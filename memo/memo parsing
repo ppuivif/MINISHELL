@@ -1,0 +1,50 @@
+
+-----------------------------------------------------------------------------------------------
+
+La commande readline permet de lire sur l'entrée standard et renvoie un char* (command_line)
+qui contient la lecture.
+Cette fonction est à inclure dans une boucle qui s'exécutera jusqu'à ce qu'elle retourne un
+NULL. Ce retour est obtenu par CTRL D (EOF).
+
+La fonction readline leak.
+
+La fonction add_history stocke dans un fichier les commandes passées dans le terminal.
+
+-----------------------------------------------------------------------------------------------
+
+Le parsing s'exécute sur le char *command_line.
+
+La première étape est le parsing sur les pipes : ft_parse_command_line.
+Cette fonction crée et retourne une variable result. Cette variable est un élément de structure
+de type t_command_line_parsing_result qui contient :
+	- un booléen pour succeed ou fail,
+	- un pointeur de structure de type t_command_to_expand.
+
+La fonction ft_parse_command_line :
+	- vérifie après avoir skip les spaces sur le char * command_line,  que la longueur de
+	la string est différente de 0, sinon retourne la variable result avec le booléen à true,
+	- si la string contient encore des caractères, une boucle s'exécute tant que la string
+	contient des caractères :
+		- dans cette boucle, la variable command_parsing_result prend la valeur de
+		retour de la fonction parse_command qui s'applique sur la variable
+		remaining_line,
+		- la variable command_parsing_result est une variable de type
+		t_command_parsing_result qui contient :
+			- un booléen pour succeed ou fail,
+			- un élément de structure de type t_command_to_expand,
+			- une variable const *char remaining_line.
+		- si le booléen est vide, il prend la valeur false et le result est retourné.
+		- sinon la fonction ft_command_to_expand_add_back s'applique en prenant en
+		paramètres : &result.commands, &command_parsing_result.command.
+		- cette fonction n'est pas décrite mais doit permettre de rajoutter en add_back
+		les éléments de structure à une liste chaînée.
+		- les espaces sont skip dans la remaining line,
+		- si le premier caractère de la remaining line est un pipe :
+			- skip ce pipe,
+			- skip les espaces,
+			- si la longueur de la remaining line est égal à zéro :
+				- result.did_succeed est mis à false,
+				- retour du result.
+	- result.did_succeed est mis à false,
+	- retour du result.
+
