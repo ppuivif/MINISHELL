@@ -1,29 +1,56 @@
-#include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
+/*   Updated: 2024/05/06 14:40:32 by ppuivif          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-void	init_argument_struct(t_native_argument *n_argument)
+#include "includes/linked_list_utils.h"
+
+int	init_argument_struct(t_native_argument **n_argument)
 {
-	n_argument->content = NULL;
-	n_argument->next = NULL;
+	*n_argument = ft_calloc(1, sizeof(t_native_argument));
+	if (!*n_argument)
+		return (1);
+	(*n_argument)->content = NULL;
+	(*n_argument)->next = NULL;
+	return (0);
 }
 
-void	init_redirection_struct(t_native_redirection *n_redirection)
+int	init_redirection_struct(t_native_redirection **n_redirection)
 {
-	n_redirection->content = NULL;
-	n_redirection->e_redirection = 4;
-	n_redirection->next = NULL;
+	*n_redirection = ft_calloc(1, sizeof(t_native_redirection));
+	if (!*n_redirection)
+		return (1);
+	(*n_redirection)->content = NULL;
+	(*n_redirection)->e_redirection = 4;
+	(*n_redirection)->next = NULL;
+	return (0);
 }
 
-void	init_substring_struct(t_substring *substring)
+int	init_substring_struct(t_substring **substring)
 {
-	substring->flag = NULL;
-	substring->remaining_line = NULL;
-	substring->n_arguments = NULL;
-	substring->n_redirections = NULL;
-	substring->next = NULL;
+	*substring = ft_calloc(1, sizeof(t_substring));
+	if (!*substring)
+		return (1);	
+	(*substring)->remaining_line = NULL;
+	(*substring)->n_arguments = NULL;
+	(*substring)->n_redirections = NULL;
+	(*substring)->next = NULL;
+	return (0);
 }
 
-void	init_command_line_struct(t_command_line *command_line)
+int	init_command_line_struct(t_command_line **command_line)
 {
-	command_line->flag = true;
-	command_line->substrings = NULL;
+	*command_line = ft_calloc(1, sizeof(t_command_line));
+	if (!*command_line)
+		return (1);
+	(*command_line)->flag = true;
+	(*command_line)->substrings = NULL;
+	return (0);
 }

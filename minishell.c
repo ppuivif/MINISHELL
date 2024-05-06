@@ -52,7 +52,7 @@ int main(void)
 int main(void)
 {
 	char	*line;
-	t_command_line command_line;
+	t_command_line *command_line;
 	
 	while (1)
 	{
@@ -60,13 +60,14 @@ int main(void)
 		if (!line)
 			break;
 		add_history(line);//here?
-		init_command_line_struct(&command_line);
 		command_line = parse_command_line(line);
-		if (!command_line.flag)
+		free(line);
+		if (command_line->flag == false)
 		{
-//			free ;
+			free_all(&command_line);
 			return (1);
 		}
 	}
+	free_all(&command_line);
 	return (0);
 }

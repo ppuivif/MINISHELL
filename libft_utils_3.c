@@ -6,10 +6,11 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 12:27:17 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/04/21 19:23:07 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/05/05 18:08:01 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+//#include "../includes/libft_utils.h"
 #include "includes/libft_utils.h"
 
 void	*free_arr(char **arr)

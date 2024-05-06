@@ -4,6 +4,7 @@
 		"stdlib.h": "c",
 		"libft_utils.h": "c",
 		"linked_list_utils.h": "c",
-		"stdbool.h": "c"
+		"stdbool.h": "c",
+		"stdio.h": "c"
 	}
 }
