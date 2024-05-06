@@ -63,18 +63,14 @@ int	parse_substrings(char **remaining_line, t_command_line *command_line)
 		if (*remaining_line[0] == '<' || *remaining_line[0] == '>')
 		{
 			return_value_redirections = get_redirections(remaining_line, substring);
-			if (return_value_redirections == 1)
-				return (1);
-			if (return_value_redirections == 2)
-				return (2);
+			if (return_value_redirections)
+				return (return_value_redirections);
 		}
 		else
 		{
 			return_value_arguments =  get_arguments(remaining_line, substring);
-			if (return_value_arguments == 1)
-				return (1);
-			if (return_value_arguments == 2)
-				return (2);
+			if (return_value_arguments)
+				return (return_value_arguments);
 		}
 		*remaining_line = skip_first_spaces(*remaining_line);
 	}

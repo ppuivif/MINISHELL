@@ -6,10 +6,16 @@ void	free_all(t_command_line **command_line)
 	{
 		if ((*command_line)->substrings)
 		{
+/*			tmp = (*command_line)->substrings->next;
 			if ((*command_line)->substrings->n_redirections)
 				free_n_redirection(&(*command_line)->substrings->n_redirections);
 			if ((*command_line)->substrings->n_arguments)
 				free_n_argument(&(*command_line)->substrings->n_arguments);
+			free ((*command_line)->substrings->remaining_line);
+			free ((*command_line)->substrings->n_redirections);
+			free ((*command_line)->substrings->n_arguments);
+			free ((*command_line)->substrings);			
+			(*command_line)->substrings = tmp;*/
 			free_substring(&(*command_line)->substrings);
 		}
 		free_command_line(command_line);
@@ -24,45 +30,46 @@ void	free_command_line(t_command_line **command_line)
 
 void	free_substring(t_substring **substrings)
 {
-	t_substring	*element_to_free;
+	t_substring	*tmp;
 
-	while (*substrings)
+	while (ft_lst_size1(*substrings))
 	{
-		element_to_free = ft_lst_last1(*substrings);
-		free (element_to_free->remaining_line);
-		free (element_to_free->n_redirections);
-		free (element_to_free->n_arguments);
-		free (element_to_free);
-		element_to_free = NULL;
+		tmp = (*substrings)->next;
+		if ((*substrings)->n_redirections)
+				free_n_redirection(&(*substrings)->n_redirections);
+		if ((*substrings)->n_arguments)
+			free_n_argument(&(*substrings)->n_arguments);	
+		free ((*substrings)->remaining_line);
+		free ((*substrings)->n_redirections);
+		free ((*substrings)->n_arguments);
+		free ((*substrings));
+		*substrings = tmp;
 	}
 }
 
-void	free_n_redirection(t_native_redirection **redirections)
+void	free_n_redirection(t_native_redirection **n_redirections)
 {
-	t_native_redirection	*element_to_free;
+	t_native_redirection	*tmp;
 
-	element_to_free = *redirections;
-	while (*redirections && redirections)
+	while (ft_lst_size2(*n_redirections))
 	{
-		free (element_to_free->content);
-		free (element_to_free);
-		element_to_free = NULL;
-		
-		printf("redirec\n");
+		tmp = (*n_redirections)->next;
+		free ((*n_redirections)->content);
+		free (*n_redirections);
+		*n_redirections = tmp;
 	}
-
 }
 
-void	free_n_argument(t_native_argument **arguments)
+void	free_n_argument(t_native_argument **n_arguments)
 {
-	t_native_argument	*element_to_free;
+	t_native_argument	*tmp;
 
-	while (*arguments)
+	while (ft_lst_size3(*n_arguments))
 	{
-		element_to_free = ft_lst_last3(*arguments);
-		free (element_to_free->content);
-		free (element_to_free);
-	//	printf("arg\n");
-		element_to_free = NULL;
+		tmp = (*n_arguments)->next;
+		free ((*n_arguments)->content);
+		free (*n_arguments);
+		*n_arguments = tmp;
 	}
+	printf("here\n");
 }
