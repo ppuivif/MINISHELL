@@ -25,8 +25,8 @@ typedef struct s_native_redirection
 		REDIRECTION_INFILE,
 		REDIRECTION_APPEND,
 		REDIRECTION_HEREDOC,
-		REDIRECTION_TEXT,
-		REDIRECTION_INDEFINED,
+//		REDIRECTION_TEXT,
+//		REDIRECTION_INDEFINED,
 	} e_redirection;
 	t_native_redirection	*next;
 }	t_native_redirection;

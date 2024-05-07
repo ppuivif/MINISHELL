@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/05 18:08:22 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/05/07 18:55:27 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	ft_putnbr_fd(int n, int fd)
 	write (fd, &c, 1);
 }
 
-char	*skip_first_spaces(char *str)
+char	*skip_first_whitespaces(char *str)
 {
-	while (str && str[0] == ' ')
+	while (str && (*str == ' ' || (*str >= 8 && *str <= 13)))
 		str++;
 	return (str);
 }

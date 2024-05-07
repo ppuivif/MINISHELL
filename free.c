@@ -5,19 +5,7 @@ void	free_all(t_command_line **command_line)
 	if (*command_line)
 	{
 		if ((*command_line)->substrings)
-		{
-/*			tmp = (*command_line)->substrings->next;
-			if ((*command_line)->substrings->n_redirections)
-				free_n_redirection(&(*command_line)->substrings->n_redirections);
-			if ((*command_line)->substrings->n_arguments)
-				free_n_argument(&(*command_line)->substrings->n_arguments);
-			free ((*command_line)->substrings->remaining_line);
-			free ((*command_line)->substrings->n_redirections);
-			free ((*command_line)->substrings->n_arguments);
-			free ((*command_line)->substrings);			
-			(*command_line)->substrings = tmp;*/
 			free_substring(&(*command_line)->substrings);
-		}
 		free_command_line(command_line);
 	}
 }

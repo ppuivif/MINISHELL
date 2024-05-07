@@ -19,7 +19,7 @@ char			*ft_substr(const char *s, unsigned int start, size_t len);
 char			*ft_strjoin(char *s1, char *s2);
 char			**ft_split(char const *s, char c);
 void			ft_putnbr_fd(int n, int fd);
-char			*skip_first_spaces(char *str);
+char			*skip_first_whitespaces(char *str);
 void			*free_arr(char **arr);
 
 #endif

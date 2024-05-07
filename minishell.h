@@ -34,6 +34,8 @@ int		init_redirection_struct(t_native_redirection **n_redirection);
 int		init_substring_struct(t_substring **substring);
 int		init_command_line_struct(t_command_line **command_line);
 
+int		check_quotes(char *remaining_line, char *c);
+
 void	error_allocation(t_command_line **command_line);
 
 #endif

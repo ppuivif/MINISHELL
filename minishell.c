@@ -65,7 +65,7 @@ int main(void)
 		if (command_line->flag == false)
 		{
 			free_all(&command_line);
-			return (1);
+			ft_putstr_fd("syntax error\n", 2);
 		}
 	}
 	free_all(&command_line);
