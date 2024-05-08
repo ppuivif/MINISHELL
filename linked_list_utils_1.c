@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/06 11:21:56 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/05/08 05:34:41 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ t_native_argument	*ft_lst_last3(t_native_argument *head)
 	return (last_element);
 }
 
-void	ft_lst_print(t_command_line *command_line)
+void	ft_lst_print(t_command_line *command_line, int fd)
 {
 	size_t	i;
 	size_t	j;
@@ -133,23 +133,23 @@ void	ft_lst_print(t_command_line *command_line)
 	tmp1 = command_line->substrings;
 	while (command_line->substrings && i < ft_lst_size1(command_line->substrings))
 	{
-		ft_putstr_fd("substring ", 1);
-		ft_putnbr_fd(i, 1);
-		ft_putstr_fd(" : \n", 1);
+		ft_putstr_fd("substring ", fd);
+		ft_putnbr_fd(i, fd);
+		ft_putstr_fd(" : \n", fd);
 		j = 0;
 		tmp2 = tmp1->n_redirections;
 		while (tmp1->n_redirections && j < ft_lst_size2(tmp1->n_redirections))
 		{
-			ft_putstr_fd("\t-redirection ", 1);
-			ft_putnbr_fd(j, 1);
-			ft_putstr_fd(" : \t", 1);
-			ft_putstr_fd(tmp2->content, 1);
-			ft_putstr_fd("\n", 1);
-			ft_putstr_fd("\t-redirection_type ", 1);
-			ft_putnbr_fd(j, 1);
-			ft_putstr_fd(" : \t", 1);
-			print_e_redirection (tmp2->e_redirection);
-			ft_putstr_fd("\n", 1);
+			ft_putstr_fd("\t-redirection ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : \t", fd);
+			ft_putstr_fd(tmp2->content, fd);
+			ft_putstr_fd("\n", fd);
+			ft_putstr_fd("\t-redirection_type ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : \t", fd);
+			print_e_redirection (tmp2->e_redirection, fd);
+			ft_putstr_fd("\n", fd);
 			tmp2 = tmp2->next;
 			j++;
 		}
@@ -157,34 +157,34 @@ void	ft_lst_print(t_command_line *command_line)
 		tmp3 = tmp1->n_arguments;
 		while (tmp1->n_arguments && j < ft_lst_size3(tmp1->n_arguments))
 		{
-			ft_putstr_fd("\t-argument ", 1);
-			ft_putnbr_fd(j, 1);
-			ft_putstr_fd(" : ", 1);
-			ft_putstr_fd(tmp3->content, 1);
-			ft_putstr_fd("\n", 1);
+			ft_putstr_fd("\t-argument ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : ", fd);
+			ft_putstr_fd(tmp3->content, fd);
+			ft_putstr_fd("\n", fd);
 			tmp3 = tmp3->next;
 			j++;
 		}
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n", fd);
 		tmp1 = tmp1->next;
 		i++;
 	}
 }
 
-void	print_e_redirection (int e_redirection)
+void	print_e_redirection (int e_redirection, int fd)
 {
 	if (e_redirection == 0)
-		ft_putstr_fd("REDIRECTION_OUTFILE", 1);
+		ft_putstr_fd("REDIRECTION_OUTFILE", fd);
 	if (e_redirection == 1)
-		ft_putstr_fd("REDIRECTION_INFILE", 1);
+		ft_putstr_fd("REDIRECTION_INFILE", fd);
 	if (e_redirection == 2)
-		ft_putstr_fd("REDIRECTION_APPEND", 1);
+		ft_putstr_fd("REDIRECTION_APPEND", fd);
 	if (e_redirection == 3)
-		ft_putstr_fd("REDIRECTION_HEREDOC", 1);
+		ft_putstr_fd("REDIRECTION_HEREDOC", fd);
 	if (e_redirection == 4)
-		ft_putstr_fd("REDIRECTION_TEXT", 1);
+		ft_putstr_fd("REDIRECTION_TEXT", fd);
 	if (e_redirection == 5)
-		ft_putstr_fd("REDIRECTION_INDEFINED", 1);
+		ft_putstr_fd("REDIRECTION_INDEFINED", fd);
 }
 
 size_t	ft_lst_size1(t_substring *head)

@@ -59,5 +59,4 @@ void	free_n_argument(t_native_argument **n_arguments)
 		free (*n_arguments);
 		*n_arguments = tmp;
 	}
-	printf("here\n");
 }

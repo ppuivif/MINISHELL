@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_command_line	*parse_command_line(char *str)
+t_command_line	*parse_command_line(char *str, int fd)
 {
 	t_command_line	*command_line;
 	char			*remaining_line;
@@ -38,7 +38,7 @@ t_command_line	*parse_command_line(char *str)
 			}	
 		}
 	}
-	ft_lst_print(command_line);
+	ft_lst_print(command_line, fd);
 	return (command_line);
 }
 
@@ -82,36 +82,30 @@ int	parse_substrings(char **remaining_line, t_command_line *command_line)
 static void get_redirection_type(char **str, t_native_redirection *n_redirection)
 {
 /*	if (str[0][0] == '<' && str[0][1] == '<' && str[0][2] == '<')
-	{
+	{		printf("len : %d\n", len);
+
 		(*n_redirection).e_redirection = REDIRECTION_TEXT;
 		*str += 3;
 	}*/
-	if (str[0][0] == '<' && str[0][1] == '<')
+	if (count_angled_bracket(*str) > 2)
+		(*n_redirection).e_redirection = REDIRECTION_INDEFINED;
+	else if (count_angled_bracket(*str) == 2)
 	{
-		(*n_redirection).e_redirection = REDIRECTION_HEREDOC;
-		*str += 2;
-	}
-	else if (str[0][0] == '>' && str[0][1] == '>')
-	{
-		(*n_redirection).e_redirection = REDIRECTION_APPEND;
+		if (str[0][0] == '<' && str[0][1] == '<')
+			(*n_redirection).e_redirection = REDIRECTION_HEREDOC;
+		else if (str[0][0] == '>' && str[0][1] == '>')
+			(*n_redirection).e_redirection = REDIRECTION_APPEND;
+		else
+			(*n_redirection).e_redirection = REDIRECTION_INDEFINED;
 		*str += 2;
 	}
 	else if (str[0][0] == '<')
-	{
 		(*n_redirection).e_redirection = REDIRECTION_INFILE;
-		*str += 1;
-	}
 	else if (str[0][0] == '>')
-
-	{
 		(*n_redirection).e_redirection = REDIRECTION_OUTFILE;
-		*str += 1;
-	}
-/*	else
-	{
+	else
 		(*n_redirection).e_redirection = REDIRECTION_INDEFINED;
-		*str += 1;	
-	}*/
+	*str += 1;
 }
 
 int	get_redirections(char **remaining_line, t_substring *substring)
@@ -124,17 +118,14 @@ int	get_redirections(char **remaining_line, t_substring *substring)
 	if (init_redirection_struct(&n_redirection) == 1)
 		return (1);
 	get_redirection_type(remaining_line, n_redirection);
+	if (n_redirection->e_redirection == -1)
+		return(2);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
-	len = strcspn(*remaining_line, " \n\t\0");
-	if (strcspn(*remaining_line, "<>|") < len)
-		return (2);
-	else
-	{
-		n_redirection->content = ft_substr(*remaining_line, 0, len);
-		*remaining_line += len;
-		ft_lst_add_back2(&substring->n_redirections, n_redirection);
-		return (0);
-	}
+	len = strcspn(*remaining_line, " <>|\b\t\n\v\f\r\0");
+	n_redirection->content = ft_substr(*remaining_line, 0, len);
+	*remaining_line += len;
+	ft_lst_add_back2(&substring->n_redirections, n_redirection);
+	return (0);
 }
 
 int	get_arguments(char **remaining_line, t_substring *substring)
@@ -159,12 +150,7 @@ int	get_arguments(char **remaining_line, t_substring *substring)
 		if (len == - 1)
 			return (2);
 	}
-	else
-	{
-		len = (int)strcspn(*remaining_line, " \n\t\0");
-		if ((int)strcspn(*remaining_line, "<>|") < len)
-			return (3);
-	}
+	len = (int)strcspn(*remaining_line, " <>|\b\t\n\v\f\r\0");
 	n_argument->content = ft_substr(*remaining_line, 0, len);
 	*remaining_line += len;
 	ft_lst_add_back3(&substring->n_arguments, n_argument);
@@ -183,15 +169,24 @@ int	check_quotes(char *remaining_line, char *c)
 	return (len + 2);
 }
 
-
-
-/*size_t	check_quotes(char *remaining_line)
+unsigned int count_angled_bracket(char *str)
 {
-	size_t	len_single_quote;
-	size_t	len_double_quote;
-	
-//	len_single_quote = count_quotes(remaining_line, '\'');
-//	len_double_quote = count_quotes(remaining_line, '\"');
+	unsigned int nmemb;
+
+	nmemb = 0; 
+	while(str && (*str == '<' || *str == '>' || ft_isspace(*str) == 0))
+	{
+		if (*str == '<' || *str == '>')
+		nmemb++;
+		str++;
+	}
+	return (nmemb);
+}
+
+
+
+/*size_t	ch	if (str[0][0] == '<' && str[0][1] != '<' && str[0][1] != '>')
+e_quote = count_quotes(remaining_line, '\"');
 	if (len_single_quote)
 		return (len_single_quote);
 	return (0);

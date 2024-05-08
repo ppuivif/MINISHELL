@@ -49,25 +49,31 @@ int main(void)
 
 }*/
 
-int main(void)
+int main(int argc, char **argv)
 {
 	char	*line;
 	t_command_line *command_line;
-	
-	while (1)
+
+	if (argc == 2)
 	{
-		line = readline("minishell : ");
-		if (!line)
-			break;
-		add_history(line);//here?
-		command_line = parse_command_line(line);
-		free(line);
-		if (command_line->flag == false)
+		while (1)
 		{
-			free_all(&command_line);
-			ft_putstr_fd("syntax error\n", 2);
+			line = readline("minishell : ");
+			if (!line)
+				break;
+			add_history(line);//here?
+//			command_line = parse_command_line(line);
+			command_line = parse_command_line(line, atoi(argv[1]));
+			free(line);
+			if (command_line->flag == false)
+			{
+				free_all(&command_line);
+				ft_putstr_fd("syntax error\n", 2);
+			}
 		}
+		free_all(&command_line);
 	}
-	free_all(&command_line);
+	else
+		ft_putstr_fd("please, give an fd to print\n", 1);
 	return (0);
 }

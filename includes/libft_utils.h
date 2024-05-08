@@ -21,5 +21,6 @@ char			**ft_split(char const *s, char c);
 void			ft_putnbr_fd(int n, int fd);
 char			*skip_first_whitespaces(char *str);
 void			*free_arr(char **arr);
+int				ft_isspace(int c);
 
 #endif
