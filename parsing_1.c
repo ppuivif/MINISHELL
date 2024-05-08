@@ -81,12 +81,6 @@ int	parse_substrings(char **remaining_line, t_command_line *command_line)
 
 static void get_redirection_type(char **str, t_native_redirection *n_redirection)
 {
-/*	if (str[0][0] == '<' && str[0][1] == '<' && str[0][2] == '<')
-	{		printf("len : %d\n", len);
-
-		(*n_redirection).e_redirection = REDIRECTION_TEXT;
-		*str += 3;
-	}*/
 	if (count_angled_bracket(*str) > 2)
 		(*n_redirection).e_redirection = REDIRECTION_INDEFINED;
 	else if (count_angled_bracket(*str) == 2)
@@ -99,13 +93,16 @@ static void get_redirection_type(char **str, t_native_redirection *n_redirection
 			(*n_redirection).e_redirection = REDIRECTION_INDEFINED;
 		*str += 2;
 	}
-	else if (str[0][0] == '<')
-		(*n_redirection).e_redirection = REDIRECTION_INFILE;
-	else if (str[0][0] == '>')
-		(*n_redirection).e_redirection = REDIRECTION_OUTFILE;
 	else
-		(*n_redirection).e_redirection = REDIRECTION_INDEFINED;
-	*str += 1;
+	{
+		if (str[0][0] == '<')
+			(*n_redirection).e_redirection = REDIRECTION_INFILE;
+		else if (str[0][0] == '>')
+			(*n_redirection).e_redirection = REDIRECTION_OUTFILE;
+		else
+			(*n_redirection).e_redirection = REDIRECTION_INDEFINED;
+		*str += 1;
+	}
 }
 
 int	get_redirections(char **remaining_line, t_substring *substring)
@@ -121,7 +118,7 @@ int	get_redirections(char **remaining_line, t_substring *substring)
 	if (n_redirection->e_redirection == -1)
 		return(2);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
-	len = strcspn(*remaining_line, " <>|\b\t\n\v\f\r\0");
+	len = strcspn(*remaining_line, "<>| \t\n\v\f\r\0");
 	n_redirection->content = ft_substr(*remaining_line, 0, len);
 	*remaining_line += len;
 	ft_lst_add_back2(&substring->n_redirections, n_redirection);
@@ -150,7 +147,7 @@ int	get_arguments(char **remaining_line, t_substring *substring)
 		if (len == - 1)
 			return (2);
 	}
-	len = (int)strcspn(*remaining_line, " <>|\b\t\n\v\f\r\0");
+	len = (int)strcspn(*remaining_line, "<>| \t\n\v\f\r\0");
 	n_argument->content = ft_substr(*remaining_line, 0, len);
 	*remaining_line += len;
 	ft_lst_add_back3(&substring->n_arguments, n_argument);

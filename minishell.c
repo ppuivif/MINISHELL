@@ -70,8 +70,8 @@ int main(int argc, char **argv)
 				free_all(&command_line);
 				ft_putstr_fd("syntax error\n", 2);
 			}
+			free_all(&command_line);
 		}
-		free_all(&command_line);
 	}
 	else
 		ft_putstr_fd("please, give an fd to print\n", 1);

@@ -24,7 +24,7 @@
 
 
 void			print_arr(char **arr);
-//t_command_line 	*parse_command_line(char *str);
+//!t_command_line 	*parse_command_line(char *str);
 t_command_line 	*parse_command_line(char *str, int fd);
 int		parse_substrings(char **remaining_line, t_command_line *command_line);
 int		get_redirections(char **remaining_line, t_substring *substring);
