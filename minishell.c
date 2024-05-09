@@ -69,6 +69,7 @@ int main(int argc, char **argv)
 			{
 				free_all(&command_line);
 				ft_putstr_fd("syntax error\n", 2);
+				return (1);// to confirm
 			}
 			free_all(&command_line);
 		}

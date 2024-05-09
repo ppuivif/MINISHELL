@@ -105,9 +105,9 @@ static void get_redirection_type(char **str, t_native_redirection *n_redirection
 	}
 }
 
-int	get_redirections(char **remaining_line, t_substring *substring)
+int		get_redirections(char **remaining_line, t_substring *substring)
 {
-	size_t					len;
+	unsigned int			len;
 	t_native_redirection	*n_redirection;
 
 	len = 0;
@@ -118,7 +118,7 @@ int	get_redirections(char **remaining_line, t_substring *substring)
 	if (n_redirection->e_redirection == -1)
 		return(2);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
-	len = strcspn(*remaining_line, "<>| \'\"\t\n\v\f\r\0");
+	len = strcspn(*remaining_line, "<>| \t\n\v\f\r\0");
 	n_redirection->content = ft_substr(*remaining_line, 0, len);
 	*remaining_line += len;
 	ft_lst_add_back2(&substring->n_redirections, n_redirection);
@@ -128,39 +128,73 @@ int	get_redirections(char **remaining_line, t_substring *substring)
 int	get_arguments(char **remaining_line, t_substring *substring)
 {
 	int					len;
+	int					len_quote;
 	t_native_argument	*n_argument;
 
 	len = 0;
+	len_quote = 0;
 	n_argument = NULL;
 	if (init_argument_struct(&n_argument) == 1)
 		return (1);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	if (*remaining_line[0] == '\'')
-		len = check_quotes(*remaining_line, "\'");
+		len_quote = check_quotes(*remaining_line, '\'', 0);
 	else if (*remaining_line[0] == '\"')
-		len = check_quotes(*remaining_line, "\"");
-	else
-		len = (int)strcspn(*remaining_line, "<>| \'\"\t\n\v\f\r\0");
-	if (len == - 1)
+		len_quote = check_quotes(*remaining_line, '\"', 0);
+/*	else
+		len_quote = strcspn(*remaining_line, "\'\"");
+		len_ifs = (int)strcspn(*remaining_line, "<>| \t\n\v\f\r\0");
+		if (len_quote < len_ifs)
+			fonction_en_francais;
+		else
+			len = len_ifs;*/
+	if (len_quote == - 1)
+	{
+		printf("here\n");
 		return (2);
-	n_argument->content = ft_substr(*remaining_line, 0, len);
-	*remaining_line += len;
+	}
+	n_argument->content = ft_substr(*remaining_line, 0, len + len_quote);
+	*remaining_line += len + len_quote;
 	ft_lst_add_back3(&substring->n_arguments, n_argument);
 	return (0);
 }
 
-int	check_quotes(char *remaining_line, char *c)
+int	check_quotes(char *remaining_line, char c, int len)
 {
-	int len;	
+	int j;
 
-	len = 0;
+//	j = 1;
+	j = 0;
 	remaining_line++;
-	len = strcspn(remaining_line, c);
-	if (len == (int)ft_strlen(remaining_line))
+//	len = (int)strcspn(&remaining_line[j], &c);
+	len = (int)strcspn(&remaining_line[0], &c);
+//	if (len == (int)ft_strlen(&remaining_line[j]))
+	if (len == (int)ft_strlen(&remaining_line[0]))
 		return (-1);
-	return (len + 2);
+	while (remaining_line[len + 1 + j] &&
+		(remaining_line[len + 1 + j] != '<' || remaining_line[len + 1 + j] != '>' ||
+		remaining_line[len + 1 + j] != '|' || isspace(remaining_line[len + 1 + j]) != 0))
+	{
+		if (remaining_line[len + 1 + j] == '\'')
+		{
+			len += check_quotes(&remaining_line[len + 1 + j], '\'', len) + 2;
+			if (len == 1)
+				return (-1);
+		}
+		if (remaining_line[len + 1 + j] == '\"')
+		{
+			len = check_quotes(&remaining_line[len + 1 + j], '\"', len);   			
+			if (len == -1)
+				return (-1);
+			len += 2;
+		}
+		if (strcspn(&remaining_line[len + 1 + j], "\'\"") == ft_strlen(&remaining_line[len + 1 + j]))
+			len++;
+		j++;
+	}
+	return (len + 3);
 }
-
+ 
 unsigned int count_angled_bracket(char *str)
 {
 	unsigned int nmemb;
