@@ -75,6 +75,6 @@ int main(int argc, char **argv)
 		}
 	}
 	else
-		ft_putstr_fd("please, give an fd to print\n", 1);
+		ft_putstr_fd("please, give an fd to display\n", 1);
 	return (0);
 }
