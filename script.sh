@@ -195,371 +195,108 @@ function delete_test_files() {
 	fi
 }
 
+run_test() {
+    test_index=$1
+    command=$2
+	file_test=$3
+    status=$4
+    test="test$test_index\t$command\t"
+    message=$test
+    echo > "temp/minishell_test$test_index.txt"
+    chmod 644 "temp/minishell_test$test_index.txt"
+    exec 3> "temp/minishell_test$test_index.txt"
+    echo "$command" | ./minishell 3 2>&1 >/dev/null
+    status_output_minishell=$?
+    if [ $status_output_minishell -eq $status ] && diff "temp/minishell_test$test_index.txt" "Tests/test$file_test.txt" > /dev/null
+	then
+        status_message="${GREEN} OK${NC}"
+    else
+        status_message="${RED} KO${NC}"
+    fi
+	# Calculate the length of the message
+    message_length=${#message}
+    # Calculate the number of spaces needed for alignment
+    num_spaces=$((60 - message_length))
+    # Create a string of spaces
+    spaces=$(printf "%-${num_spaces}s" "")
+    # Print the message with aligned status
+	echo -e "${message}${spaces}${status_message}"
+	#echo -e "$message"
+}
+
+
+
 mkdir temp
 chmod 777 temp
 clear
 
-#test1 : < infile.txt cat | cat > outfile.txt
-test="test1\t< infile.txt cat | cat > outfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test1.txt
-chmod 644 temp/minishell_test1.txt
-# Get the file descriptor of minishell_test1.txt
-exec 3> temp/minishell_test1.txt
-# Run minishell and pipe the command into it
-echo "< infile.txt cat | cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test1.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test2 : <infile.txt cat | cat > outfile.txt
-test="test2\t<infile.txt cat | cat > outfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test2.txt
-chmod 644 temp/minishell_test2.txt
-exec 3> temp/minishell_test2.txt
-echo "<infile.txt cat | cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test2.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
+run_test 1 "< infile.txt cat | cat > outfile.txt" 1 0
+run_test 2 "<infile.txt cat | cat > outfile.txt" 1 0
+run_test 3 "< infile.txt cat| cat > outfile.txt" 1 0
+run_test 4 "< infile.txt cat |cat > outfile.txt" 1 0
+run_test 5 "< infile.txt cat | cat >outfile.txt" 1 0
+run_test 6 "<infile.txt cat|cat >outfile.txt" 1 0
+run_test 7 "<	infile.txt cat | cat > outfile.txt" 1 0
+run_test 8 "<		infile.txt cat | cat > outfile.txt" 1 0
+run_test 9 "< infile.txt cat	| cat > outfile.txt" 1 0
+run_test 10 "< infile.txt cat		| cat > outfile.txt" 1 0
+run_test 11 "< infile.txt cat |	cat > outfile.txt" 1 0
+run_test 12 "< infile.txt cat |		cat > outfile.txt" 1 0
+run_test 13 "< infile.txt cat |	cat > outfile.txt" 1 0
+run_test 14 "< infile.txt cat |		cat > outfile.txt" 1 0
+run_test 15 "< infile.txt cat | cat	> outfile.txt" 1 0
+run_test 16 "< infile.txt cat | cat		> outfile.txt" 1 0
+run_test 17 "< infile.txt cat | cat >	outfile.txt" 1 0
+run_test 18 "< infile.txt cat | cat >		outfile.txt" 1 0
+run_test 19 "< infile.txt cat | cat > outfile.txt	" 1 0
+run_test 20 "< infile.txt cat | cat > outfile.txt		" 1 0
 
-#test3 : < infile.txt cat| cat > outfile.txt
-test="test3\t< infile.txt cat| cat > outfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test3.txt
-chmod 644 temp/minishell_test3.txt
-exec 3> temp/minishell_test3.txt
-echo "< infile.txt cat| cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test3.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
+run_test 21 "<< infile.txt cat | cat > outfile.txt" 21 0
+run_test 22 "<<infile.txt cat | cat > outfile.txt" 21 0
+run_test 23 "<< infile.txt cat| cat > outfile.txt" 21 0
+run_test 24 "<< infile.txt cat |cat > outfile.txt" 21 0
+run_test 25 "<< infile.txt cat | cat> outfile.txt" 21 0
+run_test 26 "<< infile.txt cat | cat >outfile.txt" 21 0
+run_test 27 "<<infile.txt cat|cat >outfile.txt" 21 0
+run_test 28 "<< infile.txt cat | cat > outfile.txt" 21 0
 
-#test4 : < infile.txt cat |cat > outfile.txt
-test="test4\t< infile.txt cat |cat > outfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test4.txt
-chmod 644 temp/minishell_test4.txt
-exec 3> temp/minishell_test4.txt
-echo "< infile.txt cat |cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test4.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test5 : < infile.txt cat | cat >outfile.txt
-test="test5\t< infile.txt cat | cat >outfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test5.txt
-chmod 644 temp/minishell_test5.txt
-exec 3> temp/minishell_test5.txt
-echo "< infile.txt cat | cat >outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test5.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test6 : <infile.txt cat|cat >outfile.txt
-test="test6\t<infile.txt cat|cat >outfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test6.txt
-chmod 644 temp/minishell_test6.txt
-exec 3> temp/minishell_test6.txt
-echo "<infile.txt cat|cat >outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test6.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test7 : <\tinfile.txt cat | cat > outfile.txt
-test="test7\t<\tinfile.txt cat | cat > outfile.txt\t\t"
-message=$test
-echo > temp/minishell_test7.txt
-chmod 644 temp/minishell_test7.txt
-exec 3> temp/minishell_test7.txt
-echo "<	infile.txt cat | cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test7.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test8 : <\t\tinfile.txt cat | cat > outfile.txt
-test="test8\t<\t\tinfile.txt cat | cat > outfile.txt\t"
-message=$test
-echo > temp/minishell_test8.txt
-chmod 644 temp/minishell_test8.txt
-exec 3> temp/minishell_test8.txt
-echo "<		infile.txt cat | cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test8.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test9 : < infile.txt\tcat | cat > outfile.txt
-test="test9\t< infile.txt\tcat | cat > outfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test9.txt
-chmod 644 temp/minishell_test9.txt
-exec 3> temp/minishell_test9.txt
-echo "<infile.txt	cat | cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test9.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test10 : < infile.txt\t\tcat | cat > outfile.txt
-test="test10\t< infile.txt\t\tcat | cat > outfile.txt\t\t"
-message=$test
-echo > temp/minishell_test10.txt
-chmod 644 temp/minishell_test10.txt
-exec 3> temp/minishell_test10.txt
-echo "<infile.txt		cat | cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test10.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test11 : < infile.txt cat\t| cat > outfile.txt
-test="test11\t< infile.txt cat\t| cat > outfile.txt\t\t"
-message=$test
-echo > temp/minishell_test11.txt
-chmod 644 temp/minishell_test11.txt
-exec 3> temp/minishell_test11.txt
-echo "<infile.txt cat	| cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test11.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test12 : < infile.txt cat\t\t| cat > outfile.txt
-test="test12\t< infile.txt cat\t\t| cat > outfile.txt\t"
-message=$test
-echo > temp/minishell_test12.txt
-chmod 644 temp/minishell_test12.txt
-exec 3> temp/minishell_test12.txt
-echo "<infile.txt cat		| cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test12.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test13 : < infile.txt cat |\tcat > outfile.txt
-test="test13\t< infile.txt cat |\tcat > outfile.txt\t\t"
-message=$test
-echo > temp/minishell_test13.txt
-chmod 644 temp/minishell_test13.txt
-exec 3> temp/minishell_test13.txt
-echo "<infile.txt cat |	cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test13.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test14 : < infile.txt cat |\t\tcat > outfile.txt
-test="test14\t< infile.txt cat |\t\tcat > outfile.txt\t"
-message=$test
-echo > temp/minishell_test14.txt
-chmod 644 temp/minishell_test14.txt
-exec 3> temp/minishell_test14.txt
-echo "<infile.txt cat |		cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test14.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
+run_test 26 "<<		infile.txt cat | cat > outfile.txt"
+run_test 27 "< infile.txt cat | cat >> outfile.txt"
 
-#test15 : < infile.txt cat | cat\t> outfile.txt
-test="test15\t< infile.txt cat | cat\t> outfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test15.txt
-chmod 644 temp/minishell_test15.txt
-exec 3> temp/minishell_test15.txt
-echo "<infile.txt cat |	cat	> outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test15.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test16 : < infile.txt cat | cat\t\t> outfile.txt
-test="test16\t< infile.txt cat | cat\t\t> outfile.txt\t\t"
-message=$test
-echo > temp/minishell_test16.txt
-chmod 644 temp/minishell_test16.txt
-exec 3> temp/minishell_test16.txt
-echo "<infile.txt cat |	cat		> outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test16.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
+delete_test_files
 
-#test17 : < infile.txt cat | cat >\toutfile.txt
-test="test17\t< infile.txt cat | cat >\toutfile.txt\t\t"
-message=$test
-echo > temp/minishell_test17.txt
-chmod 644 temp/minishell_test17.txt
-exec 3> temp/minishell_test17.txt
-echo "<infile.txt cat |	cat	>	outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test17.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
+: <<BLOCK_COMMENT
 
-#test18 : < infile.txt cat | cat >\t\toutfile.txt
-test="test18\t< infile.txt cat | cat >\t\toutfile.txt\t"
-message=$test
-echo > temp/minishell_test18.txt
-chmod 644 temp/minishell_test18.txt
-exec 3> temp/minishell_test18.txt
-echo "<infile.txt cat |	cat	>		outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test18.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
+for i in {1..27}; do
+    test_message="test$i\t< infile.txt cat | cat > outfile.txt\t"
+    if [ ${#test_message} -gt $max_length ]; then
+        max_length=${#test_message}
+    fi
+	done
+for i in {1..27}; do
+    run_test $i "< infile.txt cat | cat > outfile.txt" $i
+    test_message="test$i\t< infile.txt cat | cat > outfile.txt\t"
+    padding=$((max_length - ${#test_message}))
+    printf "%s%*s\n" "$test_message" $padding "$status_message"
+done
 
-#test19 : < infile.txt cat | cat > outfile.txt\t\t
-test="test19\t< infile.txt cat | cat > toutfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test19.txt
-chmod 644 temp/minishell_test19.txt
-exec 3> temp/minishell_test19.txt
-echo "<infile.txt cat |	cat	> outfile.txt		" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test19.txt Tests/test1.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
 
-#test20 : << infile.txt cat | cat > outfile.txt
-test="test20\t<< infile.txt cat | cat > outfile.txt\t\t\t"
-message=$test
-echo > temp/minishell_test20.txt
-chmod 644 temp/minishell_test20.txt
-exec 3> temp/minishell_test20.txt
-echo "<< infile.txt cat | cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
-status_output_minishell=$?
-if [ $status_output_minishell -eq 0 ] &&
-	diff temp/minishell_test20.txt Tests/test20.txt > /dev/null
-then
-	message+="${GREEN} OK${NC}"
-else
-	message+="${RED} KO${NC}"
-fi
-echo -e "$message"
-message=""
+
+	
+
+
 
 #test21 : <<infile.txt cat | cat > outfile.txt
 test="test21\t<<infile.txt cat | cat > outfile.txt\t\t\t"
@@ -634,7 +371,7 @@ echo -e "$message"
 message=""
 
 #test25 : <<\tinfile.txt cat | cat > outfile.txt
-test="test25\t<<\tinfile.txt cat | cat > outfile.txt\t\t"
+test="test25\t<<	infile.txt cat | cat > outfile.txt\t\t"
 message=$test
 echo > temp/minishell_test25.txt
 chmod 644 temp/minishell_test25.txt
@@ -710,7 +447,8 @@ message=""
 test="test101\t< infile.txt ' ' cat | cat > outfile.txt\t\t\t"
 message=$test
 echo > temp/minishell_test101.txt
-chmod 644 temp/minishell_test101.txt
+chmod 644 temp/minishell_test101.txtdelete_test_files
+
 exec 3> temp/minishell_test101.txt
 echo "< infile.txt ' ' cat | cat > outfile.txt" | ./minishell 3 2>&1 >/dev/null
 status_output_minishell=$?
@@ -725,11 +463,10 @@ echo -e "$message"
 message=""
 
 
-delete_test_files
 
 
 
-: <<BLOCK_COMMENT
+
 #test2 : outfile doesn't exist
 test="test2\toutfile doesn't exist\t\t"
 message=$test

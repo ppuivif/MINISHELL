@@ -118,7 +118,7 @@ int	get_redirections(char **remaining_line, t_substring *substring)
 	if (n_redirection->e_redirection == -1)
 		return(2);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
-	len = strcspn(*remaining_line, "<>| \t\n\v\f\r\0");
+	len = strcspn(*remaining_line, "<>| \'\"\t\n\v\f\r\0");
 	n_redirection->content = ft_substr(*remaining_line, 0, len);
 	*remaining_line += len;
 	ft_lst_add_back2(&substring->n_redirections, n_redirection);
@@ -136,18 +136,13 @@ int	get_arguments(char **remaining_line, t_substring *substring)
 		return (1);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	if (*remaining_line[0] == '\'')
-	{
 		len = check_quotes(*remaining_line, "\'");
-		if (len == - 1)
-			return (2);
-	}
 	else if (*remaining_line[0] == '\"')
-	{
 		len = check_quotes(*remaining_line, "\"");
-		if (len == - 1)
-			return (2);
-	}
-	len = (int)strcspn(*remaining_line, "<>| \t\n\v\f\r\0");
+	else
+		len = (int)strcspn(*remaining_line, "<>| \'\"\t\n\v\f\r\0");
+	if (len == - 1)
+		return (2);
 	n_argument->content = ft_substr(*remaining_line, 0, len);
 	*remaining_line += len;
 	ft_lst_add_back3(&substring->n_arguments, n_argument);
