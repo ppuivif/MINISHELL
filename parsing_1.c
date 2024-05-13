@@ -127,11 +127,13 @@ int		get_redirections(char **remaining_line, t_substring *substring)
 
 int	get_arguments(char **remaining_line, t_substring *substring)
 {
+	int					i ;
 	int					len;
 //	int					len_quote;
 	int					len_ifs;
 	t_native_argument	*n_argument;
 
+	i = 0;
 	len = 0;
 //	len_quote = 0;
 	len_ifs = 0;
@@ -140,21 +142,22 @@ int	get_arguments(char **remaining_line, t_substring *substring)
 		return (1);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	if (*remaining_line[0] == '\'')
-		len = check_quotes(*remaining_line, '\'', 0);
+		len = check_quotes(*remaining_line, "\'", 0);
 	else if (*remaining_line[0] == '\"')
-		len = check_quotes(*remaining_line, '\"', 0);
+		len = check_quotes(*remaining_line, "\"", 0);
 	else
 	{
 		len = strcspn(*remaining_line, "\'\"");
 		len_ifs = (int)strcspn(*remaining_line, "<>| \t\n\v\f\r\0");
 		if (len < len_ifs)
 		{
-			while (*remaining_line[0] && *remaining_line[0] != '\'' && *remaining_line[0] != '\"')
-				remaining_line++;
-			if (*remaining_line[0] == '\'')
-				len += check_quotes(*remaining_line, '\'', 0);
-			if (*remaining_line[0] == '\"')
-				len += check_quotes(*remaining_line, '\"', 0);
+			while (remaining_line[0][i] && remaining_line[0][i] != '\'' && \
+			remaining_line[0][i] != '\"')
+				i++;
+			if (remaining_line[0][i] == '\'')
+				len += check_quotes(&remaining_line[0][i], "\'", 0);
+			if (remaining_line[0][i] == '\"')
+				len += check_quotes(&remaining_line[0][i], "\"", 0);
 		}
 		else
 			len = len_ifs;
@@ -167,7 +170,7 @@ int	get_arguments(char **remaining_line, t_substring *substring)
 	return (0);
 }
 
-int	check_quotes(char *remaining_line, char c, int len)
+int	check_quotes(char *remaining_line, char *c, int len)
 {
 	int j;
 	int l;
@@ -175,7 +178,7 @@ int	check_quotes(char *remaining_line, char c, int len)
 	j = 1;
 	l = 0;
 	remaining_line++;
-	len = (int)strcspn(remaining_line, &c);
+	len = (int)strcspn(remaining_line, c);
 	if (len == (int)ft_strlen(remaining_line))
 		return (-1);
 	while (remaining_line[len + j] && remaining_line[len + j] != '<' &&	\
@@ -184,13 +187,13 @@ int	check_quotes(char *remaining_line, char c, int len)
 	{
 		if (remaining_line[len + j] == '\'')
 		{
-			len += check_quotes(&remaining_line[len + j], '\'', len) + 2;
+			len += check_quotes(&remaining_line[len + j], "\'", len) + 2;
 			if (len == 1)
 				return (-1);
 		}
 		if (remaining_line[len + j] == '\"')
 		{
-			len = check_quotes(&remaining_line[len + j], '\"', len) + 2;
+			len = check_quotes(&remaining_line[len + j], "\"", len) + 2;
 			if (len == 1)
 				return (-1);
 		}
@@ -198,7 +201,7 @@ int	check_quotes(char *remaining_line, char c, int len)
 			l++;
 		j++;
 	}
-	return (len + l + 3);
+	return (len + 2 + l);
 }
  
 unsigned int count_angled_bracket(char *str)

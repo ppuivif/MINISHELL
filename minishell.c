@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 	{
 		while (1)
 		{
-			line = readline("minishell : ");
+			line = ft_strdup_freed(readline("minishell : "));
 			if (!line)
 				break;
 			add_history(line);//here?
