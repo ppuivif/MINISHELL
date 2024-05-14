@@ -212,6 +212,7 @@ run_test() {
         status_message="${GREEN} OK${NC}"
     else
         status_message="${RED} KO${NC}"
+		flag=$((flag + 1))
     fi
 	# Calculate the length of the message
     message_length=${#message}
@@ -220,7 +221,15 @@ run_test() {
     # Create a string of spaces
     spaces=$(printf "%-${num_spaces}s" "")
     # Print the message with aligned status
-	echo -e "${message}${spaces}${status_message}"
+	if [ "$display" == "wrong_only" ]
+	then
+		if [ "$status_message" == "${RED} KO${NC}" ]
+		then
+			echo -e "${message}${spaces}${status_message}"
+		fi
+	else
+			echo -e "${message}${spaces}${status_message}"
+	fi
 	#echo -e "$message"
 }
 
@@ -228,8 +237,36 @@ run_test() {
 
 mkdir temp
 chmod 777 temp
+flag=0
 clear
 
+# Function to handle the first choice
+choice_one() {
+	display="all"
+}
+
+# Function to handle the second choice
+choice_two() {
+    display="wrong_only"
+}
+
+echo "To display all tests choice 1"
+echo "To display only wrong tests choice 2"
+read -p "Enter your choice (1 or 2): " choice
+
+# Handle the user's choice
+case $choice in
+    1)
+        choice_one
+        ;;
+    2)
+        choice_two
+        ;;
+#do not run    
+	*)
+        echo -e "${RED}Invalid choice. Please enter 1 or 2.${NC}"
+        ;;
+esac
 
 run_test 1 "< infile.txt cat | cat > outfile.txt" 1 0
 run_test 2 "<infile.txt cat | cat > outfile.txt" 1 0
@@ -260,21 +297,372 @@ run_test 25 "<< infile.txt cat | cat> outfile.txt" 21 0
 run_test 26 "<< infile.txt cat | cat >outfile.txt" 21 0
 run_test 27 "<<infile.txt cat|cat >outfile.txt" 21 0
 run_test 28 "<< infile.txt cat | cat > outfile.txt" 21 0
+run_test 29 "<<	infile.txt cat | cat > outfile.txt" 21 0
+run_test 30 "<<		infile.txt cat | cat > outfile.txt" 21 0
+run_test 31 "<< infile.txt cat	| cat > outfile.txt" 21 0
+run_test 32 "<< infile.txt cat		| cat > outfile.txt" 21 0
+run_test 33 "<< infile.txt cat |	cat > outfile.txt" 21 0
+run_test 34 "<< infile.txt cat |		cat > outfile.txt" 21 0
+run_test 35 "<< infile.txt cat | cat	> outfile.txt" 21 0
+run_test 36 "<< infile.txt cat | cat		> outfile.txt" 21 0
+run_test 37 "<< infile.txt cat | cat >	outfile.txt" 21 0
+run_test 38 "<< infile.txt cat | cat >		outfile.txt" 21 0
+run_test 39 "<< infile.txt cat | cat > outfile.txt	" 21 0
+run_test 40 "<< infile.txt cat | cat > outfile.txt		" 21 0
+
+run_test 41 "< infile.txt cat | cat >> outfile.txt" 41 0
+run_test 42 "<infile.txt cat | cat >> outfile.txt" 41 0
+run_test 43 "< infile.txt cat| cat >> outfile.txt" 41 0
+run_test 44 "< infile.txt cat |cat >> outfile.txt" 41 0
+run_test 45 "< infile.txt cat | cat>> outfile.txt" 41 0
+run_test 46 "< infile.txt cat | cat >>outfile.txt" 41 0
+run_test 47 "<infile.txt cat|cat >>outfile.txt" 41 0
+run_test 48 "< infile.txt cat | cat >> outfile.txt" 41 0
+run_test 49 "<	infile.txt cat | cat >> outfile.txt" 41 0
+run_test 50 "<		infile.txt cat | cat >> outfile.txt" 41 0
+run_test 51 "< infile.txt cat	| cat >> outfile.txt" 41 0
+run_test 52 "< infile.txt cat		| cat >> outfile.txt" 41 0
+run_test 53 "< infile.txt cat |	cat >> outfile.txt" 41 0
+run_test 54 "< infile.txt cat |		cat >> outfile.txt" 41 0
+run_test 55 "< infile.txt cat | cat	>> outfile.txt" 41 0
+run_test 56 "< infile.txt cat | cat		>> outfile.txt" 41 0
+run_test 57 "< infile.txt cat | cat >>	outfile.txt" 41 0
+run_test 58 "< infile.txt cat | cat >>		outfile.txt" 41 0
+run_test 59 "< infile.txt cat | cat >> outfile.txt	" 41 0
+run_test 60 "< infile.txt cat | cat >> outfile.txt		" 41 0
+
+run_test 61 "<< infile.txt cat | cat >> outfile.txt" 61 0
+run_test 62 "<<infile.txt cat | cat >> outfile.txt" 61 0
+run_test 63 "<< infile.txt cat| cat >> outfile.txt" 61 0
+run_test 64 "<< infile.txt cat |cat >> outfile.txt" 61 0
+run_test 65 "<< infile.txt cat | cat>> outfile.txt" 61 0
+run_test 66 "<< infile.txt cat | cat >>outfile.txt" 61 0
+run_test 67 "<<infile.txt cat|cat >>outfile.txt" 61 0
+run_test 68 "<< infile.txt cat | cat >> outfile.txt" 61 0
+run_test 69 "<<	infile.txt cat | cat >> outfile.txt" 61 0
+run_test 70 "<<		infile.txt cat | cat >> outfile.txt" 61 0
+run_test 71 "<< infile.txt cat	| cat >> outfile.txt" 61 0
+run_test 72 "<< infile.txt cat		| cat >> outfile.txt" 61 0
+run_test 73 "<< infile.txt cat |	cat >> outfile.txt" 61 0
+run_test 74 "<< infile.txt cat |		cat >> outfile.txt" 61 0
+run_test 75 "<< infile.txt cat | cat	>> outfile.txt" 61 0
+run_test 76 "<< infile.txt cat | cat		>> outfile.txt" 61 0
+run_test 77 "<< infile.txt cat | cat >>	outfile.txt" 61 0
+run_test 78 "<< infile.txt cat | cat >>		outfile.txt" 61 0
+run_test 79 "<< infile.txt cat | cat >> outfile.txt	" 61 0
+run_test 80 "<< infile.txt cat | cat >> outfile.txt		" 61 0
+echo "end of test serie from 1 to 80"
+
+run_test 500 "'ls' -l" 500 0
+run_test 501 "'ls' '-l'" 501 0
+run_test 502 "\"ls\" -l" 502 0
+run_test 503 "\"ls\" \"-l\"" 503 0
+run_test 504 "\"ls\" '-l'" 504 0
+run_test 505 "'ls' \"-l\"" 505 0
+
+run_test 550 "ls -l | cat -e" 550 0
+run_test 551 "ls '-l' | cat -e" 551 0
+run_test 552 "ls -l | 'cat' -e" 552 0
+run_test 553 "ls -l | cat '-e'" 553 0
+run_test 554 "'ls' '-l' | cat -e" 554 0
+run_test 555 "'ls' '-l' | 'cat' -e" 555 0
+run_test 556 "'ls' '-l' | cat '-e'" 556 0
+run_test 557 "'ls' '-l' | 'cat' '-e'" 557 0
+run_test 558 "ls -l | 'cat' '-e'" 558 0
+run_test 559 "ls -l | cat '-e'" 559 0
+run_test 560 "ls '-l' | 'cat' -e" 560 0
+run_test 561 "ls '-l' | cat '-e'" 561 0
+run_test 562 "ls '-l' | 'cat' '-e'" 562 0
+run_test 563 "ls -l | 'cat' '-e'" 563 0
+
+run_test 564 "\"ls\" -l | cat -e" 564 0
+run_test 565 "ls \"-l\" | cat -e" 565 0
+run_test 566 "ls -l | \"cat\" -e" 566 0
+run_test 567 "ls -l | cat \"-e\"" 567 0
+run_test 568 "\"ls\" \"-l\" | cat -e" 568 0
+run_test 569 "\"ls\" \"-l\" | \"cat\" -e" 569 0
+run_test 570 "\"ls\" \"-l\" | cat \"-e\"" 570 0
+run_test 571 "\"ls\" \"-l\" | \"cat\" \"-e\"" 571 0
+run_test 572 "\"ls\" -l | \"cat\" \"-e\"" 572 0
+run_test 573 "\"ls\" -l | cat \"-e\"" 573 0
+run_test 574 "ls \"-l\" | \"cat\" -e" 574 0
+run_test 575 "ls \"-l\" | cat \"-e\"" 575 0
+run_test 576 "ls \"-l\" | \"cat\" \"-e\"" 576 0
+run_test 577 "ls -l | \"cat\" \"-e\"" 577 0
+
+run_test 578 "\"ls\" '-l' | cat -e" 578 0
+run_test 579 "\"ls\" -l | 'cat' -e" 579 0
+run_test 580 "\"ls\" -l | cat '-e'" 580 0
+run_test 581 "\"ls\" '-l' | 'cat' -e" 581 0
+run_test 582 "\"ls\" '-l' | cat '-e'" 582 0
+run_test 583 "\"ls\" '-l' | 'cat' '-e'" 583 0
+run_test 584 "\"ls\" -l | 'cat' '-e'" 584 0
+
+run_test 585 "'ls' \"-l\" | cat -e" 585 0
+run_test 586 "ls \"-l\" | 'cat' -e" 586 0
+run_test 587 "ls \"-l\" | cat '-e'" 587 0
+run_test 588 "'ls' \"-l\" | 'cat' -e" 588 0
+run_test 589 "'ls' \"-l\" | cat '-e'" 589 0
+run_test 590 "'ls' \"-l\" | 'cat' '-e'" 590 0
+run_test 591 "ls -l | \"cat\" '-e'" 591 0
+run_test 592 "'ls' -l | \"cat\" -e" 592 0
+run_test 593 "ls '-l' | \"cat\" -e" 593 0
+run_test 594 "'ls' '-l' | \"cat\" -e" 594 0
+run_test 595 "'ls' '-l' | \"cat\" '-e'" 595 0
+run_test 596 "ls '-l' | \"cat\" '-e'" 596 0
+run_test 597 "'ls' -l | \"cat\" '-e'" 597 0
+run_test 598 "'ls' -l | cat \"-e\"" 598 0
+run_test 599 "ls '-l' | cat \"-e\"" 599 0
+run_test 600 "ls -l | 'cat' \"-e\"" 600 0
+run_test 601 "'ls' '-l' | cat \"-e\"" 601 0
+run_test 602 "'ls' '-l' | 'cat' \"-e\"" 602 0
+run_test 603 "ls '-l' | 'cat' \"-e\"" 603 0
+
+run_test 604 "\"ls\" \"-l\" | cat -e" 604 0
+run_test 605 "\"ls\" \"-l\" | 'cat' -e" 605 0
+run_test 606 "\"ls\" \"-l\" | cat '-e'" 606 0
+run_test 607 "\"ls\" \"-l\" | 'cat' '-e'" 607 0
+
+run_test 608 "\"ls\" -l | \"cat\" -e" 608 0
+run_test 609 "\"ls\" '-l' | \"cat\" -e" 609 0
+run_test 610 "\"ls\" -l | \"cat\" '-e'" 610 0
+run_test 611 "\"ls\" '-l' | \"cat\" '-e'" 611 0
+
+run_test 612 "\"ls\" -l | cat \"-e\"" 612 0
+run_test 613 "\"ls\" '-l' | cat \"-e\"" 613 0
+run_test 614 "\"ls\" '-l' | 'cat' \"-e\"" 614 0
+run_test 615 "\"ls\" -l | 'cat' \"-e\"" 615 0
+
+run_test 616 "ls \"-l\" | \"cat\" -e" 616 0
+run_test 617 "'ls' \"-l\" | \"cat\" -e" 617 0
+run_test 618 "ls \"-l\" | \"cat\" '-e'" 618 0
+run_test 619 "'ls' \"-l\" | \"cat\" '-e'" 619 0
+
+run_test 620 "ls -l | \"cat\" \"-e\"" 620 0
+run_test 621 "'ls' -l | \"cat\" \"-e\"" 621 0
+run_test 622 "ls '-l' | \"cat\" \"-e\"" 622 0
+run_test 623 "'ls' '-l' | \"cat\" \"-e\"" 623 0
+
+run_test 624 "\"ls\" \"-l\" | \"cat\" -e" 624 0
+run_test 625 "\"ls\" \"-l\" | \"cat\" '-e'" 625 0
+
+run_test 626 "\"ls\" \"-l\" | cat \"-e\"" 626 0
+run_test 627 "\"ls\" \"-l\" | 'cat' \"-e\"" 627 0
+
+run_test 628 "\"ls\" -l | \"cat\" \"-e\"" 628 0
+run_test 629 "\"ls\" '-l' | \"cat\" \"-e\"" 629 0
+
+run_test 630 "ls \"-l\" | \"cat\" \"-e\"" 630 0
+run_test 631 "'ls' \"-l\" | \"cat\" \"-e\"" 631 0
+
+run_test 632 "\"ls\" \"-l\" | \"cat\" \"-e\"" 632 0
+echo "end of test serie from 500 to 632"
+
+#invalid command version provisoire a supprimer
+run_test 650 "'ls -l'" 650 0
+run_test 651 "\"ls -l\"" 651 0
+run_test 652 "'\"ls -l\"'" 652 0
+run_test 653 "\"'ls -l'\"" 653 0
+run_test 654 "'ls'-l" 654 0
+run_test 655 "ls'-l'" 655 0
+run_test 656 "\"ls\"-l" 656 0
+run_test 657 "ls\"-l\"" 657 0
+echo "end of test serie from 650 to 657"
+
+run_test 700 "'ls -l cat -e'" 700 0
+run_test 701 "\"ls -l cat -e\"" 701 0
+run_test 702 "'\"ls -l cat -e\"'" 702 0
+run_test 703 "\"'ls -l cat -e'\"" 703 0
+
+run_test 704 "'ls'-l cat -e" 704 0
+run_test 705 "ls'-l' cat -e" 705 0
+run_test 706 "\"ls\"-l cat -e" 706 0
+run_test 707 "ls\"-l\" cat -e" 707 0
+
+run_test 708 "'ls -l' cat -e" 708 0
+run_test 709 "\"ls -l\" cat -e" 709 0
+run_test 710 "'\"ls -l\"' cat -e" 710 0
+run_test 711 "\"'ls -l'\" cat -e" 711 0
+
+run_test 712 "'ls -l'cat -e" 712 0
+run_test 713 "\"ls -l\"cat -e" 713 0
+run_test 714 "'\"ls -l\"'cat -e" 714 0
+run_test 715 "\"'ls -l'\"cat -e" 715 0
+
+run_test 716 "'ls -l' 'cat' -e" 716 0
+run_test 717 "\"ls -l\" 'cat' -e" 717 0
+run_test 718 "'\"ls -l\"' 'cat' -e" 718 0
+run_test 719 "\"'ls -l'\" 'cat' -e" 719 0
 
 
+run_test 720 "'ls -l' cat '-e'" 720 0
+run_test 721 "\"ls -l\" cat '-e'" 721 0
+run_test 722 "'\"ls -l\"' cat '-e'" 722 0
+run_test 723 "\"'ls -l'\" cat '-e'" 723 0
+run_test 724 "'ls -l' 'cat' '-e'" 724 0
+run_test 725 "\"ls -l\" 'cat' '-e'" 725 0
+run_test 726 "'\"ls -l\"' 'cat' '-e'" 726 0
+run_test 727 "\"'ls -l'\" 'cat' '-e'" 727 0
+run_test 728 "'ls -l' \"cat\" '-e'" 728 0
+run_test 729 "\"ls -l\" \"cat\" '-e'" 729 0
+run_test 730 "'\"ls -l\"' \"cat\" '-e'" 730 0
+run_test 731 "\"'ls -l'\" \"cat\" '-e'" 731 0
+run_test 732 "'ls -l' \"cat\" \"-e\"" 732 0
+run_test 733 "\"ls -l\" \"cat\" \"-e\"" 733 0
+run_test 734 "'\"ls -l\"' \"cat\" \"-e\"" 734 0
+run_test 735 "\"'ls -l'\" \"cat\" \"-e\"" 735 0
+echo "end of test serie from 700 to 735"
+
+run_test 736 "'ls -l'cat '-e'" 736 0
+run_test 737 "\"ls -l\"cat '-e'" 737 0
+run_test 738 "'\"ls -l\"'cat '-e'" 738 0
+run_test 739 "\"'ls -l'\"cat '-e'" 739 0
+run_test 740 "'ls -l'cat \"-e\"" 740 0
+run_test 741 "\"ls -l\"cat \"-e\"" 741 0
+run_test 742 "'\"ls -l\"'cat \"-e\"" 742 0
+run_test 743 "\"'ls -l'\"cat \"-e\"" 743 0
+run_test 744 "'ls -l''cat' '-e'" 744 0
+run_test 745 "\"ls -l\"'cat' '-e'" 745 0
+run_test 746 "'\"ls -l\"''cat' '-e'" 746 0
+run_test 747 "\"'ls -l'\"'cat' '-e'" 747 0
+run_test 748 "'ls -l''cat' \"-e\"" 748 0
+run_test 749 "\"ls -l\"'cat' \"-e\"" 749 0
+run_test 750 "'\"ls -l\"''cat' \"-e\"" 750 0
+run_test 751 "\"'ls -l'\"'cat' \"-e\"" 751 0
+#run_test 752 "'ls -l'\"cat\" '-e'" 752 0
+#run_test 753 "\"ls -l\"\"cat\" '-e'" 753 0
+run_test 754 "'\"ls -l\"'\"cat\" '-e'" 754 0
+run_test 755 "\"'ls -l'\"\"cat\" '-e'" 755 0
+#run_test 756 "'ls -l'\"cat\" \"-e\"" 756 0
+#run_test 757 "\"ls -l\"\"cat\" \"-e\"" 757 0
+run_test 758 "'\"ls -l\"'\"cat\" \"-e\"" 758 0
+run_test 759 "\"'ls -l'\"\"cat\" \"-e\"" 759 0
+echo "end of test serie from 735 to 759"
+
+run_test 760 "'ls -l' cat'-e'" 760 0
+run_test 761 "\"ls -l\" cat'-e'" 761 0
+run_test 762 "'\"ls -l\"' cat'-e'" 762 0
+run_test 763 "\"'ls -l'\" cat'-e'" 763 0
+run_test 764 "'ls -l' 'cat''-e'" 764 0
+run_test 765 "\"ls -l\" 'cat''-e'" 765 0
+run_test 766 "'\"ls -l\"' 'cat''-e'" 766 0
+run_test 767 "\"'ls -l'\" 'cat''-e'" 767 0
+run_test 768 "'ls -l' \"cat\"'-e'" 768 0
+run_test 769 "\"ls -l\" \"cat\"'-e'" 769 0
+run_test 770 "'\"ls -l\"' \"cat\"'-e'" 770 0
+run_test 771 "\"'ls -l'\" \"cat\"'-e'" 771 0
+run_test 772 "'ls -l' \"cat\"\"-e\"" 772 0
+run_test 773 "\"ls -l\" \"cat\"\"-e\"" 773 0
+run_test 774 "'\"ls -l\"' \"cat\"\"-e\"" 774 0
+run_test 775 "\"'ls -l'\" \"cat\"\"-e\"" 775 0
+echo "end of test serie from 759 to 775"
 
 
+: <<BLOCK_COMMENT
+#invalid command version definitive
+run_test 650 "'ls -l'" 650 127
+run_test 651 "\"ls -l\"" 651 127
+run_test 652 "'\"ls -l\"'" 652 127
+run_test 653 "\"'ls -l'\"" 653 127
+run_test 654 "'ls'-l" 654 127
+run_test 655 "ls'-l'" 655 127
+run_test 656 "\"ls\"-l" 656 127
+run_test 657 "ls\"-l\"" 657 127
+
+run_test 700 "'ls -l cat -e'" 700 127
+run_test 701 "\"ls -l cat -e\"" 701 127
+run_test 702 "'\"ls -l cat -e\"'" 702 127
+run_test 703 "\"'ls -l cat -e'\"" 703 127
+
+run_test 704 "'ls'-l cat -e" 704 127
+run_test 705 "ls'-l' cat -e" 705 127
+run_test 706 "\"ls\"-l cat -e" 706 127
+run_test 707 "ls\"-l\" cat -e" 707 127
+
+run_test 708 "'ls -l' cat -e" 708 127
+run_test 709 "\"ls -l\" cat -e" 709 127
+run_test 710 "'\"ls -l\"' cat -e" 710 127
+run_test 711 "\"'ls -l'\" cat -e" 711 127
+
+run_test 712 "'ls -l'cat -e" 712 127
+run_test 713 "\"ls -l\"cat -e" 713 127
+run_test 714 "'\"ls -l\"'cat -e" 714 127
+run_test 715 "\"'ls -l'\"cat -e" 715 127
+
+run_test 716 "'ls -l' 'cat' -e" 716 127
+run_test 717 "\"ls -l\" 'cat' -e" 717 127
+run_test 718 "'\"ls -l\"' 'cat' -e" 718 127
+run_test 719 "\"'ls -l'\" 'cat' -e" 719 127
 
 
+run_test 720 "'ls -l' cat '-e'" 720 127
+run_test 721 "\"ls -l\" cat '-e'" 721 127
+run_test 722 "'\"ls -l\"' cat '-e'" 722 127
+run_test 723 "\"'ls -l'\" cat '-e'" 723 127
+run_test 724 "'ls -l' 'cat' '-e'" 724 127
+run_test 725 "\"ls -l\" 'cat' '-e'" 725 127
+run_test 726 "'\"ls -l\"' 'cat' '-e'" 726 127
+run_test 727 "\"'ls -l'\" 'cat' '-e'" 727 127
+run_test 728 "'ls -l' \"cat\" '-e'" 728 127
+run_test 729 "\"ls -l\" \"cat\" '-e'" 729 127
+run_test 730 "'\"ls -l\"' \"cat\" '-e'" 730 127
+run_test 731 "\"'ls -l'\" \"cat\" '-e'" 731 127
+run_test 732 "'ls -l' \"cat\" \"-e\"" 732 127
+run_test 733 "\"ls -l\" \"cat\" \"-e\"" 733 127
+run_test 734 "'\"ls -l\"' \"cat\" \"-e\"" 734 127
+run_test 735 "\"'ls -l'\" \"cat\" \"-e\"" 735 127
 
+run_test 736 "'ls -l'cat '-e'" 736 127
+run_test 737 "\"ls -l\"cat '-e'" 737 127
+run_test 738 "'\"ls -l\"'cat '-e'" 738 127
+run_test 739 "\"'ls -l'\"cat '-e'" 739 127
+run_test 740 "'ls -l'cat \"-e\"" 770 127
+run_test 741 "\"ls -l\"cat \"-e\"" 741 127
+run_test 742 "'\"ls -l\"'cat \"-e\"" 772 127
+run_test 743 "\"'ls -l'\"cat \"-e\"" 743 127
+run_test 744 "'ls -l''cat' '-e'" 744 127
+run_test 745 "\"ls -l\"'cat' '-e'" 745 127
+run_test 746 "'\"ls -l\"''cat' '-e'" 746 127
+run_test 747 "\"'ls -l'\"'cat' '-e'" 747 127
+run_test 748 "'ls -l''cat' \"-e\"" 748 127
+run_test 749 "\"ls -l\"'cat' \"-e\"" 749 127
+run_test 750 "'\"ls -l\"''cat' \"-e\"" 750 127
+run_test 751 "\"'ls -l'\"'cat' \"-e\"" 751 127
+run_test 752 "'ls -l'\"cat\" '-e'" 752 127
+run_test 753 "\"ls -l\"\"cat\" '-e'" 753 127
+run_test 754 "'\"ls -l\"'\"cat\" '-e'" 754 127
+run_test 755 "\"'ls -l'\"\"cat\" '-e'" 755 127
+run_test 756 "'ls -l'\"cat\" \"-e\"" 756 127
+run_test 757 "\"ls -l\"\"cat\" \"-e\"" 757 127
+run_test 758 "'\"ls -l\"'\"cat\" \"-e\"" 758 127
+run_test 759 "\"'ls -l'\"\"cat\" \"-e\"" 759 127
 
+run_test 760 "'ls -l' cat'-e'" 760 127
+run_test 761 "\"ls -l\" cat'-e'" 761 127
+run_test 762 "'\"ls -l\"' cat'-e'" 762 127
+run_test 763 "\"'ls -l'\" cat'-e'" 763 127
+run_test 764 "'ls -l' 'cat''-e'" 764 127
+run_test 765 "\"ls -l\" 'cat''-e'" 765 127
+run_test 766 "'\"ls -l\"' 'cat''-e'" 766 127
+run_test 767 "\"'ls -l'\" 'cat''-e'" 767 127
+run_test 768 "'ls -l' \"cat\"'-e'" 768 127
+run_test 769 "\"ls -l\" \"cat\"'-e'" 769 127
+run_test 770 "'\"ls -l\"' \"cat\"'-e'" 770 127
+run_test 771 "\"'ls -l'\" \"cat\"'-e'" 771 127
+run_test 772 "'ls -l' \"cat\"\"-e\"" 772 127
+run_test 773 "\"ls -l\" \"cat\"\"-e\"" 773 127
+run_test 774 "'\"ls -l\"' \"cat\"\"-e\"" 774 127
+run_test 775 "\"'ls -l'\" \"cat\"\"-e\"" 775 127
 
+BLOCK_COMMENT
 
-
-run_test 26 "<<		infile.txt cat | cat > outfile.txt"
-run_test 27 "< infile.txt cat | cat >> outfile.txt"
-
-
+# -g for greater than and -ge for greater than or equal to
+if [ $flag -gt 0 ]
+then
+	echo -e "${RED}$flag errors were detected${NC}"
+else
+	echo -e "${GREEN}no error detected${NC}"
+fi
 delete_test_files
 
 : <<BLOCK_COMMENT
@@ -285,7 +673,8 @@ for i in {1..27}; do
         max_length=${#test_message}
     fi
 	done
-for i in {1..27}; do
+for i in {1..27}; dorun_test 606 "\"ls\"-l" 606 127
+
     run_test $i "< infile.txt cat | cat > outfile.txt" $i
     test_message="test$i\t< infile.txt cat | cat > outfile.txt\t"
     padding=$((max_length - ${#test_message}))

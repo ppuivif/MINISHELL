@@ -54,17 +54,19 @@ int main(int argc, char **argv)
 	char	*line;
 	t_command_line *command_line;
 
+	line = NULL;
 	if (argc == 2)
 	{
 		while (1)
 		{
-			line = ft_strdup_freed(readline("minishell : "));
+			line = readline("minishell : ");
 			if (!line)
 				break;
 			add_history(line);//here?
 //			command_line = parse_command_line(line);
 			command_line = parse_command_line(line, atoi(argv[1]));
 			free(line);
+			line = NULL;
 			if (command_line->flag == false)
 			{
 				free_all(&command_line);

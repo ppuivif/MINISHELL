@@ -170,38 +170,54 @@ int	get_arguments(char **remaining_line, t_substring *substring)
 	return (0);
 }
 
-int	check_quotes(char *remaining_line, char *c, int len)
+int	check_quotes(char *remaining_line, char *c, int flag)
 {
 	int j;
 	int l;
+	int len_c;
+	int len_to_end;
 
 	j = 1;
 	l = 0;
-	remaining_line++;
-	len = (int)strcspn(remaining_line, c);
-	if (len == (int)ft_strlen(remaining_line))
+//	remaining_line++;
+	flag += 1;
+	len_c = (int)strcspn(&remaining_line[1], c);
+	len_to_end = (int)ft_strlen(&remaining_line[1]);
+	if (len_c == len_to_end)
 		return (-1);
-	while (remaining_line[len + j] && remaining_line[len + j] != '<' &&	\
-	remaining_line[len + j] != '>' && remaining_line[len + j] != '|' &&	\
-	ft_isspace(remaining_line[len + j]) != 0)
+	while ((len_c + flag + j) <= (len_to_end + 1) && remaining_line[len_c + flag + j] && remaining_line[len_c + flag + j] != '<' &&	\
+	remaining_line[len_c + flag + j] != '>' && remaining_line[len_c + flag + j] != '|' &&	\
+	ft_isspace(remaining_line[len_c + flag + j]) != 0)
 	{
-		if (remaining_line[len + j] == '\'')
+		if ((len_c + flag + j) <= (len_to_end + 1) && remaining_line[len_c + flag + j] == '\'')
 		{
-			len += check_quotes(&remaining_line[len + j], "\'", len) + 2;
-			if (len == 1)
+			//flag += 1;
+			len_c += check_quotes(&remaining_line[len_c + flag + j], "\'", 0);
+			j = 0;
+			if (len_c == 1)
 				return (-1);
 		}
-		if (remaining_line[len + j] == '\"')
+		if ((len_c + flag + j) <= (len_to_end + 1) && remaining_line[len_c + flag + j] == '\"')
 		{
-			len = check_quotes(&remaining_line[len + j], "\"", len) + 2;
-			if (len == 1)
+			//flag += 1;
+			len_c = check_quotes(&remaining_line[len_c + flag + j], "\"", 0);
+			j = 0;
+			if (len_c == 1)
 				return (-1);
 		}
-		if (strcspn(&remaining_line[len + j], "\'\"") == ft_strlen(&remaining_line[len + j]))
+		if ((len_c + flag + j) <= (len_to_end + 1) && remaining_line[len_c + flag + j] && remaining_line[len_c + flag + j] != '<' && \
+		remaining_line[len_c + flag + j] != '>' && remaining_line[len_c + flag + j] != '|' &&	\
+		ft_isspace(remaining_line[len_c + flag + j]) != 0 && \
+		(strcspn(&remaining_line[len_c + flag + j], "\'\"") == ft_strlen(&remaining_line[len_c + flag + j]) || \
+		strcspn(&remaining_line[len_c + flag + j], "\'\"") > strcspn(&remaining_line[len_c + flag + j], "<>| \t\n\v\f\r\0")))
 			l++;
-		j++;
+		if ((len_c + flag + j) <= (len_to_end + 1) && remaining_line[len_c + flag + j] && remaining_line[len_c + flag + j] != '<' && \
+		remaining_line[len_c + flag + j] != '>' && remaining_line[len_c + flag + j] != '|' &&	\
+		ft_isspace(remaining_line[len_c + flag + j]) != 0)
+			j++;
 	}
-	return (len + 2 + l);
+//	return (len_c + 2 + l);
+	return (len_c + flag + 1 + l);
 }
  
 unsigned int count_angled_bracket(char *str)
