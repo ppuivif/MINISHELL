@@ -218,7 +218,9 @@ run_test() {
     message_length=${#message}
     # Calculate the number of spaces needed for alignment
     num_spaces=$((60 - message_length))
+    #num_tabs=$((25 - message_length))
     # Create a string of spaces
+	#tabs=$(printf "%${num_tabs}s" "" | tr ' ' '\t')
     spaces=$(printf "%-${num_spaces}s" "")
     # Print the message with aligned status
 	if [ "$display" == "wrong_only" ]
@@ -724,11 +726,50 @@ run_test_syntax_error 2040 ">><>>>> outfile.txt" 2
 run_test_syntax_error 2041 ">><>>>>> outfile.txt" 2
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 2000 to 2999\n"
+	echo -e "end of test serie from 2000 to 2499\n"
 else
-	echo -e "end of test serie from 2000 to 2999"
+	echo -e "end of test serie from 2000 to 2499"
 fi
 
+run_test_syntax_error 2300 "< 'infile.txt" 2 #exit_status to confirm
+run_test_syntax_error 2301 "< infile.txt'" 2
+run_test_syntax_error 2302 "< \"infile.txt" 2
+run_test_syntax_error 2303 "< infile.txt\"" 2
+run_test_syntax_error 2304 "< 'infile.txt\"" 2
+run_test_syntax_error 2305 "< 'infile.txt'\"" 2
+run_test_syntax_error 2306 "< \"infile.txt'\"" 2
+run_test_syntax_error 2307 "< \"infile.txt\"'" 2
+run_test_syntax_error 2308 "<< 'infile.txt" 2
+run_test_syntax_error 2309 "<< infile.txt'" 2
+run_test_syntax_error 2310 "<< \"infile.txt" 2
+run_test_syntax_error 2311 "<< infile.txt\"" 2
+run_test_syntax_error 2312 "<< 'infile.txt\"" 2
+run_test_syntax_error 2313 "<< 'infile.txt'\"" 2
+run_test_syntax_error 2314 "<< \"infile.txt'\"" 2
+run_test_syntax_error 2315 "<< \"infile.txt\"'" 2
+
+run_test_syntax_error 2400 "> 'outfile.txt" 2
+run_test_syntax_error 2401 "> outfile.txt'" 2
+run_test_syntax_error 2402 "> \"outfile.txt" 2
+run_test_syntax_error 2403 "> outfile.txt\"" 2
+run_test_syntax_error 2404 "> 'outfile.txt\"" 2
+run_test_syntax_error 2405 "> 'outfile.txt'\"" 2
+run_test_syntax_error 2406 "> \"outfile.txt'\"" 2
+run_test_syntax_error 2407 "> \"outfile.txt\"'" 2
+run_test_syntax_error 2408 ">> 'outfile.txt" 2
+run_test_syntax_error 2409 ">> outfile.txt'" 2
+run_test_syntax_error 2410 ">> \"outfile.txt" 2
+run_test_syntax_error 2411 ">> outfile.txt\"" 2
+run_test_syntax_error 2412 ">> 'outfile.txt\"" 2
+run_test_syntax_error 2413 ">> 'outfile.txt'\"" 2
+run_test_syntax_error 2414 ">> \"outfile.txt'\"" 2
+run_test_syntax_error 2415 ">> \"outfile.txt\"'" 2
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 2300 to 2999\n"
+else
+	echo -e "end of test serie from 2300 to 2999"
+fi
 
 run_test_syntax_error 3000 "'ls" 2 #exit_status to confirm
 run_test_syntax_error 3001 "ls'" 2
