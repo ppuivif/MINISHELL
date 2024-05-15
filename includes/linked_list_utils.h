@@ -23,10 +23,10 @@ typedef struct s_native_redirection
 	{
 		REDIRECTION_OUTFILE = 0,
 		REDIRECTION_INFILE = 1,
-		REDIRECTION_APPEND = 2,
-		REDIRECTION_HEREDOC = 3,
-		REDIRECTION_INDEFINED = -1,
-//		REDIRECTION_TEXT,
+		REDIRECTION_INDEFINED = 2,
+		REDIRECTION_APPEND = 3,
+		REDIRECTION_HEREDOC = 4,
+//		REDIRECTION_TEXT = 5,
 	} e_redirection;
 	t_native_redirection	*next;
 }	t_native_redirection;
@@ -44,7 +44,7 @@ typedef struct s_substring
 typedef struct s_command_line t_command_line;
 typedef struct s_command_line
 {
-	bool				flag;
+	int					exit_code;
 	t_substring			*substrings;
 }	t_command_line;
 

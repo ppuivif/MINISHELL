@@ -8,4 +8,23 @@ echo $ PATH
 
 echo $ "PATH"
 
+syntax error :
+
+	|
+	||
+	| cat
+	cat || cat
+	cat | | cat
+	cat | | cat |
+	cat |
+	<<>
+	>><
+	<>
+	><
+	>
+	<
+	<|
+	>|
+	' cat
+	cat'cat"cat"
 

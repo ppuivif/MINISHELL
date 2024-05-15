@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/08 05:34:41 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/05/15 11:05:13 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,14 +178,14 @@ void	print_e_redirection (int e_redirection, int fd)
 	if (e_redirection == 1)
 		ft_putstr_fd("REDIRECTION_INFILE", fd);
 	if (e_redirection == 2)
-		ft_putstr_fd("REDIRECTION_APPEND", fd);
-	if (e_redirection == 3)
-		ft_putstr_fd("REDIRECTION_HEREDOC", fd);
-	if (e_redirection == 4)
-		ft_putstr_fd("REDIRECTION_TEXT", fd);
-	if (e_redirection == 5)
 		ft_putstr_fd("REDIRECTION_INDEFINED", fd);
-}
+	if (e_redirection == 3)
+		ft_putstr_fd("REDIRECTION_APPEND", fd);
+	if (e_redirection == 4)
+		ft_putstr_fd("REDIRECTION_HEREDOC", fd);
+	if (e_redirection == 5)
+		ft_putstr_fd("REDIRECTION_TEXT", fd);
+	}
 
 size_t	ft_lst_size1(t_substring *head)
 {

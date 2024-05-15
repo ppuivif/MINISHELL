@@ -204,9 +204,9 @@ run_test() {
     message=$test
     echo > "temp/minishell_test$test_index.txt"
     chmod 644 "temp/minishell_test$test_index.txt"
-    exec 3> "temp/minishell_test$test_index.txt"
+	exec 3> "temp/minishell_test$test_index.txt"
     echo "$command" | ./minishell 3 2>&1 >/dev/null
-    status_output_minishell=$?
+	status_output_minishell=$?
     if [ $status_output_minishell -eq $status ] && diff "temp/minishell_test$test_index.txt" "Tests/test$file_test.txt" > /dev/null
 	then
         status_message="${GREEN} OK${NC}"
@@ -233,7 +233,89 @@ run_test() {
 	#echo -e "$message"
 }
 
+: <<BLOCK_COMMENT
+run_test() {
+    test_index=$1
+    command=$2
+	file_test=$3
+    status=$4
+    test="test$test_index\t$command\t"
+    message=$test
+    echo > "temp/minishell_test$test_index.txt"
+    chmod 644 "temp/minishell_test$test_index.txt"
+    exec 3> "temp/minishell_test$test_index.txt"
+    echo "$command"
+	eval "$command"
+    status_output_minishell=$?
+    if [ $status_output_minishell -eq $status ] && diff "temp/minishell_test$test_index.txt" "Tests/test$file_test.txt" > /dev/null
+	then
+        status_message="${GREEN} OK${NC}"
+    else
+        status_message="${RED} KO${NC}"
+		flag=$((flag + 1))
+    fi
+	# Calculate the length of the message
+    message_length=${#message}
+    # Calculate the number of spaces needed for alignment
+    num_spaces=$((60 - message_length))
+    # Create a string of spaces
+    spaces=$(printf "%-${num_spaces}s" "")
+    # Print the message with aligned status
+	if [ "$display" == "wrong_only" ]
+	then
+		if [ "$status_message" == "${RED} KO${NC}" ]
+		then
+			echo -e "${message}${spaces}${status_message}"
+		fi
+	else
+			echo -e "${message}${spaces}${status_message}"
+	fi
+	#echo -e "$message"
+}
+BLOCK_COMMENT
 
+run_test_syntax_error() {
+    test_index=$1
+    command=$2
+    status=$3
+#	file_test=$3
+    test="test$test_index\t$command\t"
+    message=$test
+	substring="syntax error"
+    echo > "temp/minishell_test$test_index.txt"
+    chmod 644 "temp/minishell_test$test_index.txt"
+    echo > "temp/stderr2_minishell$test_index.txt"
+    chmod 644 "temp/stderr2_minishell$test_index.txt"
+	exec 3> "temp/minishell_test$test_index.txt"
+    echo "$command" | ./minishell 3 1>/dev/null 2>"temp/stderr2_minishell$test_index.txt"
+    status_output_minishell=$?
+	if [ $status_output_minishell -eq $status ] &&
+		grep "$substring" temp/stderr2_minishell$test_index.txt >/dev/null &&
+		[ $(wc -c < "temp/minishell_test$test_index.txt") -eq 0 ]
+	then
+        status_message="${GREEN} OK${NC}"
+    else
+        status_message="${RED} KO${NC}"
+		flag=$((flag + 1))
+    fi
+	# Calculate the length of the message
+    message_length=${#message}
+    # Calculate the number of spaces needed for alignment
+    num_spaces=$((60 - message_length))
+    # Create a string of spaces
+    spaces=$(printf "%-${num_spaces}s" "")
+    # Print the message with aligned status
+	if [ "$display" == "wrong_only" ]
+	then
+		if [ "$status_message" == "${RED} KO${NC}" ]
+		then
+			echo -e "${message}${spaces}${status_message}"
+		fi
+	else
+			echo -e "${message}${spaces}${status_message}"
+	fi
+	#echo -e "$message"
+}
 
 mkdir temp
 chmod 777 temp
@@ -351,7 +433,12 @@ run_test 77 "<< infile.txt cat | cat >>	outfile.txt" 61 0
 run_test 78 "<< infile.txt cat | cat >>		outfile.txt" 61 0
 run_test 79 "<< infile.txt cat | cat >> outfile.txt	" 61 0
 run_test 80 "<< infile.txt cat | cat >> outfile.txt		" 61 0
-echo "end of test serie from 1 to 80"
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 1 to 80\n"
+else
+	echo -e "end of test serie from 1 to 80"
+fi
 
 run_test 500 "'ls' -l" 500 0
 run_test 501 "'ls' '-l'" 501 0
@@ -456,7 +543,12 @@ run_test 630 "ls \"-l\" | \"cat\" \"-e\"" 630 0
 run_test 631 "'ls' \"-l\" | \"cat\" \"-e\"" 631 0
 
 run_test 632 "\"ls\" \"-l\" | \"cat\" \"-e\"" 632 0
-echo "end of test serie from 500 to 632"
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 500 to 632\n"
+else
+	echo -e "end of test serie from 500 to 632"
+fi
 
 #invalid command version provisoire a supprimer
 run_test 650 "'ls -l'" 650 0
@@ -467,7 +559,12 @@ run_test 654 "'ls'-l" 654 0
 run_test 655 "ls'-l'" 655 0
 run_test 656 "\"ls\"-l" 656 0
 run_test 657 "ls\"-l\"" 657 0
-echo "end of test serie from 650 to 657"
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 650 to 657\n"
+else
+	echo -e "end of test serie from 650 to 657"
+fi
 
 run_test 700 "'ls -l cat -e'" 700 0
 run_test 701 "\"ls -l cat -e\"" 701 0
@@ -511,7 +608,12 @@ run_test 732 "'ls -l' \"cat\" \"-e\"" 732 0
 run_test 733 "\"ls -l\" \"cat\" \"-e\"" 733 0
 run_test 734 "'\"ls -l\"' \"cat\" \"-e\"" 734 0
 run_test 735 "\"'ls -l'\" \"cat\" \"-e\"" 735 0
-echo "end of test serie from 700 to 735"
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 700 to 735\n"
+else
+	echo -e "end of test serie from 700 to 735"
+fi
 
 run_test 736 "'ls -l'cat '-e'" 736 0
 run_test 737 "\"ls -l\"cat '-e'" 737 0
@@ -529,15 +631,20 @@ run_test 748 "'ls -l''cat' \"-e\"" 748 0
 run_test 749 "\"ls -l\"'cat' \"-e\"" 749 0
 run_test 750 "'\"ls -l\"''cat' \"-e\"" 750 0
 run_test 751 "\"'ls -l'\"'cat' \"-e\"" 751 0
-#run_test 752 "'ls -l'\"cat\" '-e'" 752 0
-#run_test 753 "\"ls -l\"\"cat\" '-e'" 753 0
+run_test 752 "'ls -l'\"cat\" '-e'" 752 0
+run_test 753 "\"ls -l\"\"cat\" '-e'" 753 0
 run_test 754 "'\"ls -l\"'\"cat\" '-e'" 754 0
 run_test 755 "\"'ls -l'\"\"cat\" '-e'" 755 0
-#run_test 756 "'ls -l'\"cat\" \"-e\"" 756 0
-#run_test 757 "\"ls -l\"\"cat\" \"-e\"" 757 0
+run_test 756 "'ls -l'\"cat\" \"-e\"" 756 0
+run_test 757 "\"ls -l\"\"cat\" \"-e\"" 757 0
 run_test 758 "'\"ls -l\"'\"cat\" \"-e\"" 758 0
 run_test 759 "\"'ls -l'\"\"cat\" \"-e\"" 759 0
-echo "end of test serie from 735 to 759"
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 735 to 759\n"
+else
+	echo -e "end of test serie from 735 to 759"
+fi
 
 run_test 760 "'ls -l' cat'-e'" 760 0
 run_test 761 "\"ls -l\" cat'-e'" 761 0
@@ -555,7 +662,115 @@ run_test 772 "'ls -l' \"cat\"\"-e\"" 772 0
 run_test 773 "\"ls -l\" \"cat\"\"-e\"" 773 0
 run_test 774 "'\"ls -l\"' \"cat\"\"-e\"" 774 0
 run_test 775 "\"'ls -l'\" \"cat\"\"-e\"" 775 0
-echo "end of test serie from 759 to 775"
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 760 to 775\n"
+else
+	echo -e "end of test serie from 760 to 775"
+fi
+
+run_test 1000 "'ls'-l'cat -e'" 1000 0
+run_test 1001 "'ls'-l'cat  -e'" 1001 0
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 1000 to 1100\n"
+else
+	echo -e "end of test serie from 1000 to 1100"
+fi
+
+
+run_test_syntax_error 2000 "<<< infile.txt" 2 #exit_status to confirm
+run_test_syntax_error 2001 "<<<< infile.txt" 2
+run_test_syntax_error 2002 "<<<<< infile.txt" 2
+run_test_syntax_error 2003 "<<> infile.txt" 2
+run_test_syntax_error 2004 "<<>> infile.txt" 2
+run_test_syntax_error 2005 "<<>>> infile.txt" 2
+run_test_syntax_error 2006 "<<>>>> infile.txt" 2
+run_test_syntax_error 2007 "<<>< infile.txt" 2
+run_test_syntax_error 2008 "<<><< infile.txt" 2
+run_test_syntax_error 2009 "<<><<< infile.txt" 2
+run_test_syntax_error 2010 "<<><<<< infile.txt" 2
+run_test_syntax_error 2011 "<<><> infile.txt" 2
+run_test_syntax_error 2012 "<<><>> infile.txt" 2
+run_test_syntax_error 2013 "<<><>>> infile.txt" 2
+run_test_syntax_error 2014 "<<><>>>> infile.txt" 2
+run_test_syntax_error 2014 "<> infile.txt" 2
+run_test_syntax_error 2015 "<>> infile.txt" 2
+run_test_syntax_error 2016 "<>>> infile.txt" 2
+run_test_syntax_error 2017 "<>>>> infile.txt" 2
+run_test_syntax_error 2018 "<>>>>> infile.txt" 2
+run_test_syntax_error 2019 "<>< infile.txt" 2
+run_test_syntax_error 2020 "<><< infile.txt" 2
+run_test_syntax_error 2021 "<><<< infile.txt" 2
+run_test_syntax_error 2022 "<><<<< infile.txt" 2
+run_test_syntax_error 2023 "<><> infile.txt" 2
+run_test_syntax_error 2024 "<><>> infile.txt" 2
+run_test_syntax_error 2025 "<><>>> infile.txt" 2
+run_test_syntax_error 2026 "<><>>>> infile.txt" 2
+run_test_syntax_error 2027 "<><>>>>> infile.txt" 2
+run_test_syntax_error 2028 ">>> outfile.txt" 2
+run_test_syntax_error 2029 ">>>> outfile.txt" 2
+run_test_syntax_error 2030 ">>>>> outfile.txt" 2
+run_test_syntax_error 2031 ">>>>>> outfile.txt" 2
+run_test_syntax_error 2032 ">>< outfile.txt" 2
+run_test_syntax_error 2033 ">><< outfile.txt" 2
+run_test_syntax_error 2034 ">><<< outfile.txt" 2
+run_test_syntax_error 2035 ">><<<< outfile.txt" 2
+run_test_syntax_error 2036 ">><<<<< outfile.txt" 2
+run_test_syntax_error 2037 ">><> outfile.txt" 2
+run_test_syntax_error 2038 ">><>> outfile.txt" 2
+run_test_syntax_error 2039 ">><>>> outfile.txt" 2
+run_test_syntax_error 2040 ">><>>>> outfile.txt" 2
+run_test_syntax_error 2041 ">><>>>>> outfile.txt" 2
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 2000 to 2999\n"
+else
+	echo -e "end of test serie from 2000 to 2999"
+fi
+
+
+run_test_syntax_error 3000 "'ls" 2 #exit_status to confirm
+run_test_syntax_error 3001 "ls'" 2
+run_test_syntax_error 3002 "\"ls" 2
+run_test_syntax_error 3003 "ls\"" 2
+run_test_syntax_error 3004 "'ls\"" 2
+run_test_syntax_error 3005 "'ls'\"" 2
+run_test_syntax_error 3006 "\"ls'" 2
+run_test_syntax_error 3007 "\"ls\"'" 2
+
+run_test_syntax_error 3100 "cat 'ls" 2
+run_test_syntax_error 3101 "cat ls'" 2
+run_test_syntax_error 3102 "cat \"ls" 2
+run_test_syntax_error 3103 "cat ls\"" 2
+run_test_syntax_error 3104 "'cat' 'ls" 2
+run_test_syntax_error 3105 "'cat' ls'" 2
+run_test_syntax_error 3106 "'cat' ls'" 2
+run_test_syntax_error 3107 "'cat' \"ls" 2
+run_test_syntax_error 3108 "'cat' ls\"" 2
+run_test_syntax_error 3109 ""cat" 'ls" 2
+run_test_syntax_error 3110 ""cat" ls'" 2
+run_test_syntax_error 3111 ""cat" ls'" 2
+run_test_syntax_error 3112 ""cat" \"ls" 2
+run_test_syntax_error 3113 ""cat" ls\"" 2
+run_test_syntax_error 3114 "cat 'ls " 2
+run_test_syntax_error 3115 "cat ls' " 2
+run_test_syntax_error 3116 "cat \"ls " 2
+run_test_syntax_error 3117 "cat ls\" " 2
+run_test_syntax_error 3118 "cat 'ls  " 2
+run_test_syntax_error 3119 "cat ls'  " 2
+run_test_syntax_error 3120 "cat \"ls  " 2
+run_test_syntax_error 3121 "cat ls\"  " 2
+run_test_syntax_error 3122 "cat ' ls" 2
+run_test_syntax_error 3123 "cat  ls'" 2
+run_test_syntax_error 3124 "cat \" ls" 2
+run_test_syntax_error 3125 "cat ls \"" 2
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 3000 to 3999\n"
+else
+	echo -e "end of test serie from 3000 to 3999"
+fi
 
 
 : <<BLOCK_COMMENT
@@ -663,7 +878,7 @@ then
 else
 	echo -e "${GREEN}no error detected${NC}"
 fi
-delete_test_files
+#delete_test_files
 
 : <<BLOCK_COMMENT
 

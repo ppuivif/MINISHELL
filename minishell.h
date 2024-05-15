@@ -35,9 +35,12 @@ int		init_redirection_struct(t_native_redirection **n_redirection);
 int		init_substring_struct(t_substring **substring);
 int		init_command_line_struct(t_command_line **command_line);
 
-int		check_quotes(char *remaining_line, char *c, int flag);
+int			check_quotes(char *remaining_line, char *c, int flag);
+int			check_char_validity(char *remaining_line, int len_to_quote, int flag, int j);
+
 unsigned int count_angled_bracket(char *str);
 
 void	error_allocation(t_command_line **command_line);
+void	error_handling(t_command_line **command_line);
 
 #endif

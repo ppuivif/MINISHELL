@@ -64,14 +64,14 @@ int main(int argc, char **argv)
 				break;
 			add_history(line);//here?
 //			command_line = parse_command_line(line);
-			command_line = parse_command_line(line, atoi(argv[1]));
+			command_line = parse_command_line(line, atoi(argv[1]));//to run script.sh
 			free(line);
 			line = NULL;
-			if (command_line->flag == false)
+			if (command_line->exit_code != 0)
 			{
-				free_all(&command_line);
-				ft_putstr_fd("syntax error\n", 2);
-				return (1);// to confirm
+				error_handling(&command_line);
+				printf("%d\n", command_line->exit_code);
+				return (command_line->exit_code);
 			}
 			free_all(&command_line);
 		}
