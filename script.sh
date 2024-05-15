@@ -878,7 +878,7 @@ then
 else
 	echo -e "${GREEN}no error detected${NC}"
 fi
-#delete_test_files
+delete_test_files
 
 : <<BLOCK_COMMENT
 
