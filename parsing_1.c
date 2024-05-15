@@ -24,7 +24,7 @@ t_command_line	*parse_command_line(char *str, int fd)
 		remaining_line = skip_first_whitespaces(remaining_line);
 		if (remaining_line[0] == '|')
 		{
-			remaining_line++;
+			remaining_line++;if (command_line->exit_code != 0)
 			remaining_line = skip_first_whitespaces(remaining_line);
 			if (ft_strlen(remaining_line) == 0)
 			{
@@ -176,7 +176,7 @@ int	count_len_to_cut(char *remaining_line)
 			len = len_to_ifs;
 	}
 	if (len_to_quote == - 1)
-		return (2);
+		return (-1);
 	len += len_to_quote;
 	return (len);
 }
@@ -188,26 +188,30 @@ int	count_len_to_quotes(char *remaining_line, char *c, int flag)
 	int j;
 	int len_to_quote;
 	int len_to_end;
+	int	return_value;
 
 	j = 1;
 	flag += 1;
 	len_to_quote = (int)strcspn(&remaining_line[1], c);
 	len_to_end = (int)ft_strlen(&remaining_line[1]);
+	return_value = 0;
 	if (len_to_quote == len_to_end)
 		return (-1);
 	while (check_char_validity(remaining_line, len_to_quote, flag, j) == 0)
 	{
 		if ((len_to_quote + flag + j) <= (len_to_end + 1) && remaining_line[len_to_quote + flag + j] == '\'')
 		{
-			len_to_quote += count_len_to_quotes(&remaining_line[len_to_quote + flag + j], "\'", 0);
-			if (len_to_quote == 1)
+			return_value = count_len_to_quotes(&remaining_line[len_to_quote + flag + j], "\'", 0);
+			if ( return_value == -1)
 				return (-1);
+			len_to_quote += return_value;
 		}
 		if ((len_to_quote + flag + j) <= (len_to_end + 1) && remaining_line[len_to_quote + flag + j] == '\"')
 		{
-			len_to_quote += count_len_to_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);
-			if (len_to_quote == 1)
+			return_value = count_len_to_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);
+			if ( return_value == -1)
 				return (-1);
+			len_to_quote += return_value;
 		}
 		if (check_char_validity(remaining_line, len_to_quote, flag, j) == 0)
 			j++;

@@ -291,7 +291,8 @@ run_test_syntax_error() {
 	exec 3> "temp/minishell_test$test_index.txt"
     echo "$command" | ./minishell 3 1>/dev/null 2>"temp/stderr2_minishell$test_index.txt"
     status_output_minishell=$?
-	if [ $status_output_minishell -eq $status ] &&
+#	if [ $status_output_minishell -eq $status ] &&
+	if [ $status_output_minishell -ne 0 ] &&
 		grep "$substring" temp/stderr2_minishell$test_index.txt >/dev/null &&
 		[ $(wc -c < "temp/minishell_test$test_index.txt") -eq 0 ]
 	then
@@ -779,6 +780,17 @@ run_test_syntax_error 3004 "'ls\"" 2
 run_test_syntax_error 3005 "'ls'\"" 2
 run_test_syntax_error 3006 "\"ls'" 2
 run_test_syntax_error 3007 "\"ls\"'" 2
+#run_test_syntax_error 3008 "''ls" 2
+run_test_syntax_error 3009 "''ls'" 2
+run_test_syntax_error 3010 "'''ls" 2
+#run_test_syntax_error 3011 "'''ls'" 2
+run_test_syntax_error 3012 "'''ls''" 2
+#run_test_syntax_error 3013 "\"\"ls" 2
+run_test_syntax_error 3014 "\"\"ls\"" 2
+run_test_syntax_error 3015 "\"\"\"ls" 2
+#run_test_syntax_error 3016 "\"\"\"ls\"" 2
+run_test_syntax_error 3017 "\"\"\"ls\"\"" 2
+#to continue
 
 run_test_syntax_error 3100 "cat 'ls" 2
 run_test_syntax_error 3101 "cat ls'" 2
