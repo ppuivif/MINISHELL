@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/15 11:05:13 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/05/16 15:16:58 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,44 @@ void	ft_lst_add_back3(t_native_argument **head, t_native_argument *new_element)
 	}
 }
 
+void	ft_lst_add_back4(t_expanded_redirection **head, t_expanded_redirection *new_element)
+{
+	t_expanded_redirection	*last_element;
+
+	if (!head || !new_element)
+		return ;
+	if (!*head)
+	{
+		*head = new_element;
+		return ;
+	}
+	else
+	{
+		last_element = ft_lst_last4(*head);
+		new_element->next = NULL;
+		last_element->next = new_element;
+	}
+}
+
+void	ft_lst_add_back5(t_expanded_argument **head, t_expanded_argument *new_element)
+{
+	t_expanded_argument	*last_element;
+
+	if (!head || !new_element)
+		return ;
+	if (!*head)
+	{
+		*head = new_element;
+		return ;
+	}
+	else
+	{
+		last_element = ft_lst_last5(*head);
+		new_element->next = NULL;
+		last_element->next = new_element;
+	}
+}
+
 t_substring	*ft_lst_last1(t_substring *head)
 {
 	t_substring	*last_element;
@@ -121,7 +159,41 @@ t_native_argument	*ft_lst_last3(t_native_argument *head)
 	return (last_element);
 }
 
-void	ft_lst_print(t_command_line *command_line, int fd)
+t_expanded_redirection	*ft_lst_last4(t_expanded_redirection *head)
+{
+	t_expanded_redirection	*last_element;
+
+	if (!head)
+		return (NULL);
+	if (!head->next)
+		last_element = head;
+	else
+	{
+		last_element = head;
+		while (last_element->next)
+			last_element = last_element->next;
+	}
+	return (last_element);
+}
+
+t_expanded_argument	*ft_lst_last5(t_expanded_argument *head)
+{
+	t_expanded_argument	*last_element;
+
+	if (!head)
+		return (NULL);
+	if (!head->next)
+		last_element = head;
+	else
+	{
+		last_element = head;
+		while (last_element->next)
+			last_element = last_element->next;
+	}
+	return (last_element);
+}
+
+void	ft_native_lst_print(t_command_line *command_line, int fd)
 {
 	size_t	i;
 	size_t	j;
@@ -156,6 +228,56 @@ void	ft_lst_print(t_command_line *command_line, int fd)
 		j = 0;
 		tmp3 = tmp1->n_arguments;
 		while (tmp1->n_arguments && j < ft_lst_size3(tmp1->n_arguments))
+		{
+			ft_putstr_fd("\t-argument ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : ", fd);
+			ft_putstr_fd(tmp3->content, fd);
+			ft_putstr_fd("\n", fd);
+			tmp3 = tmp3->next;
+			j++;
+		}
+		ft_putstr_fd("\n", fd);
+		tmp1 = tmp1->next;
+		i++;
+	}
+}
+
+void	ft_expanded_lst_print(t_command_line *command_line, int fd)
+{
+	size_t	i;
+	size_t	j;
+	t_substring	*tmp1;
+	t_expanded_redirection *tmp2;
+	t_expanded_argument *tmp3;
+
+	i = 0;
+	tmp1 = command_line->substrings;
+	while (command_line->substrings && i < ft_lst_size1(command_line->substrings))
+	{
+		ft_putstr_fd("substring ", fd);
+		ft_putnbr_fd(i, fd);
+		ft_putstr_fd(" : \n", fd);
+		j = 0;
+		tmp2 = tmp1->exp_redirections;
+		while (tmp1->exp_redirections && j < ft_lst_size4(tmp1->exp_redirections))
+		{
+			ft_putstr_fd("\t-redirection ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : \t", fd);
+			ft_putstr_fd(tmp2->content, fd);
+			ft_putstr_fd("\n", fd);
+			ft_putstr_fd("\t-redirection_type ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : \t", fd);
+			print_e_redirection (tmp2->e_redirection, fd);
+			ft_putstr_fd("\n", fd);
+			tmp2 = tmp2->next;
+			j++;
+		}
+		j = 0;
+		tmp3 = tmp1->exp_arguments;
+		while (tmp1->exp_arguments && j < ft_lst_size5(tmp1->exp_arguments))
 		{
 			ft_putstr_fd("\t-argument ", fd);
 			ft_putnbr_fd(j, fd);
@@ -234,6 +356,44 @@ size_t	ft_lst_size3(t_native_argument *head)
 	if (!head)
 		return (0);
 	last_element = ft_lst_last3(head);
+	if (last_element == head)
+		return (1);
+	while (head != last_element)
+	{
+		head = head->next;
+		len++;
+	}
+	return (len);
+}
+
+size_t	ft_lst_size4(t_expanded_redirection *head)
+{
+	size_t		len;
+	t_expanded_redirection	*last_element;
+
+	len = 1;
+	if (!head)
+		return (0);
+	last_element = ft_lst_last4(head);
+	if (last_element == head)
+		return (1);
+	while (head != last_element)
+	{
+		head = head->next;
+		len++;
+	}
+	return (len);
+}
+
+size_t	ft_lst_size5(t_expanded_argument *head)
+{
+	size_t		len;
+	t_expanded_argument	*last_element;
+
+	len = 1;
+	if (!head)
+		return (0);
+	last_element = ft_lst_last5(head);
 	if (last_element == head)
 		return (1);
 	while (head != last_element)

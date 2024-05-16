@@ -221,7 +221,8 @@ run_test() {
     #num_tabs=$((25 - message_length))
     # Create a string of spaces
 	#tabs=$(printf "%${num_tabs}s" "" | tr ' ' '\t')
-    spaces=$(printf "%-${num_spaces}s" "")
+  #  spaces=$(printf "%-${num_spaces}s" "")
+    spaces=$(printf "%-30s" "")
     # Print the message with aligned status
 	if [ "$display" == "wrong_only" ]
 	then
@@ -291,8 +292,8 @@ run_test_syntax_error() {
 	exec 3> "temp/minishell_test$test_index.txt"
     echo "$command" | ./minishell 3 1>/dev/null 2>"temp/stderr2_minishell$test_index.txt"
     status_output_minishell=$?
-#	if [ $status_output_minishell -eq $status ] &&
-	if [ $status_output_minishell -ne 0 ] &&
+	if [ $status_output_minishell -eq $status ] &&
+#	if [ $status_output_minishell -ne 0 ] &&
 		grep "$substring" temp/stderr2_minishell$test_index.txt >/dev/null &&
 		[ $(wc -c < "temp/minishell_test$test_index.txt") -eq 0 ]
 	then
@@ -304,9 +305,11 @@ run_test_syntax_error() {
 	# Calculate the length of the message
     message_length=${#message}
     # Calculate the number of spaces needed for alignment
-    num_spaces=$((60 - message_length))
+ #   num_spaces=$((60 - message_length))
+    num_spaces=$((60 - 90))
     # Create a string of spaces
-    spaces=$(printf "%-${num_spaces}s" "")
+ #   spaces=$(printf "%-${num_spaces}s"	"")
+    spaces=$(printf "%-30s"	"")
     # Print the message with aligned status
 	if [ "$display" == "wrong_only" ]
 	then
@@ -780,9 +783,9 @@ run_test 1000 "'ls'-l'cat -e'" 1000 0
 run_test 1001 "'ls'-l'cat  -e'" 1001 0
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 1000 to 1100\n"
+	echo -e "end of test serie from 1000 to 1101\n"
 else
-	echo -e "end of test serie from 1000 to 1100"
+	echo -e "end of test serie from 1000 to 1101"
 fi
 
 
@@ -846,21 +849,44 @@ run_test_syntax_error 2066 "||||" 2
 run_test_syntax_error 2067 "| | | |" 2
 run_test_syntax_error 2068 "|	|	|	|" 2
 
-run_test_syntax_error 2070 "|| ls" 2
-run_test_syntax_error 2071 "||ls" 2
-run_test_syntax_error 2072 "ls ||" 2
-run_test_syntax_error 2073 "ls||" 2
-run_test_syntax_error 2074 "||| ls" 2
-run_test_syntax_error 2075 "|||ls" 2
-run_test_syntax_error 2076 "ls |||" 2
-run_test_syntax_error 2077 "ls|||" 2
+run_test_syntax_error 2070 ">|" 2
+run_test_syntax_error 2071 "<|" 2
+run_test_syntax_error 2072 "|>" 2
+run_test_syntax_error 2073 "|<" 2
+run_test_syntax_error 2074 ">>|" 2
+run_test_syntax_error 2075 "<<|" 2
+run_test_syntax_error 2076 "|>>" 2
+run_test_syntax_error 2077 "|<<" 2
+
+run_test_syntax_error 2090 ">|>" 2
+run_test_syntax_error 2091 "<|<" 2
+run_test_syntax_error 2092 "<|>" 2
+run_test_syntax_error 2093 ">|<" 2
+run_test_syntax_error 2094 ">>|<<" 2
+run_test_syntax_error 2095 "<<|>>" 2
+run_test_syntax_error 2096 "<<|>>" 2
+run_test_syntax_error 2097 ">>|<<" 2
+
+run_test_syntax_error 2100 "|| ls" 2
+run_test_syntax_error 2101 "||ls" 2
+run_test_syntax_error 2102 "ls ||" 2
+run_test_syntax_error 2103 "ls||" 2
+run_test_syntax_error 2104 "||| ls" 2
+run_test_syntax_error 2105 "|||ls" 2
+run_test_syntax_error 2106 "ls |||" 2
+run_test_syntax_error 2107 "ls|||" 2
+
+run_test_syntax_error 2110 "ls || cat" 2
+run_test_syntax_error 2111 "ls | | cat" 2
+run_test_syntax_error 2112 "ls | cat |" 2
+run_test_syntax_error 2113 "ls || cat |" 2
 
 
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 2000 to 2100\n"
+	echo -e "end of test serie from 2000 to 2113\n"
 else
-	echo -e "end of test serie from 2000 to 2100"
+	echo -e "end of test serie from 2000 to 2113"
 fi
 
 
@@ -913,9 +939,9 @@ run_test_syntax_error 3040 ">><>>>> outfile.txt" 2
 run_test_syntax_error 3041 ">><>>>>> outfile.txt" 2
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 3000 to 3499\n"
+	echo -e "end of test serie from 3000 to 3041\n"
 else
-	echo -e "end of test serie from 3000 to 3499"
+	echo -e "end of test serie from 3000 to 3041"
 fi
 
 run_test_syntax_error 3300 "< 'infile.txt" 2 #exit_status to confirm
@@ -953,9 +979,9 @@ run_test_syntax_error 3413 ">> 'outfile.txt'\"" 2
 run_test_syntax_error 3415 ">> \"outfile.txt\"'" 2
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 3300 to 3999\n"
+	echo -e "end of test serie from 3300 to 3415\n"
 else
-	echo -e "end of test serie from 3300 to 3999"
+	echo -e "end of test serie from 3300 to 3415"
 fi
 
 run_test_syntax_error 4000 "'ls" 2 #exit_status to confirm
@@ -977,6 +1003,16 @@ run_test_syntax_error 4015 "\"\"\"ls" 2
 #run_test_syntax_error 4016 "\"\"\"ls\"" 2
 run_test_syntax_error 4017 "\"\"\"ls\"\"" 2
 #to continue
+
+
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 4000 to 4017\n"
+else
+	echo -e "end of test serie from 4000 to 4017"
+fi
+
+
 
 run_test_syntax_error 4100 "cat 'ls" 2
 run_test_syntax_error 4101 "cat ls'" 2
@@ -1006,11 +1042,10 @@ run_test_syntax_error 4124 "cat \" ls" 2
 run_test_syntax_error 4125 "cat ls \"" 2
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 4000 to 4999\n"
+	echo -e "end of test serie from 4100 to 4125\n"
 else
-	echo -e "end of test serie from 4000 to 4999"
+	echo -e "end of test serie from 4100 to 4125"
 fi
-run_test_syntax_error 2000 "<<< infile.txt" 2 #exit_status to confirm
 
 
 

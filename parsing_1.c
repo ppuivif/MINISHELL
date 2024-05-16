@@ -30,7 +30,9 @@ t_command_line	*parse_command_line(char *str, int fd)
 			}	
 		}
 	}
-	ft_lst_print(command_line, fd);
+	expand_contents(&command_line);
+	ft_expanded_lst_print(command_line, fd);
+//	ft_native_lst_print(command_line, fd);
 	return (command_line);
 }
 
@@ -45,10 +47,8 @@ int	parse_substrings(char **remaining_line, t_command_line *command_line)
 	return_value_arguments = 0;
 	if (init_substring_struct(&substring) == -1)
 		return (-1);
-	if (!*remaining_line)
-		return (1);//to confirm
 	*remaining_line = skip_first_whitespaces(*remaining_line);
-	if (*remaining_line[0] == '|')//case of | first to handle here or later when argument empty
+	if (!*remaining_line || *remaining_line[0] == '|')//case of | first to handle here or later when argument empty
 	{
 		command_line->exit_code = 2;
 		return (2);// to confirm
@@ -109,7 +109,7 @@ int		get_redirections(char **remaining_line, t_substring *substring)
 
 	len = 0;
 	n_redirection = NULL;
-	if (init_redirection_struct(&n_redirection) == -1)
+	if (init_native_redirection_struct(&n_redirection) == -1)
 		return (-1);
 	get_redirection_type(remaining_line, n_redirection);
 	if (n_redirection->e_redirection == 2)
@@ -131,10 +131,9 @@ int	get_arguments(char **remaining_line, t_substring *substring)
 
 	len = 0;
 	n_argument = NULL;
-	if (init_argument_struct(&n_argument) == -1)
+	if (init_native_argument_struct(&n_argument) == -1)
 		return (-1);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
-
 	len = count_len_to_cut(*remaining_line);
 	if (len == -1)
 		return (2);

@@ -68,8 +68,9 @@ int main(int argc, char **argv)
 			free(line);
 			line = NULL;
 			if (command_line->exit_code != 0)
-				error_handling(&command_line);
+				return(error_handling(&command_line));
 			free_all(&command_line);
+
 		}
 	}
 	else

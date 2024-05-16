@@ -5,6 +5,16 @@
 		"libft_utils.h": "c",
 		"linked_list_utils.h": "c",
 		"stdbool.h": "c",
-		"stdio.h": "c"
+		"stdio.h": "c",
+		"bit": "c",
+		"compare": "c",
+		"cstddef": "c",
+		"string": "c",
+		"optional": "c",
+		"limits": "c",
+		"memory": "c",
+		"new": "c",
+		"ranges": "c",
+		"functional": "c"
 	}
 }

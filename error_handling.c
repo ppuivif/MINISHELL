@@ -7,7 +7,7 @@ void	error_allocation(t_command_line **command_line)
 	exit(EXIT_FAILURE);
 }
 
-void    error_handling(t_command_line **command_line)
+int   error_handling(t_command_line **command_line)
 {
     int exit_code;
 
@@ -17,7 +17,7 @@ void    error_handling(t_command_line **command_line)
     if (exit_code == 2)
         ft_putstr_fd("syntax error\n", 2);
     free_all(command_line);
-    exit(exit_code);//exit or return ?
-//	return (exit_code);
+ //   exit(exit_code);//exit or return ?
+	return (exit_code);
 
 }

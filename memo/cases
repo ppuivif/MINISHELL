@@ -28,3 +28,16 @@ syntax error :
 	' cat
 	cat'cat"cat"
 
+error redirection et pqs syntax : < <
+
+
+valid :
+	arg='cat'; < infile.txt $arg
+	arg="cat"; < infile.txt $arg
+	
+invalid :
+	arg="cat"; < infile.txt '$arg'		-> command '$arg' not found
+	arg="cat"; < infile.txt "'$arg'"	-> command 'cat' not found
+	arg="cat"; < infile.txt '"$arg"'	-> command "$arg" not found
+	arg="cat"; < infile.txt "'"$arg"'"	-> command 'cat' not found
+	arg="cat"; < infile.txt '"'"$arg"'"'	-> command "cat" not found

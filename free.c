@@ -24,7 +24,7 @@ void	free_substring(t_substring **substrings)
 	{
 		tmp = (*substrings)->next;
 		if ((*substrings)->n_redirections)
-				free_n_redirection(&(*substrings)->n_redirections);
+			free_n_redirection(&(*substrings)->n_redirections);
 		if ((*substrings)->n_arguments)
 			free_n_argument(&(*substrings)->n_arguments);	
 		free ((*substrings)->remaining_line);
