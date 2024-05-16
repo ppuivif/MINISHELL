@@ -10,21 +10,18 @@ t_command_line	*parse_command_line(char *str, int fd)
 		error_allocation(&command_line);
 	remaining_line = skip_first_whitespaces(str);
 	if (ft_strlen(remaining_line) == 0)
-	{
-		command_line->exit_code = 0;
 		return (command_line);
-	}
 	while(ft_strlen(remaining_line))
 	{
 		command_line->exit_code = parse_substrings(&remaining_line, command_line);
 		if (command_line->exit_code == -1)
 			error_allocation(&command_line);
-		if (command_line->exit_code != 0)
+		if (command_line->exit_code != 0)//handle return of parse_substrings (1 or 2 when errors)
 			return (command_line);
 		remaining_line = skip_first_whitespaces(remaining_line);
 		if (remaining_line[0] == '|')
 		{
-			remaining_line++;if (command_line->exit_code != 0)
+			remaining_line++;
 			remaining_line = skip_first_whitespaces(remaining_line);
 			if (ft_strlen(remaining_line) == 0)
 			{
@@ -51,9 +48,14 @@ int	parse_substrings(char **remaining_line, t_command_line *command_line)
 	if (!*remaining_line)
 		return (1);//to confirm
 	*remaining_line = skip_first_whitespaces(*remaining_line);
+	if (*remaining_line[0] == '|')//case of | first to handle here or later when argument empty
+	{
+		command_line->exit_code = 2;
+		return (2);// to confirm
+	}
 	if (ft_strlen(*remaining_line) == 0)
 		return (1);// to confirm
-	while (*remaining_line[0] && *remaining_line[0] != '|' && *remaining_line[0])
+	while (*remaining_line[0] && *remaining_line[0] != '|')
 	{
 		if (*remaining_line[0] == '<' || *remaining_line[0] == '>')
 		{
@@ -132,6 +134,7 @@ int	get_arguments(char **remaining_line, t_substring *substring)
 	if (init_argument_struct(&n_argument) == -1)
 		return (-1);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
+
 	len = count_len_to_cut(*remaining_line);
 	if (len == -1)
 		return (2);
@@ -152,23 +155,31 @@ int	count_len_to_cut(char *remaining_line)
 	len_to_quote = 0;
 	len_to_ifs = 0;
 	len = 0;
-	if (remaining_line[0] == '\'')
+	if (remaining_line[0] == '\'' || remaining_line[0] == '\"')
+		len_to_quote = \
+	count_len_to_quotes(remaining_line, (char []){remaining_line[0], '\0'}, 0);
+/*	if (remaining_line[0] == '\'')
 		len_to_quote = count_len_to_quotes(remaining_line, "\'", 0);
 	else if (remaining_line[0] == '\"')
-		len_to_quote = count_len_to_quotes(remaining_line, "\"", 0);
+		len_to_quote = count_len_to_quotes(remaining_line, "\"", 0);*/
 	else
 	{
 		len = (int)strcspn(remaining_line, "\'\"");
 		len_to_ifs = (int)strcspn(remaining_line, "<>| \t\n\v\f\r\0");
+		if (ft_strlen(skip_first_whitespaces(remaining_line)) == 0)
+			return (-1);
 		if (len < len_to_ifs)
 		{
 			while (remaining_line[i] && remaining_line[i] != '\'' && \
 			remaining_line[i] != '\"')
 				i++;
-			if (remaining_line[i] == '\'')
+			if (remaining_line[i] == '\'' || remaining_line[i] == '\"')
+				len_to_quote = \
+				count_len_to_quotes(&remaining_line[i], (char []){remaining_line[i], '\0'}, 0);			
+/*			if (remaining_line[i] == '\'')
 				len_to_quote = count_len_to_quotes(&remaining_line[i], "\'", 0);
 			if (remaining_line[i] == '\"')
-				len_to_quote = count_len_to_quotes(&remaining_line[i], "\"", 0);
+				len_to_quote = count_len_to_quotes(&remaining_line[i], "\"", 0);*/
 			if (len_to_quote == -1)
 				return (-1);
 		}
@@ -199,8 +210,12 @@ int	count_len_to_quotes(char *remaining_line, char *c, int flag)
 		return (-1);
 	while (check_char_validity(remaining_line, len_to_quote, flag, j) == 0)
 	{
-		if ((len_to_quote + flag + j) <= (len_to_end + 1) && remaining_line[len_to_quote + flag + j] == '\'')
-		{
+		if (((len_to_quote + flag + j) <= (len_to_end + 1)) && ((remaining_line[len_to_quote + flag + j] == '\'') || \
+		(remaining_line[len_to_quote + flag + j] == '\"')))
+ 		{
+			return_value = \
+			count_len_to_quotes(&remaining_line[len_to_quote + flag + j], (char []){remaining_line[len_to_quote + flag + j], '\0'}, 0);
+/*		{
 			return_value = count_len_to_quotes(&remaining_line[len_to_quote + flag + j], "\'", 0);
 			if ( return_value == -1)
 				return (-1);
@@ -209,6 +224,10 @@ int	count_len_to_quotes(char *remaining_line, char *c, int flag)
 		if ((len_to_quote + flag + j) <= (len_to_end + 1) && remaining_line[len_to_quote + flag + j] == '\"')
 		{
 			return_value = count_len_to_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);
+			if ( return_value == -1)
+				return (-1);
+			len_to_quote += return_value;
+		}*/
 			if ( return_value == -1)
 				return (-1);
 			len_to_quote += return_value;

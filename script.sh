@@ -443,6 +443,110 @@ else
 	echo -e "end of test serie from 1 to 80"
 fi
 
+run_test 81 "< infile.txt < infile.txt" 81 0
+run_test 82 "<infile.txt < infile.txt" 81 0
+run_test 83 "< infile.txt <infile.txt" 81 0
+run_test 84 "<infile.txt <infile.txt" 81 0
+run_test 85 "<infile.txt<infile.txt" 81 0
+run_test 86 "<infile.txt<infile.txt" 81 0
+run_test 87 " <	infile.txt < infile.txt" 81 0
+run_test 88 " < infile.txt	< infile.txt" 81 0
+run_test 89 " < infile.txt <	infile.txt" 81 0
+run_test 90 " < infile.txt < infile.txt	" 81 0
+run_test 91 "< infile.txt < infile.txt < infile.txt" 91 0
+run_test 92 "<infile.txt < infile.txt < infile.txt" 91 0
+run_test 93 "< infile.txt <infile.txt < infile.txt" 91 0
+run_test 94 "< infile.txt < infile.txt <infile.txt" 91 0
+run_test 95 "< infile.txt < infile.txt < infile.txt" 91 0
+run_test 96 "<infile.txt <infile.txt < infile.txt" 91 0
+run_test 97 "<infile.txt <infile.txt <infile.txt" 91 0
+run_test 98 "<infile.txt<infile.txt <infile.txt" 91 0
+run_test 99 "<infile.txt<infile.txt<infile.txt" 91 0
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 81 to 99\n"
+else
+	echo -e "end of test serie from 81 to 99"
+fi
+
+run_test 100 "> outfile.txt > outfile.txt" 100 0
+run_test 101 ">outfile.txt > outfile.txt" 100 0
+run_test 102 "> outfile.txt >outfile.txt" 100 0
+run_test 103 ">outfile.txt >outfile.txt" 100 0
+run_test 104 ">outfile.txt>outfile.txt" 100 0
+run_test 105 ">outfile.txt>outfile.txt" 100 0
+run_test 106 " >	outfile.txt > outfile.txt" 100 0
+run_test 107 " > outfile.txt	> outfile.txt" 100 0
+run_test 108 " > outfile.txt >	outfile.txt" 100 0
+run_test 109 " > outfile.txt > outfile.txt	" 100 0
+run_test 110 "> outfile.txt > outfile.txt > outfile.txt" 110 0
+run_test 111 ">outfile.txt > outfile.txt > outfile.txt" 110 0
+run_test 112 "> outfile.txt >outfile.txt > outfile.txt" 110 0
+run_test 113 "> outfile.txt > outfile.txt >outfile.txt" 110 0
+run_test 114 "> outfile.txt > outfile.txt > outfile.txt" 110 0
+run_test 115 ">outfile.txt >outfile.txt > outfile.txt" 110 0
+run_test 116 ">outfile.txt >outfile.txt >outfile.txt" 110 0
+run_test 117 ">outfile.txt>outfile.txt >outfile.txt" 110 0
+run_test 118 ">outfile.txt>outfile.txt>outfile.txt" 110 0
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 100 to 118\n"
+else
+	echo -e "end of test serie from 100 to 118"
+fi
+
+run_test 120 "<< infile.txt << infile.txt" 120 0
+run_test 121 "<<infile.txt << infile.txt" 120 0
+run_test 122 "<< infile.txt <<infile.txt" 120 0
+run_test 123 "<<infile.txt <<infile.txt" 120 0
+run_test 124 "<<infile.txt<<infile.txt" 120 0
+run_test 125 "<<infile.txt<<infile.txt" 120 0
+run_test 126 " <<	infile.txt << infile.txt" 120 0
+run_test 127 " << infile.txt	<< infile.txt" 120 0
+run_test 128 " << infile.txt <<	infile.txt" 120 0
+run_test 129 " << infile.txt << infile.txt	" 120 0
+run_test 130 "<< infile.txt << infile.txt << infile.txt" 130 0
+run_test 131 "<<infile.txt << infile.txt << infile.txt" 130 0
+run_test 132 "<< infile.txt <<infile.txt << infile.txt" 130 0
+run_test 133 "<< infile.txt << infile.txt <<infile.txt" 130 0
+run_test 134 "<< infile.txt << infile.txt << infile.txt" 130 0
+run_test 135 "<<infile.txt <<infile.txt << infile.txt" 130 0
+run_test 136 "<<infile.txt <<infile.txt <<infile.txt" 130 0
+run_test 137 "<<infile.txt<<infile.txt <<infile.txt" 130 0
+run_test 138 "<<infile.txt<<infile.txt<<infile.txt" 130 0
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 120 to 138\n"
+else
+	echo -e "end of test serie from 120 to 138"
+fi
+
+run_test 140 ">> outfile.txt >> outfile.txt" 140 0
+run_test 141 ">>outfile.txt >> outfile.txt" 140 0
+run_test 142 ">> outfile.txt >>outfile.txt" 140 0
+run_test 143 ">>outfile.txt >>outfile.txt" 140 0
+run_test 144 ">>outfile.txt>>outfile.txt" 140 0
+run_test 145 ">>outfile.txt>>outfile.txt" 140 0
+run_test 146 " >>	outfile.txt >> outfile.txt" 140 0
+run_test 147 " >> outfile.txt	>> outfile.txt" 140 0
+run_test 148 " >> outfile.txt >>	outfile.txt" 140 0
+run_test 149 " >> outfile.txt >> outfile.txt	" 140 0
+run_test 150 ">> outfile.txt >> outfile.txt >> outfile.txt" 150 0
+run_test 151 ">>outfile.txt >> outfile.txt >> outfile.txt" 150 0
+run_test 152 ">> outfile.txt >>outfile.txt >> outfile.txt" 150 0
+run_test 153 ">> outfile.txt >> outfile.txt >>outfile.txt" 150 0
+run_test 154 ">> outfile.txt >> outfile.txt >> outfile.txt" 150 0
+run_test 155 ">>outfile.txt >>outfile.txt >> outfile.txt" 150 0
+run_test 156 ">>outfile.txt >>outfile.txt >>outfile.txt" 150 0
+run_test 157 ">>outfile.txt>>outfile.txt >>outfile.txt" 150 0
+run_test 158 ">>outfile.txt>>outfile.txt>>outfile.txt" 150 0
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 140 to 158\n"
+else
+	echo -e "end of test serie from 140 to 158"
+fi
+
 run_test 500 "'ls' -l" 500 0
 run_test 501 "'ls' '-l'" 501 0
 run_test 502 "\"ls\" -l" 502 0
@@ -682,148 +786,234 @@ else
 fi
 
 
-run_test_syntax_error 2000 "<<< infile.txt" 2 #exit_status to confirm
-run_test_syntax_error 2001 "<<<< infile.txt" 2
-run_test_syntax_error 2002 "<<<<< infile.txt" 2
-run_test_syntax_error 2003 "<<> infile.txt" 2
-run_test_syntax_error 2004 "<<>> infile.txt" 2
-run_test_syntax_error 2005 "<<>>> infile.txt" 2
-run_test_syntax_error 2006 "<<>>>> infile.txt" 2
-run_test_syntax_error 2007 "<<>< infile.txt" 2
-run_test_syntax_error 2008 "<<><< infile.txt" 2
-run_test_syntax_error 2009 "<<><<< infile.txt" 2
-run_test_syntax_error 2010 "<<><<<< infile.txt" 2
-run_test_syntax_error 2011 "<<><> infile.txt" 2
-run_test_syntax_error 2012 "<<><>> infile.txt" 2
-run_test_syntax_error 2013 "<<><>>> infile.txt" 2
-run_test_syntax_error 2014 "<<><>>>> infile.txt" 2
-run_test_syntax_error 2014 "<> infile.txt" 2
-run_test_syntax_error 2015 "<>> infile.txt" 2
-run_test_syntax_error 2016 "<>>> infile.txt" 2
-run_test_syntax_error 2017 "<>>>> infile.txt" 2
-run_test_syntax_error 2018 "<>>>>> infile.txt" 2
-run_test_syntax_error 2019 "<>< infile.txt" 2
-run_test_syntax_error 2020 "<><< infile.txt" 2
-run_test_syntax_error 2021 "<><<< infile.txt" 2
-run_test_syntax_error 2022 "<><<<< infile.txt" 2
-run_test_syntax_error 2023 "<><> infile.txt" 2
-run_test_syntax_error 2024 "<><>> infile.txt" 2
-run_test_syntax_error 2025 "<><>>> infile.txt" 2
-run_test_syntax_error 2026 "<><>>>> infile.txt" 2
-run_test_syntax_error 2027 "<><>>>>> infile.txt" 2
-run_test_syntax_error 2028 ">>> outfile.txt" 2
-run_test_syntax_error 2029 ">>>> outfile.txt" 2
-run_test_syntax_error 2030 ">>>>> outfile.txt" 2
-run_test_syntax_error 2031 ">>>>>> outfile.txt" 2
-run_test_syntax_error 2032 ">>< outfile.txt" 2
-run_test_syntax_error 2033 ">><< outfile.txt" 2
-run_test_syntax_error 2034 ">><<< outfile.txt" 2
-run_test_syntax_error 2035 ">><<<< outfile.txt" 2
-run_test_syntax_error 2036 ">><<<<< outfile.txt" 2
-run_test_syntax_error 2037 ">><> outfile.txt" 2
-run_test_syntax_error 2038 ">><>> outfile.txt" 2
-run_test_syntax_error 2039 ">><>>> outfile.txt" 2
-run_test_syntax_error 2040 ">><>>>> outfile.txt" 2
-run_test_syntax_error 2041 ">><>>>>> outfile.txt" 2
+run_test_syntax_error 2000 "<" 2
+run_test_syntax_error 2001 "<<" 2
+run_test_syntax_error 2002 "<<<" 2
+run_test_syntax_error 2003 "<<<<" 2
+run_test_syntax_error 2004 "<" 2
+run_test_syntax_error 2005 "<<" 2
+run_test_syntax_error 2006 "<<<" 2
+run_test_syntax_error 2007 "<<<<" 2
+run_test_syntax_error 2008 "<>" 2
+run_test_syntax_error 2009 "><" 2
+run_test_syntax_error 2010 "<><>" 2
+run_test_syntax_error 2011 "><><" 2
+run_test_syntax_error 2012 "<<>" 2
+run_test_syntax_error 2013 "<<>>" 2
+run_test_syntax_error 2014 "<<<>>>" 2
+run_test_syntax_error 2015 "<<<<>>>>" 2
+run_test_syntax_error 2016 ">><" 2
+run_test_syntax_error 2017 ">><<" 2
+run_test_syntax_error 2018 ">>><<<" 2
+run_test_syntax_error 2019 ">>>><<<<" 2
+
+run_test_syntax_error 2020 "ls <" 2
+run_test_syntax_error 2021 "ls <<" 2
+run_test_syntax_error 2022 "ls >" 2
+run_test_syntax_error 2023 "ls >>" 2
+run_test_syntax_error 2024 "ls<" 2
+run_test_syntax_error 2025 "ls<<" 2
+run_test_syntax_error 2026 "ls>" 2
+run_test_syntax_error 2027 "ls>>" 2
+
+run_test_syntax_error 2030 "|" 2
+run_test_syntax_error 2031 " |" 2
+run_test_syntax_error 2032 "  |" 2
+run_test_syntax_error 2033 "| " 2
+run_test_syntax_error 2034 "|  " 2
+run_test_syntax_error 2035 " | " 2
+run_test_syntax_error 2036 "  | " 2
+run_test_syntax_error 2037 "  |  " 2
+run_test_syntax_error 2038 "	|" 2
+run_test_syntax_error 2039 "		|" 2
+run_test_syntax_error 2040 "|	" 2
+run_test_syntax_error 2041 "|		" 2
+run_test_syntax_error 2042 "	|	" 2
+run_test_syntax_error 2043 "		|		" 2
+
+run_test_syntax_error 2050 "| ls" 2
+run_test_syntax_error 2051 "|ls" 2
+run_test_syntax_error 2052 "ls |" 2
+run_test_syntax_error 2053 "ls|" 2
+
+run_test_syntax_error 2060 "||" 2
+run_test_syntax_error 2061 "| |" 2
+run_test_syntax_error 2062 "|	|" 2
+run_test_syntax_error 2063 "|||" 2
+run_test_syntax_error 2064 "| | |" 2
+run_test_syntax_error 2065 "|	|	|" 2
+run_test_syntax_error 2066 "||||" 2
+run_test_syntax_error 2067 "| | | |" 2
+run_test_syntax_error 2068 "|	|	|	|" 2
+
+run_test_syntax_error 2070 "|| ls" 2
+run_test_syntax_error 2071 "||ls" 2
+run_test_syntax_error 2072 "ls ||" 2
+run_test_syntax_error 2073 "ls||" 2
+run_test_syntax_error 2074 "||| ls" 2
+run_test_syntax_error 2075 "|||ls" 2
+run_test_syntax_error 2076 "ls |||" 2
+run_test_syntax_error 2077 "ls|||" 2
+
+
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 2000 to 2499\n"
+	echo -e "end of test serie from 2000 to 2100\n"
 else
-	echo -e "end of test serie from 2000 to 2499"
+	echo -e "end of test serie from 2000 to 2100"
 fi
 
-run_test_syntax_error 2300 "< 'infile.txt" 2 #exit_status to confirm
-run_test_syntax_error 2301 "< infile.txt'" 2
-run_test_syntax_error 2302 "< \"infile.txt" 2
-run_test_syntax_error 2303 "< infile.txt\"" 2
-run_test_syntax_error 2304 "< 'infile.txt\"" 2
-run_test_syntax_error 2305 "< 'infile.txt'\"" 2
-run_test_syntax_error 2306 "< \"infile.txt'\"" 2
-run_test_syntax_error 2307 "< \"infile.txt\"'" 2
-run_test_syntax_error 2308 "<< 'infile.txt" 2
-run_test_syntax_error 2309 "<< infile.txt'" 2
-run_test_syntax_error 2310 "<< \"infile.txt" 2
-run_test_syntax_error 2311 "<< infile.txt\"" 2
-run_test_syntax_error 2312 "<< 'infile.txt\"" 2
-run_test_syntax_error 2313 "<< 'infile.txt'\"" 2
-run_test_syntax_error 2314 "<< \"infile.txt'\"" 2
-run_test_syntax_error 2315 "<< \"infile.txt\"'" 2
 
-run_test_syntax_error 2400 "> 'outfile.txt" 2
-run_test_syntax_error 2401 "> outfile.txt'" 2
-run_test_syntax_error 2402 "> \"outfile.txt" 2
-run_test_syntax_error 2403 "> outfile.txt\"" 2
-run_test_syntax_error 2404 "> 'outfile.txt\"" 2
-run_test_syntax_error 2405 "> 'outfile.txt'\"" 2
-run_test_syntax_error 2406 "> \"outfile.txt'\"" 2
-run_test_syntax_error 2407 "> \"outfile.txt\"'" 2
-run_test_syntax_error 2408 ">> 'outfile.txt" 2
-run_test_syntax_error 2409 ">> outfile.txt'" 2
-run_test_syntax_error 2410 ">> \"outfile.txt" 2
-run_test_syntax_error 2411 ">> outfile.txt\"" 2
-run_test_syntax_error 2412 ">> 'outfile.txt\"" 2
-run_test_syntax_error 2413 ">> 'outfile.txt'\"" 2
-run_test_syntax_error 2414 ">> \"outfile.txt'\"" 2
-run_test_syntax_error 2415 ">> \"outfile.txt\"'" 2
+
+
+
+
+run_test_syntax_error 3000 "<<< infile.txt" 2 #exit_status to confirm
+run_test_syntax_error 3001 "<<<< infile.txt" 2
+run_test_syntax_error 3002 "<<<<< infile.txt" 2
+run_test_syntax_error 3003 "<<> infile.txt" 2
+run_test_syntax_error 3004 "<<>> infile.txt" 2
+run_test_syntax_error 3005 "<<>>> infile.txt" 2
+run_test_syntax_error 3006 "<<>>>> infile.txt" 2
+run_test_syntax_error 3007 "<<>< infile.txt" 2
+run_test_syntax_error 3008 "<<><< infile.txt" 2
+run_test_syntax_error 3009 "<<><<< infile.txt" 2
+run_test_syntax_error 3010 "<<><<<< infile.txt" 2
+run_test_syntax_error 3011 "<<><> infile.txt" 2
+run_test_syntax_error 3012 "<<><>> infile.txt" 2
+run_test_syntax_error 3013 "<<><>>> infile.txt" 2
+run_test_syntax_error 3014 "<<><>>>> infile.txt" 2
+run_test_syntax_error 3014 "<> infile.txt" 2
+run_test_syntax_error 3015 "<>> infile.txt" 2
+run_test_syntax_error 3016 "<>>> infile.txt" 2
+run_test_syntax_error 3017 "<>>>> infile.txt" 2
+run_test_syntax_error 3018 "<>>>>> infile.txt" 2
+run_test_syntax_error 3019 "<>< infile.txt" 2
+run_test_syntax_error 3020 "<><< infile.txt" 2
+run_test_syntax_error 3021 "<><<< infile.txt" 2
+run_test_syntax_error 3022 "<><<<< infile.txt" 2
+run_test_syntax_error 3023 "<><> infile.txt" 2
+run_test_syntax_error 3024 "<><>> infile.txt" 2
+run_test_syntax_error 3025 "<><>>> infile.txt" 2
+run_test_syntax_error 3026 "<><>>>> infile.txt" 2
+run_test_syntax_error 3027 "<><>>>>> infile.txt" 2
+run_test_syntax_error 3028 ">>> outfile.txt" 2
+run_test_syntax_error 3029 ">>>> outfile.txt" 2
+run_test_syntax_error 3030 ">>>>> outfile.txt" 2
+run_test_syntax_error 3031 ">>>>>> outfile.txt" 2
+run_test_syntax_error 3032 ">>< outfile.txt" 2
+run_test_syntax_error 3033 ">><< outfile.txt" 2
+run_test_syntax_error 3034 ">><<< outfile.txt" 2
+run_test_syntax_error 3035 ">><<<< outfile.txt" 2
+run_test_syntax_error 3036 ">><<<<< outfile.txt" 2
+run_test_syntax_error 3037 ">><> outfile.txt" 2
+run_test_syntax_error 3038 ">><>> outfile.txt" 2
+run_test_syntax_error 3039 ">><>>> outfile.txt" 2
+run_test_syntax_error 3040 ">><>>>> outfile.txt" 2
+run_test_syntax_error 3041 ">><>>>>> outfile.txt" 2
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 2300 to 2999\n"
+	echo -e "end of test serie from 3000 to 3499\n"
 else
-	echo -e "end of test serie from 2300 to 2999"
+	echo -e "end of test serie from 3000 to 3499"
 fi
 
-run_test_syntax_error 3000 "'ls" 2 #exit_status to confirm
-run_test_syntax_error 3001 "ls'" 2
-run_test_syntax_error 3002 "\"ls" 2
-run_test_syntax_error 3003 "ls\"" 2
-run_test_syntax_error 3004 "'ls\"" 2
-run_test_syntax_error 3005 "'ls'\"" 2
-run_test_syntax_error 3006 "\"ls'" 2
-run_test_syntax_error 3007 "\"ls\"'" 2
-#run_test_syntax_error 3008 "''ls" 2
-run_test_syntax_error 3009 "''ls'" 2
-run_test_syntax_error 3010 "'''ls" 2
-#run_test_syntax_error 3011 "'''ls'" 2
-run_test_syntax_error 3012 "'''ls''" 2
-#run_test_syntax_error 3013 "\"\"ls" 2
-run_test_syntax_error 3014 "\"\"ls\"" 2
-run_test_syntax_error 3015 "\"\"\"ls" 2
-#run_test_syntax_error 3016 "\"\"\"ls\"" 2
-run_test_syntax_error 3017 "\"\"\"ls\"\"" 2
+run_test_syntax_error 3300 "< 'infile.txt" 2 #exit_status to confirm
+run_test_syntax_error 3301 "< infile.txt'" 2
+run_test_syntax_error 3302 "< \"infile.txt" 2
+run_test_syntax_error 3303 "< infile.txt\"" 2
+run_test_syntax_error 3304 "< 'infile.txt\"" 2
+run_test_syntax_error 3305 "< 'infile.txt'\"" 2
+#run_test_syntax_error 3306 "< \"infile.txt'\"" 2
+run_test_syntax_error 3307 "< \"infile.txt\"'" 2
+run_test_syntax_error 3308 "<< 'infile.txt" 2
+run_test_syntax_error 3309 "<< infile.txt'" 2
+run_test_syntax_error 3310 "<< \"infile.txt" 2
+run_test_syntax_error 3311 "<< infile.txt\"" 2
+run_test_syntax_error 3312 "<< 'infile.txt\"" 2
+run_test_syntax_error 3313 "<< 'infile.txt'\"" 2
+#run_test_syntax_error 3314 "<< \"infile.txt'\"" 2
+run_test_syntax_error 3315 "<< \"infile.txt\"'" 2
+
+run_test_syntax_error 3400 "> 'outfile.txt" 2
+run_test_syntax_error 3401 "> outfile.txt'" 2
+run_test_syntax_error 3402 "> \"outfile.txt" 2
+run_test_syntax_error 3403 "> outfile.txt\"" 2
+run_test_syntax_error 3404 "> 'outfile.txt\"" 2
+run_test_syntax_error 3405 "> 'outfile.txt'\"" 2
+#run_test_syntax_error 3406 "> \"outfile.txt'\"" 2
+run_test_syntax_error 3407 "> \"outfile.txt\"'" 2
+run_test_syntax_error 3408 ">> 'outfile.txt" 2
+run_test_syntax_error 3409 ">> outfile.txt'" 2
+run_test_syntax_error 3410 ">> \"outfile.txt" 2
+run_test_syntax_error 3411 ">> outfile.txt\"" 2
+run_test_syntax_error 3412 ">> 'outfile.txt\"" 2
+run_test_syntax_error 3413 ">> 'outfile.txt'\"" 2
+#run_test_syntax_error 3414 ">> \"outfile.txt'\"" 2
+run_test_syntax_error 3415 ">> \"outfile.txt\"'" 2
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 3300 to 3999\n"
+else
+	echo -e "end of test serie from 3300 to 3999"
+fi
+
+run_test_syntax_error 4000 "'ls" 2 #exit_status to confirm
+run_test_syntax_error 4001 "ls'" 2
+run_test_syntax_error 4002 "\"ls" 2
+run_test_syntax_error 3403 "ls\"" 2
+run_test_syntax_error 4004 "'ls\"" 2
+run_test_syntax_error 4005 "'ls'\"" 2
+run_test_syntax_error 4006 "\"ls'" 2
+run_test_syntax_error 4007 "\"ls\"'" 2
+#run_test_syntax_error 4008 "''ls" 2
+run_test_syntax_error 4009 "''ls'" 2
+run_test_syntax_error 4010 "'''ls" 2
+#run_test_syntax_error 4011 "'''ls'" 2
+run_test_syntax_error 4012 "'''ls''" 2
+#run_test_syntax_error 4013 "\"\"ls" 2
+run_test_syntax_error 4014 "\"\"ls\"" 2
+run_test_syntax_error 4015 "\"\"\"ls" 2
+#run_test_syntax_error 4016 "\"\"\"ls\"" 2
+run_test_syntax_error 4017 "\"\"\"ls\"\"" 2
 #to continue
 
-run_test_syntax_error 3100 "cat 'ls" 2
-run_test_syntax_error 3101 "cat ls'" 2
-run_test_syntax_error 3102 "cat \"ls" 2
-run_test_syntax_error 3103 "cat ls\"" 2
-run_test_syntax_error 3104 "'cat' 'ls" 2
-run_test_syntax_error 3105 "'cat' ls'" 2
-run_test_syntax_error 3106 "'cat' ls'" 2
-run_test_syntax_error 3107 "'cat' \"ls" 2
-run_test_syntax_error 3108 "'cat' ls\"" 2
-run_test_syntax_error 3109 ""cat" 'ls" 2
-run_test_syntax_error 3110 ""cat" ls'" 2
-run_test_syntax_error 3111 ""cat" ls'" 2
-run_test_syntax_error 3112 ""cat" \"ls" 2
-run_test_syntax_error 3113 ""cat" ls\"" 2
-run_test_syntax_error 3114 "cat 'ls " 2
-run_test_syntax_error 3115 "cat ls' " 2
-run_test_syntax_error 3116 "cat \"ls " 2
-run_test_syntax_error 3117 "cat ls\" " 2
-run_test_syntax_error 3118 "cat 'ls  " 2
-run_test_syntax_error 3119 "cat ls'  " 2
-run_test_syntax_error 3120 "cat \"ls  " 2
-run_test_syntax_error 3121 "cat ls\"  " 2
-run_test_syntax_error 3122 "cat ' ls" 2
-run_test_syntax_error 3123 "cat  ls'" 2
-run_test_syntax_error 3124 "cat \" ls" 2
-run_test_syntax_error 3125 "cat ls \"" 2
+run_test_syntax_error 4100 "cat 'ls" 2
+run_test_syntax_error 4101 "cat ls'" 2
+run_test_syntax_error 4102 "cat \"ls" 2
+run_test_syntax_error 4103 "cat ls\"" 2
+run_test_syntax_error 4104 "'cat' 'ls" 2
+run_test_syntax_error 4105 "'cat' ls'" 2
+run_test_syntax_error 4106 "'cat' ls'" 2
+run_test_syntax_error 4107 "'cat' \"ls" 2
+run_test_syntax_error 4108 "'cat' ls\"" 2
+run_test_syntax_error 4109 ""cat" 'ls" 2
+run_test_syntax_error 4110 ""cat" ls'" 2
+run_test_syntax_error 4111 ""cat" ls'" 2
+run_test_syntax_error 4112 ""cat" \"ls" 2
+run_test_syntax_error 4113 ""cat" ls\"" 2
+run_test_syntax_error 4114 "cat 'ls " 2
+run_test_syntax_error 4115 "cat ls' " 2
+run_test_syntax_error 4116 "cat \"ls " 2
+run_test_syntax_error 4117 "cat ls\" " 2
+run_test_syntax_error 4118 "cat 'ls  " 2
+run_test_syntax_error 4119 "cat ls'  " 2
+run_test_syntax_error 4120 "cat \"ls  " 2
+run_test_syntax_error 4121 "cat ls\"  " 2
+run_test_syntax_error 4122 "cat ' ls" 2
+run_test_syntax_error 4123 "cat  ls'" 2
+run_test_syntax_error 4124 "cat \" ls" 2
+run_test_syntax_error 4125 "cat ls \"" 2
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 3000 to 3999\n"
+	echo -e "end of test serie from 4000 to 4999\n"
 else
-	echo -e "end of test serie from 3000 to 3999"
+	echo -e "end of test serie from 4000 to 4999"
 fi
+run_test_syntax_error 2000 "<<< infile.txt" 2 #exit_status to confirm
+
+
+
 
 
 : <<BLOCK_COMMENT
