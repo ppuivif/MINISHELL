@@ -1,8 +1,0 @@
-substring 0 : 
-	-redirection 0 : 	infile.txt
-	-redirection_type 0 : 	REDIRECTION_HEREDOC
-	-redirection 1 : 	infile.txt
-	-redirection_type 1 : 	REDIRECTION_HEREDOC
-	-redirection 2 : 	infile.txt
-	-redirection_type 2 : 	REDIRECTION_HEREDOC
-

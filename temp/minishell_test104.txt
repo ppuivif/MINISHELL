@@ -1,6 +1,0 @@
-substring 0 : 
-	-redirection 0 : 	outfile.txt
-	-redirection_type 0 : 	REDIRECTION_OUTFILE
-	-redirection 1 : 	outfile.txt
-	-redirection_type 1 : 	REDIRECTION_OUTFILE
-
