@@ -2,114 +2,161 @@
 
 void	expand_contents(t_command_line **command_line)
 {
-	size_t	i;
-	size_t	j;
 	t_substring	*tmp1;
 	t_native_redirection *tmp2;
 	t_native_argument *tmp3;
-	//t_expanded_redirection	*exp_redirection;
-	//t_expanded_argument		*exp_argument;
 
-	i = 0;
 	tmp1 = (*command_line)->substrings;
-	while ((*command_line)->substrings && i < ft_lst_size1((*command_line)->substrings))
+	while (tmp1)
 	{
-		j = 0;
 		tmp2 = tmp1->n_redirections;
-		while (tmp1->n_redirections && j < ft_lst_size2(tmp1->n_redirections))
+		while (tmp2)
 		{
-			expand_redirections((*command_line)->substrings, tmp1->n_redirections);
-			if ((*command_line)->substrings->exp_redirections->alloc_succeed == false)
+			expand_redirections(tmp1, tmp2);
+			if (tmp1->exp_redirections->alloc_succeed == false)
 				free_all(command_line);	
-//			printf("exp_redirection %d : %s\n", exp_redirection->content);
 			tmp2 = tmp2->next;
-			j++;
 		}
-		j = 0;
 		tmp3 = tmp1->n_arguments;
-		while (tmp1->n_arguments && j < ft_lst_size3(tmp1->n_arguments))
+		while (tmp3)
 		{
-			expand_arguments((*command_line)->substrings, tmp1->n_arguments);
-			if ((*command_line)->substrings->exp_arguments->alloc_succeed == false)
+			expand_arguments(tmp1, tmp3);
+			if (tmp1->exp_arguments->alloc_succeed == false)
 				free_all(command_line);
 			tmp3 = tmp3->next;
-			j++;
 		}
-		(*command_line)->substrings = (*command_line)->substrings->next;
-		i++;
+		tmp1 = tmp1->next;
 	}
-	(*command_line)->substrings = tmp1;
 }
 
 
 void expand_redirections(t_substring *substring, t_native_redirection *n_redirection)
 {
+	int	i;
 	t_expanded_redirection	*exp_redirection;
 	size_t					len_to_next_quote;
 	char					*extracted_line;
+	char					*definitive_content;
+
 
 	exp_redirection = NULL;
+	definitive_content = NULL;
 	if (init_expanded_redirection_struct(&exp_redirection) == -1)
 		exp_redirection->alloc_succeed = false;
-	if (n_redirection)
+	i = 0;
+	while (n_redirection && n_redirection->content[i])
 	{
-		if (n_redirection->content[0] == '\'')
+		if (n_redirection->content[i] == '\'')
 		{
-			len_to_next_quote = strspn(&n_redirection->content[1], "\'");
-			extracted_line = ft_substr(&n_redirection->content[1], 0, len_to_next_quote);
-			n_redirection->content += len_to_next_quote;
+			len_to_next_quote = strcspn(&n_redirection->content[i + 1], "\'");
+			extracted_line = ft_substr(&n_redirection->content[i + 1], 0, len_to_next_quote);
 //			search_variables(extracted_line);
 		}
-		if (n_redirection->content[0] == '\"')
+		else if (n_redirection->content[i] == '\"')
 		{
-			len_to_next_quote = strspn(&n_redirection->content[1], "\"");
-			extracted_line = ft_substr(&n_redirection->content[1], 0, len_to_next_quote);
-			n_redirection->content += len_to_next_quote;
+			len_to_next_quote = strcspn(&n_redirection->content[i + 1], "\"");
+			extracted_line = ft_substr(&n_redirection->content[i + 1], 0, len_to_next_quote);
 //			search_variables(extracted_line);
 		}
 		else
 		{
-			extracted_line = n_redirection->content;
+			len_to_next_quote = strcspn(&n_redirection->content[i], "\"\'") - 2;
+			extracted_line = ft_substr(&n_redirection->content[i], 0, len_to_next_quote + 2);
 		}
-		if (extracted_line)
-		{
-			exp_redirection->e_redirection = n_redirection->e_redirection;
-			exp_redirection->content = extracted_line;
-		}
+		if (!extracted_line)
+			exp_redirection->alloc_succeed = false;
+		if (!definitive_content)
+			definitive_content = ft_strdup(extracted_line);
+		else
+			definitive_content = ft_strjoin_freed(definitive_content, extracted_line);
+		free(extracted_line);
+		extracted_line = NULL;
+		if (!definitive_content)
+			exp_redirection->alloc_succeed = false;
+		i += (len_to_next_quote + 2);
 	}
+	exp_redirection->e_redirection = n_redirection->e_redirection;
+	exp_redirection->content = definitive_content;
 	ft_lst_add_back4(&substring->exp_redirections, exp_redirection);
 }
+
 void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 {
+	int i;
 	t_expanded_argument		*exp_argument;
 	size_t					len_to_next_quote;
 	char					*extracted_line;
+	char					*definitive_content;
 
 	exp_argument = NULL;
+	definitive_content = NULL;
 	if (init_expanded_argument_struct(&exp_argument) == -1)
 		exp_argument->alloc_succeed = false;
-	if (n_argument)
+	i = 0;
+	while (n_argument && n_argument->content[i])
 	{
-		if (n_argument->content[0] == '\'')
+		if (n_argument->content[i] == '\'')
 		{
-			len_to_next_quote = strspn(&n_argument->content[1], "\'");
-			extracted_line = ft_substr(&n_argument->content[1], 0, len_to_next_quote);
-			n_argument->content += len_to_next_quote;
-//			search_variables(extracted_line);
+			len_to_next_quote = strcspn(&n_argument->content[i + 1], "\'");
+			extracted_line = ft_substr(&n_argument->content[i + 1], 0, len_to_next_quote);
 		}
-		if (n_argument->content[0] == '\"')
+		else if (n_argument->content[i] == '\"')
 		{
-			len_to_next_quote = strspn(&n_argument->content[1], "\"");
-			extracted_line = ft_substr(&n_argument->content[1], 0, len_to_next_quote);
-			n_argument->content += len_to_next_quote;
-//			search_variables(extracted_line);
+			len_to_next_quote = strcspn(&n_argument->content[i + 1], "\"");
+			extracted_line = ft_substr(&n_argument->content[i + 1], 0, len_to_next_quote);
+			search_variables(&extracted_line);
 		}
 		else
 		{
-			extracted_line = n_argument->content;
+			len_to_next_quote = strcspn(&n_argument->content[i], "\"\'") - 2;
+			extracted_line = ft_substr(&n_argument->content[i], 0, len_to_next_quote + 2);
+			search_variables(&extracted_line);
 		}
-		if (extracted_line)
-			exp_argument->content = extracted_line;
+		if (!extracted_line)
+			exp_argument->alloc_succeed = false;
+		if (!definitive_content)
+			definitive_content = ft_strdup(extracted_line);
+		else
+			definitive_content = ft_strjoin_freed(definitive_content, extracted_line);
+		free(extracted_line);
+		extracted_line = NULL;
+		if (!definitive_content)
+			exp_argument->alloc_succeed = false;
+		i += (len_to_next_quote + 2);
 	}
+	exp_argument->content = definitive_content;
 	ft_lst_add_back5(&substring->exp_arguments, exp_argument);
+}
+
+
+void	search_variables(char **extracted_line)
+{
+	int i;
+	int	len_to_dollar;
+	int	len_to_ifs;
+	int	len;
+	char	*variable;
+	char	*result;
+	
+	i = 0;
+	result = "";
+	while (*extracted_line && *extracted_line[i])
+	{
+		len_to_dollar = (int)strcspn(extracted_line[i], "$");
+//		len = ft_strlen(extracted_line[i]);
+		len_to_ifs = (int)strcspn(extracted_line[i], " \t\n\v\f\r\0");
+		if (*extracted_line[i] == "$")
+		{
+			variable = getenv(ft_substr(extracted_line[0][i], 1, len_to_ifs - 1));
+			//free(*extracted_line);
+			if (variable)
+				result = ft_strjoin_freed(result, variable);
+			else
+				result = ft_strjoin_freed(result, "");
+		}
+		else
+			result = ft_strjoin_freed(result, ft_substr(extracted_line[i], i, len_to_ifs));
+		i += len_to_ifs;
+	}
+	free
 }

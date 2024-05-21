@@ -45,9 +45,10 @@ unsigned int count_angled_bracket(char *str);
 
 void	expand_contents(t_command_line **command_line);
 //t_expanded_redirection *expand_redirections(t_substring *substring, t_native_redirection *n_redirection);
-void expand_redirections(t_substring *substring, t_native_redirection *n_redirection);
+void	expand_redirections(t_substring *substring, t_native_redirection *n_redirection);
 //t_expanded_argument *expand_arguments(t_substring *substring, t_native_argument *n_argument);
-void expand_arguments(t_substring *substring, t_native_argument *n_argument);
+void	expand_arguments(t_substring *substring, t_native_argument *n_argument);
+void	search_variables(char **extracted_line);
 
 
 

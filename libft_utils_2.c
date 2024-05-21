@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:58:37 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/05 18:07:52 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/05/21 17:11:43 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,6 @@ char	*ft_substr(const char *s, unsigned int start, size_t len)
 		str[i] = 0;
 		return (str);
 	}
-
 	return (NULL);
 }
 
