@@ -183,15 +183,35 @@ function display_files_content() {
 }
 
 function delete_test_files() {
-	if [ -f "temp/minishell_test1.txt" ]
-	then
-		chmod 644 temp/minishell_test1.txt
-		rm temp/minishell_test1.txt
-	fi
+#	if [ -f "temp/minishell_test1.txt" ]
+#	then
+#		chmod 644 temp/minishell_test1.txt
+#		rm temp/minishell_test1.txt
+#	fi
 	if [ -d "temp" ]
 	then
 		chmod 777 temp
 		rm -r temp
+	fi
+}
+
+function delete_test_file() {
+	file="$1"
+
+	if [ -f $file ]
+	then
+		chmod 644 $file
+		rm $file
+	fi
+}
+
+function delete_stderr_file() {
+	file="$1"
+
+	if [ -f $file ]
+	then
+		chmod 644 $file
+		rm $file
 	fi
 }
 
@@ -210,6 +230,7 @@ run_test() {
     if [ $status_output_minishell -eq $status ] && diff "temp/minishell_test$test_index.txt" "Tests/test$file_test.txt" > /dev/null
 	then
         status_message="${GREEN} OK${NC}"
+		delete_test_file "temp/minishell_test$test_index.txt"
     else
         status_message="${RED} KO${NC}"
 		flag=$((flag + 1))
@@ -298,6 +319,8 @@ run_test_syntax_error() {
 		[ $(wc -c < "temp/minishell_test$test_index.txt") -eq 0 ]
 	then
         status_message="${GREEN} OK${NC}"
+		delete_test_file "temp/minishell_test$test_index.txt"
+		delete_stderr_file "temp/stderr2_minishell$test_index.txt"
     else
         status_message="${RED} KO${NC}"
 		flag=$((flag + 1))
@@ -796,12 +819,59 @@ run_test 1503 "\"\$TEST\"" 1503 0
 run_test 1504 "'\"\$TEST\"'" 1504 0
 run_test 1505 "\"'\"\$TEST\"'\"" 1505 0
 run_test 1506 "\"\$TEST \$TEST\"" 1506 0
+run_test 1507 "\" \$TEST\"" 1507 0
+run_test 1508 "\"  \$TEST\"" 1508 0
+run_test 1509 "\"\$TEST \"" 1509 0
+run_test 1510 "\"\$TEST  \"" 1510 0
+run_test 1511 "\" \$TEST \"" 1511 0
+run_test 1512 "\"  \$TEST  \"" 1512 0
+#run_test 1513 "\"	\$TEST\"" 1513 0
+#run_test 1514 "\"\t\t\$TEST\"" 1514 0
+#run_test 1515 "\"\$TEST\t\"" 1515 0
+#run_test 1516 "\"\$TEST\t\t\"" 1516 0
+#run_test 1517 "\"\t\$TEST\t\"" 1517 0
+#run_test 1518 "\"\t\t\$TEST\t\t\"" 1518 0
+#run_test 1519 "\" \$TEST\t\"" 1519 0
+#run_test 1520 "\"\t\$TEST \"" 1520 0
+
+run_test 1521 "\$\"TEST\"" 1521 0
+run_test 1522 "\$'TEST'" 1522 0
+run_test 1523 "\"\$ \"TEST\"\"" 1523 0
+run_test 1524 "\"\$ 'TEST'\"" 1524 0
+
+run_test 1530 "\" \$TEST \$TEST\"" 1530 0
+run_test 1531 "\"  \$TEST \$TEST\"" 1531 0
+run_test 1532 "\"\$TEST  \$TEST\"" 1532 0
+run_test 1533 "\"\$TEST \$TEST \"" 1533 0
+run_test 1534 "\"\$TEST \$TEST  \"" 1534 0
+run_test 1535 "\" \$TEST  \$TEST\"" 1535 0
+run_test 1536 "\" \$TEST  \$TEST \"" 1536 0
+#run_test 1537 "\"\t\$TEST\t\$TEST\"" 1537 0
+#run_test 1538 "\"\t\$TEST\t\$TEST\t\"" 1538 0
+#run_test 1539 "\"\t\t\$TEST\t\t\$TEST\t\t\"" 1539 0
+
+run_test 1550 "\"text\$TEST\"" 1550 0
+run_test 1551 "\"text \$TEST\"" 1551 0
+run_test 1552 "\" text \$TEST\"" 1552 0
+run_test 1553 "\"text \$TEST \"" 1553 0
+run_test 1554 "\"\$TEST cat\"" 1554 0
+run_test 1555 "\"\$TEST cat \"" 1555 0
+#run_test 1556 "\"\$TEST cat	\"" 1556 0
+run_test 1557 "\$" 1557 0
+run_test 1558 "\"\$ TEST\"" 1558 0
+run_test 1559 "\$\"\"" 1559 0
+run_test 1560 "\$''" 1560 0
+run_test 1561 "\"\$\"\"\"" 1561 0
+run_test 1562 "\"\$''\"" 1562 0
+run_test 1563 "\"\$\" \"\"" 1563 0
+run_test 1564 "\"\$' '\"" 1564 0
+run_test 1565 "'\$'''" 1565 0
 unset TEST
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 1500 to 1550\n"
+	echo -e "end of test serie from 1500 to 1570\n"
 else
-	echo -e "end of test serie from 1500 to 1550"
+	echo -e "end of test serie from 1500 to 1570"
 fi
 
 

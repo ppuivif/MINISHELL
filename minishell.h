@@ -48,7 +48,8 @@ void	expand_contents(t_command_line **command_line);
 void	expand_redirections(t_substring *substring, t_native_redirection *n_redirection);
 //t_expanded_argument *expand_arguments(t_substring *substring, t_native_argument *n_argument);
 void	expand_arguments(t_substring *substring, t_native_argument *n_argument);
-void	search_variables(char **extracted_line);
+void	expand_content(char **extracted_line);
+char	*expand_variables(char **remaining_line);
 
 
 

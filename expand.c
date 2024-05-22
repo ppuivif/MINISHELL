@@ -85,6 +85,7 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 	int i;
 	t_expanded_argument		*exp_argument;
 	size_t					len_to_next_quote;
+	size_t					len_to_dollar;
 	char					*extracted_line;
 	char					*definitive_content;
 
@@ -104,13 +105,37 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 		{
 			len_to_next_quote = strcspn(&n_argument->content[i + 1], "\"");
 			extracted_line = ft_substr(&n_argument->content[i + 1], 0, len_to_next_quote);
-			search_variables(&extracted_line);
+			expand_content(&extracted_line);
 		}
 		else
 		{
-			len_to_next_quote = strcspn(&n_argument->content[i], "\"\'") - 2;
-			extracted_line = ft_substr(&n_argument->content[i], 0, len_to_next_quote + 2);
-			search_variables(&extracted_line);
+			if (strcspn(&n_argument->content[i], "$") < ft_strlen(&n_argument->content[i]))
+			{
+				len_to_dollar = strcspn(&n_argument->content[i], "$");
+				if (len_to_dollar == 0)
+				{
+					if (n_argument->content[i + 1] == '\"' || n_argument->content[i + 1] == '\'')
+						len_to_next_quote = len_to_dollar - 1;
+					else
+					{
+						len_to_next_quote = strcspn(&n_argument->content[i + 1], "\'\"");//to complete with whitespaces and $ ?
+						extracted_line = ft_substr(&n_argument->content[i], 0, len_to_next_quote);
+						expand_content(&extracted_line);
+					}
+				}
+				else
+				{
+					extracted_line = ft_substr(&n_argument->content[i], 0, len_to_dollar);
+					len_to_next_quote = len_to_dollar - 2;
+					expand_content(&extracted_line);
+				}
+			}
+			else
+			{
+				len_to_next_quote = strcspn(&n_argument->content[i], "\"\'") - 2;
+				extracted_line = ft_substr(&n_argument->content[i], 0, len_to_next_quote + 2);
+				//expand_content(&extracted_line);
+//			}
 		}
 		if (!extracted_line)
 			exp_argument->alloc_succeed = false;
@@ -129,34 +154,63 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 }
 
 
-void	search_variables(char **extracted_line)
+void	expand_content(char **extracted_line)
 {
-	int i;
-	int	len_to_dollar;
-	int	len_to_ifs;
-	int	len;
+	char	*remaining_line;
 	char	*variable;
 	char	*result;
 	
-	i = 0;
-	result = "";
-	while (*extracted_line && *extracted_line[i])
-	{
-		len_to_dollar = (int)strcspn(extracted_line[i], "$");
-//		len = ft_strlen(extracted_line[i]);
-		len_to_ifs = (int)strcspn(extracted_line[i], " \t\n\v\f\r\0");
-		if (*extracted_line[i] == "$")
+	result = ft_strdup("");
+//	remaining_line = skip_first_whitespaces(*extracted_line);
+	remaining_line = *extracted_line;
+//	if (strcspn(remaining_line, "$") < ft_strlen(remaining_line))
+//	{
+		while (remaining_line && remaining_line[0])
 		{
-			variable = getenv(ft_substr(extracted_line[0][i], 1, len_to_ifs - 1));
-			//free(*extracted_line);
-			if (variable)
-				result = ft_strjoin_freed(result, variable);
+			variable = expand_variables(&remaining_line);
+			if (!result[0])
+				result = ft_strdup(variable);
 			else
-				result = ft_strjoin_freed(result, "");
+				result = ft_strjoin_freed(result, variable);
+		}
+		free (*extracted_line);
+		*extracted_line = ft_strdup_freed(result);
+//	}
+}
+
+char *expand_variables(char **remaining_line)
+{
+	int		len_to_cut;
+	char	*result;
+
+	len_to_cut = 0;
+	result = NULL;
+	if (remaining_line[0][0] == '$')
+	{
+		if ((remaining_line[0][1] && ft_isspace(remaining_line[0][1]) != 0))
+		{
+			if (remaining_line[0][1] == '\"' || remaining_line[0][1] == '\'')
+			{
+				len_to_cut = 0;
+				result = "";
+			}
+			else
+			{
+				len_to_cut = (int)strcspn(&remaining_line[0][1], " \t\n\v\f\r\0");
+				result = getenv(ft_substr(&remaining_line[0][1], 0, len_to_cut));
+				if (!result)
+					result = "";
+			}
 		}
 		else
-			result = ft_strjoin_freed(result, ft_substr(extracted_line[i], i, len_to_ifs));
-		i += len_to_ifs;
+			result = "$";
+		*remaining_line += len_to_cut + 1;
 	}
-	free
+	else
+	{
+		len_to_cut = (int)strcspn(remaining_line[0], "$\0");
+		result = ft_substr(remaining_line[0], 0, len_to_cut);
+		*remaining_line += len_to_cut;
+	}
+	return (result);
 }

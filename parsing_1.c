@@ -192,7 +192,6 @@ int	count_len_to_cut(char *remaining_line)
 }
 
 
-
 int	count_len_to_quotes(char *remaining_line, char *c, int flag)
 {
 	int j;
