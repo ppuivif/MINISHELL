@@ -107,16 +107,15 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 		{
 			len_to_next_quote = strcspn(&n_argument->content[i + 1], "\"");
 			extracted_line = ft_substr(&n_argument->content[i + 1], 0, len_to_next_quote);
-			expand_content(&extracted_line);
-			len = len_to_next_quote + 2;
+			if (strcspn(extracted_line, "$") < ft_strlen(extracted_line))
+				len = if_dollar_in_string(extracted_line, &extracted_line) + 2;
+			else
+				len = len_to_next_quote + 2;
 		}
 		else
 		{
 			if (strcspn(&n_argument->content[i], "$") < ft_strlen(&n_argument->content[i]))
-			{
 				len = if_dollar_in_string(&n_argument->content[i], &extracted_line);
-				printf("extracted_line : %s\n", extracted_line);
-			}
 			else
 			{
 				len_to_next_quote = strcspn(&n_argument->content[i], "\"\'");
@@ -161,9 +160,13 @@ size_t	if_dollar_in_string(char *content, char **extracted_line)
 		}
 		else
 		{
+			if (strcspn(&content[i + 1], "$") < strcspn(&content[i + 1], "\'\" \t\n\v\f\r\0"))//to complete with whitespaces and $ ?
+				len = 0;
+			else
+				len = 1;
 			len_to_cut = strcspn(&content[i + 1], "$\'\" \t\n\v\f\r\0");//to complete with whitespaces and $ ?
 			*extracted_line = ft_substr(&content[i], 0, len_to_cut + 1);
-			len = len_to_cut + 1;
+			len += len_to_cut;
 			expand_content(extracted_line);
 		}
 	}
@@ -213,13 +216,10 @@ char *expand_variables(char **remaining_line)
 		if ((remaining_line[0][1] && ft_isspace(remaining_line[0][1]) != 0))
 		{
 			if (remaining_line[0][1] == '\"' || remaining_line[0][1] == '\'')
-			{
-				len_to_cut = 0;
 				result = "";
-			}
 			else
 			{
-				len_to_cut = (int)strcspn(&remaining_line[0][1], " \t\n\v\f\r\0");
+				len_to_cut = (int)strcspn(&remaining_line[0][1], "$ \t\n\v\f\r\0");
 				result = getenv(ft_substr(&remaining_line[0][1], 0, len_to_cut));
 				if (!result)
 					result = "";

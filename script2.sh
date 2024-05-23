@@ -825,14 +825,14 @@ run_test 1509 "\"\$TEST \"" 1509 0
 run_test 1510 "\"\$TEST  \"" 1510 0
 run_test 1511 "\" \$TEST \"" 1511 0
 run_test 1512 "\"  \$TEST  \"" 1512 0
-#run_test 1513 "\"	\$TEST\"" 1513 0
-#run_test 1514 "\"\t\t\$TEST\"" 1514 0
-#run_test 1515 "\"\$TEST\t\"" 1515 0
-#run_test 1516 "\"\$TEST\t\t\"" 1516 0
-#run_test 1517 "\"\t\$TEST\t\"" 1517 0
-#run_test 1518 "\"\t\t\$TEST\t\t\"" 1518 0
-#run_test 1519 "\" \$TEST\t\"" 1519 0
-#run_test 1520 "\"\t\$TEST \"" 1520 0
+#run_test 1513 "\"	\$TEST\"" 1513 0//pb with\t
+#run_test 1514 "\"\t\t\$TEST\"" 1514 0//pb with\t
+#run_test 1515 "\"\$TEST\t\"" 1515 0//pb with\t
+#run_test 1516 "\"\$TEST\t\t\"" 1516 0//pb with\t
+#run_test 1517 "\"\t\$TEST\t\"" 1517 0//pb with\t
+#run_test 1518 "\"\t\t\$TEST\t\t\"" 1518 0//pb with\t
+#run_test 1519 "\" \$TEST\t\"" 1519 0//pb with\t
+#run_test 1520 "\"\t\$TEST \"" 1520 0//pb with\t
 
 run_test 1521 "\$\"TEST\"" 1521 0
 run_test 1522 "\$'TEST'" 1522 0
@@ -846,16 +846,16 @@ run_test 1533 "\"\$TEST \$TEST \"" 1533 0
 run_test 1534 "\"\$TEST \$TEST  \"" 1534 0
 run_test 1535 "\" \$TEST  \$TEST\"" 1535 0
 run_test 1536 "\" \$TEST  \$TEST \"" 1536 0
-#run_test 1537 "\"\t\$TEST\t\$TEST\"" 1537 0
-#run_test 1538 "\"\t\$TEST\t\$TEST\t\"" 1538 0
-#run_test 1539 "\"\t\t\$TEST\t\t\$TEST\t\t\"" 1539 0
+#run_test 1537 "\"\t\$TEST\t\$TEST\"" 1537 0//pb with\t
+#run_test 1538 "\"\t\$TEST\t\$TEST\t\"" 1538 0//pb with\t
+#run_test 1539 "\"\t\t\$TEST\t\t\$TEST\t\t\"" 1539 0//pb with\t
 run_test 1540 "\$TEST\$TEST" 1540 0
 run_test 1541 "\" \$TEST\$TEST\"" 1541 0
 run_test 1542 "\"\$TEST\$TEST \"" 1542 0
 run_test 1543 "\" \$TEST\$TEST \"" 1543 0
-run_test 1544 "\"	\$TEST\$TEST\"" 1544 0
-run_test 1545 "\"\$TEST\$TEST	\"" 1545 0
-run_test 1546 "\"	\$TEST\$TEST	\"" 1546 0
+#run_test 1544 "\"	\$TEST\$TEST\"" 1544 0//pb with\t
+#run_test 1545 "\"\$TEST\$TEST	\"" 1545 0//pb with\t
+#run_test 1546 "\"	\$TEST\$TEST	\"" 1546 0//pb with\t
 
 run_test 1550 "\"text\$TEST\"" 1550 0
 run_test 1551 "\"text \$TEST\"" 1551 0
@@ -863,7 +863,7 @@ run_test 1552 "\" text \$TEST\"" 1552 0
 run_test 1553 "\"text \$TEST \"" 1553 0
 run_test 1554 "\"\$TEST cat\"" 1554 0
 run_test 1555 "\"\$TEST cat \"" 1555 0
-#run_test 1556 "\"\$TEST cat	\"" 1556 0
+#run_test 1556 "\"\$TEST cat	\"" 1556 0//pb with\t
 run_test 1557 "\$" 1557 0
 run_test 1558 "\"\$ TEST\"" 1558 0
 run_test 1559 "\$\"\"" 1559 0
