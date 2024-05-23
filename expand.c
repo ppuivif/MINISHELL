@@ -85,7 +85,6 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 	int i;
 	t_expanded_argument		*exp_argument;
 	size_t					len;
-	size_t					len_to_next_quote;
 	char					*extracted_line;
 	char					*definitive_content;
 
@@ -98,31 +97,23 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 	while (n_argument && n_argument->content[i])
 	{
 		if (n_argument->content[i] == '\'')
-		{
-			len_to_next_quote = strcspn(&n_argument->content[i + 1], "\'");
-			extracted_line = ft_substr(&n_argument->content[i + 1], 0, len_to_next_quote);
-			len = len_to_next_quote + 2;
-		}
+			len = len_and_extract_between_single_quotes(&n_argument->content[i + 1], &extracted_line);
 		else if (n_argument->content[i] == '\"')
-		{
+			len = len_and_extract_between_double_quotes(&n_argument->content[i + 1], &extracted_line);
+/*		{
 			len_to_next_quote = strcspn(&n_argument->content[i + 1], "\"");
 			extracted_line = ft_substr(&n_argument->content[i + 1], 0, len_to_next_quote);
-			if (strcspn(extracted_line, "$") < ft_strlen(extracted_line))
-				len = if_dollar_in_string(extracted_line, &extracted_line) + 2;
+			if (is_remaining_chars(extracted_line, "$") == 0)
+				len = special_expand_content(&extracted_line);
 			else
 				len = len_to_next_quote + 2;
-		}
+		}*/
 		else
 		{
-			if (strcspn(&n_argument->content[i], "$") < ft_strlen(&n_argument->content[i]))
+			if (is_remaining_chars(&n_argument->content[i], "$") == 0)
 				len = if_dollar_in_string(&n_argument->content[i], &extracted_line);
 			else
-			{
-				len_to_next_quote = strcspn(&n_argument->content[i], "\"\'");
-				extracted_line = ft_substr(&n_argument->content[i], 0, len_to_next_quote);
-				len = len_to_next_quote;
-				//expand_content(&extracted_line);
-			}
+				len = len_and_extract_until_next_quote(&n_argument->content[i], &extracted_line);
 		}
 		if (!extracted_line)
 			exp_argument->alloc_succeed = false;
@@ -141,6 +132,81 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 }
 
 
+size_t	len_and_extract_between_single_quotes(char *str, char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_single_quote;
+	
+	len = 0;
+	len_to_next_single_quote = strcspn(str, "\'");
+	*extracted_line = ft_substr(str, 0, len_to_next_single_quote);
+	len = len_to_next_single_quote + 2;
+	return (len);
+}
+
+size_t	len_and_extract_between_double_quotes(char *str, char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_double_quote;
+	
+	len = 0;
+	len_to_next_double_quote = strcspn(str, "\"");
+	*extracted_line = ft_substr(str, 0, len_to_next_double_quote);
+	len = len_to_next_double_quote + 2;
+	return (len);
+}
+
+size_t	len_and_extract_until_next_quote(char *str, char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_quote;
+
+	len_to_next_quote = strcspn(str, "\"\'");
+	*extracted_line = ft_substr(str, 0, len_to_next_quote);
+	len = len_to_next_quote;
+	return (len);
+}
+
+
+/*size_t	special_expand_content(char **extracted_line)
+{
+	int		i;
+	size_t	len;
+	char 	*tmp;
+	char 	*result;
+
+	size_t	len_to_dollar;
+	size_t	len_to_double_quote;
+		
+	result = NULL;
+	len_to_dollar = strcspn(*extracted_line, "$");
+	len_to_double_quote = strcspn(*extracted_line, "\"");
+	while (extracted_line[0][i])
+	{
+//		if (len_to_dollar == 0)
+		if ()
+		i++;
+		while (ft_isspace(extracted_line[0][i]) == 0)
+			i++;
+		tmp = substr
+		if (!result)
+			result = ft_strdup_freed(tmp);
+		else
+			result = ft_strjoin_freed(result, tmp);
+		if (extracted_line[0][i] == "\'")
+			 i += strcspn(&extracted_line[0][i], "\'") + 1;
+	
+
+	
+	}
+	free(*extracted_line);
+	*extracted_line = ft_strdup_freed[result];
+	return (len);
+}
+*/
+
+
+
 size_t	if_dollar_in_string(char *content, char **extracted_line)
 {
 	int		i;
@@ -150,6 +216,7 @@ size_t	if_dollar_in_string(char *content, char **extracted_line)
 	
 	i = 0;
 	len_to_cut = 0;
+	len = 0;
 	len_to_dollar = strcspn(&content[i], "$");
 	if (len_to_dollar == 0)
 	{
@@ -160,20 +227,21 @@ size_t	if_dollar_in_string(char *content, char **extracted_line)
 		}
 		else
 		{
-			if (strcspn(&content[i + 1], "$") < strcspn(&content[i + 1], "\'\" \t\n\v\f\r\0"))//to complete with whitespaces and $ ?
-				len = 0;
-			else
-				len = 1;
-			len_to_cut = strcspn(&content[i + 1], "$\'\" \t\n\v\f\r\0");//to complete with whitespaces and $ ?
+//			if (strcspn(&content[i + 1], "$") < strcspn(&content[i + 1], "\'\" \t\n\v\f\r\0"))//to complete with whitespaces and $ ?
+//				len = 0;
+//			else
+//				len = 1;
+//			len_to_cut = strcspn(&content[i + 1], "$\'\" \t\n\v\f\r\0");//to complete with whitespaces and $ ?
+			len_to_cut = strcspn(&content[i + 1], "$\" \t\n\v\f\r\0");//to complete with whitespaces and $ ?
 			*extracted_line = ft_substr(&content[i], 0, len_to_cut + 1);
-			len += len_to_cut;
+			len = len_to_cut + 1;
 			expand_content(extracted_line);
 		}
 	}
 	else
 	{
 		*extracted_line = ft_substr(&content[i], 0, len_to_dollar);
-		len = len_to_dollar + 1;
+		len = len_to_dollar;
 		expand_content(extracted_line);
 	}
 	return (len);
@@ -236,4 +304,11 @@ char *expand_variables(char **remaining_line)
 		*remaining_line += len_to_cut;
 	}
 	return (result);
+}
+
+int is_remaining_chars(char *str, char *list_of_char)
+{
+	if(strcspn(str, list_of_char) < ft_strlen(str))
+		return (0);
+	return (1);
 }
