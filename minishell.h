@@ -50,6 +50,7 @@ void	expand_redirections(t_substring *substring, t_native_redirection *n_redirec
 void	expand_arguments(t_substring *substring, t_native_argument *n_argument);
 void	expand_content(char **extracted_line);
 char	*expand_variables(char **remaining_line);
+size_t	if_dollar_in_string(char *content, char **extracted_line);
 
 
 

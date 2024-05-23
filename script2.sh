@@ -849,6 +849,13 @@ run_test 1536 "\" \$TEST  \$TEST \"" 1536 0
 #run_test 1537 "\"\t\$TEST\t\$TEST\"" 1537 0
 #run_test 1538 "\"\t\$TEST\t\$TEST\t\"" 1538 0
 #run_test 1539 "\"\t\t\$TEST\t\t\$TEST\t\t\"" 1539 0
+run_test 1540 "\$TEST\$TEST" 1540 0
+run_test 1541 "\" \$TEST\$TEST\"" 1541 0
+run_test 1542 "\"\$TEST\$TEST \"" 1542 0
+run_test 1543 "\" \$TEST\$TEST \"" 1543 0
+run_test 1544 "\"	\$TEST\$TEST\"" 1544 0
+run_test 1545 "\"\$TEST\$TEST	\"" 1545 0
+run_test 1546 "\"	\$TEST\$TEST	\"" 1546 0
 
 run_test 1550 "\"text\$TEST\"" 1550 0
 run_test 1551 "\"text \$TEST\"" 1551 0

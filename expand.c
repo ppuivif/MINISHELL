@@ -84,11 +84,12 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 {
 	int i;
 	t_expanded_argument		*exp_argument;
+	size_t					len;
 	size_t					len_to_next_quote;
-	size_t					len_to_dollar;
 	char					*extracted_line;
 	char					*definitive_content;
 
+	len = 0;
 	exp_argument = NULL;
 	definitive_content = NULL;
 	if (init_expanded_argument_struct(&exp_argument) == -1)
@@ -100,42 +101,29 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 		{
 			len_to_next_quote = strcspn(&n_argument->content[i + 1], "\'");
 			extracted_line = ft_substr(&n_argument->content[i + 1], 0, len_to_next_quote);
+			len = len_to_next_quote + 2;
 		}
 		else if (n_argument->content[i] == '\"')
 		{
 			len_to_next_quote = strcspn(&n_argument->content[i + 1], "\"");
 			extracted_line = ft_substr(&n_argument->content[i + 1], 0, len_to_next_quote);
 			expand_content(&extracted_line);
+			len = len_to_next_quote + 2;
 		}
 		else
 		{
 			if (strcspn(&n_argument->content[i], "$") < ft_strlen(&n_argument->content[i]))
 			{
-				len_to_dollar = strcspn(&n_argument->content[i], "$");
-				if (len_to_dollar == 0)
-				{
-					if (n_argument->content[i + 1] == '\"' || n_argument->content[i + 1] == '\'')
-						len_to_next_quote = len_to_dollar - 1;
-					else
-					{
-						len_to_next_quote = strcspn(&n_argument->content[i + 1], "\'\"");//to complete with whitespaces and $ ?
-						extracted_line = ft_substr(&n_argument->content[i], 0, len_to_next_quote);
-						expand_content(&extracted_line);
-					}
-				}
-				else
-				{
-					extracted_line = ft_substr(&n_argument->content[i], 0, len_to_dollar);
-					len_to_next_quote = len_to_dollar - 2;
-					expand_content(&extracted_line);
-				}
+				len = if_dollar_in_string(&n_argument->content[i], &extracted_line);
+				printf("extracted_line : %s\n", extracted_line);
 			}
 			else
 			{
-				len_to_next_quote = strcspn(&n_argument->content[i], "\"\'") - 2;
-				extracted_line = ft_substr(&n_argument->content[i], 0, len_to_next_quote + 2);
+				len_to_next_quote = strcspn(&n_argument->content[i], "\"\'");
+				extracted_line = ft_substr(&n_argument->content[i], 0, len_to_next_quote);
+				len = len_to_next_quote;
 				//expand_content(&extracted_line);
-//			}
+			}
 		}
 		if (!extracted_line)
 			exp_argument->alloc_succeed = false;
@@ -147,10 +135,45 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 		extracted_line = NULL;
 		if (!definitive_content)
 			exp_argument->alloc_succeed = false;
-		i += (len_to_next_quote + 2);
+		i += len;
 	}
 	exp_argument->content = definitive_content;
 	ft_lst_add_back5(&substring->exp_arguments, exp_argument);
+}
+
+
+size_t	if_dollar_in_string(char *content, char **extracted_line)
+{
+	int		i;
+	size_t	len_to_dollar;
+	size_t	len_to_cut;
+	size_t	len;
+	
+	i = 0;
+	len_to_cut = 0;
+	len_to_dollar = strcspn(&content[i], "$");
+	if (len_to_dollar == 0)
+	{
+		if (content[i + 1] == '\"' || content[i + 1] == '\'')
+		{
+			*extracted_line = ft_strdup("");
+			len = len_to_dollar + 1;
+		}
+		else
+		{
+			len_to_cut = strcspn(&content[i + 1], "$\'\" \t\n\v\f\r\0");//to complete with whitespaces and $ ?
+			*extracted_line = ft_substr(&content[i], 0, len_to_cut + 1);
+			len = len_to_cut + 1;
+			expand_content(extracted_line);
+		}
+	}
+	else
+	{
+		*extracted_line = ft_substr(&content[i], 0, len_to_dollar);
+		len = len_to_dollar + 1;
+		expand_content(extracted_line);
+	}
+	return (len);
 }
 
 
