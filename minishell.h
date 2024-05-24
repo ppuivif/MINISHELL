@@ -48,15 +48,18 @@ void	expand_contents(t_command_line **command_line);
 void	expand_redirections(t_substring *substring, t_native_redirection *n_redirection);
 //t_expanded_argument *expand_arguments(t_substring *substring, t_native_argument *n_argument);
 void	expand_arguments(t_substring *substring, t_native_argument *n_argument);
-size_t	len_and_extract_between_single_quotes(char *str, char **extracted_line);
-size_t	len_and_extract_between_double_quotes(char *str, char **extracted_line);
-size_t	len_and_extract_until_next_quote(char *str, char **extracted_line);
+size_t	get_len_and_extract_between_single_quotes(char *str, char **extracted_line);
+size_t	get_len_and_extract_with_single_quotes(char *str, char **extracted_line);
+size_t	get_len_and_extract_between_double_quotes(char *str, char **extracted_line);
+size_t	get_len_and_extract_until_next_quote(char *str, char **extracted_line);
+size_t	get_len_and_extract_until_next_quote_or_dollar(char *str, char **extracted_line);
+size_t	get_len_and_extract_until_next_separator(char *str, char **extracted_line);
 
-
-void	expand_content(char **extracted_line);
+void	complete_expand_content(char **str);
+size_t	simple_expand_content(char *str, char **extracted_line);
+void	expand_string_after_dollar(char **str);
 char	*expand_variables(char **remaining_line);
-size_t	if_dollar_in_string(char *content, char **extracted_line);
-int is_remaining_chars(char *str, char *list_of_char);
+int     is_remaining_chars(char *str, char *list_of_char);
 
 
 
