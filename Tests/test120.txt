@@ -1,6 +1,6 @@
 substring 0 : 
-	-redirection 0 : 	infile.txt
+	-redirection 0 : 	limiter1
 	-redirection_type 0 : 	REDIRECTION_HEREDOC
-	-redirection 1 : 	infile.txt
+	-redirection 1 : 	limiter2
 	-redirection_type 1 : 	REDIRECTION_HEREDOC
 

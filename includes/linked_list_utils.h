@@ -107,7 +107,9 @@ void	free_all(t_command_line **command_line);
 void	free_command_line(t_command_line **command_line);
 void	free_substring(t_substring **substrings);
 void	free_n_redirection(t_native_redirection **redirections);
+void	free_exp_redirection(t_expanded_redirection **exp_redirections);
 void	free_n_argument(t_native_argument **arguments);
+void	free_exp_argument(t_expanded_argument **exp_arguments);
 
 //void		ft_lst_delone(t_element **head, t_element *element_to_del);
 

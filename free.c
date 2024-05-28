@@ -24,12 +24,20 @@ void	free_substring(t_substring **substrings)
 	{
 		tmp = (*substrings)->next;
 		if ((*substrings)->n_redirections)
+		{
 			free_n_redirection(&(*substrings)->n_redirections);
+			free_exp_redirection(&(*substrings)->exp_redirections);
+		}
 		if ((*substrings)->n_arguments)
-			free_n_argument(&(*substrings)->n_arguments);	
+		{
+			free_n_argument(&(*substrings)->n_arguments);
+			free_exp_argument(&(*substrings)->exp_arguments);
+		}
 		free ((*substrings)->remaining_line);
 		free ((*substrings)->n_redirections);
+		free ((*substrings)->exp_redirections);
 		free ((*substrings)->n_arguments);
+		free ((*substrings)->exp_arguments);
 		free ((*substrings));
 		*substrings = tmp;
 	}
@@ -58,5 +66,31 @@ void	free_n_argument(t_native_argument **n_arguments)
 		free ((*n_arguments)->content);
 		free (*n_arguments);
 		*n_arguments = tmp;
+	}
+}
+
+void	free_exp_redirection(t_expanded_redirection **exp_redirections)
+{
+	t_expanded_redirection	*tmp;
+
+	while (ft_lst_size4(*exp_redirections))
+	{
+		tmp = (*exp_redirections)->next;
+		free ((*exp_redirections)->content);
+		free (*exp_redirections);
+		*exp_redirections = tmp;
+	}
+}
+
+void	free_exp_argument(t_expanded_argument **exp_arguments)
+{
+	t_expanded_argument	*tmp;
+
+	while (ft_lst_size5(*exp_arguments))
+	{
+		tmp = (*exp_arguments)->next;
+		free ((*exp_arguments)->content);
+		free (*exp_arguments);
+		*exp_arguments = tmp;
 	}
 }

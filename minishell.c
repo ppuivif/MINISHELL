@@ -62,7 +62,8 @@ int main(int argc, char **argv)
 			line = readline("minishell : ");
 			if (!line)
 				break;
-			add_history(line);//here?
+			if (line[0])//no history on empty lines
+				add_history(line);//here?
 //			command_line = parse_command_line(line);
 			command_line = parse_command_line(line, atoi(argv[1]));//to run script.sh
 			free(line);

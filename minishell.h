@@ -26,7 +26,9 @@
 void			print_arr(char **arr);
 //!t_command_line 	*parse_command_line(char *str);
 t_command_line 	*parse_command_line(char *str, int fd);
+void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line);
 int		parse_substrings(char **remaining_line, t_command_line *command_line);
+int		get_arguments_and_redirections(t_substring **substring, char **remaining_line);
 int		get_redirections(char **remaining_line, t_substring *substring);
 int		get_arguments(char **remaining_line, t_substring *substring);
 
@@ -38,7 +40,8 @@ int		init_substring_struct(t_substring **substring);
 int		init_command_line_struct(t_command_line **command_line);
 
 int		count_len_to_cut(char *remaining_line);
-int		count_len_to_quotes(char *remaining_line, char *c, int flag);
+int		count_len_to_reach_first_quote_or_ifs(char *remaining_line);
+int		count_len_to_next_quotes(char *remaining_line, char *c, int flag);
 int		check_char_validity(char *remaining_line, int len_to_quote, int flag, int j);
 
 unsigned int count_angled_bracket(char *str);

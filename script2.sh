@@ -400,26 +400,14 @@ run_test 18 "< infile.txt cat | cat >		outfile.txt" 1 0
 run_test 19 "< infile.txt cat | cat > outfile.txt	" 1 0
 run_test 20 "< infile.txt cat | cat > outfile.txt		" 1 0
 
-run_test 21 "<< infile.txt cat | cat > outfile.txt" 21 0
-run_test 22 "<<infile.txt cat | cat > outfile.txt" 21 0
-run_test 23 "<< infile.txt cat| cat > outfile.txt" 21 0
-run_test 24 "<< infile.txt cat |cat > outfile.txt" 21 0
-run_test 25 "<< infile.txt cat | cat> outfile.txt" 21 0
-run_test 26 "<< infile.txt cat | cat >outfile.txt" 21 0
-run_test 27 "<<infile.txt cat|cat >outfile.txt" 21 0
-run_test 28 "<< infile.txt cat | cat > outfile.txt" 21 0
-run_test 29 "<<	infile.txt cat | cat > outfile.txt" 21 0
-run_test 30 "<<		infile.txt cat | cat > outfile.txt" 21 0
-run_test 31 "<< infile.txt cat	| cat > outfile.txt" 21 0
-run_test 32 "<< infile.txt cat		| cat > outfile.txt" 21 0
-run_test 33 "<< infile.txt cat |	cat > outfile.txt" 21 0
-run_test 34 "<< infile.txt cat |		cat > outfile.txt" 21 0
-run_test 35 "<< infile.txt cat | cat	> outfile.txt" 21 0
-run_test 36 "<< infile.txt cat | cat		> outfile.txt" 21 0
-run_test 37 "<< infile.txt cat | cat >	outfile.txt" 21 0
-run_test 38 "<< infile.txt cat | cat >		outfile.txt" 21 0
-run_test 39 "<< infile.txt cat | cat > outfile.txt	" 21 0
-run_test 40 "<< infile.txt cat | cat > outfile.txt		" 21 0
+run_test 21 "<< limiter cat | cat > outfile.txt" 21 0
+run_test 22 "<<limiter cat | cat > outfile.txt" 21 0 \"" 1512 0
+run_test 1513 "
+run_test 36 "<< limiter cat | cat		> outfile.txt" 21 0
+run_test 37 "<< limiter cat | cat >	outfile.txt" 21 0
+run_test 38 "<< limiter cat | cat >		outfile.txt" 21 0
+run_test 39 "<< limiter cat | cat > outfile.txt	" 21 0
+run_test 40 "<< limiter cat | cat > outfile.txt		" 21 0
 
 run_test 41 "< infile.txt cat | cat >> outfile.txt" 41 0
 run_test 42 "<infile.txt cat | cat >> outfile.txt" 41 0
@@ -442,26 +430,26 @@ run_test 58 "< infile.txt cat | cat >>		outfile.txt" 41 0
 run_test 59 "< infile.txt cat | cat >> outfile.txt	" 41 0
 run_test 60 "< infile.txt cat | cat >> outfile.txt		" 41 0
 
-run_test 61 "<< infile.txt cat | cat >> outfile.txt" 61 0
-run_test 62 "<<infile.txt cat | cat >> outfile.txt" 61 0
-run_test 63 "<< infile.txt cat| cat >> outfile.txt" 61 0
-run_test 64 "<< infile.txt cat |cat >> outfile.txt" 61 0
-run_test 65 "<< infile.txt cat | cat>> outfile.txt" 61 0
-run_test 66 "<< infile.txt cat | cat >>outfile.txt" 61 0
-run_test 67 "<<infile.txt cat|cat >>outfile.txt" 61 0
-run_test 68 "<< infile.txt cat | cat >> outfile.txt" 61 0
-run_test 69 "<<	infile.txt cat | cat >> outfile.txt" 61 0
-run_test 70 "<<		infile.txt cat | cat >> outfile.txt" 61 0
-run_test 71 "<< infile.txt cat	| cat >> outfile.txt" 61 0
-run_test 72 "<< infile.txt cat		| cat >> outfile.txt" 61 0
-run_test 73 "<< infile.txt cat |	cat >> outfile.txt" 61 0
-run_test 74 "<< infile.txt cat |		cat >> outfile.txt" 61 0
-run_test 75 "<< infile.txt cat | cat	>> outfile.txt" 61 0
-run_test 76 "<< infile.txt cat | cat		>> outfile.txt" 61 0
-run_test 77 "<< infile.txt cat | cat >>	outfile.txt" 61 0
-run_test 78 "<< infile.txt cat | cat >>		outfile.txt" 61 0
-run_test 79 "<< infile.txt cat | cat >> outfile.txt	" 61 0
-run_test 80 "<< infile.txt cat | cat >> outfile.txt		" 61 0
+run_test 61 "<< limiter cat | cat >> outfile.txt" 61 0
+run_test 62 "<<limiter cat | cat >> outfile.txt" 61 0
+run_test 63 "<< limiter cat| cat >> outfile.txt" 61 0
+run_test 64 "<< limiter cat |cat >> outfile.txt" 61 0
+run_test 65 "<< limiter cat | cat>> outfile.txt" 61 0
+run_test 66 "<< limiter cat | cat >>outfile.txt" 61 0
+run_test 67 "<<limiter cat|cat >>outfile.txt" 61 0
+run_test 68 "<< limiter cat | cat >> outfile.txt" 61 0
+run_test 69 "<<	limiter cat | cat >> outfile.txt" 61 0
+run_test 70 "<<		limiter cat | cat >> outfile.txt" 61 0
+run_test 71 "<< limiter cat	| cat >> outfile.txt" 61 0
+run_test 72 "<< limiter cat		| cat >> outfile.txt" 61 0
+run_test 73 "<< limiter cat |	cat >> outfile.txt" 61 0
+run_test 74 "<< limiter cat |		cat >> outfile.txt" 61 0
+run_test 75 "<< limiter cat | cat	>> outfile.txt" 61 0
+run_test 76 "<< limiter cat | cat		>> outfile.txt" 61 0
+run_test 77 "<< limiter cat | cat >>	outfile.txt" 61 0
+run_test 78 "<< limiter cat | cat >>		outfile.txt" 61 0
+run_test 79 "<< limiter cat | cat >> outfile.txt	" 61 0
+run_test 80 "<< limiter cat | cat >> outfile.txt		" 61 0
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 1 to 80\n"
@@ -521,25 +509,25 @@ else
 	echo -e "end of test serie from 100 to 118"
 fi
 
-run_test 120 "<< infile.txt << infile.txt" 120 0
-run_test 121 "<<infile.txt << infile.txt" 120 0
-run_test 122 "<< infile.txt <<infile.txt" 120 0
-run_test 123 "<<infile.txt <<infile.txt" 120 0
-run_test 124 "<<infile.txt<<infile.txt" 120 0
-run_test 125 "<<infile.txt<<infile.txt" 120 0
-run_test 126 " <<	infile.txt << infile.txt" 120 0
-run_test 127 " << infile.txt	<< infile.txt" 120 0
-run_test 128 " << infile.txt <<	infile.txt" 120 0
-run_test 129 " << infile.txt << infile.txt	" 120 0
-run_test 130 "<< infile.txt << infile.txt << infile.txt" 130 0
-run_test 131 "<<infile.txt << infile.txt << infile.txt" 130 0
-run_test 132 "<< infile.txt <<infile.txt << infile.txt" 130 0
-run_test 133 "<< infile.txt << infile.txt <<infile.txt" 130 0
-run_test 134 "<< infile.txt << infile.txt << infile.txt" 130 0
-run_test 135 "<<infile.txt <<infile.txt << infile.txt" 130 0
-run_test 136 "<<infile.txt <<infile.txt <<infile.txt" 130 0
-run_test 137 "<<infile.txt<<infile.txt <<infile.txt" 130 0
-run_test 138 "<<infile.txt<<infile.txt<<infile.txt" 130 0
+run_test 120 "<< limiter1 << limiter2" 120 0
+run_test 121 "<<limiter1 << limiter2" 120 0
+run_test 122 "<< limiter1 <<limiter2" 120 0
+run_test 123 "<<limiter1 <<limiter2" 120 0
+run_test 124 "<<limiter1<<limiter2" 120 0
+run_test 125 "<<limiter1<<limiter2" 120 0
+run_test 126 " <<	limiter1 << limiter2" 120 0
+run_test 127 " << limiter1	<< limiter2" 120 0
+run_test 128 " << limiter1 <<	limiter2" 120 0
+run_test 129 " << limiter1 << limiter2	" 120 0
+run_test 130 "<< limiter1 << limiter2 << limiter3" 130 0
+run_test 131 "<<limiter1 << limiter2 << limiter3" 130 0
+run_test 132 "<< limiter1 <<limiter2 << limiter3" 130 0
+run_test 133 "<< limiter1 << limiter2 <<limiter3" 130 0
+run_test 134 "<< limiter1 << limiter2 << limiter3" 130 0
+run_test 135 "<<limiter1 <<limiter2 << limiter3" 130 0
+run_test 136 "<<limiter1 <<limiter2 <<limiter3" 130 0
+run_test 137 "<<limiter1<<limiter2 <<limiter3" 130 0
+run_test 138 "<<limiter1<<limiter2<<limiter3" 130 0
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 120 to 138\n"
@@ -572,6 +560,47 @@ then
 else
 	echo -e "end of test serie from 140 to 158"
 fi
+
+run_test 160 "< 'infile.txt'" 160 0
+run_test 161 "< \"infile.txt\"" 160 0
+run_test 162 "< '\"infile.txt\"'" 162 0
+run_test 163 "< \"'infile.txt'\"" 163 0
+run_test 164 "< '\"'infile.txt'\"'" 164 0
+run_test 165 "< \"'\"infile.txt\"'\"" 165 0
+run_test 166 "> 'outfile.txt'" 166 0
+run_test 167 "> \"outfile.txt\"" 166 0
+run_test 168 "> '\"outfile.txt\"'" 168 0
+run_test 169 "> \"'outfile.txt'\"" 169 0
+run_test 170 "> '\"'outfile.txt'\"'" 170 0
+run_test 171 "> \"'\"outfile.txt\"'\"" 171 0
+run_test 172 "<< 'limiter'" 172 0
+run_test 173 "<< \"limiter\"" 172 0
+run_test 174 "<< '\"limiter\"'" 174 0
+run_test 175 "<< \"'limiter'\"" 175 0
+run_test 176 "<< '\"'limiter'\"'" 176 0
+run_test 177 "<< \"'\"limiter\"'\"" 177 0
+run_test 178 ">> 'outfile.txt'" 178 0
+run_test 179 ">> \"outfile.txt\"" 178 0
+run_test 180 ">> '\"outfile.txt\"'" 180 0
+run_test 181 ">> \"'outfile.txt'\"" 181 0
+run_test 182 ">> '\"'outfile.txt'\"'" 182 0
+run_test 183 ">> \"'\"outfile.txt\"'\"" 183 0
+
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 160 to 183\n"
+else
+	echo -e "end of test serie from 160 to 183"
+fi
+
+
+
+
+
+
+
+
+
 
 run_test 500 "'ls' -l" 500 0
 run_test 501 "'ls' '-l'" 500 0
@@ -881,9 +910,103 @@ else
 	echo -e "end of test serie from 1500 to 1570"
 fi
 
+export INFILE="infile.txt"
+run_test 1700 "< \$INFILE" 1700 0
+run_test 1701 "< \$DO_NOT_EXIST" 1701 0
+run_test 1702 "< '\$INFILE'" 1702 0
+run_test 1703 "< \"\$INFILE\"" 1703 0
+run_test 1704 "< '\"\$INFILE\"'" 1704 0
+run_test 1705 "< \"'\"\$INFILE\"'\"" 1705 0
+run_test 1706 "< \"\$INFILE \$INFILE\"" 1706 0
+run_test 1707 "< \" \$INFILE\"" 1707 0
+run_test 1708 "< \"  \$INFILE\"" 1708 0
+run_test 1709 "< \"\$INFILE \"" 1709 0
+run_test 1710 "< \"\$INFILE  \"" 1710 0
+run_test 1711 "< \" \$INFILE \"" 1711 0
+run_test 1712 "< \"  \$INFILE  \"" 1712 0
+#run_test 1713 "< \"	\$INFILE\"" 1713 0
+#run_test 1714 "< \"\$INFILE	\"" 1714 0
+#run_test 1715 "< \"		\$INFILE\"" 1715 0
+#run_test 1716 "< \"\$INFILE		\"" 1716 0
+#run_test 1717 "< \"	\$INFILE	\"" 1717 0
+#run_test 1718 "< \"		\$INFILE		\"" 1718 0
+run_test 1719 "< \"INFILE \$INFILE\"" 1719 0
+unset INFILE
 
+export OUTFILE="outfile.txt"
+run_test 1740 "> \$OUTFILE" 1740 0
+run_test 1741 "> \$DO_NOT_EXIST" 1741 0
+run_test 1742 "> '\$OUTFILE'" 1742 0
+run_test 1743 "> \"\$OUTFILE\"" 1743 0
+run_test 1744 "> '\"\$OUTFILE\"'" 1744 0
+run_test 1745 "> \"'\"\$OUTFILE\"'\"" 1745 0
+run_test 1746 "> \"\$OUTFILE \$OUTFILE\"" 1746 0
+run_test 1747 "> \" \$OUTFILE\"" 1747 0
+run_test 1748 "> \"  \$OUTFILE\"" 1748 0
+run_test 1749 "> \"\$OUTFILE \"" 1749 0
+run_test 1750 "> \"\$OUTFILE  \"" 1750 0
+run_test 1751 "> \" \$OUTFILE \"" 1751 0
+run_test 1752 "> \"  \$OUTFILE  \"" 1752 0
+#run_test 1753 "> \"	\$OUTFILE\"" 1753 0
+#run_test 1754 "> \"\$OUTFILE	\"" 1754 0
+#run_test 1755 "> \"		\$OUTFILE\"" 1755 0
+#run_test 1756 "> \"\$OUTFILE		\"" 1756 0
+#run_test 1757 "> \"	\$OUTFILE	\"" 1757 0
+#run_test 1758 "> \"		\$OUTFILE		\"" 1758 0
+run_test 1759 "> \"OUTFILE \$OUTFILE\"" 1759 0
+unset OUTFILE
 
+export LIMITER="limiter"
+run_test 1780 "<< \$LIMITER" 1780 0
+run_test 1781 "<< \$DO_NOT_EXIST" 1781 0
+run_test 1782 "<< '\$LIMITER'" 1782 0
+run_test 1783 "<< \"\$LIMITER\"" 1782 0
+run_test 1784 "<< '\"\$LIMITER\"'" 1784 0
+run_test 1785 "<< \"'\"\$LIMITER\"'\"" 1785 0
+run_test 1786 "<< \"\$LIMITER \$LIMITER\"" 1786 0
+run_test 1787 "<< \" \$LIMITER\"" 1787 0
+run_test 1788 "<< \"  \$LIMITER\"" 1788 0
+run_test 1789 "<< \"\$LIMITER \"" 1789 0
+run_test 1790 "<< \"\$LIMITER  \"" 1790 0
+run_test 1791 "<< \" \$LIMITER \"" 1791 0
+run_test 1792 "<< \"  \$LIMITER  \"" 1792 0
+#run_test 1793 "<< \"	\$LIMITER\"" 1793 0
+#run_test 1794 "<< \"\$LIMITER	\"" 1794 0
+#run_test 1795 "<< \"		\$LIMITER\"" 1795 0
+#run_test 1796 "<< \"\$LIMITER		\"" 1796 0
+#run_test 1797 "<< \"	\$LIMITER	\"" 1797 0
+#run_test 1798 "<< \"		\$LIMITER		\"" 1798 0
+run_test 1799 "<< \"LIMITER \$LIMITER\"" 1799 0
+unset LIMITER
 
+export OUTFILE="outfile.txt"
+run_test 1820 ">> \$OUTFILE" 1820 0
+run_test 1821 ">> \$DO_NOT_EXIST" 1821 0
+run_test 1822 ">> '\$OUTFILE'" 1822 0
+run_test 1823 ">> \"\$OUTFILE\"" 1823 0
+run_test 1824 ">> '\"\$OUTFILE\"'" 1824 0
+run_test 1825 ">> \"'\"\$OUTFILE\"'\"" 1825 0
+run_test 1826 ">> \"\$OUTFILE \$OUTFILE\"" 1826 0
+run_test 1827 ">> \" \$OUTFILE\"" 1827 0
+run_test 1828 ">> \"  \$OUTFILE\"" 1828 0
+run_test 1829 ">> \"\$OUTFILE \"" 1829 0
+run_test 1830 ">> \"\$OUTFILE  \"" 1830 0
+run_test 1831 ">> \" \$OUTFILE \"" 1831 0
+run_test 1832 ">> \"  \$OUTFILE  \"" 1832 0
+#run_test 1833 ">> \"	\$OUTFILE\"" 1833 0
+#run_test 1834 ">> \"\$OUTFILE	\"" 1834 0
+#run_test 1835 ">> \"		\$OUTFILE\"" 1835 0
+#run_test 1836 ">> \"\$OUTFILE		\"" 1836 0
+#run_test 1837 ">> \"	\$OUTFILE	\"" 1837 0
+#run_test 1838 ">> \"		\$OUTFILE		\"" 1838 0
+unset OUTFILE
+
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 1700 to 1900\n"
+else
+	echo -e "end of test serie from 1700 to 1900"
+fi
 
 
 

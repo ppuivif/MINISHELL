@@ -32,7 +32,17 @@ void	expand_contents(t_command_line **command_line)
 
 void expand_redirections(t_substring *substring, t_native_redirection *n_redirection)
 {
-	int	i;
+	int i;
+	t_expanded_redirection	*exp_redirection;
+	size_t					len;
+	char					*extracted_line;
+	char					*definitive_content;
+
+	len = 0;
+	exp_redirection = NULL;
+	definitive_content = NULL;
+	
+	/*int	i;
 	t_expanded_redirection	*exp_redirection;
 	size_t					len_to_next_quote;
 	char					*extracted_line;
@@ -40,11 +50,11 @@ void expand_redirections(t_substring *substring, t_native_redirection *n_redirec
 
 
 	exp_redirection = NULL;
-	definitive_content = NULL;
+	definitive_content = NULL;*/
 	if (init_expanded_redirection_struct(&exp_redirection) == -1)
 		exp_redirection->alloc_succeed = false;
 	i = 0;
-	while (n_redirection && n_redirection->content[i])
+	/*while (n_redirection && n_redirection->content[i])
 	{
 		if (n_redirection->content[i] == '\'')
 		{
@@ -74,7 +84,38 @@ void expand_redirections(t_substring *substring, t_native_redirection *n_redirec
 		if (!definitive_content)
 			exp_redirection->alloc_succeed = false;
 		i += (len_to_next_quote + 2);
+
+	}*/
+
+	while (n_redirection && n_redirection->content[i])
+	{
+		if (n_redirection->content[i] == '\'')
+			len = get_len_and_extract_between_single_quotes(&n_redirection->content[i + 1], &extracted_line);
+		else if (n_redirection->content[i] == '\"')
+		{
+			len = get_len_and_extract_between_double_quotes(&n_redirection->content[i + 1], &extracted_line);
+			if (is_remaining_chars(extracted_line, "$") == 0 && n_redirection->e_redirection != 4)
+				complete_expand_content(&extracted_line);
+		}
+		else if (n_redirection->content[i] == '$' && n_redirection->e_redirection != 4)
+			len = simple_expand_content(&n_redirection->content[i], &extracted_line);
+		else if (n_redirection->e_redirection != 4)
+			len = get_len_and_extract_until_next_quote_or_dollar(&n_redirection->content[i], &extracted_line);
+		else
+			len = get_len_and_extract_until_next_quote(&n_redirection->content[i], &extracted_line);
+		if (!extracted_line)
+			exp_redirection->alloc_succeed = false;
+		if (!definitive_content)
+			definitive_content = ft_strdup(extracted_line);
+		else
+			definitive_content = ft_strjoin_freed(definitive_content, extracted_line);
+		free(extracted_line);
+		extracted_line = NULL;
+		if (!definitive_content)
+			exp_redirection->alloc_succeed = false;
+		i += len;
 	}
+
 	exp_redirection->e_redirection = n_redirection->e_redirection;
 	exp_redirection->content = definitive_content;
 	ft_lst_add_back4(&substring->exp_redirections, exp_redirection);

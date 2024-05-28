@@ -1,5 +1,5 @@
 substring 0 : 
-	-redirection 0 : 	infile.txt
+	-redirection 0 : 	limiter
 	-redirection_type 0 : 	REDIRECTION_HEREDOC
 	-argument 0 : cat
 
