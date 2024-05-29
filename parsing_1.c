@@ -225,33 +225,21 @@ int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
 		return (-1);
 	while (check_char_validity(remaining_line, len_to_quote, flag, j) == 0)
 	{
-		if (((len_to_quote + flag + j) <= (len_to_end + 1)) && ((remaining_line[len_to_quote + flag + j] == '\'') || \
-		(remaining_line[len_to_quote + flag + j] == '\"')))
- 		{
-			return_value = \
-			count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], (char []){remaining_line[len_to_quote + flag + j], '\0'}, 0);
-/*		{
-			return_value = count_len_to_quotes(&remaining_line[len_to_quote + flag + j], "\'", 0);
-			if ( return_value == -1)
+		if (((len_to_quote + flag + j) <= (len_to_end + 1)) && \
+		(remaining_line[len_to_quote + flag + j] == '\''))
+			return_value = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\'", 0);
+		else if ((len_to_quote + flag + j) <= (len_to_end + 1) && \
+		remaining_line[len_to_quote + flag + j] == '\"')
+			return_value = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);
+		if ( return_value == -1)
 				return (-1);
-			len_to_quote += return_value;
-		}
-		if ((len_to_quote + flag + j) <= (len_to_end + 1) && remaining_line[len_to_quote + flag + j] == '\"')
-		{
-			return_value = count_len_to_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);
-			if ( return_value == -1)
-				return (-1);
-			len_to_quote += return_value;
-		}*/
-			if ( return_value == -1)
-				return (-1);
-			len_to_quote += return_value;
-		}
+		len_to_quote += return_value;
 		if (check_char_validity(remaining_line, len_to_quote, flag, j) == 0)
 			j++;
 	}
 	return (len_to_quote + (flag + 1) + (j - 1));
 }
+
 
 int	check_char_validity(char *remaining_line, int len_to_quote, int flag, int j)
 {

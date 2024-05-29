@@ -579,12 +579,15 @@ run_test 174 "<< '\"limiter\"'" 174 0
 run_test 175 "<< \"'limiter'\"" 175 0
 run_test 176 "<< '\"'limiter'\"'" 176 0
 run_test 177 "<< \"'\"limiter\"'\"" 177 0
-run_test 178 ">> 'outfile.txt'" 178 0
-run_test 179 ">> \"outfile.txt\"" 178 0
-run_test 180 ">> '\"outfile.txt\"'" 180 0
-run_test 181 ">> \"'outfile.txt'\"" 181 0
-run_test 182 ">> '\"'outfile.txt'\"'" 182 0
-run_test 183 ">> \"'\"outfile.txt\"'\"" 183 0
+run_test 178 "<< '<limiter'" 178 0
+run_test 179 "<< \"<limiter\"" 179 0
+
+run_test 190 ">> 'outfile.txt'" 190 0
+run_test 191 ">> \"outfile.txt\"" 190 0
+run_test 192 ">> '\"outfile.txt\"'" 192 0
+run_test 193 ">> \"'outfile.txt'\"" 193 0
+run_test 194 ">> '\"'outfile.txt'\"'" 194 0
+run_test 195 ">> \"'\"outfile.txt\"'\"" 195 0
 
 if [ "$display" == "all" ]
 then
@@ -594,6 +597,17 @@ else
 fi
 
 
+run_test 200 "\"< infile.txt\"" 200 0
+run_test 210 "\"<< limiter\"" 210 0
+run_test 220 "\"> output.txt\"" 220 0
+run_test 230 "\">> output.txt\"" 230 0
+
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 200 to 250\n"
+else
+	echo -e "end of test serie from 200 to 250"
+fi
 
 
 
@@ -824,11 +838,12 @@ run_test 772 "'ls -l' \"cat\"\"-e\"" 772 0
 run_test 773 "\"ls -l\" \"cat\"\"-e\"" 773 0
 run_test 774 "'\"ls -l\"' \"cat\"\"-e\"" 774 0
 run_test 775 "\"'ls -l'\" \"cat\"\"-e\"" 775 0
+run_test 776 "\"ls\"'-l'cat\"-e\"" 776 0
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 760 to 775\n"
+	echo -e "end of test serie from 760 to 776\n"
 else
-	echo -e "end of test serie from 760 to 775"
+	echo -e "end of test serie from 760 to 776"
 fi
 
 run_test 1000 "'ls'-l'cat -e'" 1000 0
@@ -840,6 +855,28 @@ else
 	echo -e "end of test serie from 1000 to 1001"
 fi
 
+run_test 1100 "\\" 1100 0
+run_test 1101 "\"\\\"" 1100 0
+run_test 1102 "\"\\cat\"" 1102 0
+run_test 1103 "'\'" 1103 0
+run_test 1104 "'\cat'" 1104 0
+run_test 1105 "(" 1105 0
+run_test 1106 ")" 1106 0
+run_test 1107 "()" 1107 0
+run_test 1108 ";" 1108 0
+run_test 1109 "\"'\"" 1109 0
+run_test 1110 "@" 1110 0
+run_test 1111 "\"@\"" 1110 0
+run_test 1112 "*" 1112 0
+run_test 1113 "\"*\"" 1112 0
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 1100 to 1200\n"
+else
+	echo -e "end of test serie from 1100 to 1200"
+fi
+
+
 export TEST="test_minishell"
 run_test 1500 "\$TEST" 1500 0
 run_test 1501 "\$DO_NOT_EXIST" 1501 0
@@ -847,26 +884,28 @@ run_test 1502 "'\$TEST'" 1502 0
 run_test 1503 "\"\$TEST\"" 1503 0
 run_test 1504 "'\"\$TEST\"'" 1504 0
 run_test 1505 "\"'\"\$TEST\"'\"" 1505 0
-run_test 1506 "\"\$TEST \$TEST\"" 1506 0
-run_test 1507 "\" \$TEST\"" 1507 0
-run_test 1508 "\"  \$TEST\"" 1508 0
-run_test 1509 "\"\$TEST \"" 1509 0
-run_test 1510 "\"\$TEST  \"" 1510 0
-run_test 1511 "\" \$TEST \"" 1511 0
-run_test 1512 "\"  \$TEST  \"" 1512 0
-#run_test 1513 "\"	\$TEST\"" 1513 0//pb with\t
-#run_test 1514 "\"\t\t\$TEST\"" 1514 0//pb with\t
-#run_test 1515 "\"\$TEST\t\"" 1515 0//pb with\t
-#run_test 1516 "\"\$TEST\t\t\"" 1516 0//pb with\t
-#run_test 1517 "\"\t\$TEST\t\"" 1517 0//pb with\t
-#run_test 1518 "\"\t\t\$TEST\t\t\"" 1518 0//pb with\t
-#run_test 1519 "\" \$TEST\t\"" 1519 0//pb with\t
-#run_test 1520 "\"\t\$TEST \"" 1520 0//pb with\t
+run_test 1506 "\"'\$TEST'\"" 1506 0
+run_test 1507 "'\"'\$TEST'\"'" 1507 0
+run_test 1508 "\"\$TEST \$TEST\"" 1508 0
+run_test 1509 "\" \$TEST\"" 1509 0
+run_test 1510 "\"  \$TEST\"" 1510 0
+run_test 1511 "\"\$TEST \"" 1511 0
+run_test 1512 "\"\$TEST  \"" 1512 0
+run_test 1513 "\" \$TEST \"" 1513 0
+run_test 1514 "\"  \$TEST  \"" 1514 0
+#run_test 1515 "\"	\$TEST\"" 1515 0 #pb with\t
+#run_test 1516 "\"\t\t\$TEST\"" 1516 0 #pb with\t
+#run_test 1517 "\"\$TEST\t\"" 1517 0 #pb with\t
+#run_test 1518 "\"\$TEST\t\t\"" 1518 0 #pb with\t
+#run_test 1519 "\"\t\$TEST\t\"" 1519 0 #pb with\t
+#run_test 1520 "\"\t\t\$TEST\t\t\"" 1520 0 #pb with\t
+#run_test 1521 "\" \$TEST\t\"" 1521 0 #pb with\t
+#run_test 1522 "\"\t\$TEST \"" 1522 0 #pb with\t
 
-run_test 1521 "\$\"TEST\"" 1521 0
-run_test 1522 "\$'TEST'" 1522 0
-run_test 1523 "\"\$ \"TEST\"\"" 1523 0
-run_test 1524 "\"\$ 'TEST'\"" 1524 0
+run_test 1523 "\$\"TEST\"" 1523 0
+run_test 1524 "\$'TEST'" 1524 0
+run_test 1525 "\"\$ \"TEST\"\"" 1525 0
+run_test 1526 "\"\$ 'TEST'\"" 1526 0
 
 run_test 1530 "\" \$TEST \$TEST\"" 1530 0
 run_test 1531 "\"  \$TEST \$TEST\"" 1531 0
@@ -890,18 +929,25 @@ run_test 1550 "\"text\$TEST\"" 1550 0
 run_test 1551 "\"text \$TEST\"" 1551 0
 run_test 1552 "\" text \$TEST\"" 1552 0
 run_test 1553 "\"text \$TEST \"" 1553 0
-run_test 1554 "\"\$TEST cat\"" 1554 0
-run_test 1555 "\"\$TEST cat \"" 1555 0
-#run_test 1556 "\"\$TEST cat	\"" 1556 0//pb with\t
-run_test 1557 "\$" 1557 0
-run_test 1558 "\"\$ TEST\"" 1558 0
-run_test 1559 "\$\"\"" 1559 0
-run_test 1560 "\$''" 1560 0
-run_test 1561 "\"\$\"\"\"" 1561 0
-run_test 1562 "\"\$''\"" 1562 0
-run_test 1563 "\"\$\" \"\"" 1563 0
-run_test 1564 "\"\$' '\"" 1564 0
-run_test 1565 "'\$'''" 1565 0
+run_test 1554 "\"text \$TEST text\"" 1554 0
+run_test 1555 "'text \$TEST text'" 1555 0
+run_test 1556 "\"'text \$TEST text'\"" 1556 0
+run_test 1557 "'\"text \$TEST text\"'" 1557 0
+run_test 1558 "\"\$TEST text \$TEST\"" 1558 0
+
+run_test 1559 "\"\$TEST cat\"" 1559 0
+run_test 1560 "\"\$TEST cat \"" 1560 0
+#run_test 1561 "\"\$TEST cat	\"" 1561 0//pb with\t
+
+run_test 1562 "\$" 1562 0
+run_test 1563 "\"\$ TEST\"" 1563 0
+run_test 1564 "\$\"\"" 1564 0
+run_test 1565 "\$''" 1565 0
+run_test 1566 "\"\$\"\"\"" 1566 0
+run_test 1567 "\"\$''\"" 1567 0
+run_test 1568 "\"\$\" \"\"" 1568 0
+run_test 1569 "\"\$' '\"" 1569 0
+run_test 1570 "'\$'''" 1570 0
 unset TEST
 if [ "$display" == "all" ]
 then
@@ -1209,7 +1255,7 @@ fi
 run_test_syntax_error 4000 "'ls" 2 #exit_status to confirm
 run_test_syntax_error 4001 "ls'" 2
 run_test_syntax_error 4002 "\"ls" 2
-run_test_syntax_error 3403 "ls\"" 2
+run_test_syntax_error 4003 "ls\"" 2
 run_test_syntax_error 4004 "'ls\"" 2
 run_test_syntax_error 4005 "'ls'\"" 2
 run_test_syntax_error 4006 "\"ls'" 2
@@ -1269,7 +1315,16 @@ else
 	echo -e "end of test serie from 4100 to 4125"
 fi
 
+run_test_syntax_error 4300 "'" 2 #exit_status to confirm
+run_test_syntax_error 4301 "\"" 2 #exit_status to confirm
+run_test_syntax_error 4302 "\"\"\"" 2 #exit_status to confirm
 
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 4300 to 4350\n"
+else
+	echo -e "end of test serie from 4300 to 4350"
+fi
 
 
 
