@@ -64,14 +64,27 @@ int main(int argc, char **argv)
 				break;
 			if (line[0])//no history on empty lines
 				add_history(line);//here?
+/*			if (ft_strncmp(line, "$?", 2) == 0)
+				ft_putnbr_fd(command_line->exit_code, 1);*/
+				//voir $? : se comporte comme une variable. Il faut qu'elle prenne la valeur de l'exit code 
+			if (ft_strncmp(line, "exit", 4) == 0)
+			{
+				free(line);
+				line = NULL;
+//				free_all(&command_line);
+//				return (command_line->exit_code);
+				clear_history();
+				exit (EXIT_SUCCESS);
+			}
 //			command_line = parse_command_line(line);
-			command_line = parse_command_line(line, atoi(argv[1]));//to run script.sh
+			else
+				command_line = parse_command_line(line, atoi(argv[1]));//to run script.sh
 			free(line);
 			line = NULL;
-			if (command_line->exit_code != 0)
-				return(error_handling(&command_line));
+//			if (command_line->exit_code != 0)
+//				return(error_handling(&command_line));
 			free_all(&command_line);
-
+			
 		}
 	}
 	else

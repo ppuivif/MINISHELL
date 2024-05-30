@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/16 17:57:03 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/05/30 14:25:07 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,10 @@ int	init_substring_struct(t_substring **substring)
 	if (!*substring)
 		return (-1);	
 	(*substring)->remaining_line = NULL;
-	(*substring)->n_arguments = NULL;
 	(*substring)->n_redirections = NULL;
-	(*substring)->exp_arguments = NULL;
+	(*substring)->n_arguments = NULL;
 	(*substring)->exp_redirections = NULL;
+	(*substring)->exp_arguments = NULL;
 	(*substring)->next = NULL;
 	return (0);
 }

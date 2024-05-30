@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-t_command_line	*parse_command_line(char *str, int fd)
+t_command_line	*parse_command_line(char *str, int fd)//int fd is used only for script.sh execution
 {
 	t_command_line	*command_line;
 	char			*remaining_line;
@@ -24,7 +24,7 @@ void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_
 {
 	while(ft_strlen(remaining_line))
 	{
-		(*command_line)->exit_code = parse_substrings(&remaining_line, (*command_line));
+		(*command_line)->exit_code = parse_substrings(&remaining_line, *command_line);
 		if ((*command_line)->exit_code == -1)
 			error_allocation(command_line);
 		if ((*command_line)->exit_code != 0)//handle return of parse_substrings (1 or 2 when errors)

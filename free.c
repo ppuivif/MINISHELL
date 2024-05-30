@@ -35,8 +35,8 @@ void	free_substring(t_substring **substrings)
 		}
 		free ((*substrings)->remaining_line);
 		free ((*substrings)->n_redirections);
-		free ((*substrings)->exp_redirections);
 		free ((*substrings)->n_arguments);
+		free ((*substrings)->exp_redirections);
 		free ((*substrings)->exp_arguments);
 		free ((*substrings));
 		*substrings = tmp;

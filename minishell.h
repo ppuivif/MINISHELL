@@ -71,6 +71,6 @@ int     is_remaining_chars(char *str, char *list_of_char);
 
 
 void	error_allocation(t_command_line **command_line);
-int	error_handling(t_command_line **command_line);
+void	error_handling(t_command_line **command_line);
 
 #endif
