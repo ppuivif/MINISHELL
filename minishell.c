@@ -49,12 +49,24 @@ int main(void)
 
 }*/
 
-int main(int argc, char **argv)
+int main(int argc, char **argv, char **envp)
 {
 	char	*line;
-	t_command_line *command_line;
+	t_envp_struct	*envp_struct;
+	t_command_line	*command_line;
+	t_main_struct	*main_struct;
 
 	line = NULL;
+	
+	if (!envp || !envp[0])
+	{
+		ft_putstr_fd("error\nenvp doesn't exists or is empty\n", 2);
+		exit(EXIT_FAILURE);
+	}
+	if (init_envp_struct(&envp_struct) == -1)
+		error_allocation_envp_struct();
+	get_envp(envp, &envp_struct);
+//	ft_envp_struct_lst_print(envp_struct, 1);
 	if (argc == 2)
 	{
 		while (1)
@@ -64,9 +76,20 @@ int main(int argc, char **argv)
 				break;
 			if (line[0])//no history on empty lines
 				add_history(line);//here?
-/*			if (ft_strncmp(line, "$?", 2) == 0)
-				ft_putnbr_fd(command_line->exit_code, 1);*/
-				//voir $? : se comporte comme une variable. Il faut qu'elle prenne la valeur de l'exit code 
+			if (ft_strncmp(line, "exit", 4) != 0)
+			{
+//				command_line = parse_command_line(line);
+				command_line = parse_command_line(line, atoi(argv[1]));//to run script.sh
+				if (command_line->exit_code != 0)
+					error_handling(&command_line);
+			}
+//			if (ft_strncmp(command_line->substrings->exp_arguments->content, "exit_code", 9) == 0)
+/*			if (ft_strncmp(command_line->substrings->exp_arguments->content, "?", 1) == 0)
+			{
+				ft_putstr_fd("exit_code : ", 1);
+				ft_putnbr_fd(command_line->exit_code, 1);
+				ft_putstr_fd("\n", 1);
+			}*/
 			if (ft_strncmp(line, "exit", 4) == 0)
 			{
 				free(line);
@@ -76,14 +99,15 @@ int main(int argc, char **argv)
 				clear_history();
 				exit (EXIT_SUCCESS);
 			}
-//			command_line = parse_command_line(line);
-			else
-				command_line = parse_command_line(line, atoi(argv[1]));//to run script.sh
+			if (init_main_struct(&main_struct) == -1)
+				error_allocation_main_struct(&main_struct, &command_line);
+//			command_line->exit_code = check_files(command_line, &main_struct);
+
+
+
 			free(line);
 			line = NULL;
-//			if (command_line->exit_code != 0)
-//				return(error_handling(&command_line));
-			free_all(&command_line);
+			free_all_command_line(&command_line);
 			
 		}
 	}

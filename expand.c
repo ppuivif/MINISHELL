@@ -14,7 +14,7 @@ void	expand_contents(t_command_line **command_line)
 		{
 			expand_redirections(tmp1, tmp2);
 			if (tmp1->exp_redirections->alloc_succeed == false)
-				free_all(command_line);	
+				free_all_command_line(command_line);	
 			tmp2 = tmp2->next;
 		}
 		tmp3 = tmp1->n_arguments;
@@ -22,7 +22,7 @@ void	expand_contents(t_command_line **command_line)
 		{
 			expand_arguments(tmp1, tmp3);
 			if (tmp1->exp_arguments->alloc_succeed == false)
-				free_all(command_line);
+				free_all_command_line(command_line);
 			tmp3 = tmp3->next;
 		}
 		tmp1 = tmp1->next;

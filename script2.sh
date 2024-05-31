@@ -1104,8 +1104,10 @@ run_test_syntax_error 2043 "		|		" 2
 
 run_test_syntax_error 2050 "| ls" 2
 run_test_syntax_error 2051 "|ls" 2
-run_test_syntax_error 2052 "ls |" 2
-run_test_syntax_error 2053 "ls|" 2
+run_test_syntax_error 2052 " |ls" 2
+run_test_syntax_error 2053 "ls |" 2
+run_test_syntax_error 2054 "ls|" 2
+run_test_syntax_error 2055 "ls| " 2
 
 run_test_syntax_error 2060 "||" 2
 run_test_syntax_error 2061 "| |" 2

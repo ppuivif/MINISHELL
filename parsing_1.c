@@ -7,7 +7,7 @@ t_command_line	*parse_command_line(char *str, int fd)//int fd is used only for s
 
 	command_line = NULL;
 	if (init_command_line_struct(&command_line) == -1)
-		error_allocation(&command_line);
+		error_allocation_command_line(&command_line);
 	remaining_line = skip_first_whitespaces(str);
 	if (ft_strlen(remaining_line) == 0)
 		return (command_line);
@@ -15,7 +15,7 @@ t_command_line	*parse_command_line(char *str, int fd)//int fd is used only for s
 	if (command_line->exit_code != 0)
 		return (command_line);
 	expand_contents(&command_line);
-	ft_expanded_lst_print(command_line, fd);
+	ft_expanded_lst_print(command_line, fd);//to delete
 //	ft_native_lst_print(command_line, fd);
 	return (command_line);
 }
@@ -26,7 +26,7 @@ void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_
 	{
 		(*command_line)->exit_code = parse_substrings(&remaining_line, *command_line);
 		if ((*command_line)->exit_code == -1)
-			error_allocation(command_line);
+			error_allocation_command_line(command_line);
 		if ((*command_line)->exit_code != 0)//handle return of parse_substrings (1 or 2 when errors)
 			return ;
 		remaining_line = skip_first_whitespaces(remaining_line);
@@ -36,7 +36,7 @@ void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_
 			remaining_line = skip_first_whitespaces(remaining_line);
 			if (ft_strlen(remaining_line) == 0)
 			{
-				(*command_line)->exit_code = 2;
+				(*command_line)->exit_code = 2;//case of | at last position
 				return ;
 			}	
 		}
@@ -53,16 +53,22 @@ int	parse_substrings(char **remaining_line, t_command_line *command_line)
 	if (init_substring_struct(&substring) == -1)
 		return (-1);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
-	if (!*remaining_line || *remaining_line[0] == '|')//case of | first to handle here or later when argument empty
+	if (!*remaining_line || *remaining_line[0] == '|')//case of | at first position (to handle here or later when argument empty)
 	{
-		command_line->exit_code = 2;
+		free(substring);
 		return (2);// to confirm
 	}
 	if (ft_strlen(*remaining_line) == 0)
-		return (1);// to confirm
+	{
+		free(substring);
+		return (0);// to confirm
+	}
 	return_value = get_arguments_and_redirections(&substring, remaining_line);
 	if (return_value != 0)
+	{
+		free(substring);
 		return (return_value);
+	}
 	ft_lst_add_back1(&command_line->substrings, substring);
 	return (0);
 }
@@ -130,11 +136,17 @@ int		get_redirections(char **remaining_line, t_substring *substring)
 		return (-1);
 	get_redirection_type(remaining_line, n_redirection);
 	if (n_redirection->e_redirection == 2)
+	{
+		free(n_redirection);
 		return(2);
+	}
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	len = count_len_to_cut(*remaining_line);
 	if (len == -1)
+	{
+		free(n_redirection);
 		return (2);
+	}
 	n_redirection->content = ft_substr(*remaining_line, 0, len);
 	*remaining_line += len;
 	ft_lst_add_back2(&substring->n_redirections, n_redirection);
@@ -153,7 +165,10 @@ int	get_arguments(char **remaining_line, t_substring *substring)
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	len = count_len_to_cut(*remaining_line);
 	if (len == -1)
+	{
+		free(n_argument);
 		return (2);
+	}
 	n_argument->content = ft_substr(*remaining_line, 0, len);
 	*remaining_line += len;
 	ft_lst_add_back3(&substring->n_arguments, n_argument);

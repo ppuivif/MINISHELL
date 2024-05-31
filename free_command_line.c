@@ -1,6 +1,6 @@
 #include "includes/linked_list_utils.h"
 
-void	free_all(t_command_line **command_line)
+void	free_all_command_line(t_command_line **command_line)
 {
 	if (*command_line)
 	{

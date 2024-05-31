@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/30 11:58:45 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/05/31 18:04:41 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,6 +108,25 @@ void	ft_lst_add_back5(t_expanded_argument **head, t_expanded_argument *new_eleme
 	}
 }
 
+void	ft_lst_add_back6(t_envp_struct **head, t_envp_struct *new_element)
+{
+	t_envp_struct	*last_element;
+
+	if (!head || !new_element)
+		return ;
+	if (!*head)
+	{
+		*head = new_element;
+		return ;
+	}
+	else
+	{
+		last_element = ft_lst_last6(*head);
+		new_element->next = NULL;
+		last_element->next = new_element;
+	}
+}
+
 t_substring	*ft_lst_last1(t_substring *head)
 {
 	t_substring	*last_element;
@@ -191,6 +210,95 @@ t_expanded_argument	*ft_lst_last5(t_expanded_argument *head)
 			last_element = last_element->next;
 	}
 	return (last_element);
+}
+
+t_envp_struct	*ft_lst_last6(t_envp_struct *head)
+{
+	t_envp_struct	*last_element;
+
+	if (!head)
+		return (NULL);
+	if (!head->next)
+		last_element = head;
+	else
+	{
+		last_element = head;
+		while (last_element->next)
+			last_element = last_element->next;
+	}
+	return (last_element);
+}
+
+t_execution	*ft_lst_last7(t_execution *head)
+{
+	t_execution	*last_element;
+
+	if (!head)
+		return (NULL);
+	if (!head->next)
+		last_element = head;
+	else
+	{
+		last_element = head;
+		while (last_element->next)
+			last_element = last_element->next;
+	}
+	return (last_element);
+}
+
+t_redirection	*ft_lst_last8(t_redirection *head)
+{
+	t_redirection	*last_element;
+
+	if (!head)
+		return (NULL);
+	if (!head->next)
+		last_element = head;
+	else
+	{
+		last_element = head;
+		while (last_element->next)
+			last_element = last_element->next;
+	}
+	return (last_element);
+}
+
+t_command	*ft_lst_last9(t_command *head)
+{
+	t_command	*last_element;
+
+	if (!head)
+		return (NULL);
+	if (!head->next)
+		last_element = head;
+	else
+	{
+		last_element = head;
+		while (last_element->next)
+			last_element = last_element->next;
+	}
+	return (last_element);
+}
+
+void	ft_envp_struct_lst_print(t_envp_struct *envp_struct, int fd)
+{
+	size_t	i;
+	t_envp_struct	*tmp;
+
+	i = 0;
+	tmp = envp_struct;
+	while (tmp && i < ft_lst_size6(envp_struct))
+	{
+		ft_putstr_fd("envp[", fd);
+		ft_putnbr_fd(i, fd);
+		ft_putstr_fd("] : ", fd);
+		ft_putstr_fd(tmp->content, fd);
+//		ft_putstr_fd(envp_struct->content, fd);
+		ft_putstr_fd("\n", fd);
+		tmp = tmp->next;
+//		envp_struct = envp_struct->next;
+		i++;
+	}
 }
 
 void	ft_native_lst_print(t_command_line *command_line, int fd)
@@ -403,3 +511,81 @@ size_t	ft_lst_size5(t_expanded_argument *head)
 	}
 	return (len);
 }
+
+
+size_t	ft_lst_size6(t_envp_struct *head)
+{
+	size_t		len;
+	t_envp_struct	*last_element;
+
+	len = 1;
+	if (!head)
+		return (0);
+	last_element = ft_lst_last6(head);
+	if (last_element == head)
+		return (1);
+	while (head != last_element)
+	{
+		head = head->next;
+		len++;
+	}
+	return (len);
+}
+
+size_t	ft_lst_size7(t_execution *head)
+{
+	size_t		len;
+	t_execution	*last_element;
+
+	len = 1;
+	if (!head)
+		return (0);
+	last_element = ft_lst_last7(head);
+	if (last_element == head)
+		return (1);
+	while (head != last_element)
+	{
+		head = head->next;
+		len++;
+	}
+	return (len);
+}
+
+size_t	ft_lst_size8(t_redirection *head)
+{
+	size_t		len;
+	t_redirection	*last_element;
+
+	len = 1;
+	if (!head)
+		return (0);
+	last_element = ft_lst_last8(head);
+	if (last_element == head)
+		return (1);
+	while (head != last_element)
+	{
+		head = head->next;
+		len++;
+	}
+	return (len);
+}
+
+size_t	ft_lst_size9(t_command *head)
+{
+	size_t		len;
+	t_command	*last_element;
+
+	len = 1;
+	if (!head)
+		return (0);
+	last_element = ft_lst_last9(head);
+	if (last_element == head)
+		return (1);
+	while (head != last_element)
+	{
+		head = head->next;
+		len++;
+	}
+	return (len);
+}
+

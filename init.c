@@ -6,11 +6,21 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/30 14:25:07 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/05/31 17:32:09 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "includes/linked_list_utils.h"
+
+int	init_envp_struct(t_envp_struct **envp_struct)
+{
+	*envp_struct = ft_calloc(1, sizeof(t_envp_struct));
+	if (!*envp_struct)
+		return (-1);
+	(*envp_struct)->content = NULL;
+	(*envp_struct)->next = NULL;
+	return (0);
+}
 
 int	init_expanded_argument_struct(t_expanded_argument **exp_argument)
 {
@@ -77,5 +87,43 @@ int	init_command_line_struct(t_command_line **command_line)
 		return (-1);
 	(*command_line)->exit_code = 0;
 	(*command_line)->substrings = NULL;
+	return (0);
+}
+
+
+
+
+
+int	init_redirection(t_redirection **redirection)
+{
+	*redirection = ft_calloc(1, sizeof(t_redirection));
+	if (!*redirection)
+		return (-1);	
+	(*redirection)->file = NULL;
+	(*redirection)->e_redirection = 4;
+	(*redirection)->fd_input = -1;
+	(*redirection)->fd_output = -1;
+	(*redirection)->next = NULL;
+	return (0);
+}
+
+int	init_execution_struct(t_execution **execution)
+{
+	*execution = ft_calloc(1, sizeof(t_execution));
+	if (!*execution)
+		return (-1);	
+	(*execution)->redirections = NULL;
+	(*execution)->commands = NULL;
+	(*execution)->next = NULL;
+	return (0);
+}
+
+int	init_main_struct(t_main_struct **main_struct)
+{
+	*main_struct = ft_calloc(1, sizeof(t_main_struct));
+	if (!*main_struct)
+		return (-1);
+	(*main_struct)->exit_code = 0;
+	(*main_struct)->executions = 0;
 	return (0);
 }
