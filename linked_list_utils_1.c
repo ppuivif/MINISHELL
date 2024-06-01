@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/31 18:04:41 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/01 19:19:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,63 @@ void	ft_lst_add_back6(t_envp_struct **head, t_envp_struct *new_element)
 	}
 }
 
+void	ft_lst_add_back7(t_exec_subline **head, t_exec_subline *new_element)
+{
+	t_exec_subline	*last_element;
+
+	if (!head || !new_element)
+		return ;
+	if (!*head)
+	{
+		*head = new_element;
+		return ;
+	}
+	else
+	{
+		last_element = ft_lst_last7(*head);
+		new_element->next = NULL;
+		last_element->next = new_element;
+	}
+}
+
+void	ft_lst_add_back8(t_exec_redirection **head, t_exec_redirection *new_element)
+{
+	t_exec_redirection	*last_element;
+
+	if (!head || !new_element)
+		return ;
+	if (!*head)
+	{
+		*head = new_element;
+		return ;
+	}
+	else
+	{
+		last_element = ft_lst_last8(*head);
+		new_element->next = NULL;
+		last_element->next = new_element;
+	}
+}
+
+void	ft_lst_add_back9(t_exec_argument **head, t_exec_argument *new_element)
+{
+	t_exec_argument	*last_element;
+
+	if (!head || !new_element)
+		return ;
+	if (!*head)
+	{
+		*head = new_element;
+		return ;
+	}
+	else
+	{
+		last_element = ft_lst_last9(*head);
+		new_element->next = NULL;
+		last_element->next = new_element;
+	}
+}
+
 t_substring	*ft_lst_last1(t_substring *head)
 {
 	t_substring	*last_element;
@@ -229,9 +286,9 @@ t_envp_struct	*ft_lst_last6(t_envp_struct *head)
 	return (last_element);
 }
 
-t_execution	*ft_lst_last7(t_execution *head)
+t_exec_subline	*ft_lst_last7(t_exec_subline *head)
 {
-	t_execution	*last_element;
+	t_exec_subline	*last_element;
 
 	if (!head)
 		return (NULL);
@@ -246,9 +303,9 @@ t_execution	*ft_lst_last7(t_execution *head)
 	return (last_element);
 }
 
-t_redirection	*ft_lst_last8(t_redirection *head)
+t_exec_redirection	*ft_lst_last8(t_exec_redirection *head)
 {
-	t_redirection	*last_element;
+	t_exec_redirection	*last_element;
 
 	if (!head)
 		return (NULL);
@@ -263,9 +320,9 @@ t_redirection	*ft_lst_last8(t_redirection *head)
 	return (last_element);
 }
 
-t_command	*ft_lst_last9(t_command *head)
+t_exec_argument	*ft_lst_last9(t_exec_argument *head)
 {
-	t_command	*last_element;
+	t_exec_argument	*last_element;
 
 	if (!head)
 		return (NULL);
@@ -391,6 +448,66 @@ void	ft_expanded_lst_print(t_command_line *command_line, int fd)
 			ft_putnbr_fd(j, fd);
 			ft_putstr_fd(" : ", fd);
 			ft_putstr_fd(tmp3->content, fd);
+			ft_putstr_fd("\n", fd);
+			tmp3 = tmp3->next;
+			j++;
+		}
+		ft_putstr_fd("\n", fd);
+		tmp1 = tmp1->next;
+		i++;
+	}
+}
+
+void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd)
+{
+	size_t	i;
+	size_t	j;
+	t_exec_subline		*tmp1;
+	t_exec_redirection	*tmp2;
+	t_exec_argument		*tmp3;
+
+	i = 0;
+	tmp1 = exec_struct->exec_sublines;
+	while (exec_struct->exec_sublines && i < ft_lst_size7(exec_struct->exec_sublines))
+	{
+		ft_putstr_fd("subline ", fd);
+		ft_putnbr_fd(i, fd);
+		ft_putstr_fd(" : \n", fd);
+		j = 0;
+		tmp2 = tmp1->exec_redirections;
+		while (tmp1->exec_redirections && j < ft_lst_size8(tmp1->exec_redirections))
+		{
+			ft_putstr_fd("\t-redirection ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : \t", fd);
+			ft_putstr_fd(tmp2->file, fd);
+			ft_putstr_fd("\n", fd);
+			ft_putstr_fd("\t-redirection_type ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : \t", fd);
+			print_e_redirection (tmp2->e_redirection, fd);
+			ft_putstr_fd("\n", fd);
+			ft_putstr_fd("\t-fd_input ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : \t\t", fd);
+			ft_putnbr_fd(tmp2->fd_input, fd);
+			ft_putstr_fd("\n", fd);
+			ft_putstr_fd("\t-fd_output ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : \t\t", fd);
+			ft_putnbr_fd(tmp2->fd_output, fd);
+			ft_putstr_fd("\n", fd);
+			tmp2 = tmp2->next;
+			j++;
+		}
+		j = 0;
+		tmp3 = tmp1->exec_arguments;
+		while (tmp1->exec_arguments && j < ft_lst_size9(tmp1->exec_arguments))
+		{
+			ft_putstr_fd("\t-argument ", fd);
+			ft_putnbr_fd(j, fd);
+			ft_putstr_fd(" : ", fd);
+			ft_putstr_fd(tmp3->argument, fd);
 			ft_putstr_fd("\n", fd);
 			tmp3 = tmp3->next;
 			j++;
@@ -532,10 +649,10 @@ size_t	ft_lst_size6(t_envp_struct *head)
 	return (len);
 }
 
-size_t	ft_lst_size7(t_execution *head)
+size_t	ft_lst_size7(t_exec_subline *head)
 {
 	size_t		len;
-	t_execution	*last_element;
+	t_exec_subline	*last_element;
 
 	len = 1;
 	if (!head)
@@ -551,10 +668,10 @@ size_t	ft_lst_size7(t_execution *head)
 	return (len);
 }
 
-size_t	ft_lst_size8(t_redirection *head)
+size_t	ft_lst_size8(t_exec_redirection *head)
 {
 	size_t		len;
-	t_redirection	*last_element;
+	t_exec_redirection	*last_element;
 
 	len = 1;
 	if (!head)
@@ -570,10 +687,10 @@ size_t	ft_lst_size8(t_redirection *head)
 	return (len);
 }
 
-size_t	ft_lst_size9(t_command *head)
+size_t	ft_lst_size9(t_exec_argument *head)
 {
 	size_t		len;
-	t_command	*last_element;
+	t_exec_argument	*last_element;
 
 	len = 1;
 	if (!head)

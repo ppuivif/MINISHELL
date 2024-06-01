@@ -6,14 +6,15 @@ void	error_allocation_envp_struct()
 	exit(EXIT_FAILURE);
 }
 
-void	error_allocation_main_struct(t_main_struct **main_struct, t_command_line **command_line)
+void	error_allocation_exec_struct(t_exec_struct **exec_struct, t_command_line **command_line)
 {
-    free_all_main_struct(main_struct);
-	error_allocation_command_line(command_line);
+    free_all_exec_struct(exec_struct);
+	error_allocation_command_line(command_line, &(*exec_struct)->envp_struct);
 }
 
-void	error_allocation_command_line(t_command_line **command_line)
+void	error_allocation_command_line(t_command_line **command_line, t_envp_struct **envp_struct)
 {
+    free_envp(envp_struct);
 	free_all_command_line(command_line);
 	ft_putstr_fd("error\nan allocation failed\n", 2);
 	clear_history();

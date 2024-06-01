@@ -1,17 +1,17 @@
 #include "minishell.h"
 
-t_command_line	*parse_command_line(char *str, int fd)//int fd is used only for script.sh execution
+t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd)//int fd is used only for script.sh execution
 {
 	t_command_line	*command_line;
 	char			*remaining_line;
 
 	command_line = NULL;
 	if (init_command_line_struct(&command_line) == -1)
-		error_allocation_command_line(&command_line);
+		error_allocation_command_line(&command_line, envp_struct);
 	remaining_line = skip_first_whitespaces(str);
 	if (ft_strlen(remaining_line) == 0)
 		return (command_line);
-	cut_remaining_line_on_pipes(&command_line, remaining_line);
+	cut_remaining_line_on_pipes(&command_line, remaining_line, envp_struct);
 	if (command_line->exit_code != 0)
 		return (command_line);
 	expand_contents(&command_line);
@@ -20,13 +20,13 @@ t_command_line	*parse_command_line(char *str, int fd)//int fd is used only for s
 	return (command_line);
 }
 
-void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line)
+void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line, t_envp_struct **envp_struct)
 {
 	while(ft_strlen(remaining_line))
 	{
 		(*command_line)->exit_code = parse_substrings(&remaining_line, *command_line);
 		if ((*command_line)->exit_code == -1)
-			error_allocation_command_line(command_line);
+			error_allocation_command_line(command_line, envp_struct);
 		if ((*command_line)->exit_code != 0)//handle return of parse_substrings (1 or 2 when errors)
 			return ;
 		remaining_line = skip_first_whitespaces(remaining_line);

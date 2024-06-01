@@ -16,6 +16,7 @@
 		"new": "c",
 		"ranges": "c",
 		"functional": "c",
-		"history.h": "c"
+		"history.h": "c",
+		"minishell.h": "c"
 	}
 }

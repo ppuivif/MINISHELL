@@ -9,7 +9,7 @@
 # include "includes/linked_list_utils.h"
 
 # include <stdio.h>//to delete
-
+# include <fcntl.h>
 
 
 
@@ -29,8 +29,8 @@ void			print_arr(char **arr);
 
 void get_envp(char **envp, t_envp_struct **envp_struct);
 
-t_command_line 	*parse_command_line(char *str, int fd);
-void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line);
+t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd);
+void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line, t_envp_struct **envp_struct);
 int		parse_substrings(char **remaining_line, t_command_line *command_line);
 int		get_arguments_and_redirections(t_substring **substring, char **remaining_line);
 int		get_redirections(char **remaining_line, t_substring *substring);
@@ -43,7 +43,10 @@ int		init_expanded_argument_struct(t_expanded_argument **exp_argument);
 int		init_expanded_redirection_struct(t_expanded_redirection **exp_redirection);
 int		init_substring_struct(t_substring **substring);
 int		init_command_line_struct(t_command_line **command_line);
-int		init_main_struct(t_main_struct **main_struct);
+int		init_exec_struct(t_exec_struct **exec_struct);
+int		init_exec_subline_struct(t_exec_subline **exec_subline);
+int		init_exec_redirection_struct(t_exec_redirection **exec_redirection);
+int		init_exec_argument_struct(t_exec_argument **exec_argument);
 
 int		count_len_to_cut(char *remaining_line);
 int		count_len_to_reach_first_quote_or_ifs(char *remaining_line);
@@ -73,11 +76,25 @@ void	expand_string_after_dollar(char **str);
 char	*expand_variables(char **remaining_line);
 int     is_remaining_chars(char *str, char *list_of_char);
 
+void	build_exec_struct(t_command_line **command_line, t_exec_struct **exec_struct);
+void	build_exec_subline_struct(t_substring *substring, t_command_line **command_line, t_exec_struct **exec_struct);
+void	build_exec_redirection_struct(t_expanded_redirection *expand_redirection, t_exec_subline **exec_subline, t_command_line **command_line, t_exec_struct **exec_struct);
+void	build_exec_argument_struct(t_expanded_argument *expand_argument, t_exec_subline **exec_subline, t_command_line **command_line, t_exec_struct **exec_struct);
+
+
+int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection);
+int		check_outfile(t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection);
+int		check_infile(t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection);
+
+//int		check_commands(t_exec_subline **exec_subline, t_command_line **command_line, t_exec_struct **exec_struct);
+int		check_commands(t_command_line **command_line, t_exec_struct **exec_struct);
+char	**build_envp_arr(t_exec_struct **exec_struct, t_command_line **command_line);
+
 
 
 void	error_allocation_envp_struct();
-void	error_allocation_command_line(t_command_line **command_line);
-void	error_allocation_main_struct(t_main_struct **main_struct, t_command_line **command_line);
+void	error_allocation_command_line(t_command_line **command_line, t_envp_struct **envp_struct);
+void	error_allocation_exec_struct(t_exec_struct **exec_struct, t_command_line **command_line);
 void	error_handling(t_command_line **command_line);
 
 //void	free_cmd(t_cmd *cmd);

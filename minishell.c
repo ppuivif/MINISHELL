@@ -54,7 +54,7 @@ int main(int argc, char **argv, char **envp)
 	char	*line;
 	t_envp_struct	*envp_struct;
 	t_command_line	*command_line;
-	t_main_struct	*main_struct;
+	t_exec_struct	*exec_struct;
 
 	line = NULL;
 	
@@ -79,7 +79,7 @@ int main(int argc, char **argv, char **envp)
 			if (ft_strncmp(line, "exit", 4) != 0)
 			{
 //				command_line = parse_command_line(line);
-				command_line = parse_command_line(line, atoi(argv[1]));//to run script.sh
+				command_line = parse_command_line(line, &envp_struct, atoi(argv[1]));//to run script.sh
 				if (command_line->exit_code != 0)
 					error_handling(&command_line);
 			}
@@ -90,6 +90,7 @@ int main(int argc, char **argv, char **envp)
 				ft_putnbr_fd(command_line->exit_code, 1);
 				ft_putstr_fd("\n", 1);
 			}*/
+
 			if (ft_strncmp(line, "exit", 4) == 0)
 			{
 				free(line);
@@ -99,15 +100,23 @@ int main(int argc, char **argv, char **envp)
 				clear_history();
 				exit (EXIT_SUCCESS);
 			}
-			if (init_main_struct(&main_struct) == -1)
-				error_allocation_main_struct(&main_struct, &command_line);
-//			command_line->exit_code = check_files(command_line, &main_struct);
+			if (init_exec_struct(&exec_struct) == -1)
+				error_allocation_exec_struct(&exec_struct, &command_line);
+			exec_struct->envp_struct = envp_struct;
+			if (command_line->substrings)
+			{
+				build_exec_struct(&command_line, &exec_struct);
+//				if (command_line->exit_code != 0)
+//					error_handling(&command_line);
+				ft_execution_lst_print(exec_struct, 1);
 
-
+			}
 
 			free(line);
 			line = NULL;
+			free_envp(&envp_struct);
 			free_all_command_line(&command_line);
+			free_all_exec_struct(&exec_struct);
 			
 		}
 	}

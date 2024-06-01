@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/31 17:32:09 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/01 19:07:09 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,38 +92,49 @@ int	init_command_line_struct(t_command_line **command_line)
 
 
 
-
-
-int	init_redirection(t_redirection **redirection)
+int	init_exec_argument_struct(t_exec_argument **exec_argument)
 {
-	*redirection = ft_calloc(1, sizeof(t_redirection));
-	if (!*redirection)
+	*exec_argument = ft_calloc(1, sizeof(t_exec_argument));
+	if (!*exec_argument)
 		return (-1);	
-	(*redirection)->file = NULL;
-	(*redirection)->e_redirection = 4;
-	(*redirection)->fd_input = -1;
-	(*redirection)->fd_output = -1;
-	(*redirection)->next = NULL;
+	(*exec_argument)->cmd_arr = NULL;
+	(*exec_argument)->argument = NULL;
+	(*exec_argument)->path = NULL;
+	(*exec_argument)->next = NULL;
 	return (0);
 }
 
-int	init_execution_struct(t_execution **execution)
+int	init_exec_redirection_struct(t_exec_redirection **exec_redirection)
 {
-	*execution = ft_calloc(1, sizeof(t_execution));
-	if (!*execution)
+	*exec_redirection = ft_calloc(1, sizeof(t_exec_redirection));
+	if (!*exec_redirection)
 		return (-1);	
-	(*execution)->redirections = NULL;
-	(*execution)->commands = NULL;
-	(*execution)->next = NULL;
+	(*exec_redirection)->file = NULL;
+	(*exec_redirection)->e_redirection = 2;
+	(*exec_redirection)->fd_input = -1;
+	(*exec_redirection)->fd_output = -1;
+	(*exec_redirection)->next = NULL;
 	return (0);
 }
 
-int	init_main_struct(t_main_struct **main_struct)
+int	init_exec_subline_struct(t_exec_subline **exec_subline)
 {
-	*main_struct = ft_calloc(1, sizeof(t_main_struct));
-	if (!*main_struct)
+	*exec_subline = ft_calloc(1, sizeof(t_exec_subline));
+	if (!*exec_subline)
+		return (-1);	
+	(*exec_subline)->exec_redirections = NULL;
+	(*exec_subline)->exec_arguments = NULL;
+	(*exec_subline)->next = NULL;
+	return (0);
+}
+
+int	init_exec_struct(t_exec_struct **exec_struct)
+{
+	*exec_struct = ft_calloc(1, sizeof(t_exec_struct));
+	if (!*exec_struct)
 		return (-1);
-	(*main_struct)->exit_code = 0;
-	(*main_struct)->executions = 0;
+	(*exec_struct)->exit_code = 0;
+	(*exec_struct)->exec_sublines = 0;
+	(*exec_struct)->envp_struct = NULL;
 	return (0);
 }

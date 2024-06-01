@@ -6,14 +6,8 @@ void	free_all_command_line(t_command_line **command_line)
 	{
 		if ((*command_line)->substrings)
 			free_substring(&(*command_line)->substrings);
-		free_command_line(command_line);
-	}
-}
-
-void	free_command_line(t_command_line **command_line)
-{
-	if (*command_line)
 		free(*command_line);
+	}
 }
 
 void	free_substring(t_substring **substrings)

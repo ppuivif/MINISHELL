@@ -23,4 +23,17 @@ void get_envp(char **envp, t_envp_struct **envp_struct)
 	}
 }
 
+void	free_envp(t_envp_struct **envp_struct)
+{
+	t_envp_struct	*tmp;
+
+	while (ft_lst_size6(*envp_struct))
+	{
+		tmp = (*envp_struct)->next;
+		free((*envp_struct)->content);
+		free(*envp_struct);
+		*envp_struct = tmp;
+	}
+}
+
 

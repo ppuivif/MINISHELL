@@ -88,37 +88,39 @@ typedef struct s_command_line
 }	t_command_line;
 
 
-typedef struct s_redirection t_redirection;
-typedef struct s_redirection
+typedef struct s_exec_redirection t_exec_redirection;
+typedef struct s_exec_redirection
 {
-	char			*file;
-	e_redirection	e_redirection;
-	int				fd_input;
-	int				fd_output;
-	t_redirection	*next;
-}t_redirection;
+	char				*file;
+	e_redirection		e_redirection;
+	int					fd_input;
+	int					fd_output;
+	t_exec_redirection	*next;
+}t_exec_redirection;
 
-typedef struct s_command t_command;
-typedef struct s_command
+typedef struct s_exec_argument t_exec_argument;
+typedef struct s_exec_argument
 {
 	char	**cmd_arr;
+	char	*argument;
 	char	*path;
-	t_command	*next;
-}t_command;
+	t_exec_argument	*next;
+}t_exec_argument;
 
-typedef struct s_execution t_execution;
-typedef struct s_execution
+typedef struct s_exec_subline t_exec_subline;
+typedef struct s_exec_subline
 {
-	t_redirection	*redirections;
-	t_command		*commands;
-	t_execution		*next;
-}t_execution;
+	t_exec_redirection		*exec_redirections;
+	t_exec_argument			*exec_arguments;
+	t_exec_subline			*next;
+}t_exec_subline;
 
-typedef struct s_main_struct
+typedef struct s_exec_struct
 {
-	int			exit_code;
-	t_execution	*executions;
-}t_main_struct;
+	int				exit_code;
+	t_exec_subline	*exec_sublines;
+	t_envp_struct	*envp_struct;
+}t_exec_struct;
 
 
 
@@ -129,19 +131,19 @@ size_t	ft_lst_size3(t_native_argument *head);
 size_t	ft_lst_size4(t_expanded_redirection *head);
 size_t	ft_lst_size5(t_expanded_argument *head);
 size_t	ft_lst_size6(t_envp_struct *head);
-size_t	ft_lst_size7(t_execution *head);
-size_t	ft_lst_size8(t_redirection *head);
-size_t	ft_lst_size9(t_command *head);
+size_t	ft_lst_size7(t_exec_subline *head);
+size_t	ft_lst_size8(t_exec_redirection *head);
+size_t	ft_lst_size9(t_exec_argument *head);
 
-t_substring	*ft_lst_last1(t_substring *head);
+t_substring				*ft_lst_last1(t_substring *head);
 t_native_redirection	*ft_lst_last2(t_native_redirection *head);
-t_native_argument	*ft_lst_last3(t_native_argument *head);
+t_native_argument		*ft_lst_last3(t_native_argument *head);
 t_expanded_redirection	*ft_lst_last4(t_expanded_redirection *head);
-t_expanded_argument	*ft_lst_last5(t_expanded_argument *head);
-t_envp_struct		*ft_lst_last6(t_envp_struct *head);
-t_execution		*ft_lst_last7(t_execution *head);
-t_redirection		*ft_lst_last8(t_redirection *head);
-t_command		*ft_lst_last9(t_command *head);
+t_expanded_argument		*ft_lst_last5(t_expanded_argument *head);
+t_envp_struct			*ft_lst_last6(t_envp_struct *head);
+t_exec_subline			*ft_lst_last7(t_exec_subline *head);
+t_exec_redirection		*ft_lst_last8(t_exec_redirection *head);
+t_exec_argument			*ft_lst_last9(t_exec_argument *head);
 
 void	ft_lst_add_back1(t_substring **head, t_substring *new_element);
 void	ft_lst_add_back2(t_native_redirection **head, t_native_redirection *new_element);
@@ -149,15 +151,19 @@ void	ft_lst_add_back3(t_native_argument **head, t_native_argument *new_element);
 void	ft_lst_add_back4(t_expanded_redirection **head, t_expanded_redirection *new_element);
 void	ft_lst_add_back5(t_expanded_argument **head, t_expanded_argument *new_element);
 void	ft_lst_add_back6(t_envp_struct **head, t_envp_struct *new_element);
+void	ft_lst_add_back7(t_exec_subline **head, t_exec_subline *new_element);
+void	ft_lst_add_back8(t_exec_redirection **head, t_exec_redirection *new_element);
+void	ft_lst_add_back9(t_exec_argument **head, t_exec_argument *new_element);
 
 void	ft_envp_struct_lst_print(t_envp_struct *envp_struct, int fd);
 void	ft_native_lst_print(t_command_line *command_line, int fd);
 void	ft_expanded_lst_print(t_command_line *command_line, int fd);
+void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd);
 void	print_e_redirection (int e_redirection, int fd);
 
+void	free_envp(t_envp_struct **envp_struct);
 void	free_all_command_line(t_command_line **command_line);
-void	free_all_main_struct(t_main_struct **main_struct);
-void	free_command_line(t_command_line **command_line);
+void	free_all_exec_struct(t_exec_struct **exec_struct);
 void	free_substring(t_substring **substrings);
 void	free_n_redirection(t_native_redirection **redirections);
 void	free_exp_redirection(t_expanded_redirection **exp_redirections);
