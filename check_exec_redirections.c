@@ -10,7 +10,7 @@ int	open_and_check_file(t_expanded_redirection *exp_redirection , t_exec_redirec
 		return_value = check_outfile(exp_redirection, exec_redirection);
 		return (return_value);
 	}
-	if (exp_redirection->e_redirection == 1)
+	else if (exp_redirection->e_redirection == 1)
 	{
 		return_value = check_infile(exp_redirection, exec_redirection);
 		return (return_value);
@@ -28,9 +28,9 @@ int	check_outfile(t_expanded_redirection *exp_redirection, t_exec_redirection **
 {
 	if (exp_redirection->e_redirection == 0)
 		(*exec_redirection)->fd_output = open(exp_redirection->content, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (exp_redirection->e_redirection == 3)
+	else if (exp_redirection->e_redirection == 3)
 		(*exec_redirection)->fd_output = open(exp_redirection->content, O_WRONLY | O_CREAT, 0644);
-	if ((*exec_redirection)->fd_output == -1)
+	else if ((*exec_redirection)->fd_output == -1)
 		{
 			perror(exp_redirection->content);
 			return(1);

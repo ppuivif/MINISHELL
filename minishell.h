@@ -81,7 +81,6 @@ void	build_exec_subline_struct(t_substring *substring, t_command_line **command_
 void	build_exec_redirection_struct(t_expanded_redirection *expand_redirection, t_exec_subline **exec_subline, t_command_line **command_line, t_exec_struct **exec_struct);
 void	build_exec_argument_struct(t_expanded_argument *expand_argument, t_exec_subline **exec_subline, t_command_line **command_line, t_exec_struct **exec_struct);
 
-
 int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection);
 int		check_outfile(t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection);
 int		check_infile(t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection);
