@@ -4,7 +4,7 @@ NAME  = minishell
 #SRCDIR = src
 #OBJDIR = obj
 SRCS = minishell.c \
-		get_envp.c arr_utils.c parsing_1.c parsing_2.c expand.c \
+		get_envp.c arr_utils.c parsing_1.c expand.c \
 		build_execution.c check_exec_redirections.c check_exec_arguments.c error_handling.c
 
 #SRCS += libft/libft_utils_1.c libft/libft_utils_2.c libft/libft_utils_3.c libft/libft_utils_4.c\

@@ -29,7 +29,8 @@ void			print_arr(char **arr);
 
 void get_envp(char **envp, t_envp_struct **envp_struct);
 
-t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd);
+//t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd);
+t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct);
 void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line, t_envp_struct **envp_struct);
 int		parse_substrings(char **remaining_line, t_command_line *command_line);
 int		get_arguments_and_redirections(t_substring **substring, char **remaining_line);
@@ -76,24 +77,24 @@ void	expand_string_after_dollar(char **str);
 char	*expand_variables(char **remaining_line);
 int     is_remaining_chars(char *str, char *list_of_char);
 
-void	build_exec_struct(t_command_line **command_line, t_exec_struct **exec_struct);
-void	build_exec_subline_struct(t_substring *substring, t_command_line **command_line, t_exec_struct **exec_struct);
-void	build_exec_redirection_struct(t_expanded_redirection *expand_redirection, t_exec_subline **exec_subline, t_command_line **command_line, t_exec_struct **exec_struct);
-void	build_exec_argument_struct(t_expanded_argument *expand_argument, t_exec_subline **exec_subline, t_command_line **command_line, t_exec_struct **exec_struct);
+void	build_exec_struct(t_exec_struct **exec_struct);
+void	build_exec_subline_struct(t_substring *substring, t_exec_struct **exec_struct);
+void	build_exec_redirection_struct(t_expanded_redirection *expand_redirection, t_exec_subline **exec_subline, t_exec_struct **exec_struct);
+void	build_exec_argument_struct(t_expanded_argument *expand_argument, t_exec_subline **exec_subline, t_exec_struct **exec_struct);
 
 int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection);
 int		check_outfile(t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection);
 int		check_infile(t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection);
 
-//int		check_commands(t_exec_subline **exec_subline, t_command_line **command_line, t_exec_struct **exec_struct);
-int		check_commands(t_command_line **command_line, t_exec_struct **exec_struct);
-char	**build_envp_arr(t_exec_struct **exec_struct, t_command_line **command_line);
+void	check_exec_arguments(t_exec_subline **exec_subline, t_exec_struct **exec_struct);
+void	build_cmd_arr(t_exec_subline **exec_subline, t_exec_struct **exec_struct);
+void	check_command_with_options(t_exec_subline **exec_subline, t_exec_struct **exec_struct);
+void	check_path_in_envp(t_exec_subline **exec_subline, t_exec_struct **exec_struct);
+int		check_path_cmd_validity(char **path, t_exec_subline **exec_subline);
 
-
-
-void	error_allocation_envp_struct();
+void	error_allocation_envp_struct(void);
 void	error_allocation_command_line(t_command_line **command_line, t_envp_struct **envp_struct);
-void	error_allocation_exec_struct(t_exec_struct **exec_struct, t_command_line **command_line);
+void	error_allocation_exec_struct(t_exec_struct **exec_struct);
 void	error_handling(t_command_line **command_line);
 
 //void	free_cmd(t_cmd *cmd);

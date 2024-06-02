@@ -17,5 +17,12 @@ echo $? give 1
 
 -----------------------------------------------------------------------------------------------
 
+ppuivif@2G3:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ unset PATH
+ppuivif@2G3:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ ls
+bash: ls: No such file or directory
+
+echo $? give 127
+
+-----------------------------------------------------------------------------------------------
 
 

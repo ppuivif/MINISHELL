@@ -1,108 +1,77 @@
 #include "minishell.h"
 
-//int	check_commands(t_exec_subline **exec_subline, t_command_line **command_line, t_exec_struct **exec_struct)
-int	check_commands(t_command_line **command_line, t_exec_struct **exec_struct)
+void	check_exec_arguments(t_exec_subline **exec_subline, \
+t_exec_struct **exec_struct)
 {
-	char	**envp_arr;
-
-	envp_arr = build_envp_arr(exec_struct, command_line);
-//	build_full_path_cmd_arr(exec_subline, envp_arr);
-	free_arr(envp_arr);
-	return (0);
-
-
-
+	build_cmd_arr(exec_subline, exec_struct);
+	if ((*exec_subline)->cmd_arr && (*exec_subline)->cmd_arr[0])
+		check_command_with_options(exec_subline, exec_struct);
 }
 
-char	**build_envp_arr(t_exec_struct **exec_struct, t_command_line **command_line)
+void	build_cmd_arr(t_exec_subline **exec_subline, \
+t_exec_struct **exec_struct)
+{
+	char			**cmd_arr;
+	size_t			cmd_arr_size;
+	t_exec_argument	*tmp;
+	size_t			i;	
+
+	cmd_arr = NULL;
+	cmd_arr_size = ft_lst_size9((*exec_subline)->exec_arguments);
+	cmd_arr = ft_calloc(cmd_arr_size + 1, sizeof(char *));
+	if (!cmd_arr)
+		error_allocation_exec_struct(exec_struct);
+	tmp = (*exec_subline)->exec_arguments;
+	i = 0;
+	while (tmp)
+	{
+		cmd_arr[i] = tmp->argument;
+		tmp = tmp->next;
+		i++;
+	}
+	(*exec_subline)->cmd_arr = cmd_arr;
+}
+
+void	check_command_with_options(t_exec_subline **exec_subline, \
+t_exec_struct **exec_struct)
+{
+	char	**cmd_arr;
+
+	cmd_arr = (*exec_subline)->cmd_arr;
+	if (access(cmd_arr[0], F_OK) == 0)
+	{
+		(*exec_subline)->path_with_cmd = ft_strdup(cmd_arr[0]);
+		if (!(*exec_subline)->path_with_cmd)
+			error_allocation_exec_struct(exec_struct);
+	}
+	else
+		check_path_in_envp(exec_subline, exec_struct);
+}
+
+static char	**build_envp_arr(t_exec_struct **exec_struct)
 {
 	char			**envp_arr;
-	size_t			arr_size;
+	size_t			envp_arr_size;
 	t_envp_struct	*tmp;
 	size_t			i;
 
 	envp_arr = NULL;
-	arr_size = ft_lst_size6((*exec_struct)->envp_struct);
-	envp_arr = ft_calloc(arr_size, sizeof(char *));
+	envp_arr_size = ft_lst_size6((*exec_struct)->envp_struct);
+	envp_arr = ft_calloc(envp_arr_size + 1, sizeof(char *));
 	if (!envp_arr)
-		error_allocation_exec_struct(exec_struct, command_line);
-	tmp = (*exec_struct)->envp_struct->next;
+		error_allocation_exec_struct(exec_struct);
+	tmp = (*exec_struct)->envp_struct;
 	i = 0;
 	while (tmp)
 	{
-		envp_arr[i] = ft_strdup(tmp->content);
+		envp_arr[i] = tmp->content;
 		tmp = tmp->next;
 		i++;
 	}
-//	envp_arr[0] = ft_strdup("");
 	return (envp_arr);
 }
 
-/*void	build_full_path_cmd_arr(t_exec_subline **exec_subline, char **envp)
-{
-
-
-
-
-}
-
-
-void	build_full_path_cmd_arr(char **argv, char **envp,
-		t_main_struct *main_struct)
-{
-	int	i;
-
-	i = 2;
-	while (i < main_struct->nb_arg)
-	{
-		t_cmd	*new_cmd;
-		char	**cmd_arr;
-		char	*path_cmd;
-		
-		cmd_arr = NULL;
-		path_cmd = NULL;
-		build_cmd_arr(argv[i], &cmd_arr, &path_cmd, envp);
-		new_cmd = ft_lst_dc_new(cmd_arr, path_cmd);
-		ft_lst_dc_add_back(&main_struct->head, new_cmd);
-		i++;
-	}
-//	ft_lst_dc_print(main_struct->head);
-}
-
-void	build_cmd_arr(char *argv, char ***cmd_arr, char	**cmd_path, char **envp)
-{
-	*cmd_arr = ft_split(argv, ' ');
-	if (!**cmd_arr || !*cmd_arr[0])
-		ft_putstr_fd("error\ncommand not found\n", 2);
-	else
-	{
-		if (access(*cmd_arr[0], F_OK) == 0)
-		{
-			*cmd_path = ft_strdup(*cmd_arr[0]);
-			if (!*cmd_path)
-				ft_putstr_fd("error\npath couldn't be created\n", 2);
-		}
-		else
-			check_full_path_in_envp(cmd_arr, cmd_path, envp);
-	}
-}
-
-void	check_full_path_in_envp(char ***cmd_arr, char **cmd_path, char **envp)
-{
-	char	**path_envp;
-
-	path_envp = search_path(envp);
-	if (!path_envp || !path_envp[0])
-	{
-		ft_putstr_fd("error\npath doesn't exist in envp\n", 2);
-		return ;
-	}
-	check_path_cmd_validity(path_envp, cmd_arr, cmd_path);
-	free_arr(path_envp);
-	return ;
-}
-
-char	**search_path(char **envp)
+static char	**search_path(char **envp)
 {
 	int		i;
 	char	**path;
@@ -111,9 +80,10 @@ char	**search_path(char **envp)
 	i = 0;
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], "PATH", 4) == 0)
+		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
 		{
-			path = ft_split(ft_strchr(envp[i], '/'), ':');
+			envp[i] += 5;
+			path = ft_split(envp[i], ':');
 			return (path);
 		}
 		else
@@ -122,30 +92,60 @@ char	**search_path(char **envp)
 	return (path);
 }
 
-void	check_path_cmd_validity(char **path, char ***cmd_arr, char **cmd_path)
+void	check_path_in_envp(t_exec_subline **exec_subline, \
+t_exec_struct **exec_struct)
+{
+	int		return_value;
+	char	**envp_arr;
+	char	**path_envp;
+
+	return_value = 0;
+	envp_arr = build_envp_arr(exec_struct);
+	path_envp = search_path(envp_arr);
+	if (!path_envp || !path_envp[0])
+	{
+		perror((*exec_subline)->cmd_arr[0]);
+		(*exec_struct)->command_line->exit_code = 127;
+	}
+	else
+	{
+		return_value = check_path_cmd_validity(path_envp, exec_subline);
+		if (return_value == -1)
+			error_allocation_exec_struct(exec_struct);
+		if (return_value == 1)
+		{
+			perror((*exec_subline)->cmd_arr[0]);
+			(*exec_struct)->command_line->exit_code = 127;
+		}
+	}
+	free(envp_arr);
+	envp_arr = NULL;
+	free_arr(path_envp);
+}
+
+int	check_path_cmd_validity(char **path, t_exec_subline **exec_subline)
 {
 	char	*path_with_cmd;
+	char	**cmd_arr;
 
+	cmd_arr = (*exec_subline)->cmd_arr;
 	while (*path)
 	{
 		path_with_cmd = NULL;
 		path_with_cmd = ft_strjoin(*path, "/");
-		path_with_cmd = ft_strjoin_freed(path_with_cmd, *cmd_arr[0]);
+		path_with_cmd = ft_strjoin_freed(path_with_cmd, cmd_arr[0]);
 		if (!path_with_cmd || !path_with_cmd[0])
-			ft_putstr_fd("error\nat least one path couldn'be checked \
-			in envp\n", 2);
+			return (1);
 		if (access(path_with_cmd, F_OK) == 0)
 		{
-			*cmd_path = ft_strdup(path_with_cmd);
-			if (!cmd_path)
-				ft_putstr_fd("error\nat least one path couldn'be checked\
-				in envp\n", 2);
+			(*exec_subline)->path_with_cmd = ft_strdup(path_with_cmd);
+			if (!(*exec_subline)->path_with_cmd)
+				return (-1);
 			free (path_with_cmd);
-			return ;
+			return (0);
 		}
 		free (path_with_cmd);
 		path ++;
 	}
-	ft_putstr_fd("error\ncommand not found\n", 2);
-	return ;
-}*/
+	return (1);
+}

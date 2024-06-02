@@ -1,6 +1,7 @@
 #include "minishell.h"
 
-t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd)//int fd is used only for script.sh execution
+//t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd)//int fd is used only for script.sh execution
+t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct)
 {
 	t_command_line	*command_line;
 	char			*remaining_line;
@@ -15,7 +16,7 @@ t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, int f
 	if (command_line->exit_code != 0)
 		return (command_line);
 	expand_contents(&command_line);
-	ft_expanded_lst_print(command_line, fd);//to delete
+//	ft_expanded_lst_print(command_line, fd);//to delete
 //	ft_native_lst_print(command_line, fd);
 	return (command_line);
 }

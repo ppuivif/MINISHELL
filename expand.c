@@ -2,9 +2,9 @@
 
 void	expand_contents(t_command_line **command_line)
 {
-	t_substring	*tmp1;
-	t_native_redirection *tmp2;
-	t_native_argument *tmp3;
+	t_substring				*tmp1;
+	t_native_redirection	*tmp2;
+	t_native_argument		*tmp3;
 
 	tmp1 = (*command_line)->substrings;
 	while (tmp1)
@@ -14,7 +14,7 @@ void	expand_contents(t_command_line **command_line)
 		{
 			expand_redirections(tmp1, tmp2);
 			if (tmp1->exp_redirections->alloc_succeed == false)
-				free_all_command_line(command_line);	
+				free_all_command_line(command_line);
 			tmp2 = tmp2->next;
 		}
 		tmp3 = tmp1->n_arguments;
@@ -29,15 +29,14 @@ void	expand_contents(t_command_line **command_line)
 	}
 }
 
-
-void expand_redirections(t_substring *substring, t_native_redirection *n_redirection)
+void	expand_redirections(t_substring *substring, \
+t_native_redirection *n_redirection)
 {
 	t_expanded_redirection	*exp_redirection;
 	char					*definitive_content;
 
 	exp_redirection = NULL;
 	definitive_content = NULL;
-	
 	if (init_expanded_redirection_struct(&exp_redirection) == -1)
 		exp_redirection->alloc_succeed = false;
 	if (redirec(&n_redirection, &definitive_content) == -1)
@@ -49,7 +48,7 @@ void expand_redirections(t_substring *substring, t_native_redirection *n_redirec
 
 int	redirec(t_native_redirection **n_redirection, char **definitive_content)
 {
-	int		 i;
+	int		i;
 	size_t	len;
 	char	*extracted_line;
 
@@ -70,9 +69,10 @@ int	redirec(t_native_redirection **n_redirection, char **definitive_content)
 		}
 		else if ((*n_redirection)->content[i] == '$' && \
 		(*n_redirection)->e_redirection != 4)
-			len = simple_expand_content(&(*n_redirection)->content[i], &extracted_line);
+			len = simple_expand_content(&(*n_redirection)->content[i], \
+			&extracted_line);
 		else if ((*n_redirection)->e_redirection != 4)
-			len = get_len_and_extract_until_next_quote_or_dollar\
+			len = get_len_and_extract_until_next_quote_or_dollar \
 			(&(*n_redirection)->content[i], &extracted_line);
 		else
 			len = get_len_and_extract_until_next_quote \
@@ -82,7 +82,8 @@ int	redirec(t_native_redirection **n_redirection, char **definitive_content)
 		if (!(*definitive_content))
 			*definitive_content = ft_strdup(extracted_line);
 		else
-			*definitive_content = ft_strjoin_freed(*definitive_content, extracted_line);
+			*definitive_content = ft_strjoin_freed(*definitive_content, \
+			extracted_line);
 		free(extracted_line);
 		extracted_line = NULL;
 		if (!definitive_content)
@@ -92,13 +93,13 @@ int	redirec(t_native_redirection **n_redirection, char **definitive_content)
 	return (0);
 }
 
-void expand_arguments(t_substring *substring, t_native_argument *n_argument)
+void	expand_arguments(t_substring *substring, t_native_argument *n_argument)
 {
-	int i;
-	t_expanded_argument		*exp_argument;
-	size_t					len;
-	char					*extracted_line;
-	char					*definitive_content;
+	int					i;
+	t_expanded_argument	*exp_argument;
+	size_t				len;
+	char				*extracted_line;
+	char				*definitive_content;
 
 	len = 0;
 	exp_argument = NULL;
@@ -109,23 +110,31 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 	while (n_argument && n_argument->content[i])
 	{
 		if (n_argument->content[i] == '\'')
-			len = get_len_and_extract_between_single_quotes(&n_argument->content[i + 1], &extracted_line);
+			len = \
+			get_len_and_extract_between_single_quotes \
+			(&n_argument->content[i + 1], &extracted_line);
 		else if (n_argument->content[i] == '\"')
 		{
-			len = get_len_and_extract_between_double_quotes(&n_argument->content[i + 1], &extracted_line);
+			len = \
+			get_len_and_extract_between_double_quotes \
+			(&n_argument->content[i + 1], &extracted_line);
 			if (is_remaining_chars(extracted_line, "$") == 0)
 				complete_expand_content(&extracted_line);
 		}
 		else if (n_argument->content[i] == '$')
-			len = simple_expand_content(&n_argument->content[i], &extracted_line);
+			len = \
+			simple_expand_content(&n_argument->content[i], &extracted_line);
 		else
-			len = get_len_and_extract_until_next_quote_or_dollar(&n_argument->content[i], &extracted_line);
+			len = \
+			get_len_and_extract_until_next_quote_or_dollar \
+			(&n_argument->content[i], &extracted_line);
 		if (!extracted_line)
 			exp_argument->alloc_succeed = false;
 		if (!definitive_content)
 			definitive_content = ft_strdup(extracted_line);
 		else
-			definitive_content = ft_strjoin_freed(definitive_content, extracted_line);
+			definitive_content = \
+			ft_strjoin_freed(definitive_content, extracted_line);
 		free(extracted_line);
 		extracted_line = NULL;
 		if (!definitive_content)
@@ -136,12 +145,12 @@ void expand_arguments(t_substring *substring, t_native_argument *n_argument)
 	ft_lst_add_back5(&substring->exp_arguments, exp_argument);
 }
 
-
-size_t	get_len_and_extract_between_single_quotes(char *str, char **extracted_line)
+size_t	get_len_and_extract_between_single_quotes(char *str, \
+char **extracted_line)
 {
 	size_t	len;
 	size_t	len_to_next_single_quote;
-	
+
 	len = 0;
 	len_to_next_single_quote = strcspn(str, "\'");
 	*extracted_line = ft_substr(str, 0, len_to_next_single_quote);
@@ -149,11 +158,12 @@ size_t	get_len_and_extract_between_single_quotes(char *str, char **extracted_lin
 	return (len);
 }
 
-size_t	get_len_and_extract_with_single_quotes(char *str, char **extracted_line)
+size_t	get_len_and_extract_with_single_quotes(char *str, \
+char **extracted_line)
 {
 	size_t	len;
 	size_t	len_to_next_single_quote;
-	
+
 	len = 0;
 	len_to_next_single_quote = strcspn(&str[1], "\'");
 	*extracted_line = ft_substr(str, 0, len_to_next_single_quote + 2);
@@ -161,11 +171,12 @@ size_t	get_len_and_extract_with_single_quotes(char *str, char **extracted_line)
 	return (len);
 }
 
-size_t	get_len_and_extract_between_double_quotes(char *str, char **extracted_line)
+size_t	get_len_and_extract_between_double_quotes(char *str, \
+char **extracted_line)
 {
 	size_t	len;
 	size_t	len_to_next_double_quote;
-	
+
 	len = 0;
 	len_to_next_double_quote = strcspn(str, "\"");
 	*extracted_line = ft_substr(str, 0, len_to_next_double_quote);
@@ -195,7 +206,8 @@ size_t	get_len_and_extract_until_next_dollar(char *str, char **extracted_line)
 	return (len);
 }
 
-size_t	get_len_and_extract_until_next_quote_or_dollar(char *str, char **extracted_line)
+size_t	get_len_and_extract_until_next_quote_or_dollar(char *str, \
+char **extracted_line)
 {
 	size_t	len;
 	size_t	len_to_next_quote_or_dollar;
@@ -206,7 +218,8 @@ size_t	get_len_and_extract_until_next_quote_or_dollar(char *str, char **extracte
 	return (len);
 }
 
-size_t	get_len_and_extract_until_next_separator(char *str, char **extracted_line)
+size_t	get_len_and_extract_until_next_separator(char *str, \
+char **extracted_line)
 {
 	size_t	len;
 	size_t	len_to_next_separator;
@@ -230,9 +243,9 @@ size_t	get_len_and_extract_after_dollar(char *str, char **extracted_line)
 
 size_t	simple_expand_content(char *str, char **extracted_line)
 {
-	int		i;
-	int len;
-	
+	int	i;
+	int	len;
+
 	i = 0;
 	len = 0;
 	if (str[i + 1] == '\"' || str[i + 1] == '\'')
@@ -251,9 +264,9 @@ size_t	simple_expand_content(char *str, char **extracted_line)
 void	complete_expand_content(char **str)
 {
 	int		i;
-	char 	*tmp;
-	char 	*result;
-	
+	char	*tmp;
+	char	*result;
+
 	i = 0;
 	result = NULL;
 	while (str[0][i])
@@ -280,7 +293,8 @@ void	complete_expand_content(char **str)
 				expand_string_between_single_quotes(&tmp);
 		}
 		else if (ft_isspace(str[0][i]) == 0)
-			i += get_len_and_extract_until_next_quote_or_dollar(&str[0][i], &tmp);
+			i += \
+			get_len_and_extract_until_next_quote_or_dollar(&str[0][i], &tmp);
 		else
 			i += get_len_and_extract_until_next_separator(&str[0][i], &tmp);
 		if (!result)
@@ -296,7 +310,7 @@ void	expand_string_between_single_quotes(char **str)
 {
 	int		i;
 	char	*tmp;
-	char 	*result;
+	char	*result;
 
 	i = 0;
 	result = NULL;
@@ -323,7 +337,7 @@ void	expand_string_after_dollar(char **str)
 	char	*remaining_line;
 	char	*variable;
 	char	*result;
-	
+
 	result = NULL;
 	remaining_line = *str;
 	while (remaining_line && remaining_line[0])
@@ -338,7 +352,7 @@ void	expand_string_after_dollar(char **str)
 	*str = ft_strdup_freed(result);
 }
 
-char *expand_variables(char **remaining_line)
+char	*expand_variables(char **remaining_line)
 {
 	int		len_to_cut;
 	char	*result;
@@ -353,8 +367,10 @@ char *expand_variables(char **remaining_line)
 				result = "";
 			else
 			{
-				len_to_cut = (int)strcspn(&remaining_line[0][1], "$ \t\n\v\f\r\0");
-				result = getenv(ft_substr(&remaining_line[0][1], 0, len_to_cut));
+				len_to_cut = \
+					(int)strcspn(&remaining_line[0][1], "$ \t\n\v\f\r\0");
+				result = \
+					getenv(ft_substr(&remaining_line[0][1], 0, len_to_cut));
 				if (!result)
 					result = "";
 			}
@@ -372,9 +388,9 @@ char *expand_variables(char **remaining_line)
 	return (result);
 }
 
-int is_remaining_chars(char *str, char *list_of_char)
+int	is_remaining_chars(char *str, char *list_of_char)
 {
-	if(strcspn(str, list_of_char) < ft_strlen(str))
+	if (strcspn(str, list_of_char) < ft_strlen(str))
 		return (0);
 	return (1);
 }

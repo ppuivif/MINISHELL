@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 12:27:17 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/05 18:08:01 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/02 16:52:08 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,15 @@
 
 void	*free_arr(char **arr)
 {
+	int	i;
+	
+	i = 0;	
 	if (arr)
 	{
-		while (*arr)
+		while (arr[i])
 		{
-			free (*arr);
-			arr++;
+			free (arr[i]);
+			i++;
 		}
 		free (arr);
 		arr = NULL;

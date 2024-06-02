@@ -101,17 +101,17 @@ typedef struct s_exec_redirection
 typedef struct s_exec_argument t_exec_argument;
 typedef struct s_exec_argument
 {
-	char	**cmd_arr;
 	char	*argument;
-	char	*path;
 	t_exec_argument	*next;
 }t_exec_argument;
 
 typedef struct s_exec_subline t_exec_subline;
 typedef struct s_exec_subline
 {
-	t_exec_redirection		*exec_redirections;
-	t_exec_argument			*exec_arguments;
+	t_exec_redirection	*exec_redirections;
+	t_exec_argument		*exec_arguments;
+	char				**cmd_arr;
+	char				*path_with_cmd;
 	t_exec_subline			*next;
 }t_exec_subline;
 
@@ -120,6 +120,7 @@ typedef struct s_exec_struct
 	int				exit_code;
 	t_exec_subline	*exec_sublines;
 	t_envp_struct	*envp_struct;
+	t_command_line	*command_line;
 }t_exec_struct;
 
 

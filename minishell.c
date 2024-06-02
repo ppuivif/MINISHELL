@@ -57,29 +57,24 @@ int main(int argc, char **argv, char **envp)
 	t_exec_struct	*exec_struct;
 
 	line = NULL;
-	
-	if (!envp || !envp[0])
-	{
-		ft_putstr_fd("error\nenvp doesn't exists or is empty\n", 2);
-		exit(EXIT_FAILURE);
-	}
-	if (init_envp_struct(&envp_struct) == -1)
-		error_allocation_envp_struct();
-	get_envp(envp, &envp_struct);
-//	ft_envp_struct_lst_print(envp_struct, 1);
+	envp_struct = NULL;
+	(void) argv;
+//	if (envp_struct)
+//		ft_envp_struct_lst_print(envp_struct, 1);
 	if (argc == 2)
 	{
 		while (1)
 		{
+			get_envp(envp, &envp_struct);
 			line = readline("minishell : ");
 			if (!line)
 				break;
 			if (line[0])//no history on empty lines
 				add_history(line);//here?
-			if (ft_strncmp(line, "exit", 4) != 0)
+			if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
 			{
-//				command_line = parse_command_line(line);
-				command_line = parse_command_line(line, &envp_struct, atoi(argv[1]));//to run script.sh
+//				command_line = parse_command_line(line, &envp_struct, atoi(argv[1]));//to run script.sh
+				command_line = parse_command_line(line, &envp_struct);
 				if (command_line->exit_code != 0)
 					error_handling(&command_line);
 			}
@@ -91,21 +86,20 @@ int main(int argc, char **argv, char **envp)
 				ft_putstr_fd("\n", 1);
 			}*/
 
-			if (ft_strncmp(line, "exit", 4) == 0)
+			if (strncmp(line, "exit", 4) == 0)
 			{
 				free(line);
 				line = NULL;
-//				free_all(&command_line);
-//				return (command_line->exit_code);
 				clear_history();
 				exit (EXIT_SUCCESS);
 			}
 			if (init_exec_struct(&exec_struct) == -1)
-				error_allocation_exec_struct(&exec_struct, &command_line);
+				error_allocation_exec_struct(&exec_struct);
 			exec_struct->envp_struct = envp_struct;
+			exec_struct->command_line = command_line;
 			if (command_line->substrings)
 			{
-				build_exec_struct(&command_line, &exec_struct);
+				build_exec_struct(&exec_struct);
 //				if (command_line->exit_code != 0)
 //					error_handling(&command_line);
 				ft_execution_lst_print(exec_struct, 1);

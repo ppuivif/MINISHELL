@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/01 19:07:09 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/02 16:37:18 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,7 @@ int	init_exec_argument_struct(t_exec_argument **exec_argument)
 	*exec_argument = ft_calloc(1, sizeof(t_exec_argument));
 	if (!*exec_argument)
 		return (-1);	
-	(*exec_argument)->cmd_arr = NULL;
 	(*exec_argument)->argument = NULL;
-	(*exec_argument)->path = NULL;
 	(*exec_argument)->next = NULL;
 	return (0);
 }
@@ -124,6 +122,8 @@ int	init_exec_subline_struct(t_exec_subline **exec_subline)
 		return (-1);	
 	(*exec_subline)->exec_redirections = NULL;
 	(*exec_subline)->exec_arguments = NULL;
+	(*exec_subline)->cmd_arr = NULL;
+	(*exec_subline)->path_with_cmd = NULL;
 	(*exec_subline)->next = NULL;
 	return (0);
 }
