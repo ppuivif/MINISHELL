@@ -17,11 +17,11 @@ t_exec_redirection **exec_redirection)
 		return_value = check_infile(exp_redirection, exec_redirection);
 		return (return_value);
 	}
-/*	if (exp_redirection->e_redirection == 4)
+	if (exp_redirection->e_redirection == 4)
 	{
-		return_value = check_heredoc(exp_redirection, exec_redirection);
+		return_value = check_heredoc(&exp_redirection, exec_redirection);
 		return (return_value);
-	}*/
+	}
 	else
 		return (-1);
 }
@@ -40,6 +40,8 @@ t_exec_redirection **exec_redirection)
 		perror(exp_redirection->content);
 		return (1);
 	}
+	(*exec_redirection)->file = exp_redirection->content;
+	(*exec_redirection)->e_redirection = exp_redirection->e_redirection;
 	return (0);
 }
 
@@ -54,6 +56,47 @@ t_exec_redirection **exec_redirection)
 		else
 			perror(exp_redirection->content);
 		return (1);
+	}
+	(*exec_redirection)->file = exp_redirection->content;
+	(*exec_redirection)->e_redirection = exp_redirection->e_redirection;
+	return (0);
+}
+
+int	check_heredoc(t_expanded_redirection **exp_redirection, \
+t_exec_redirection **exec_redirection)
+{
+	char	*line;
+	int		fd;
+	char	*limiter;
+
+	line = NULL;
+	fd = open("heredoc_tmp.txt", O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	if (fd == -1)
+		return (-1);
+	limiter = ft_strjoin((*exp_redirection)->content, "\n");
+	while (1)
+	{
+		line = get_next_line(0);
+		if (ft_strcmp(line, limiter) == 0)
+		{
+			free(line);
+			close(fd);
+			break;
+		}
+		expand_content_when_heredoc(&line);
+		ft_putstr_fd(line, fd);
+		free(line);
+		line = NULL;
+	}
+	free(limiter);
+	limiter = NULL;
+	(*exec_redirection)->file = "heredoc_tmp.txt";
+	(*exec_redirection)->e_redirection = 1;
+	(*exec_redirection)->fd_input = open((*exec_redirection)->file, O_RDONLY);
+	if ((*exec_redirection)->fd_input == -1)
+	{
+		perror((*exec_redirection)->file);
+		return (-1);
 	}
 	return (0);
 }

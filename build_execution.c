@@ -53,8 +53,6 @@ t_exec_subline **exec_subline, t_exec_struct **exec_struct)
 		(*exec_struct)->command_line->exit_code = exit_code;
 		return ;
 	}
-	exec_redirection->file = exp_redirection->content;
-	exec_redirection->e_redirection = exp_redirection->e_redirection;
 	ft_lst_add_back8(&(*exec_subline)->exec_redirections, exec_redirection);
 }
 

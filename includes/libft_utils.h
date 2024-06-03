@@ -6,6 +6,7 @@
 # include <unistd.h>
 
 size_t			ft_strlen(const char *s);
+int				ft_strcmp(char *s1, char *s2);
 int				ft_strncmp(const char *s1, const char *s2, size_t n);
 char			*ft_strchr(const char *s, int c);
 unsigned int	search_first_occurence(char *str, char c);
@@ -22,5 +23,6 @@ void			ft_putnbr_fd(int n, int fd);
 char			*skip_first_whitespaces(char *str);
 void			*free_arr(char **arr);
 int				ft_isspace(int c);
+char			*ft_itoa(int n);
 
 #endif

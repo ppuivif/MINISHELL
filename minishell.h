@@ -7,18 +7,11 @@
 
 # include "includes/libft_utils.h"
 # include "includes/linked_list_utils.h"
+//# include "includes/linked_list_utils.h"
+# include "GNL/get_next_line.h"
 
 # include <stdio.h>//to delete
 # include <fcntl.h>
-
-
-
-
-
-
-
-
-
 
 
 
@@ -57,11 +50,15 @@ int		check_char_validity(char *remaining_line, int len_to_quote, int flag, int j
 unsigned int count_angled_bracket(char *str);
 
 void	expand_contents(t_command_line **command_line);
-//t_expanded_redirection *expand_redirections(t_substring *substring, t_native_redirection *n_redirection);
+
 void	expand_redirections(t_substring *substring, t_native_redirection *n_redirection);
-int		redirec(t_native_redirection **n_redirection, char **definitive_content);
-//t_expanded_argument *expand_arguments(t_substring *substring, t_native_argument *n_argument);
+int		get_definitive_content_of_redirections(char *content, char **definitive_content, int e_redirection);
+int		extract_and_expand_redirections(char *content, char **definitive_content, int e_redirection);
+size_t	common_extract_and_expand_content_of_redirections(char *content, char **extracted_line);
+size_t	heredoc_extract_and_expand_content_of_redirections(char *content, char **extracted_line);
+
 void	expand_arguments(t_substring *substring, t_native_argument *n_argument);
+
 size_t	get_len_and_extract_between_single_quotes(char *str, char **extracted_line);
 size_t	get_len_and_extract_with_single_quotes(char *str, char **extracted_line);
 size_t	get_len_and_extract_between_double_quotes(char *str, char **extracted_line);
@@ -69,13 +66,13 @@ size_t	get_len_and_extract_until_next_quote(char *str, char **extracted_line);
 size_t	get_len_and_extract_until_next_dollar(char *str, char **extracted_line);
 size_t	get_len_and_extract_until_next_quote_or_dollar(char *str, char **extracted_line);
 size_t	get_len_and_extract_until_next_separator(char *str, char **extracted_line);
+size_t	get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
+size_t	get_len_and_extract_after_dollar(char *str, char **extracted_line);
 
+void	expand_string_after_dollar(char **str);
 void	complete_expand_content(char **str);
 size_t	simple_expand_content(char *str, char **extracted_line);
-void	expand_string_between_single_quotes(char **str);
-void	expand_string_after_dollar(char **str);
-char	*expand_variables(char **remaining_line);
-int     is_remaining_chars(char *str, char *list_of_char);
+void	expand_content_when_heredoc(char **str);
 
 void	build_exec_struct(t_exec_struct **exec_struct);
 void	build_exec_subline_struct(t_substring *substring, t_exec_struct **exec_struct);
@@ -85,6 +82,7 @@ void	build_exec_argument_struct(t_expanded_argument *expand_argument, t_exec_sub
 int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection);
 int		check_outfile(t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection);
 int		check_infile(t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection);
+int		check_heredoc(t_expanded_redirection **exp_redirection, t_exec_redirection **exec_redirection);
 
 void	check_exec_arguments(t_exec_subline **exec_subline, t_exec_struct **exec_struct);
 void	build_cmd_arr(t_exec_subline **exec_subline, t_exec_struct **exec_struct);
@@ -96,9 +94,6 @@ void	error_allocation_envp_struct(void);
 void	error_allocation_command_line(t_command_line **command_line, t_envp_struct **envp_struct);
 void	error_allocation_exec_struct(t_exec_struct **exec_struct);
 void	error_handling(t_command_line **command_line);
-
-//void	free_cmd(t_cmd *cmd);
-//void	free_arr(char **str_arr);
 
 
 #endif

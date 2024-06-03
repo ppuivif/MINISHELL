@@ -124,6 +124,11 @@ typedef struct s_exec_struct
 }t_exec_struct;
 
 
+void	ft_envp_struct_lst_print(t_envp_struct *envp_struct, int fd);
+void	ft_native_lst_print(t_command_line *command_line, int fd);
+void	ft_expanded_lst_print(t_command_line *command_line, int fd);
+void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd);
+void	print_e_redirection (int e_redirection, int fd);
 
 
 size_t	ft_lst_size1(t_substring *head);
@@ -155,12 +160,6 @@ void	ft_lst_add_back6(t_envp_struct **head, t_envp_struct *new_element);
 void	ft_lst_add_back7(t_exec_subline **head, t_exec_subline *new_element);
 void	ft_lst_add_back8(t_exec_redirection **head, t_exec_redirection *new_element);
 void	ft_lst_add_back9(t_exec_argument **head, t_exec_argument *new_element);
-
-void	ft_envp_struct_lst_print(t_envp_struct *envp_struct, int fd);
-void	ft_native_lst_print(t_command_line *command_line, int fd);
-void	ft_expanded_lst_print(t_command_line *command_line, int fd);
-void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd);
-void	print_e_redirection (int e_redirection, int fd);
 
 void	free_envp(t_envp_struct **envp_struct);
 void	free_all_command_line(t_command_line **command_line);

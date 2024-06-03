@@ -41,3 +41,51 @@ invalid :
 	arg="cat"; < infile.txt '"$arg"'	-> command "$arg" not found
 	arg="cat"; < infile.txt "'"$arg"'"	-> command 'cat' not found
 	arg="cat"; < infile.txt '"'"$arg"'"'	-> command "cat" not found
+
+
+<< $PATH
+LIMITER = $PATH
+
+<< "$PATH"
+LIMITER = $PATH
+
+<< '$PATH'
+LIMITER = $PATH
+
+<< "'$PATH'"
+LIMITER = '$PATH'
+
+<< '"$PATH"'
+LIMITER = "$PATH"
+
+<< "'"$PATH"'"
+LIMITER = '$PATH'
+
+<< $"PATH"
+LIMITER = PATH
+
+<< $'PATH'
+LIMITER = PATH
+
+<< $"'PATH'"
+LIMITER = 'PATH'
+
+<< $'"PATH"'
+LIMITER = "PATH"
+
+<< $"'"PATH"'"
+LIMITER = 'PATH'
+
+<< $'"'PATH'"'
+LIMITER = "PATH"
+
+
+export limiter="ceci est un limiteur"
+< $limiter génère un ambiguous redirect
+< "$limiter" redirige vers le fichier ceci est un limiteur
+< '$limiter' génère un No such file or directory
+< "'$limiter'" redirige vers le fichier 'ceci est un limiteur'
+< '"$limiter"' redirige vers le fichier "ceci est un limiteur"
+
+idem en outfile
+

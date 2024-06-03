@@ -15,9 +15,10 @@ t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct)
 	cut_remaining_line_on_pipes(&command_line, remaining_line, envp_struct);
 	if (command_line->exit_code != 0)
 		return (command_line);
-	expand_contents(&command_line);
-//	ft_expanded_lst_print(command_line, fd);//to delete
 //	ft_native_lst_print(command_line, fd);
+	expand_contents(&command_line);
+//	ft_expanded_lst_print(command_line, 1);//to delete
+//	ft_expanded_lst_print(command_line, fd);//to delete
 	return (command_line);
 }
 
