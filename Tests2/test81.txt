@@ -1,0 +1,6 @@
+substring 0 : 
+	-redirection 0 : 	infile.txt
+	-redirection_type 0 : 	REDIRECTION_INFILE
+	-redirection 1 : 	infile.txt
+	-redirection_type 1 : 	REDIRECTION_INFILE
+

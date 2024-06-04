@@ -6,12 +6,12 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:59:46 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/05 18:07:34 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/04 15:27:53 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 //#include "../includes/libft_utils.h"
-#include "includes/libft_utils.h"
+#include "libft_utils.h"
 
 size_t	ft_strlen(const char *s)
 {

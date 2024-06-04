@@ -1,5 +1,5 @@
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -g
+FLAGS = -Wall -Werror -Wextra -g -Iincludes
 NAME  = minishell
 #SRCDIR = src
 #OBJDIR = obj

@@ -13,7 +13,7 @@ static int	expand_variables_when_dollar_first(char *remaining_line, char **resul
 		{
 			len_to_cut = (int)strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
 			*result = getenv(ft_substr(&remaining_line[1], 0, len_to_cut));
-			if (!result)
+			if (!*result)
 				*result = "";
 		}
 	}

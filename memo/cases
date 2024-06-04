@@ -55,8 +55,10 @@ LIMITER = $PATH
 << "'$PATH'"
 LIMITER = '$PATH'
 
+
 << '"$PATH"'
 LIMITER = "$PATH"
+
 
 << "'"$PATH"'"
 LIMITER = '$PATH'
@@ -79,6 +81,23 @@ LIMITER = 'PATH'
 << $'"'PATH'"'
 LIMITER = "PATH"
 
+<< "$"PATH""
+LIMITER = $PATH
+
+<< "$'PATH'"
+LIMITER = $'PATH'
+
+<< '$"PATH"'
+LIMITER = $"PATH"
+
+<< "'$"PATH"'"
+LIMITER = '$PATH'
+
+
+
+
+
+
 
 export limiter="ceci est un limiteur"
 < $limiter génère un ambiguous redirect
@@ -88,4 +107,7 @@ export limiter="ceci est un limiteur"
 < '"$limiter"' redirige vers le fichier "ceci est un limiteur"
 
 idem en outfile
+
+
+
 

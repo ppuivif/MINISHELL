@@ -1,10 +1,14 @@
 substring 0 : 
 	-redirection 0 : 	infile.txt
 	-redirection_type 0 : 	REDIRECTION_INFILE
+	-fd_input 0 : 		3
+	-fd_output 0 : 		-1
 	-argument 0 : cat
 
 substring 1 : 
 	-redirection 0 : 	outfile.txt
 	-redirection_type 0 : 	REDIRECTION_APPEND
+	-fd_input 0 : 		-1
+	-fd_output 0 : 		4
 	-argument 0 : cat
 

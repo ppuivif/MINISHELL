@@ -1,32 +1,6 @@
 #include "minishell.h"
 
-int	open_and_check_file(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection)
-{
-	int	return_value;
-
-	return_value = 0;
-	if (exp_redirection->e_redirection == 0 || \
-	exp_redirection->e_redirection == 3)
-	{
-		return_value = check_outfile(exp_redirection, exec_redirection);
-		return (return_value);
-	}
-	else if (exp_redirection->e_redirection == 1)
-	{
-		return_value = check_infile(exp_redirection, exec_redirection);
-		return (return_value);
-	}
-	if (exp_redirection->e_redirection == 4)
-	{
-		return_value = check_heredoc(&exp_redirection, exec_redirection);
-		return (return_value);
-	}
-	else
-		return (-1);
-}
-
-int	check_outfile(t_expanded_redirection *exp_redirection, \
+static int	check_outfile(t_expanded_redirection *exp_redirection, \
 t_exec_redirection **exec_redirection)
 {
 	if (exp_redirection->e_redirection == 0)
@@ -35,19 +9,22 @@ t_exec_redirection **exec_redirection)
 	else if (exp_redirection->e_redirection == 3)
 		(*exec_redirection)->fd_output = \
 		open(exp_redirection->content, O_WRONLY | O_CREAT, 0644);
-	else if ((*exec_redirection)->fd_output == -1)
+	(*exec_redirection)->file = exp_redirection->content;
+	(*exec_redirection)->e_redirection = exp_redirection->e_redirection;
+	if ((*exec_redirection)->fd_output == -1)
 	{
 		perror(exp_redirection->content);
 		return (1);
 	}
-	(*exec_redirection)->file = exp_redirection->content;
-	(*exec_redirection)->e_redirection = exp_redirection->e_redirection;
 	return (0);
 }
 
-int	check_infile(t_expanded_redirection *exp_redirection, \
+static int	check_infile(t_expanded_redirection *exp_redirection, \
 t_exec_redirection **exec_redirection)
 {
+	int	return_value;
+
+	return_value = 0;
 	(*exec_redirection)->fd_input = open(exp_redirection->content, O_RDONLY);
 	if ((*exec_redirection)->fd_input == -1)
 	{
@@ -55,14 +32,14 @@ t_exec_redirection **exec_redirection)
 			perror(exp_redirection->content);
 		else
 			perror(exp_redirection->content);
-		return (1);
+		return_value = 1;
 	}
 	(*exec_redirection)->file = exp_redirection->content;
 	(*exec_redirection)->e_redirection = exp_redirection->e_redirection;
-	return (0);
+	return (return_value);
 }
 
-int	check_heredoc(t_expanded_redirection **exp_redirection, \
+static int	check_heredoc(t_expanded_redirection *exp_redirection, \
 t_exec_redirection **exec_redirection)
 {
 	char	*line;
@@ -73,7 +50,7 @@ t_exec_redirection **exec_redirection)
 	fd = open("heredoc_tmp.txt", O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 		return (-1);
-	limiter = ft_strjoin((*exp_redirection)->content, "\n");
+	limiter = ft_strjoin(exp_redirection->content, "\n");
 	while (1)
 	{
 		line = get_next_line(0);
@@ -99,4 +76,30 @@ t_exec_redirection **exec_redirection)
 		return (-1);
 	}
 	return (0);
+}
+
+int	open_and_check_file(t_expanded_redirection *exp_redirection, \
+t_exec_redirection **exec_redirection)
+{
+	int	return_value;
+
+	return_value = 0;
+	if (exp_redirection->e_redirection == 0 || \
+	exp_redirection->e_redirection == 3)
+	{
+		return_value = check_outfile(exp_redirection, exec_redirection);
+		return (return_value);
+	}
+	else if (exp_redirection->e_redirection == 1)
+	{
+		return_value = check_infile(exp_redirection, exec_redirection);
+		return (return_value);
+	}
+	if (exp_redirection->e_redirection == 4)
+	{
+		return_value = check_heredoc(exp_redirection, exec_redirection);
+		return (return_value);
+	}
+	else
+		return (-1);
 }

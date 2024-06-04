@@ -36,7 +36,7 @@ char **extracted_line)
 	return (len);
 }
 
-size_t	get_len_and_extract_after_dollar(char *str, char **extracted_line)
+size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line)
 {
 	size_t	len;
 	size_t	len_to_next_separator;

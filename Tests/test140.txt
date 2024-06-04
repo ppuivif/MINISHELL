@@ -1,6 +1,10 @@
 substring 0 : 
 	-redirection 0 : 	outfile.txt
 	-redirection_type 0 : 	REDIRECTION_APPEND
+	-fd_input 0 : 		-1
+	-fd_output 0 : 		3
 	-redirection 1 : 	outfile.txt
 	-redirection_type 1 : 	REDIRECTION_APPEND
+	-fd_input 1 : 		-1
+	-fd_output 1 : 		4
 

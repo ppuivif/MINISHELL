@@ -7,7 +7,7 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp)
 	len = 0;
 	if (str[1] != '\"' && str[1] != '\'' && ft_isspace(str[1]) != 0)
 	{
-		len += get_len_and_extract_after_dollar(str, tmp);
+		len += get_len_and_extract_after_first_dollar(str, tmp);
 		expand_string_after_dollar(tmp);
 	}
 	else
@@ -16,21 +16,25 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp)
 	return (len);
 }
 
-size_t	simple_expand_content(char *str, char **extracted_line)
+size_t	simple_expand_content(char *str, char **extracted_line, \
+t_command_line *command_line)
 {
-	int	i;
 	int	len;
 
-	i = 0;
 	len = 0;
-	if (str[i + 1] == '\"' || str[i + 1] == '\'')
+	if (str[1] == '\"' || str[1] == '\'')
 	{
 		*extracted_line = ft_strdup("");
 		len = 1;
 	}
+	else if (str[1] == '?')
+	{
+		*extracted_line = ft_strdup(ft_itoa(command_line->exit_code)); 
+		len = 2;
+	}
 	else
 	{
-		len = get_len_and_extract_after_dollar(&str[i], extracted_line);
+		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
 		expand_string_after_dollar(extracted_line);
 	}
 	return (len);

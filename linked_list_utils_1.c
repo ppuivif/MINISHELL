@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/01 19:19:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/04 06:02:45 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,9 +127,9 @@ void	ft_lst_add_back6(t_envp_struct **head, t_envp_struct *new_element)
 	}
 }
 
-void	ft_lst_add_back7(t_exec_subline **head, t_exec_subline *new_element)
+void	ft_lst_add_back7(t_exec_substring **head, t_exec_substring *new_element)
 {
-	t_exec_subline	*last_element;
+	t_exec_substring	*last_element;
 
 	if (!head || !new_element)
 		return ;
@@ -286,9 +286,9 @@ t_envp_struct	*ft_lst_last6(t_envp_struct *head)
 	return (last_element);
 }
 
-t_exec_subline	*ft_lst_last7(t_exec_subline *head)
+t_exec_substring	*ft_lst_last7(t_exec_substring *head)
 {
-	t_exec_subline	*last_element;
+	t_exec_substring	*last_element;
 
 	if (!head)
 		return (NULL);
@@ -462,15 +462,15 @@ void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd)
 {
 	size_t	i;
 	size_t	j;
-	t_exec_subline		*tmp1;
+	t_exec_substring		*tmp1;
 	t_exec_redirection	*tmp2;
 	t_exec_argument		*tmp3;
 
 	i = 0;
-	tmp1 = exec_struct->exec_sublines;
-	while (exec_struct->exec_sublines && i < ft_lst_size7(exec_struct->exec_sublines))
+	tmp1 = exec_struct->exec_substrings;
+	while (exec_struct->exec_substrings && i < ft_lst_size7(exec_struct->exec_substrings))
 	{
-		ft_putstr_fd("subline ", fd);
+		ft_putstr_fd("substring ", fd);
 		ft_putnbr_fd(i, fd);
 		ft_putstr_fd(" : \n", fd);
 		j = 0;
@@ -649,10 +649,10 @@ size_t	ft_lst_size6(t_envp_struct *head)
 	return (len);
 }
 
-size_t	ft_lst_size7(t_exec_subline *head)
+size_t	ft_lst_size7(t_exec_substring *head)
 {
 	size_t		len;
-	t_exec_subline	*last_element;
+	t_exec_substring	*last_element;
 
 	len = 1;
 	if (!head)

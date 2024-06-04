@@ -1,14 +1,14 @@
 #include "minishell.h"
 
-void	check_exec_arguments(t_exec_subline **exec_subline, \
+void	check_exec_arguments(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
-	build_cmd_arr(exec_subline, exec_struct);
-	if ((*exec_subline)->cmd_arr && (*exec_subline)->cmd_arr[0])
-		check_command_with_options(exec_subline, exec_struct);
+	build_cmd_arr(exec_substring, exec_struct);
+	if ((*exec_substring)->cmd_arr && (*exec_substring)->cmd_arr[0])
+		check_command_with_options(exec_substring, exec_struct);
 }
 
-void	build_cmd_arr(t_exec_subline **exec_subline, \
+void	build_cmd_arr(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
 	char			**cmd_arr;
@@ -17,11 +17,11 @@ t_exec_struct **exec_struct)
 	size_t			i;	
 
 	cmd_arr = NULL;
-	cmd_arr_size = ft_lst_size9((*exec_subline)->exec_arguments);
+	cmd_arr_size = ft_lst_size9((*exec_substring)->exec_arguments);
 	cmd_arr = ft_calloc(cmd_arr_size + 1, sizeof(char *));
 	if (!cmd_arr)
 		error_allocation_exec_struct(exec_struct);
-	tmp = (*exec_subline)->exec_arguments;
+	tmp = (*exec_substring)->exec_arguments;
 	i = 0;
 	while (tmp)
 	{
@@ -29,23 +29,23 @@ t_exec_struct **exec_struct)
 		tmp = tmp->next;
 		i++;
 	}
-	(*exec_subline)->cmd_arr = cmd_arr;
+	(*exec_substring)->cmd_arr = cmd_arr;
 }
 
-void	check_command_with_options(t_exec_subline **exec_subline, \
+void	check_command_with_options(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
 	char	**cmd_arr;
 
-	cmd_arr = (*exec_subline)->cmd_arr;
+	cmd_arr = (*exec_substring)->cmd_arr;
 	if (access(cmd_arr[0], F_OK) == 0)
 	{
-		(*exec_subline)->path_with_cmd = ft_strdup(cmd_arr[0]);
-		if (!(*exec_subline)->path_with_cmd)
+		(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
+		if (!(*exec_substring)->path_with_cmd)
 			error_allocation_exec_struct(exec_struct);
 	}
 	else
-		check_path_in_envp(exec_subline, exec_struct);
+		check_path_in_envp(exec_substring, exec_struct);
 }
 
 static char	**build_envp_arr(t_exec_struct **exec_struct)
@@ -92,7 +92,7 @@ static char	**search_path(char **envp)
 	return (path);
 }
 
-void	check_path_in_envp(t_exec_subline **exec_subline, \
+void	check_path_in_envp(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
 	int		return_value;
@@ -104,31 +104,35 @@ t_exec_struct **exec_struct)
 	path_envp = search_path(envp_arr);
 	if (!path_envp || !path_envp[0])
 	{
-		perror((*exec_subline)->cmd_arr[0]);
+		ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
 		(*exec_struct)->command_line->exit_code = 127;
 	}
 	else
 	{
-		return_value = check_path_cmd_validity(path_envp, exec_subline);
+		return_value = check_path_cmd_validity(path_envp, exec_substring);
 		if (return_value == -1)
 			error_allocation_exec_struct(exec_struct);
 		if (return_value == 1)
 		{
-			perror((*exec_subline)->cmd_arr[0]);
+			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
+			ft_putstr_fd(": command not found\n", 2);
 			(*exec_struct)->command_line->exit_code = 127;
 		}
+		else
+			(*exec_struct)->command_line->exit_code = 0;
 	}
 	free(envp_arr);
 	envp_arr = NULL;
 	free_arr(path_envp);
 }
 
-int	check_path_cmd_validity(char **path, t_exec_subline **exec_subline)
+int	check_path_cmd_validity(char **path, t_exec_substring **exec_substring)
 {
 	char	*path_with_cmd;
 	char	**cmd_arr;
 
-	cmd_arr = (*exec_subline)->cmd_arr;
+	cmd_arr = (*exec_substring)->cmd_arr;
 	while (*path)
 	{
 		path_with_cmd = NULL;
@@ -138,8 +142,8 @@ int	check_path_cmd_validity(char **path, t_exec_subline **exec_subline)
 			return (1);
 		if (access(path_with_cmd, F_OK) == 0)
 		{
-			(*exec_subline)->path_with_cmd = ft_strdup(path_with_cmd);
-			if (!(*exec_subline)->path_with_cmd)
+			(*exec_substring)->path_with_cmd = ft_strdup(path_with_cmd);
+			if (!(*exec_substring)->path_with_cmd)
 				return (-1);
 			free (path_with_cmd);
 			return (0);

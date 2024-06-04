@@ -12,7 +12,7 @@ static void	expand_string_between_single_quotes(char **str)
 	{
 		if (str[0][i] == '$')
 		{
-			i += get_len_and_extract_after_dollar(&str[0][i], &tmp);
+			i += get_len_and_extract_after_first_dollar(&str[0][i], &tmp);
 			expand_string_after_dollar(&tmp);
 		}
 		else
@@ -38,7 +38,7 @@ static int	expand_content_when_dollar_first(char *str, char **tmp)
 	}
 	else
 	{
-		len += get_len_and_extract_after_dollar(str, tmp);
+		len += get_len_and_extract_after_first_dollar(str, tmp);
 		expand_string_after_dollar(tmp);
 	}
 	return (len);
@@ -64,7 +64,7 @@ static int	expand_content_when_dollar_not_first(char *str, char **tmp)
 	return (len);
 }
 
-void	complete_expand_content(char **str)
+void	complete_expand_content(char **str, t_command_line *command_line)
 {
 	int		i;
 	char	*tmp;
@@ -75,7 +75,15 @@ void	complete_expand_content(char **str)
 	while (str[0][i])
 	{
 		if (str[0][i] == '$')
-			i += expand_content_when_dollar_first(&str[0][i], &tmp);
+		{
+			if (str[0][i + 1] == '?')
+			{
+				tmp = ft_strdup(ft_itoa(command_line->exit_code));
+				i += 2;
+			}
+			else
+				i += expand_content_when_dollar_first(&str[0][i], &tmp);
+		}
 		else
 			i += expand_content_when_dollar_not_first(&str[0][i], &tmp);
 		if (!result)

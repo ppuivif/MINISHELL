@@ -55,10 +55,12 @@ int main(int argc, char **argv, char **envp)
 	t_envp_struct	*envp_struct;
 	t_command_line	*command_line;
 	t_exec_struct	*exec_struct;
+	int				exit_code;
 
 	line = NULL;
 	envp_struct = NULL;
-	(void) argv;
+	exit_code = 0;
+//	(void) argv;
 //	if (envp_struct)
 //		ft_envp_struct_lst_print(envp_struct, 1);
 	if (argc == 2)
@@ -74,9 +76,9 @@ int main(int argc, char **argv, char **envp)
 			if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
 			{
 //				command_line = parse_command_line(line, &envp_struct, atoi(argv[1]));//to run script.sh
-				command_line = parse_command_line(line, &envp_struct);
-				if (command_line->exit_code != 0)
-					error_handling(&command_line);
+				command_line = parse_command_line(line, &envp_struct, exit_code);
+//				if (command_line->exit_code != 0)
+//					error_handling(&command_line);
 			}
 //			if (ft_strncmp(command_line->substrings->exp_arguments->content, "exit_code", 9) == 0)
 /*			if (ft_strncmp(command_line->substrings->exp_arguments->content, "?", 1) == 0)
@@ -86,7 +88,7 @@ int main(int argc, char **argv, char **envp)
 				ft_putstr_fd("\n", 1);
 			}*/
 
-			if (strncmp(line, "exit", 4) == 0)
+			if (ft_strncmp(line, "exit", 5) == 0)
 			{
 				free(line);
 				line = NULL;
@@ -102,10 +104,10 @@ int main(int argc, char **argv, char **envp)
 				build_exec_struct(&exec_struct);
 //				if (command_line->exit_code != 0)
 //					error_handling(&command_line);
-				ft_execution_lst_print(exec_struct, 1);
 
+				ft_execution_lst_print(exec_struct, atoi(argv[1]));
 			}
-
+			exit_code = command_line->exit_code;
 			free(line);
 			line = NULL;
 			free_envp(&envp_struct);

@@ -74,23 +74,23 @@ static void	free_exec_redirection_struct(t_exec_redirection **exec_redirections)
 	}
 }
 
-static void	free_exec_subline_struct(t_exec_subline **exec_sublines)
+static void	free_exec_substring_struct(t_exec_substring **exec_substrings)
 {
-	t_exec_subline	*tmp;
+	t_exec_substring	*tmp;
 
-	while (ft_lst_size7(*exec_sublines))
+	while (ft_lst_size7(*exec_substrings))
 	{
-		tmp = (*exec_sublines)->next;
-		if ((*exec_sublines)->exec_redirections)
-			free_exec_redirection_struct(&(*exec_sublines)->exec_redirections);
-		if ((*exec_sublines)->exec_arguments)
-			free_exec_argument_struct(&(*exec_sublines)->exec_arguments);
-		free ((*exec_sublines)->exec_redirections);
-		free ((*exec_sublines)->exec_arguments);
-		free((*exec_sublines)->cmd_arr);
-		free((*exec_sublines)->path_with_cmd);
-		free ((*exec_sublines));
-		*exec_sublines = tmp;
+		tmp = (*exec_substrings)->next;
+		if ((*exec_substrings)->exec_redirections)
+			free_exec_redirection_struct(&(*exec_substrings)->exec_redirections);
+		if ((*exec_substrings)->exec_arguments)
+			free_exec_argument_struct(&(*exec_substrings)->exec_arguments);
+		free ((*exec_substrings)->exec_redirections);
+		free ((*exec_substrings)->exec_arguments);
+		free((*exec_substrings)->cmd_arr);
+		free((*exec_substrings)->path_with_cmd);
+		free ((*exec_substrings));
+		*exec_substrings = tmp;
 	}
 }
 
@@ -98,8 +98,8 @@ void	free_all_exec_struct(t_exec_struct **exec_struct)
 {
 	if (*exec_struct)
 	{
-		if ((*exec_struct)->exec_sublines)
-			free_exec_subline_struct(&(*exec_struct)->exec_sublines);
+		if ((*exec_struct)->exec_substrings)
+			free_exec_substring_struct(&(*exec_struct)->exec_substrings);
 		free_exec_struct(exec_struct);
 	}
 }

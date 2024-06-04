@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/03 13:52:43 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/04 19:14:08 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,22 +109,22 @@ int	init_exec_redirection_struct(t_exec_redirection **exec_redirection)
 		return (-1);	
 	(*exec_redirection)->file = NULL;
 	(*exec_redirection)->e_redirection = 2;
-	(*exec_redirection)->fd_input = -1;
-	(*exec_redirection)->fd_output = -1;
+	(*exec_redirection)->fd_input = 0;
+	(*exec_redirection)->fd_output = 0;
 	(*exec_redirection)->next = NULL;
 	return (0);
 }
 
-int	init_exec_subline_struct(t_exec_subline **exec_subline)
+int	init_exec_substring_struct(t_exec_substring **exec_substring)
 {
-	*exec_subline = ft_calloc(1, sizeof(t_exec_subline));
-	if (!*exec_subline)
+	*exec_substring = ft_calloc(1, sizeof(t_exec_substring));
+	if (!*exec_substring)
 		return (-1);	
-	(*exec_subline)->exec_redirections = NULL;
-	(*exec_subline)->exec_arguments = NULL;
-	(*exec_subline)->cmd_arr = NULL;
-	(*exec_subline)->path_with_cmd = NULL;
-	(*exec_subline)->next = NULL;
+	(*exec_substring)->exec_redirections = NULL;
+	(*exec_substring)->exec_arguments = NULL;
+	(*exec_substring)->cmd_arr = NULL;
+	(*exec_substring)->path_with_cmd = NULL;
+	(*exec_substring)->next = NULL;
 	return (0);
 }
 
@@ -134,7 +134,7 @@ int	init_exec_struct(t_exec_struct **exec_struct)
 	if (!*exec_struct)
 		return (-1);
 	(*exec_struct)->exit_code = 0;
-	(*exec_struct)->exec_sublines = 0;
+	(*exec_struct)->exec_substrings = 0;
 	(*exec_struct)->envp_struct = NULL;
 	return (0);
 }

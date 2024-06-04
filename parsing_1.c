@@ -1,7 +1,8 @@
 #include "minishell.h"
 
 //t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd)//int fd is used only for script.sh execution
-t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct)
+t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, \
+int exit_code)
 {
 	t_command_line	*command_line;
 	char			*remaining_line;
@@ -9,12 +10,14 @@ t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct)
 	command_line = NULL;
 	if (init_command_line_struct(&command_line) == -1)
 		error_allocation_command_line(&command_line, envp_struct);
+	command_line->exit_code = exit_code;
+//	printf("exit_code : %d\n", command_line->exit_code);
 	remaining_line = skip_first_whitespaces(str);
 	if (ft_strlen(remaining_line) == 0)
 		return (command_line);
 	cut_remaining_line_on_pipes(&command_line, remaining_line, envp_struct);
-	if (command_line->exit_code != 0)
-		return (command_line);
+//	if (command_line->exit_code != 0)
+//		return (command_line);
 //	ft_native_lst_print(command_line, fd);
 	expand_contents(&command_line);
 //	ft_expanded_lst_print(command_line, 1);//to delete
@@ -24,13 +27,22 @@ t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct)
 
 void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line, t_envp_struct **envp_struct)
 {
+	int	exit_code;
+
+	exit_code = 0;
 	while(ft_strlen(remaining_line))
 	{
-		(*command_line)->exit_code = parse_substrings(&remaining_line, *command_line);
-		if ((*command_line)->exit_code == -1)
+		exit_code = parse_substrings(&remaining_line, *command_line);
+		if (exit_code == -1)
+		{
+			(*command_line)->exit_code = exit_code;
 			error_allocation_command_line(command_line, envp_struct);
-		if ((*command_line)->exit_code != 0)//handle return of parse_substrings (1 or 2 when errors)
+		}
+		if (exit_code != 0)//handle return of parse_substrings (1 or 2 when errors)
+		{
+			(*command_line)->exit_code = exit_code;
 			return ;
+		}
 		remaining_line = skip_first_whitespaces(remaining_line);
 		if (remaining_line[0] == '|')
 		{
@@ -242,12 +254,19 @@ int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
 		return (-1);
 	while (check_char_validity(remaining_line, len_to_quote, flag, j) == 0)
 	{
-		if (((len_to_quote + flag + j) <= (len_to_end + 1)) && \
+ 		if ((len_to_quote + flag + j) <= (len_to_end + 1) && \
+        (remaining_line[len_to_quote + flag + j] == '\'' || \
+		remaining_line[len_to_quote + flag + j] == '\"'))
+            return_value = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], \
+			(char []){remaining_line[len_to_quote + flag + j], '\0'}, 0);
+
+/*		if (((len_to_quote + flag + j) <= (len_to_end + 1)) && \
 		(remaining_line[len_to_quote + flag + j] == '\''))
 			return_value = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\'", 0);
 		else if ((len_to_quote + flag + j) <= (len_to_end + 1) && \
 		remaining_line[len_to_quote + flag + j] == '\"')
-			return_value = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);
+			return_value = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);*/
+
 		if ( return_value == -1)
 				return (-1);
 		len_to_quote += return_value;
