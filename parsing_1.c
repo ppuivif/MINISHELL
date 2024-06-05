@@ -2,86 +2,108 @@
 
 //t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd)//int fd is used only for script.sh execution
 t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, \
-int exit_code)
+int previous_exit_code)
 {
 	t_command_line	*command_line;
 	char			*remaining_line;
+	int				status_code;
 
 	command_line = NULL;
+	status_code = 0;
 	if (init_command_line_struct(&command_line) == -1)
-		error_allocation_command_line(&command_line, envp_struct);
-	command_line->exit_code = exit_code;
+		error_allocation_command_line_and_exit(&command_line, envp_struct);
+	command_line->previous_exit_code = previous_exit_code;
 //	printf("exit_code : %d\n", command_line->exit_code);
 	remaining_line = skip_first_whitespaces(str);
 	if (ft_strlen(remaining_line) == 0)
 		return (command_line);
-	cut_remaining_line_on_pipes(&command_line, remaining_line, envp_struct);
-//	if (command_line->exit_code != 0)
-//		return (command_line);
-//	ft_native_lst_print(command_line, fd);
+	status_code = cut_remaining_line_on_pipes(&command_line, \
+	remaining_line, envp_struct);
+	if (status_code != 0)
+		return (command_line);
+//	ft_native_lst_print(command_line, 1);
+//	ft_native_lst_print(command_line, fd);//to use bash script
 	expand_contents(&command_line);
-//	ft_expanded_lst_print(command_line, 1);//to delete
-//	ft_expanded_lst_print(command_line, fd);//to delete
+//	ft_expanded_lst_print(command_line, 1);
+//	ft_expanded_lst_print(command_line, fd);//to use bash script
 	return (command_line);
 }
 
-void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line, t_envp_struct **envp_struct)
+static int	is_pipe_latest_character(char **remaining_line)
 {
-	int	exit_code;
-
-	exit_code = 0;
-	while(ft_strlen(remaining_line))
+	if (*remaining_line[0] && *remaining_line[0] == '|')
 	{
-		exit_code = parse_substrings(&remaining_line, *command_line);
-		if (exit_code == -1)
+		(*remaining_line)++;
+		*remaining_line = skip_first_whitespaces(*remaining_line);
+		if (ft_strlen(*remaining_line) == 0)
+			return (true);
+		return (false);
+	}
+	else
+		return (false);
+}
+
+static int	is_pipe_first_character(char *remaining_line)
+{
+	if (remaining_line[0] && remaining_line[0] == '|')
+		return (true);
+	else
+		return (false);
+}
+
+int	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line, t_envp_struct **envp_struct)
+{
+	int	status_code;
+
+	status_code = 0;
+	while (ft_strlen(remaining_line))
+	{
+		status_code = parse_substrings(&remaining_line, *command_line);
+		if (status_code == -1)
+			error_allocation_command_line_and_exit(command_line, envp_struct);
+		if (status_code > 0)//handle return of parse_substrings (1 or 2 when errors)
 		{
-			(*command_line)->exit_code = exit_code;
-			error_allocation_command_line(command_line, envp_struct);
-		}
-		if (exit_code != 0)//handle return of parse_substrings (1 or 2 when errors)
-		{
-			(*command_line)->exit_code = exit_code;
-			return ;
+			(*command_line)->current_exit_code = status_code;
+			error_handling(*command_line);
+			return (1);
 		}
 		remaining_line = skip_first_whitespaces(remaining_line);
-		if (remaining_line[0] == '|')
+		if (is_pipe_latest_character(&remaining_line) == true)
 		{
-			remaining_line++;
-			remaining_line = skip_first_whitespaces(remaining_line);
-			if (ft_strlen(remaining_line) == 0)
-			{
-				(*command_line)->exit_code = 2;//case of | at last position
-				return ;
-			}	
+			(*command_line)->current_exit_code = 2;//syntax_error
+			error_handling(*command_line);
+			return (2);
 		}
 	}
+	return (0);
 }
 
 int	parse_substrings(char **remaining_line, t_command_line *command_line)
 {
-	t_substring		*substring;
-	int return_value;	
+	t_substring	*substring;
+	int			status_code;	
 
 	substring = NULL;
-	return_value = 0;
+	status_code = 0;
 	if (init_substring_struct(&substring) == -1)
 		return (-1);
 	*remaining_line = skip_first_whitespaces(*remaining_line);
-	if (!*remaining_line || *remaining_line[0] == '|')//case of | at first position (to handle here or later when argument empty)
+
+	if (is_pipe_first_character(*remaining_line) == true)
 	{
 		free(substring);
-		return (2);// to confirm
+		return (2);//syntax_error
 	}
 	if (ft_strlen(*remaining_line) == 0)
 	{
 		free(substring);
 		return (0);// to confirm
 	}
-	return_value = get_arguments_and_redirections(&substring, remaining_line);
-	if (return_value != 0)
+	status_code = get_arguments_and_redirections(&substring, remaining_line);
+	if (status_code != 0)
 	{
 		free(substring);
-		return (return_value);
+		return (status_code);
 	}
 	ft_lst_add_back1(&command_line->substrings, substring);
 	return (0);

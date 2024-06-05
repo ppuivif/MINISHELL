@@ -25,4 +25,17 @@ echo $? give 127
 
 -----------------------------------------------------------------------------------------------
 
+ppuivif@1H7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ export toto="a    b"
+ppuivif@1H7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ < $toto
+bash: $toto: ambiguous redirect
 
+echo $? give 1
+
+-----------------------------------------------------------------------------------------------
+
+ppuivif@1H7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ echo (
+bash: syntax error near unexpected token `newline'
+
+echo $? give 2
+
+-----------------------------------------------------------------------------------------------

@@ -1,5 +1,19 @@
 #include "minishell.h"
 
+static int is_non_valid_characters(char *str)
+{
+	int		return_value;
+
+	return_value = 1;
+	if (str[0] && !str[1] && (str[0] == '{' || str[0] == '[')) 
+		return_value = 0;
+	else if (str[0] && str[1] && str[0] == '{' && str[1] != '}')
+		return_value = 0;
+	else if (str[0] && str[1] && str[0] == '[' && str[1] != ']')
+		return_value = 0;
+	return (return_value);
+}
+
 static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp)
 {
 	int	len;
@@ -17,9 +31,9 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp)
 }
 
 size_t	simple_expand_content(char *str, char **extracted_line, \
-t_command_line *command_line)
+t_command_line **command_line)
 {
-	int	len;
+	int		len;
 
 	len = 0;
 	if (str[1] == '\"' || str[1] == '\'')
@@ -27,9 +41,16 @@ t_command_line *command_line)
 		*extracted_line = ft_strdup("");
 		len = 1;
 	}
+	else if (is_non_valid_characters(&str[1]) == 0)
+	{
+		*extracted_line = ft_strdup("");
+		(*command_line)->current_exit_code = 2;
+		error_handling(*command_line);
+		len = ft_strlen(str);
+	}
 	else if (str[1] == '?')
 	{
-		*extracted_line = ft_strdup(ft_itoa(command_line->exit_code)); 
+		*extracted_line = ft_itoa((*command_line)->previous_exit_code);
 		len = 2;
 	}
 	else

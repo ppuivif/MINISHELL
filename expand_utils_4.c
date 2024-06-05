@@ -78,7 +78,7 @@ void	complete_expand_content(char **str, t_command_line *command_line)
 		{
 			if (str[0][i + 1] == '?')
 			{
-				tmp = ft_strdup(ft_itoa(command_line->exit_code));
+				tmp = ft_itoa(command_line->previous_exit_code);
 				i += 2;
 			}
 			else

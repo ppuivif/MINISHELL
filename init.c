@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/05 07:01:08 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/05 18:14:10 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,8 @@ int	init_command_line_struct(t_command_line **command_line)
 	*command_line = ft_calloc(1, sizeof(t_command_line));
 	if (!*command_line)
 		return (-1);
-	(*command_line)->exit_code = 0;
+	(*command_line)->previous_exit_code = 0;
+	(*command_line)->current_exit_code = 0;
 	(*command_line)->substrings = NULL;
 	return (0);
 }
@@ -110,8 +111,8 @@ int	init_exec_redirection_struct(t_exec_redirection **exec_redirection)
 	(*exec_redirection)->substring_index = 0;
 	(*exec_redirection)->file = NULL;
 	(*exec_redirection)->e_redirection = 2;
-	(*exec_redirection)->fd_input = 0;
-	(*exec_redirection)->fd_output = 0;
+	(*exec_redirection)->fd_input = STDIN_FILENO;
+	(*exec_redirection)->fd_output = STDOUT_FILENO;
 	(*exec_redirection)->next = NULL;
 	return (0);
 }

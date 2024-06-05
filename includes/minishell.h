@@ -24,7 +24,7 @@ void get_envp(char **envp, t_envp_struct **envp_struct);
 
 //t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct, int exit_code, int fd);
 t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct, int exit_code);
-void	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line, t_envp_struct **envp_struct);
+int		cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line, t_envp_struct **envp_struct);
 int		parse_substrings(char **remaining_line, t_command_line *command_line);
 int		get_arguments_and_redirections(t_substring **substring, char **remaining_line);
 int		get_redirections(char **remaining_line, t_substring *substring);
@@ -51,7 +51,7 @@ unsigned int count_angled_bracket(char *str);
 
 void	expand_contents(t_command_line **command_line);
 void	expand_redirections(t_substring *substring, t_native_redirection *n_redirection);
-void	expand_arguments(t_substring *substring, t_native_argument *n_argument, t_command_line *command_line);
+void	expand_arguments(t_substring *substring, t_native_argument *n_argument, t_command_line **command_line);
 
 size_t	get_len_and_extract_between_single_quotes(char *str, char **extracted_line);
 size_t	get_len_and_extract_with_single_quotes(char *str, char **extracted_line);
@@ -65,7 +65,7 @@ size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line);
 
 void	expand_string_after_dollar(char **str);
 void	complete_expand_content(char **str, t_command_line *command_line);
-size_t	simple_expand_content(char *str, char **extracted_line, t_command_line *command_line);
+size_t	simple_expand_content(char *str, char **extracted_line, t_command_line **command_line);
 void	expand_content_when_heredoc(char **str);
 
 void	build_exec_struct(t_exec_struct **exec_struct);
@@ -78,10 +78,10 @@ void	check_command_with_options(t_exec_substring **exec_substring, t_exec_struct
 void	check_path_in_envp(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 int		check_path_cmd_validity(char **path, t_exec_substring **exec_substring);
 
-void	error_allocation_envp_struct(void);
-void	error_allocation_command_line(t_command_line **command_line, t_envp_struct **envp_struct);
-void	error_allocation_exec_struct(t_exec_struct **exec_struct);
-void	error_handling(t_command_line **command_line);
+void	error_allocation_envp_struct_and_exit(void);
+void	error_allocation_command_line_and_exit(t_command_line **command_line, t_envp_struct **envp_struct);
+void	error_allocation_exec_struct_and_exit(t_exec_struct **exec_struct);
+void	error_handling(t_command_line *command_line);
 
 
 #endif

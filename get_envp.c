@@ -6,7 +6,7 @@ static void	add_line(char *envp, t_envp_struct **envp_struct)
 
 	new_element = NULL;
 	if (init_envp_struct(&new_element) == -1)
-		error_allocation_envp_struct();
+		error_allocation_envp_struct_and_exit();
 	new_element->content = ft_strdup(envp);
 	ft_lst_add_back6(envp_struct, new_element);
 }

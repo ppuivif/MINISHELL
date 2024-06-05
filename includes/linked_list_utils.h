@@ -23,7 +23,7 @@ typedef enum e_redirection
 	REDIRECTION_INDEFINED = 2,
 	REDIRECTION_APPEND = 3,
 	REDIRECTION_HEREDOC = 4,
-//	REDIRECTION_TEXT = 5,
+	REDIRECTION_AMBIGUOUS = 5,
 } e_redirection;
 
 typedef struct s_expanded_argument t_expanded_argument;
@@ -83,7 +83,8 @@ typedef struct s_substring
 typedef struct s_command_line t_command_line;
 typedef struct s_command_line
 {
-	int			exit_code;
+	int			previous_exit_code;
+	int			current_exit_code;
 	t_substring	*substrings;
 }	t_command_line;
 
@@ -149,7 +150,7 @@ t_native_argument		*ft_lst_last3(t_native_argument *head);
 t_expanded_redirection	*ft_lst_last4(t_expanded_redirection *head);
 t_expanded_argument		*ft_lst_last5(t_expanded_argument *head);
 t_envp_struct			*ft_lst_last6(t_envp_struct *head);
-t_exec_substring			*ft_lst_last7(t_exec_substring *head);
+t_exec_substring		*ft_lst_last7(t_exec_substring *head);
 t_exec_redirection		*ft_lst_last8(t_exec_redirection *head);
 t_exec_argument			*ft_lst_last9(t_exec_argument *head);
 

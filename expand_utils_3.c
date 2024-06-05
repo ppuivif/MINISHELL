@@ -2,7 +2,8 @@
 
 static int	expand_variables_when_dollar_first(char *remaining_line, char **result)
 {
-	int	len_to_cut;
+	int		len_to_cut;
+	char	*tmp;
 
 	len_to_cut = 0;
 	if ((remaining_line[1] && ft_isspace(remaining_line[1]) != 0))
@@ -12,7 +13,9 @@ static int	expand_variables_when_dollar_first(char *remaining_line, char **resul
 		else
 		{
 			len_to_cut = (int)strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
-			*result = getenv(ft_substr(&remaining_line[1], 0, len_to_cut));
+			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);
+			*result = getenv(tmp);
+			free_and_null(tmp);
 			if (!*result)
 				*result = "";
 		}

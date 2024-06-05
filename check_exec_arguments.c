@@ -20,7 +20,7 @@ t_exec_struct **exec_struct)
 	cmd_arr_size = ft_lst_size9((*exec_substring)->exec_arguments);
 	cmd_arr = ft_calloc(cmd_arr_size + 1, sizeof(char *));
 	if (!cmd_arr)
-		error_allocation_exec_struct(exec_struct);
+		error_allocation_exec_struct_and_exit(exec_struct);
 	tmp = (*exec_substring)->exec_arguments;
 	i = 0;
 	while (tmp)
@@ -42,7 +42,7 @@ t_exec_struct **exec_struct)
 	{
 		(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
 		if (!(*exec_substring)->path_with_cmd)
-			error_allocation_exec_struct(exec_struct);
+			error_allocation_exec_struct_and_exit(exec_struct);
 	}
 	else
 		check_path_in_envp(exec_substring, exec_struct);
@@ -59,7 +59,7 @@ static char	**build_envp_arr(t_exec_struct **exec_struct)
 	envp_arr_size = ft_lst_size6((*exec_struct)->envp_struct);
 	envp_arr = ft_calloc(envp_arr_size + 1, sizeof(char *));
 	if (!envp_arr)
-		error_allocation_exec_struct(exec_struct);
+		error_allocation_exec_struct_and_exit(exec_struct);
 	tmp = (*exec_struct)->envp_struct;
 	i = 0;
 	while (tmp)
@@ -106,21 +106,21 @@ t_exec_struct **exec_struct)
 	{
 		ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
-		(*exec_struct)->command_line->exit_code = 127;
+		(*exec_struct)->command_line->current_exit_code = 127;
 	}
 	else
 	{
 		return_value = check_path_cmd_validity(path_envp, exec_substring);
 		if (return_value == -1)
-			error_allocation_exec_struct(exec_struct);
+			error_allocation_exec_struct_and_exit(exec_struct);
 		if (return_value == 1)
 		{
 			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
 			ft_putstr_fd(": command not found\n", 2);
-			(*exec_struct)->command_line->exit_code = 127;
+			(*exec_struct)->command_line->current_exit_code = 127;
 		}
 		else
-			(*exec_struct)->command_line->exit_code = 0;
+			(*exec_struct)->command_line->current_exit_code = 0;
 	}
 	free(envp_arr);
 	envp_arr = NULL;

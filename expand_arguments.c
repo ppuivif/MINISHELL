@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 static size_t	extract_and_expand_content_of_arguments(char *content, \
-char **extracted_line, t_command_line *command_line)
+char **extracted_line, t_command_line **command_line)
 {
 	size_t	len;
 
@@ -13,7 +13,7 @@ char **extracted_line, t_command_line *command_line)
 		len = get_len_and_extract_between_double_quotes \
 		(&content[1], extracted_line);
 		if (strcspn(*extracted_line, "$") < ft_strlen(*extracted_line))
-			complete_expand_content(extracted_line, command_line);
+			complete_expand_content(extracted_line, *command_line);
 	}
 	else if (content[0] == '$')
 		len = simple_expand_content(&content[0], extracted_line, command_line);
@@ -24,7 +24,7 @@ char **extracted_line, t_command_line *command_line)
 }
 
 static int	get_definitive_content_of_arguments(char *content, char **definitive_content, \
-t_command_line *command_line)
+t_command_line **command_line)
 {
 	char	*extracted_line;
 	int		len;
@@ -46,7 +46,7 @@ t_command_line *command_line)
 }
 
 void	expand_arguments(t_substring *substring, t_native_argument *n_argument, \
-t_command_line *command_line)
+t_command_line **command_line)
 {
 	int					i;
 	t_expanded_argument	*exp_argument;
