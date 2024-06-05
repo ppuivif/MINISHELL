@@ -90,6 +90,7 @@ int main(int argc, char **argv, char **envp)
 
 			if (ft_strncmp(line, "exit", 5) == 0)
 			{
+				free_envp(&envp_struct);
 				free(line);
 				line = NULL;
 				clear_history();
@@ -107,7 +108,8 @@ int main(int argc, char **argv, char **envp)
 
 				ft_execution_lst_print(exec_struct, atoi(argv[1]));
 			}
-			exit_code = command_line->exit_code;
+			if (command_line)
+				exit_code = command_line->exit_code;
 			free(line);
 			line = NULL;
 			free_envp(&envp_struct);

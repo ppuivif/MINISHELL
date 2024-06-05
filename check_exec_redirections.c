@@ -9,7 +9,7 @@ t_exec_redirection **exec_redirection)
 	else if (exp_redirection->e_redirection == 3)
 		(*exec_redirection)->fd_output = \
 		open(exp_redirection->content, O_WRONLY | O_CREAT, 0644);
-	(*exec_redirection)->file = exp_redirection->content;
+	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
 	(*exec_redirection)->e_redirection = exp_redirection->e_redirection;
 	if ((*exec_redirection)->fd_output == -1)
 	{
@@ -34,7 +34,7 @@ t_exec_redirection **exec_redirection)
 			perror(exp_redirection->content);
 		return_value = 1;
 	}
-	(*exec_redirection)->file = exp_redirection->content;
+	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
 	(*exec_redirection)->e_redirection = exp_redirection->e_redirection;
 	return (return_value);
 }
@@ -45,9 +45,15 @@ t_exec_redirection **exec_redirection)
 	char	*line;
 	int		fd;
 	char	*limiter;
+	char	*filename;
+	char	*index;
 
 	line = NULL;
-	fd = open("heredoc_tmp.txt", O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	index = ft_itoa((*exec_redirection)->substring_index);
+	filename = ft_strjoin("heredoc_tmp_", index);
+	free (index);
+	index = NULL;
+	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 		return (-1);
 	limiter = ft_strjoin(exp_redirection->content, "\n");
@@ -67,7 +73,7 @@ t_exec_redirection **exec_redirection)
 	}
 	free(limiter);
 	limiter = NULL;
-	(*exec_redirection)->file = "heredoc_tmp.txt";
+	(*exec_redirection)->file = filename;
 	(*exec_redirection)->e_redirection = 1;
 	(*exec_redirection)->fd_input = open((*exec_redirection)->file, O_RDONLY);
 	if ((*exec_redirection)->fd_input == -1)

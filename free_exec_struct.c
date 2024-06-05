@@ -35,20 +35,6 @@
 	str_arr = NULL;
 }*/
 
-static void	free_exec_struct(t_exec_struct **exec_struct)
-{
-//	close_fd(main_struct->fd_input);
-//	close_fd(main_struct->fd_output);
-	/*while (main_struct->head != NULL)
-		ft_lst_dc_delone(&main_struct->head, main_struct->head);*/
-	
-	
-	
-	if (*exec_struct)
-		free(*exec_struct);
-}
-
-
 static void	free_exec_argument_struct(t_exec_argument **exec_arguments)
 {
 	t_exec_argument	*tmp;
@@ -56,7 +42,7 @@ static void	free_exec_argument_struct(t_exec_argument **exec_arguments)
 	while (ft_lst_size9(*exec_arguments))
 	{
 		tmp = (*exec_arguments)->next;
-		free(*exec_arguments);
+			free_and_null(*exec_arguments);
 		*exec_arguments = tmp;
 	}
 }
@@ -68,8 +54,10 @@ static void	free_exec_redirection_struct(t_exec_redirection **exec_redirections)
 	while (ft_lst_size8(*exec_redirections))
 	{
 		tmp = (*exec_redirections)->next;
-//		free ((*exec_redirections)->file);
-		free (*exec_redirections);
+		close_fd((*exec_redirections)->fd_input);
+		close_fd((*exec_redirections)->fd_output);
+		free_and_null((*exec_redirections)->file);
+		free_and_null(*exec_redirections);
 		*exec_redirections = tmp;
 	}
 }
@@ -85,11 +73,11 @@ static void	free_exec_substring_struct(t_exec_substring **exec_substrings)
 			free_exec_redirection_struct(&(*exec_substrings)->exec_redirections);
 		if ((*exec_substrings)->exec_arguments)
 			free_exec_argument_struct(&(*exec_substrings)->exec_arguments);
-		free ((*exec_substrings)->exec_redirections);
-		free ((*exec_substrings)->exec_arguments);
-		free((*exec_substrings)->cmd_arr);
-		free((*exec_substrings)->path_with_cmd);
-		free ((*exec_substrings));
+		free_and_null((*exec_substrings)->exec_redirections);
+		free_and_null((*exec_substrings)->exec_arguments);
+		free_and_null((*exec_substrings)->cmd_arr);
+		free_and_null((*exec_substrings)->path_with_cmd);
+		free_and_null((*exec_substrings));
 		*exec_substrings = tmp;
 	}
 }
@@ -100,7 +88,7 @@ void	free_all_exec_struct(t_exec_struct **exec_struct)
 	{
 		if ((*exec_struct)->exec_substrings)
 			free_exec_substring_struct(&(*exec_struct)->exec_substrings);
-		free_exec_struct(exec_struct);
+		free_and_null(*exec_struct);
 	}
 }
 

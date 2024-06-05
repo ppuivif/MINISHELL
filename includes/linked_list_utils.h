@@ -91,6 +91,7 @@ typedef struct s_command_line
 typedef struct s_exec_redirection t_exec_redirection;
 typedef struct s_exec_redirection
 {
+	int					substring_index;
 	char				*file;
 	e_redirection		e_redirection;
 	int					fd_input;
@@ -108,6 +109,7 @@ typedef struct s_exec_argument
 typedef struct s_exec_substring t_exec_substring;
 typedef struct s_exec_substring
 {
+	int					index;
 	t_exec_redirection	*exec_redirections;
 	t_exec_argument		*exec_arguments;
 	char				**cmd_arr;
@@ -165,10 +167,6 @@ void	free_envp(t_envp_struct **envp_struct);
 void	free_all_command_line(t_command_line **command_line);
 void	free_all_exec_struct(t_exec_struct **exec_struct);
 void	free_substring(t_substring **substrings);
-void	free_n_redirection(t_native_redirection **redirections);
-void	free_exp_redirection(t_expanded_redirection **exp_redirections);
-void	free_n_argument(t_native_argument **arguments);
-void	free_exp_argument(t_expanded_argument **exp_arguments);
 
 //void		ft_lst_delone(t_element **head, t_element *element_to_del);
 

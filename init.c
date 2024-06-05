@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/04 19:14:08 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/05 07:01:08 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ int	init_exec_redirection_struct(t_exec_redirection **exec_redirection)
 	*exec_redirection = ft_calloc(1, sizeof(t_exec_redirection));
 	if (!*exec_redirection)
 		return (-1);	
+	(*exec_redirection)->substring_index = 0;
 	(*exec_redirection)->file = NULL;
 	(*exec_redirection)->e_redirection = 2;
 	(*exec_redirection)->fd_input = 0;
@@ -119,7 +120,8 @@ int	init_exec_substring_struct(t_exec_substring **exec_substring)
 {
 	*exec_substring = ft_calloc(1, sizeof(t_exec_substring));
 	if (!*exec_substring)
-		return (-1);	
+		return (-1);
+	(*exec_substring)->index = 0;
 	(*exec_substring)->exec_redirections = NULL;
 	(*exec_substring)->exec_arguments = NULL;
 	(*exec_substring)->cmd_arr = NULL;
