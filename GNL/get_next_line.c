@@ -3,10 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
+<<<<<<< HEAD
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:15:24 by ppuivif           #+#    #+#             */
 /*   Updated: 2024/06/06 18:44:17 by drabarza         ###   ########.fr       */
+=======
+/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/12/14 14:15:24 by ppuivif           #+#    #+#             */
+/*   Updated: 2024/06/06 18:35:21 by ppuivif          ###   ########.fr       */
+>>>>>>> PAP
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +108,8 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = NULL;
-	//while (1)
+	write(1, "> ", 2);
+	while (1)
 	{
 		tmp = ft_get_calloc((BUFFER_SIZE + 1), sizeof(char));
 		if (!tmp)
