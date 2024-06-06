@@ -14,8 +14,13 @@ void	expand_contents(t_command_line **command_line)
 		while (tmp2 && (*command_line)->current_exit_code == 0)
 		{
 			expand_redirections(tmp1, tmp2, command_line);
+			if ((*command_line)->current_exit_code == 1)
+				return ;
 			if (tmp1->exp_redirections->alloc_succeed == false)
+			{
 				free_all_command_line(command_line);
+				return ;
+			}
 			tmp2 = tmp2->next;
 		}
 		tmp3 = tmp1->n_arguments;

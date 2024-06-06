@@ -23,9 +23,9 @@ void			print_arr(char **arr);
 void get_envp(char **envp, t_envp_struct **envp_struct);
 
 //t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct, int exit_code, int fd);
-t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct, int exit_code);
+t_command_line 	*parse_command_line(char **argv, char *str, t_envp_struct **envp_struct, int exit_code);
 int		cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line);
-int		parse_substrings(char **remaining_line, t_command_line *command_line);
+int		parse_substrings(char **remaining_line, t_command_line **command_line);
 int		get_arguments_and_redirections(t_substring **substring, char **remaining_line, t_command_line **command_line);
 int		get_redirections(char **remaining_line, t_substring *substring, t_command_line **command_line);
 int		get_arguments(char **remaining_line, t_substring *substring, t_command_line **command_line);

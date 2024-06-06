@@ -83,6 +83,7 @@ typedef struct s_substring
 typedef struct s_command_line t_command_line;
 typedef struct s_command_line
 {
+	char			**argv;
 	int				previous_exit_code;
 	int				current_exit_code;
 	t_substring		*substrings;

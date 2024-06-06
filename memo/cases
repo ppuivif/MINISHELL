@@ -109,5 +109,12 @@ export limiter="ceci est un limiteur"
 idem en outfile
 
 
+envp -i ./minishell : efface les variables d'env. avant de lancer le programme
+donc recreer l'env. au debut et travailler sur la copie
 
+creer des fonctions d'ajout, de delete, ..., pour manipuler la liste chainee de variables d'env.
 
+echo $0 donne le nom du programme
+$1, ... les arguments du programme
+
+$$ affiche le PID

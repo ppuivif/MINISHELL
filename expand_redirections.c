@@ -2,6 +2,8 @@
 
 static int	is_ambiguous_redirection(char *extracted_line)
 {
+	if (ft_strlen(extracted_line) == 0)
+			return (true);
 	if (strcspn(extracted_line, " \t\n\v\f\r\0") < ft_strlen(extracted_line))
 			return (true);
 	return (false);
@@ -25,8 +27,12 @@ char **extracted_line)
 			complete_expand_content(extracted_line, NULL);
 	}
 	else if (content[0] == '$')
+	{
 		len = simple_expand_content(content, \
 		extracted_line, NULL);
+		if (is_ambiguous_redirection(*extracted_line) == true)
+			len = -2;
+	}
 	else
 		len = get_len_and_extract_until_next_quote_or_dollar \
 		(content, extracted_line);
@@ -53,12 +59,8 @@ char **extracted_line)
 		(&content[1], extracted_line);
 	}
 	else
-	{
 		len = get_len_and_extract_until_next_quote \
 		(content, extracted_line);
-		if (is_ambiguous_redirection(*extracted_line) == true)
-			len = -2;
-	}
 	return (len);
 }
 
@@ -70,15 +72,18 @@ int e_redirection)
 
 	len = 0;
 	if (e_redirection != 4)
+	{
 		len = (int)common_extract_and_expand_content_of_redirections \
 		(content, &extracted_line);
+		if (len == -2)
+		{
+			free_and_null(extracted_line);
+			return (-2);//ambiguous_redirection
+		}
+	}
 	else
-	{
 		len = (int)heredoc_extract_and_expand_content_of_redirections \
 		(content, &extracted_line);
-		if (len == -2)
-			return (-2);//amiguous_redirection
-	}
 	if (!extracted_line)
 		return (-1);
 	if (!(*definitive_content))
@@ -86,8 +91,7 @@ int e_redirection)
 	else
 		*definitive_content = ft_strjoin_freed(*definitive_content, \
 		extracted_line);//protection sur malloc à prévoir
-	free(extracted_line);
-	extracted_line = NULL;
+	free_and_null(extracted_line);
 	if (!definitive_content)
 		return (-1);
 	return (len);
@@ -114,7 +118,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 		if (len == -2)
 		{
 			ft_putstr_fd(n_redirection->content, 2);			
-			ft_putstr_fd(": ambiguous redirect", 2);			
+			ft_putstr_fd(": ambiguous redirect\n", 2);			
 			free_and_null(exp_redirection);
 			(*command_line)->current_exit_code = 1;
 			return ;

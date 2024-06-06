@@ -1,7 +1,7 @@
 #include "minishell.h"
 
 //t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd)//int fd is used only for script.sh execution
-t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, \
+t_command_line	*parse_command_line(char **argv, char *str, t_envp_struct **envp_struct, \
 int previous_exit_code)
 {
 	t_command_line	*command_line;
@@ -15,6 +15,7 @@ int previous_exit_code)
 		free_envp(envp_struct);
 		error_allocation_command_line_and_exit(&command_line);
 	}
+	command_line->argv = argv;
 	command_line->previous_exit_code = previous_exit_code;
 	command_line->envp_struct = *envp_struct;
 //	printf("exit_code : %d\n", command_line->exit_code);
@@ -39,7 +40,7 @@ int	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_l
 	status_code = 0;
 	while (ft_strlen(remaining_line))
 	{
-		status_code = parse_substrings(&remaining_line, *command_line);
+		status_code = parse_substrings(&remaining_line, command_line);
 		if (status_code == 2)
 		{
 			(*command_line)->current_exit_code = 2;//syntax_error
@@ -57,7 +58,7 @@ int	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_l
 	return (0);
 }
 
-int	parse_substrings(char **remaining_line, t_command_line *command_line)
+int	parse_substrings(char **remaining_line, t_command_line **command_line)
 {
 	t_substring	*substring;
 	int			status_code;	
@@ -70,15 +71,15 @@ int	parse_substrings(char **remaining_line, t_command_line *command_line)
 	if (is_pipe_first_character(*remaining_line) == true)
 		return (2);//syntax_error
 	if (init_substring_struct(&substring) == -1)
-		error_allocation_command_line_and_exit(&command_line);
+		error_allocation_command_line_and_exit(command_line);
 	status_code = get_arguments_and_redirections(&substring, remaining_line, \
-	&command_line);
+	command_line);
 	if (status_code == 2)
 	{
 		free_and_null(substring);
 		return (2);//syntax_error 
 	}
-	ft_lst_add_back1(&command_line->substrings, substring);
+	ft_lst_add_back1(&(*command_line)->substrings, substring);
 	return (0);
 }
 

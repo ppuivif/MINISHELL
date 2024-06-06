@@ -76,7 +76,7 @@ int main(int argc, char **argv, char **envp)
 			if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
 			{
 //				command_line = parse_command_line(line, &envp_struct, atoi(argv[1]));//to run script.sh
-				command_line = parse_command_line(line, &envp_struct, previous_exit_code);
+				command_line = parse_command_line(argv, line, &envp_struct, previous_exit_code);
 //				if (command_line->exit_code != 0)
 //					error_handling(&command_line);
 			}
@@ -100,7 +100,7 @@ int main(int argc, char **argv, char **envp)
 				error_allocation_exec_struct_and_exit(&exec_struct);
 			exec_struct->envp_struct = envp_struct;
 			exec_struct->command_line = command_line;
-			if (command_line->substrings && command_line->current_exit_code != 2)
+			if (command_line->substrings && command_line->current_exit_code == 0)
 			{
 				build_exec_struct(&exec_struct);
 //				if (command_line->exit_code != 0)
