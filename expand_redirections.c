@@ -1,5 +1,13 @@
 #include "minishell.h"
 
+static int	is_ambiguous_redirection(char *extracted_line)
+{
+	if (strcspn(extracted_line, " \t\n\v\f\r\0") < ft_strlen(extracted_line))
+			return (true);
+	return (false);
+}
+
+
 static size_t	common_extract_and_expand_content_of_redirections(char *content, \
 char **extracted_line)
 {
@@ -33,7 +41,7 @@ char **extracted_line)
 	len = 0;
 	if (content[0] == '$' && (content[1] == '\'' || content[1] == '\"'))
 	{
-		(*extracted_line) = ft_strdup("");
+		(*extracted_line) = ft_strdup("");//protection malloc
 		len = 1;
 	}
 	else if (content[0] == '\'')
@@ -45,8 +53,12 @@ char **extracted_line)
 		(&content[1], extracted_line);
 	}
 	else
+	{
 		len = get_len_and_extract_until_next_quote \
 		(content, extracted_line);
+		if (is_ambiguous_redirection(*extracted_line) == true)
+			len = -2;
+	}
 	return (len);
 }
 
@@ -61,15 +73,19 @@ int e_redirection)
 		len = (int)common_extract_and_expand_content_of_redirections \
 		(content, &extracted_line);
 	else
+	{
 		len = (int)heredoc_extract_and_expand_content_of_redirections \
 		(content, &extracted_line);
+		if (len == -2)
+			return (-2);//amiguous_redirection
+	}
 	if (!extracted_line)
 		return (-1);
 	if (!(*definitive_content))
-		*definitive_content = ft_strdup(extracted_line);
+		*definitive_content = ft_strdup(extracted_line);//protection sur malloc à prévoir
 	else
 		*definitive_content = ft_strjoin_freed(*definitive_content, \
-		extracted_line);
+		extracted_line);//protection sur malloc à prévoir
 	free(extracted_line);
 	extracted_line = NULL;
 	if (!definitive_content)
@@ -78,7 +94,7 @@ int e_redirection)
 }
 
 void	expand_redirections(t_substring *substring, \
-t_native_redirection *n_redirection)
+t_native_redirection *n_redirection, t_command_line **command_line)
 {
 	int						i;
 	int						len;
@@ -95,8 +111,19 @@ t_native_redirection *n_redirection)
 	{
 		len = get_definitive_content_of_redirections(&n_redirection->content[i], \
 		&definitive_content, n_redirection->e_redirection);
+		if (len == -2)
+		{
+			ft_putstr_fd(n_redirection->content, 2);			
+			ft_putstr_fd(": ambiguous redirect", 2);			
+			free_and_null(exp_redirection);
+			(*command_line)->current_exit_code = 1;
+			return ;
+		}
 		if (len == -1)
+		{
 			exp_redirection->alloc_succeed = false;//which treatment ?
+			error_allocation_command_line_and_exit(command_line);
+		}
 		i += len;
 	}
 	exp_redirection->e_redirection = n_redirection->e_redirection;

@@ -4,7 +4,10 @@ NAME  = minishell
 #SRCDIR = src
 #OBJDIR = obj
 SRCS = minishell.c \
-		get_envp.c arr_utils.c parsing_1.c expand_contents.c expand_redirections.c expand_arguments.c\
+		get_and_free_envp.c arr_utils.c\
+		parsing_substrings.c parsing_redirections.c parsing_arguments.c\
+		parsing_utils_1.c parsing_utils_2.c\
+		expand_contents.c expand_redirections.c expand_arguments.c\
 		expand_utils_1.c expand_utils_2.c expand_utils_3.c expand_utils_4.c expand_utils_5.c\
 		build_execution.c check_exec_redirections.c check_exec_arguments.c error_handling.c
 

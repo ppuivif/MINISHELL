@@ -35,8 +35,8 @@ void	free_envp(t_envp_struct **envp_struct)
 	while (ft_lst_size6(*envp_struct))
 	{
 		tmp = (*envp_struct)->next;
-		free((*envp_struct)->content);
-		free(*envp_struct);
+		free_and_null((*envp_struct)->content);
+		free_and_null(*envp_struct);
 		*envp_struct = NULL;
 		*envp_struct = tmp;
 	}

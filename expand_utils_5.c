@@ -2,16 +2,60 @@
 
 static int is_non_valid_characters(char *str)
 {
-	int		return_value;
-
-	return_value = 1;
-	if (str[0] && !str[1] && (str[0] == '{' || str[0] == '[')) 
-		return_value = 0;
+	if (str[0] && !str[1] && (str[0] == '{' || str[0] == '[' || \
+	str[0] == '(' || str[0] == ')'))
+		return (true);
 	else if (str[0] && str[1] && str[0] == '{' && str[1] != '}')
-		return_value = 0;
+		return (true);
 	else if (str[0] && str[1] && str[0] == '[' && str[1] != ']')
-		return_value = 0;
-	return (return_value);
+		return (true);
+	return (false);
+}
+
+static size_t	handle_special_characters_after_dollar(char *str, char **extracted_line, \
+t_command_line **command_line)
+{
+	int	len;
+
+	len = 0;
+	if (str[1] == '\"' || str[1] == '\'')
+	{
+		*extracted_line = ft_strdup("");
+		len = 1;
+	}
+	else if (is_non_valid_characters(&str[1]) == true)
+	{
+		*extracted_line = ft_strdup("");
+		(*command_line)->current_exit_code = 2;
+		error_handling(*command_line);
+		len = ft_strlen(str);
+	}
+	else if (str[1] == '}' || str[1] == ']')
+		len = get_len_and_extract_until_next_separator_first_dollar_included \
+		(str, extracted_line);
+	else if (str[1] == '?')
+	{
+		*extracted_line = ft_itoa((*command_line)->previous_exit_code);
+		len = 2;
+	}
+	return (len);
+}
+
+size_t	simple_expand_content(char *str, char **extracted_line, \
+t_command_line **command_line)
+{
+	int		len;
+
+	len = handle_special_characters_after_dollar(str, extracted_line, \
+	command_line);
+	if (len != 0)
+		return (len);
+	else
+	{
+		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
+		expand_string_after_dollar(extracted_line);
+	}
+	return (len);
 }
 
 static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp)
@@ -27,37 +71,6 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp)
 	else
 		len += get_len_and_extract_until_next_separator_dollar_excluded \
 		(str, tmp);
-	return (len);
-}
-
-size_t	simple_expand_content(char *str, char **extracted_line, \
-t_command_line **command_line)
-{
-	int		len;
-
-	len = 0;
-	if (str[1] == '\"' || str[1] == '\'')
-	{
-		*extracted_line = ft_strdup("");
-		len = 1;
-	}
-	else if (is_non_valid_characters(&str[1]) == 0)
-	{
-		*extracted_line = ft_strdup("");
-		(*command_line)->current_exit_code = 2;
-		error_handling(*command_line);
-		len = ft_strlen(str);
-	}
-	else if (str[1] == '?')
-	{
-		*extracted_line = ft_itoa((*command_line)->previous_exit_code);
-		len = 2;
-	}
-	else
-	{
-		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-		expand_string_after_dollar(extracted_line);
-	}
 	return (len);
 }
 
@@ -83,3 +96,4 @@ void	expand_content_when_heredoc(char **str)
 	free(*str);
 	*str = ft_strdup_freed(result);
 }
+

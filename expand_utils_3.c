@@ -13,7 +13,7 @@ static int	expand_variables_when_dollar_first(char *remaining_line, char **resul
 		else
 		{
 			len_to_cut = (int)strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
-			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);
+			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);//malloc à protéger
 			*result = getenv(tmp);
 			free_and_null(tmp);
 			if (!*result)
@@ -40,7 +40,7 @@ static char	*expand_variables(char **remaining_line)
 	else
 	{
 		len_to_cut = (int)strcspn(remaining_line[0], "$\0");
-		result = ft_substr(remaining_line[0], 0, len_to_cut);
+		result = ft_substr(remaining_line[0], 0, len_to_cut);//malloc à protéger
 		*remaining_line += len_to_cut;
 	}
 	return (result);
@@ -58,10 +58,10 @@ void	expand_string_after_dollar(char **str)
 	{
 		variable = expand_variables(&remaining_line);
 		if (!result)
-			result = ft_strdup(variable);
+			result = ft_strdup(variable);//malloc à protéger
 		else
-			result = ft_strjoin_freed(result, variable);
+			result = ft_strjoin_freed(result, variable);//malloc à protéger
 	}
 	free (*str);
-	*str = ft_strdup_freed(result);
+	*str = ft_strdup_freed(result);//malloc à protéger
 }

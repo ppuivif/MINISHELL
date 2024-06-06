@@ -18,12 +18,12 @@ static void	expand_string_between_single_quotes(char **str)
 		else
 			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp);
 		if (!result)
-			result = ft_strdup_freed(tmp);
+			result = ft_strdup_freed(tmp);//malloc à protéger
 		else
-			result = ft_strjoin_freed(result, tmp);
+			result = ft_strjoin_freed(result, tmp);//malloc à protéger
 	}
 	free(*str);
-	*str = ft_strdup_freed(result);
+	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
 static int	expand_content_when_dollar_first(char *str, char **tmp)
@@ -33,7 +33,7 @@ static int	expand_content_when_dollar_first(char *str, char **tmp)
 	len = 0;
 	if (str[1] == '\"' || str[1] == '\'')
 	{
-		*tmp = ft_strdup("$");
+		*tmp = ft_strdup("$");//malloc à protéger
 		len += 1;
 	}
 	else
@@ -78,7 +78,7 @@ void	complete_expand_content(char **str, t_command_line *command_line)
 		{
 			if (str[0][i + 1] == '?')
 			{
-				tmp = ft_itoa(command_line->previous_exit_code);
+				tmp = ft_itoa(command_line->previous_exit_code);//malloc à protéger
 				i += 2;
 			}
 			else
@@ -87,11 +87,11 @@ void	complete_expand_content(char **str, t_command_line *command_line)
 		else
 			i += expand_content_when_dollar_not_first(&str[0][i], &tmp);
 		if (!result)
-			result = ft_strdup_freed(tmp);
+			result = ft_strdup_freed(tmp);//malloc à protéger
 		else
-			result = ft_strjoin_freed(result, tmp);
+			result = ft_strjoin_freed(result, tmp);//malloc à protéger
 	}
 	free(*str);
-	*str = ft_strdup_freed(result);
+	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
