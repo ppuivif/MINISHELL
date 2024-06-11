@@ -166,7 +166,7 @@ void	ft_lst_add_back7(t_exec_substring **head, t_exec_substring *new_element);
 void	ft_lst_add_back8(t_exec_redirection **head, t_exec_redirection *new_element);
 void	ft_lst_add_back9(t_exec_argument **head, t_exec_argument *new_element);
 
-void	free_envp(t_envp_struct **envp_struct);
+void	free_envp_struct(t_envp_struct **envp_struct);
 void	free_all_command_line(t_command_line **command_line);
 void	free_all_exec_struct(t_exec_struct **exec_struct);
 void	free_substring(t_substring **substrings);

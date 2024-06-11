@@ -123,6 +123,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 			(*command_line)->current_exit_code = 1;
 			return ;
 		}
+		(*command_line)->current_exit_code = 0;
 		if (len == -1)
 		{
 			exp_redirection->alloc_succeed = false;//which treatment ?

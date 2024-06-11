@@ -16,7 +16,7 @@ void	get_envp(char **envp, t_envp_struct **envp_struct)
 	int	i;
 
 	i = 0;
-	if (!envp || !envp[0])
+	if (!envp_struct || !envp[0])
 	{
 		ft_putstr_fd("error\nenvp doesn't exists or is empty\n", 2);
 		exit(EXIT_FAILURE);
@@ -28,7 +28,7 @@ void	get_envp(char **envp, t_envp_struct **envp_struct)
 	}
 }
 
-void	free_envp(t_envp_struct **envp_struct)
+void	free_envp_struct(t_envp_struct **envp_struct)
 {
 	t_envp_struct	*tmp;
 

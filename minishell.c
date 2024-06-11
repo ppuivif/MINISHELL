@@ -90,7 +90,7 @@ int main(int argc, char **argv, char **envp)
 
 			if (ft_strncmp(line, "exit", 5) == 0)
 			{
-				free_envp(&envp_struct);
+				free_envp_struct(&envp_struct);
 				free(line);
 				line = NULL;
 				clear_history();
@@ -100,19 +100,20 @@ int main(int argc, char **argv, char **envp)
 				error_allocation_exec_struct_and_exit(&exec_struct);
 			exec_struct->envp_struct = envp_struct;
 			exec_struct->command_line = command_line;
-			if (command_line->substrings && command_line->current_exit_code == 0)
+			if (command_line->substrings && command_line->current_exit_code != 2)
 			{
 				build_exec_struct(&exec_struct);
 //				if (command_line->exit_code != 0)
 //					error_handling(&command_line);
 
-				ft_execution_lst_print(exec_struct, atoi(argv[1]));
+//				ft_execution_lst_print(exec_struct, atoi(argv[1]));
+				execution(&exec_struct);
 			}
 			if (command_line)
 				previous_exit_code = command_line->current_exit_code;
 			free(line);
 			line = NULL;
-			free_envp(&envp_struct);
+			free_envp_struct(&envp_struct);
 			free_all_command_line(&command_line);
 			free_all_exec_struct(&exec_struct);
 			

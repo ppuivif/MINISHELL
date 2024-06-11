@@ -48,7 +48,7 @@ t_exec_struct **exec_struct)
 		check_path_in_envp(exec_substring, exec_struct);
 }
 
-static char	**build_envp_arr(t_exec_struct **exec_struct)
+char	**build_envp_arr(t_exec_struct **exec_struct)
 {
 	char			**envp_arr;
 	size_t			envp_arr_size;

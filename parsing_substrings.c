@@ -12,7 +12,7 @@ int previous_exit_code)
 	status_code = 0;
 	if (init_command_line_struct(&command_line) == -1)
 	{
-		free_envp(envp_struct);
+		free_envp_struct(envp_struct);
 		error_allocation_command_line_and_exit(&command_line);
 	}
 	command_line->argv = argv;
