@@ -17,6 +17,7 @@
 		"ranges": "c",
 		"functional": "c",
 		"history.h": "c",
-		"minishell.h": "c"
+		"minishell.h": "c",
+		"wait.h": "c"
 	}
 }
