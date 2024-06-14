@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/14 14:15:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/11 10:07:29 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/14 10:52:36 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ char	*get_next_line(int fd)
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
 	line = NULL;
-	write(1, "> ", 2);
+//	write(1, "> ", 2);
 	while (1)
 	{
 		tmp = ft_get_calloc((BUFFER_SIZE + 1), sizeof(char));

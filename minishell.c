@@ -65,7 +65,7 @@ int main(int argc, char **argv, char **envp)
 //		ft_envp_struct_lst_print(envp_struct, 1);
 	if (argc == 2)
 	{
-		if (!isatty(STDIN_FILENO))
+		/*if (!isatty(STDIN_FILENO))
 		{
 			line = get_next_line(STDIN_FILENO);
 			ft_putstr_fd("line: ", STDERR_FILENO);
@@ -73,13 +73,14 @@ int main(int argc, char **argv, char **envp)
 			write (STDERR_FILENO, "\n", 1);
 			free(line);
 			exit(0);
-		}
-
+		}*/
+		if (!isatty(STDIN_FILENO))
+			line = get_next_line(STDIN_FILENO);
 		while (1)
 		{
 			get_envp(envp, &envp_struct);
-		//	line = readline("minishell : ");
-			line = readline("");
+			if (isatty(STDIN_FILENO))
+				line = readline("minishell : ");
 			if (!line)
 				break;
 			if (line[0])//no history on empty lines

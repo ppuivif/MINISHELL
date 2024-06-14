@@ -1,0 +1,37 @@
+https://docs.google.com/document/d/1XynZi6aDYN0siOhTaL7S_oPn-TPZKNIgIGZrxtzh2rQ/edit?usp=sharing
+
+https://www.codequoi.com/en/home-english/
+
+https://github.com/StephaneVogrig/minishell_tester
+
+ 08-MINISHELL git:(PAP) ✗ git clone https://github.com/StephaneVogrig/minishell_tester.git  
+Cloning into 'minishell_tester'...
+remote: Enumerating objects: 273, done.
+remote: Counting objects: 100% (98/98), done.
+remote: Compressing objects: 100% (44/44), done.
+remote: Total 273 (delta 71), reused 70 (delta 53), pack-reused 175
+Receiving objects: 100% (273/273), 121.02 KiB | 1.63 MiB/s, done.
+Resolving deltas: 100% (148/148), done.
+➜  08-MINISHELL git:(PAP) ✗ cd minishell_tester 
+➜  minishell_tester git:(main) git checkout bd27c1a
+Note: switching to 'bd27c1a'.
+
+You are in 'detached HEAD' state. You can look around, make experimental
+changes and commit them, and you can discard any commits you make in this
+state without impacting any branches by switching back to a branch.
+
+If you want to create a new branch to retain commits you create, you may
+do so (now or later) by using -c with the switch command. Example:
+
+  git switch -c <new-branch-name>
+
+Or undo this operation with:
+
+  git switch -
+
+Turn off this advice by setting config variable advice.detachedHead to false
+
+HEAD is now at bd27c1a change exit code handler
+➜  minishell_tester git:(bd27c1a) cd src 
+➜  src git:(bd27c1a) ./tester
+

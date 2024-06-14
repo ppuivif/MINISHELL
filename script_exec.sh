@@ -16,14 +16,14 @@ function create_files_and_set_permissions() {
 	test_index=$1
 	echo -e "ceci est\nun test1\n" > infile1.txt
 	echo -e "ceci est\nun test2\n" > infile2.txt
-	echo > temp/bash_outfile1.txt
-	chmod 644 temp/bash_outfile1.txt
-	echo > temp/bash_outfile2.txt
-	chmod 644 temp/bash_outfile2.txt
-	echo > temp/minishell_outfile1.txt
-	chmod 644 temp/minishell_outfile1.txt
-	echo > temp/minishell_outfile2.txt
-	chmod 644 temp/minishell_outfile2.txt
+	echo > bash_outfile1.txt
+	chmod 644 bash_outfile1.txt
+	echo > bash_outfile2.txt
+	chmod 644 bash_outfile2.txt
+	echo > outfile1.txt
+	chmod 644 outfile1.txt
+	echo > outfile2.txt
+	chmod 644 outfile2.txt
 	echo > "temp/minishell_stdout$test_index.txt"
     chmod 644 "temp/minishell_stdout$test_index.txt"
 	exec 100> "temp/minishell_stdout$test_index.txt"
@@ -38,7 +38,7 @@ function create_files_and_set_permissions() {
 	exec 201> "temp/bash_stderr$test_index.txt"
 }
 
-function delete_files() {
+function delete_infiles() {
 	if [ -f "infile1.txt" ] # to check if the given path exists and is a regular file
 	then
 		chmod 644 infile1.txt
@@ -49,25 +49,18 @@ function delete_files() {
 		chmod 644 infile2.txt
 		rm infile2.txt
 	fi
-	if [ -f "bash_outfile1.txt" ]
+}
+
+function delete_outfiles() {
+	if [ -f "outfile1.txt" ]
 	then
-		chmod 644 bash_outfile1.txt
-		rm bash_outfile1.txt
+		chmod 644 outfile1.txt
+		rm outfile1.txt
 	fi
-	if [ -f "bash_outfile2.txt" ]
+	if [ -f "outfile2.txt" ]
 	then
-		chmod 644 bash_outfile2.txt
-		rm bash_outfile2.txt
-	fi
-	if [ -f "minishell_outfile1.txt" ]
-	then
-		chmod 644 minishell_outfile1.txt
-		rm minishell_outfile1.txt
-	fi
-	if [ -f "minishell_outfile2.txt" ]
-	then
-		chmod 644 minishell_outfile2.txt
-		rm minishell_outfile2.txt
+		chmod 644 outfile2.txt
+		rm outfile2.txt
 	fi
 }
 
@@ -186,17 +179,7 @@ function delete_test_files() {
 	fi
 }
 
-function delete_stdout_file() {
-	file="$1"
-
-	if [ -f $file ]
-	then
-		chmod 644 $file
-		rm $file
-	fi
-}
-
-function delete_stderr_file() {
+function delete_file() {
 	file="$1"
 
 	if [ -f $file ]
@@ -215,42 +198,81 @@ run_test() {
 	test="test$test_index\t$command\t"
     message=$test
     create_files_and_set_permissions $test_index
-	echo "$command" 1>"temp/bash_stdout$test_index.txt"
-	eval "$command" 1>>"temp/bash_stdout$test_index.txt" 2>temp/bash_stderr$test_index.txt
+	eval "$command" 1>"temp/bash_stdout$test_index.txt" 2>temp/bash_stderr$test_index.txt
 	exit_code_bash=$?
+	cat "outfile1.txt" >"temp/$test_index\_bash_outfile_1.txt"
+	cat "outfile2.txt" >"temp/$test_index\_bash_outfile_2.txt"
+	echo > outfile1.txt
+	echo > outfile2.txt	
     echo "$command" | ./minishell 100 1>"temp/minishell_stdout$test_index.txt" 2>temp/minishell_stderr$test_index.txt
-	exit_code_minishell=$?
-	echo "$exit_code_minishell"
- 	diff_output=$(diff "temp/minishell_stdout$test_index.txt" "temp/bash_stdout$test_index.txt" > /dev/null)
-	diff_exit_status=$?
-	if [ $diff_exit_status -eq 1 ]
+#	exit_code_minishell=$?
+#	echo "$exit_code_minishell"
+	cat "outfile1.txt" >"temp/$test_index\_minishell_outfile_1.txt"
+	cat "outfile2.txt" >"temp/$test_index\_minishell_outfile_2.txt"
+ 	diff_outfile1=$(diff "temp/$test_index\_minishell_outfile_1.txt" "temp/$test_index\_bash_outfile_1.txt" > /dev/null)
+	diff_exit_outfile1=$?
+	diff_outfile1=$(diff "temp/$test_index\_minishell_outfile_2.txt" "temp/$test_index\_bash_outfile_2.txt" > /dev/null)
+	diff_exit_outfile2=$?
+	diff_stdout=$(diff "temp/minishell_stdout$test_index.txt" "temp/bash_stdout$test_index.txt" > /dev/null)
+	diff_exit_stdout=$?
+	empty_substring=""
+	if [ "$substring" = "$empty_substring" ] && [ ! -s "temp/minishell_stderr$test_index.txt" ]
 	then
-		error_detail1="${RED}std_output ${NC}"
+		diff_empty_substring=0
+	else
+		diff_empty_substring=1
+	fi
+ 	diff_stderr=$(grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null)
+	diff_exit_stderr=$?
+	if [ $diff_exit_outfile1 -eq 1 ]
+	then
+		error_detail1="${RED}outfile1.txt ${NC}"
 		status_message="${RED}KO : ${NC}"
 		flag=$((flag + 1))
 	else
 		status_message="${GREEN} OK${NC}"
-		delete_stdout_file "temp/minishell_stdout$test_index.txt"
-		delete_stdout_file "temp/bash_stdout$test_index.txt"
+		delete_file "temp/$test_index\_minishell_outfile_1.txt"
+		delete_file "temp/$test_index\_bash_outfile_1.txt"
 	fi
-	if	grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null
+	if [ $diff_exit_outfile2 -eq 1 ]
 	then
-		error_detail2="${RED}stderr_output ${NC}"
+		error_detail2="${RED}outfile2.txt ${NC}"
 		status_message="${RED}KO : ${NC}"
 		flag=$((flag + 1))
 	else
-       status_message="${GREEN} OK${NC}"
-		delete_stderr_file "temp/minishell_stderr$test_index.txt"
-		delete_stderr_file "temp/bash_stderr$test_index.txt"
-    fi
-	if [ $exit_code_minishell -ne $exit_code_bash ]
-    then
-		error_detail3="${RED}exit_code ${NC}"
-	    status_message="${RED}KO : ${NC}"
+		status_message="${GREEN} OK${NC}"
+		delete_file "temp/$test_index\_minishell_outfile_2.txt"
+		delete_file "temp/$test_index\_bash_outfile_2.txt"
+	fi
+	if [ $diff_exit_stdout -eq 1 ]
+	then
+		error_detail3="${RED}std_output ${NC}"
+		status_message="${RED}KO : ${NC}"
 		flag=$((flag + 1))
 	else
-        status_message="${GREEN} OK${NC}"
+		status_message="${GREEN} OK${NC}"
+		delete_file "temp/minishell_stdout$test_index.txt"
+		delete_file "temp/bash_stdout$test_index.txt"
+	fi
+	if [ $diff_exit_stderr -eq 0 ] || [ $diff_empty_substring -eq 0 ]
+#	if	grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null
+	then
+    	status_message="${GREEN} OK${NC}"
+		delete_file "temp/minishell_stderr$test_index.txt"
+		delete_file "temp/bash_stderr$test_index.txt"
+	else	
+		error_detail4="${RED}stderr_output ${NC}"
+		status_message="${RED}KO : ${NC}"
+		flag=$((flag + 1))
     fi
+#	if [ $exit_code_minishell -ne $exit_code_bash ]
+#   then
+#		error_detail5="${RED}exit_code ${NC}"
+#	    status_message="${RED}KO : ${NC}"
+#		flag=$((flag + 1))
+#	else
+#       status_message="${GREEN} OK${NC}"
+#    fi
 	# Calculate the length of the message
     message_length=${#message}
     # Calculate the number of spaces needed for alignment
@@ -265,13 +287,128 @@ run_test() {
 	then
 		if [ "$status_message" == "${RED}KO : ${NC}" ]
 		then
-			echo -e "${message}${spaces}${status_message}${error_detail1}${error_detail2}${error_detail3}"
+			echo -e "${message}${spaces}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}"
 		fi
 	else
 			echo -e "${message}${spaces}${status_message}"
 	fi
-	delete_files
+	delete_infiles
+	delete_outfiles
 }
+
+run_test_heredoc() {
+    test_index=$1
+    command=$2
+	file_test=$3
+    exit_code_expected=$4
+ 	substring=$5
+	test="test$test_index\t$command\t"
+    message=$test
+    create_files_and_set_permissions $test_index
+	heredoc_input=$(cat << 'EOF'
+	first_line
+	limiter
+	EOF
+	)
+	eval "$command" <<< "$heredoc_input" 1>"temp/bash_stdout$test_index.txt" 2>temp/bash_stderr$test_index.txt
+	exit_code_bash=$?
+	cat "outfile1.txt" >"temp/$test_index\_bash_outfile_1.txt"
+	cat "outfile2.txt" >"temp/$test_index\_bash_outfile_2.txt"
+	echo > outfile1.txt
+	echo > outfile2.txt	
+    echo "$command" | ./minishell 100 | echo -e "first line" | echo -e "limiter" 1>"temp/minishell_stdout$test_index.txt" 2>temp/minishell_stderr$test_index.txt
+#	exit_code_minishell=$?
+#	echo "$exit_code_minishell"
+	cat "outfile1.txt" >"temp/$test_index\_minishell_outfile_1.txt"
+	cat "outfile2.txt" >"temp/$test_index\_minishell_outfile_2.txt"
+ 	diff_outfile1=$(diff "temp/$test_index\_minishell_outfile_1.txt" "temp/$test_index\_bash_outfile_1.txt" > /dev/null)
+	diff_exit_outfile1=$?
+	diff_outfile1=$(diff "temp/$test_index\_minishell_outfile_2.txt" "temp/$test_index\_bash_outfile_2.txt" > /dev/null)
+	diff_exit_outfile2=$?
+	diff_stdout=$(diff "temp/minishell_stdout$test_index.txt" "temp/bash_stdout$test_index.txt" > /dev/null)
+	diff_exit_stdout=$?
+	empty_substring=""
+	if [ "$substring" = "$empty_substring" ] && [ ! -s "temp/minishell_stderr$test_index.txt" ]
+	then
+		diff_empty_substring=0
+	else
+		diff_empty_substring=1
+	fi
+ 	diff_stderr=$(grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null)
+	diff_exit_stderr=$?
+	if [ $diff_exit_outfile1 -eq 1 ]
+	then
+		error_detail1="${RED}outfile1.txt ${NC}"
+		status_message="${RED}KO : ${NC}"
+		flag=$((flag + 1))
+	else
+		status_message="${GREEN} OK${NC}"
+		delete_file "temp/$test_index\_minishell_outfile_1.txt"
+		delete_file "temp/$test_index\_bash_outfile_1.txt"
+	fi
+	if [ $diff_exit_outfile2 -eq 1 ]
+	then
+		error_detail2="${RED}outfile2.txt ${NC}"
+		status_message="${RED}KO : ${NC}"
+		flag=$((flag + 1))
+	else
+		status_message="${GREEN} OK${NC}"
+		delete_file "temp/$test_index\_minishell_outfile_2.txt"
+		delete_file "temp/$test_index\_bash_outfile_2.txt"
+	fi
+	if [ $diff_exit_stdout -eq 1 ]
+	then
+		error_detail3="${RED}std_output ${NC}"
+		status_message="${RED}KO : ${NC}"
+		flag=$((flag + 1))
+	else
+		status_message="${GREEN} OK${NC}"
+		delete_file "temp/minishell_stdout$test_index.txt"
+		delete_file "temp/bash_stdout$test_index.txt"
+	fi
+	if [ $diff_exit_stderr -eq 0 ] || [ $diff_empty_substring -eq 0 ]
+#	if	grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null
+	then
+    	status_message="${GREEN} OK${NC}"
+		delete_file "temp/minishell_stderr$test_index.txt"
+		delete_file "temp/bash_stderr$test_index.txt"
+	else	
+		error_detail4="${RED}stderr_output ${NC}"
+		status_message="${RED}KO : ${NC}"
+		flag=$((flag + 1))
+    fi
+#	if [ $exit_code_minishell -ne $exit_code_bash ]
+#   then
+#		error_detail5="${RED}exit_code ${NC}"
+#	    status_message="${RED}KO : ${NC}"
+#		flag=$((flag + 1))
+#	else
+#       status_message="${GREEN} OK${NC}"
+#    fi
+	# Calculate the length of the message
+    message_length=${#message}
+    # Calculate the number of spaces needed for alignment
+    num_spaces=$((60 - message_length))
+    #num_tabs=$((25 - message_length))
+    # Create a string of spaces
+	#tabs=$(printf "%${num_tabs}s" "" | tr ' ' '\t')
+  #  spaces=$(printf "%-${num_spaces}s" "")
+    spaces=$(printf "%-30s" "")
+    # Print the message with aligned status
+	if [ "$display" == "wrong_only" ]
+	then
+		if [ "$status_message" == "${RED}KO : ${NC}" ]
+		then
+			echo -e "${message}${spaces}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}"
+		fi
+	else
+			echo -e "${message}${spaces}${status_message}"
+	fi
+	delete_infiles
+	delete_outfiles
+}
+
+: <<BLOCK_COMMENT
 
 run_test_heredoc() {
     test_index=$1
@@ -315,6 +452,8 @@ run_test_heredoc() {
 	fi
 	#echo -e "$message"
 }
+
+BLOCK_COMMENT
 
 : <<BLOCK_COMMENT
 run_test() {
@@ -503,30 +642,30 @@ case $choice in
         ;;
 esac
 
-: <<BLOCK_COMMENT
 
-run_test 1 "< infile.txt cat | cat > outfile.txt" 1 0
-run_test 2 "<infile.txt cat | cat > outfile.txt" 1 0
-run_test 3 "< infile.txt cat| cat > outfile.txt" 1 0
-run_test 4 "< infile.txt cat |cat > outfile.txt" 1 0
-run_test 5 "< infile.txt cat | cat >outfile.txt" 1 0
-run_test 6 "<infile.txt cat|cat >outfile.txt" 1 0
-run_test 7 "<	infile.txt cat | cat > outfile.txt" 1 0
-#run_test 8 "<\\tinfile.txt cat | cat > outfile.txt" 1 0
-run_test 9 "< infile.txt cat	| cat > outfile.txt" 1 0
-run_test 10 "< infile.txt cat		| cat > outfile.txt" 1 0
-run_test 11 "< infile.txt cat |	cat > outfile.txt" 1 0
-#run_test 12 "< infile.txt cat |		cat > outfile.txt" 1 0
-run_test 13 "< infile.txt cat |	cat > outfile.txt" 1 0
-#run_test 14 "< infile.txt cat |		cat > outfile.txt" 1 0
-run_test 15 "< infile.txt cat | cat	> outfile.txt" 1 0
-run_test 16 "< infile.txt cat | cat		> outfile.txt" 1 0
-run_test 17 "< infile.txt cat | cat >	outfile.txt" 1 0
-#run_test 18 "< infile.txt cat | cat >		outfile.txt" 1 0
-run_test 19 "< infile.txt cat | cat > outfile.txt	" 1 0
-run_test 20 "< infile.txt cat | cat > outfile.txt		" 1 0
+run_test 1 "< infile.txt cat | cat > outfile1.txt" 1 0
+run_test 2 "<infile.txt cat | cat > outfile1.txt" 1 0
+run_test 3 "< infile.txt cat| cat > outfile1.txt" 1 0
+run_test 4 "< infile.txt cat |cat > outfile1.txt" 1 0
+run_test 5 "< infile.txt cat | cat >outfile1.txt" 1 0
+run_test 6 "<infile.txt cat|cat >outfile1.txt" 1 0
+run_test 7 "<	infile.txt cat | cat > outfile1.txt" 1 0
+run_test 8 "<		infile.txt cat | cat > outfile1.txt" 1 0
+run_test 9 "< infile.txt cat	| cat > outfile1.txt" 1 0
+run_test 10 "< infile.txt cat		| cat > outfile1.txt" 1 0
+run_test 11 "< infile.txt cat |	cat > outfile1.txt" 1 0
+run_test 12 "< infile.txt cat |		cat > outfile1.txt" 1 0
+run_test 13 "< infile.txt cat |	cat > outfile1.txt" 1 0
+run_test 14 "< infile.txt cat |		cat > outfile1.txt" 1 0
+run_test 15 "< infile.txt cat | cat	> outfile1.txt" 1 0
+run_test 16 "< infile.txt cat | cat		> outfile1.txt" 1 0
+run_test 17 "< infile.txt cat | cat >	outfile1.txt" 1 0
+run_test 18 "< infile.txt cat | cat >		outfile1.txt" 1 0
+run_test 19 "< infile.txt cat | cat > outfile1.txt	" 1 0
+run_test 20 "< infile.txt cat | cat > outfile1.txt		" 1 0
 
-#run_test_heredoc 21 "<< limiter cat | cat > outfile.txt" 21 0
+
+run_test_heredoc 21 "<< limiter cat | cat > outfile.txt" 21 0
 #run_test_heredoc 22 "<<limiter cat | cat > outfile.txt" 21 0
 #run_test_heredoc 36 "<< limiter cat | cat		> outfile.txt" 21 0
 #run_test_heredoc 37 "<< limiter cat | cat >	outfile.txt" 21 0
@@ -543,17 +682,20 @@ run_test 46 "< infile.txt cat | cat >>outfile.txt" 41 0
 run_test 47 "<infile.txt cat|cat >>outfile.txt" 41 0
 run_test 48 "< infile.txt cat | cat >> outfile.txt" 41 0
 run_test 49 "<	infile.txt cat | cat >> outfile.txt" 41 0
-#run_test 50 "<		infile.txt cat | cat >> outfile.txt" 41 0
+run_test 50 "<		infile.txt cat | cat >> outfile.txt" 41 0
 run_test 51 "< infile.txt cat	| cat >> outfile.txt" 41 0
 run_test 52 "< infile.txt cat		| cat >> outfile.txt" 41 0
 run_test 53 "< infile.txt cat |	cat >> outfile.txt" 41 0
-#run_test 54 "< infile.txt cat |		cat >> outfile.txt" 41 0
+run_test 54 "< infile.txt cat |		cat >> outfile.txt" 41 0
 run_test 55 "< infile.txt cat | cat	>> outfile.txt" 41 0
 run_test 56 "< infile.txt cat | cat		>> outfile.txt" 41 0
 run_test 57 "< infile.txt cat | cat >>	outfile.txt" 41 0
-#run_test 58 "< infile.txt cat | cat >>		outfile.txt" 41 0
+run_test 58 "< infile.txt cat | cat >>		outfile.txt" 41 0
 run_test 59 "< infile.txt cat | cat >> outfile.txt	" 41 0
 run_test 60 "< infile.txt cat | cat >> outfile.txt		" 41 0
+
+: <<BLOCK_COMMENT
+
 
 #run_test_heredoc 61 "<< limiter cat | cat >> outfile.txt" 61 0
 #run_test_heredoc 62 "<<limiter cat | cat >> outfile.txt" 61 0
@@ -1566,7 +1708,7 @@ run_test 5022 "< infile1.txt cat > outfile1.txt" 5022 0
 run_test 5023 "< infile1.txt > outfile1.txt cat" 5022 0
 run_test 5024 "> outfile1.txt < infile1.txt cat" 5022 0
 run_test 5025 "< infile1.txt cat > outfile1.txt > outfile2.txt" 5025 0
-run_test 5025 "< infile1.txt < infile2.txt cat" 5025 0
+run_test 5026 "< infile1.txt < infile2.txt cat" 5026 0
 
 
 run_test 7000 "infile1.txt cat" 7000 127 "infile1.txt: command not found"
@@ -1583,7 +1725,7 @@ then
 else
 	echo -e "${GREEN}no error detected${NC}"
 fi
-#delete_test_files
+#delete_files
 
 : <<BLOCK_COMMENT
 

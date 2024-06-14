@@ -45,7 +45,10 @@ static int	*build_pid_arr(int *pid_arr, int i)
 	if (!new_pid_arr)
 		exit (EXIT_FAILURE);
 	if (!pid_arr)
+	{
+		new_pid_arr[0] = 0;
 		return (new_pid_arr);
+	}
 	while (j <= i)
 	{
 		new_pid_arr[j] = pid_arr[j];
@@ -65,19 +68,14 @@ void	execution(t_exec_struct **exec_struct)
 	int		fd_out;
 	size_t	substrings_nmemb;
 	char	**envp_arr;
-	int		tmp;
 //	int		status;
 	int		*pid_arr;
-	size_t		flag;
-	size_t		j;
 
 	cursor = (*exec_struct)->exec_substrings;
 	substrings_nmemb = ft_lst_size7(cursor);
 //	printf("substrings nmemb : %ld", substrings_nmemb);
 	i = 0;
 //	status = 0;
-	flag = 0;
-	j = 0;
 	fd_in = STDIN_FILENO;
 	pid_arr = NULL;
 //	if (substrings_nmemb == 1)
@@ -86,6 +84,7 @@ void	execution(t_exec_struct **exec_struct)
 	while (i < substrings_nmemb)
 	{
 		pid_arr = build_pid_arr(pid_arr, i);
+//		printf("1 pid_arr[%ld] : %d\n", i, pid_arr[i]);
 		fd_out = STDOUT_FILENO;
 		if (cursor->exec_redirections)
 		{
@@ -109,11 +108,11 @@ void	execution(t_exec_struct **exec_struct)
 			perror("error\ncreate fork failed");
 			error_fork_creation_and_exit(exec_struct);
 		}
+		pid_arr[i] = pid_1;
 		if (pid_1 == 0)
 		{
 //			exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct);
-			pid_arr[i] = getpid();
-//			printf("%d\n", pid_arr[i]);
+//			printf("pid_arr[%ld] : %d\n", i, pid_arr[i]);
 			exec_child(cursor, fd_in, fd_out, envp_arr);
 			//return ?
 		}	
@@ -132,32 +131,29 @@ void	execution(t_exec_struct **exec_struct)
 		i++;
 	}
 //	printf("%s\n", strerror(errno));
-//	while(waitpid(-1, &status, 0) != -1)
+//	while(waitpid(-1, &tmp, 0) != -1)
+//	while(waitpid(-1, NULL, 0) != -1)
 //		continue;
-	while (flag != i)
+	i -= 1;
+	while(waitpid(-1, NULL, 0) != -1)
 	{
-		j = 0;
-		while (j != i)
+//			printf("j : %ld\n", i);
+//			printf("number of childs : %ld\n", i);
+//			printf("3 pid_arr[%ld] : %d\n", j, pid_arr[j]);
+		
+/*		if (waitpid(pid_arr[i], &status, 0))
 		{
-			if (waitpid(pid_arr[j], &tmp, 0) == -1)
-			{
-				flag++;
-				if (j == i)
-				{
-					printf("%d\n", WEXITSTATUS(tmp));
-//					status = tmp;
-				}
-			}
-			j++;
-		}
+			printf("exit_code : %d\n", WEXITSTATUS(status));
+		}*/
+		continue;
 	}
-	printf("here\n");
 
 }
 
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct)
 void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp)
 {
+	
 	dup2(fd_in, STDIN_FILENO);
 	dup2(fd_out, STDOUT_FILENO);
 	close_fd(fd_in);
