@@ -49,6 +49,7 @@ int main(void)
 
 }*/
 
+//int main(int argc, char **argv, char **envp)
 int main(int argc, char **argv, char **envp)
 {
 	char	*line;
@@ -60,11 +61,12 @@ int main(int argc, char **argv, char **envp)
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;
-//	(void) argv;
+	(void) argc;
+	(void) argv;
 //	if (envp_struct)
 //		ft_envp_struct_lst_print(envp_struct, 1);
-	if (argc == 2)
-	{
+//	if (argc == 2)
+//	{
 		/*if (!isatty(STDIN_FILENO))
 		{
 			line = get_next_line(STDIN_FILENO);
@@ -130,8 +132,8 @@ int main(int argc, char **argv, char **envp)
 			free_all_exec_struct(&exec_struct);
 			
 		}
-	}
-	else
-		ft_putstr_fd("please, give an fd to display\n", 1);
+//	}
+//	else
+//		ft_putstr_fd("please, give an fd to display\n", 1);
 	return (0);
 }

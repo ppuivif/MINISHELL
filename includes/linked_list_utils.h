@@ -106,6 +106,7 @@ typedef struct s_exec_argument t_exec_argument;
 typedef struct s_exec_argument
 {
 	char	*argument;
+	bool	is_argument_valid;
 	t_exec_argument	*next;
 }t_exec_argument;
 
@@ -114,6 +115,7 @@ typedef struct s_exec_substring
 {
 	int					index;
 	t_exec_redirection	*exec_redirections;
+	bool				is_previous_file_opened;
 	t_exec_argument		*exec_arguments;
 	char				**cmd_arr;
 	char				*path_with_cmd;

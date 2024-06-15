@@ -117,7 +117,8 @@ t_exec_struct **exec_struct)
 		{
 			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
 			ft_putstr_fd(": command not found\n", 2);
-			(*exec_struct)->command_line->current_exit_code = 127;
+			(*exec_substring)->exec_arguments->is_argument_valid = false;
+//			(*exec_struct)->command_line->current_exit_code = 127;
 		}
 		else
 			(*exec_struct)->command_line->current_exit_code = 0;

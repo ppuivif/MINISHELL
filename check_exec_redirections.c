@@ -3,10 +3,10 @@
 static int	check_outfile(t_expanded_redirection *exp_redirection, \
 t_exec_redirection **exec_redirection)
 {
-	if (exp_redirection->e_redirection == 0)
+	if (exp_redirection->e_redirection == REDIRECTION_OUTFILE)
 		(*exec_redirection)->fd_output = \
 		open(exp_redirection->content, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	else if (exp_redirection->e_redirection == 3)
+	else if (exp_redirection->e_redirection == REDIRECTION_APPEND)
 		(*exec_redirection)->fd_output = \
 		open(exp_redirection->content, O_WRONLY | O_CREAT, 0644);
 	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
@@ -85,23 +85,28 @@ t_exec_redirection **exec_redirection)
 }
 
 int	open_and_check_file(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection)
+t_exec_redirection **exec_redirection, t_exec_substring **exec_substring)
 {
 	int	return_value;
 
 	return_value = 0;
-	if (exp_redirection->e_redirection == 0 || \
-	exp_redirection->e_redirection == 3)
+//	printf("fd_input : %d\n", (*exec_redirection)->fd_input);
+//	printf("fd_output : %d\n", (*exec_redirection)->fd_output);
+
+	if ((exp_redirection->e_redirection == REDIRECTION_OUTFILE || \
+	exp_redirection->e_redirection == REDIRECTION_APPEND) && \
+	(*exec_substring)->is_previous_file_opened == true)
 	{
 		return_value = check_outfile(exp_redirection, exec_redirection);
 		return (return_value);
 	}
-	else if (exp_redirection->e_redirection == 1)
+	else if (exp_redirection->e_redirection == REDIRECTION_INFILE && \
+	(*exec_substring)->is_previous_file_opened == true)
 	{
 		return_value = check_infile(exp_redirection, exec_redirection);
 		return (return_value);
 	}
-	if (exp_redirection->e_redirection == 4)
+	if (exp_redirection->e_redirection == REDIRECTION_HEREDOC)
 	{
 		return_value = check_heredoc(exp_redirection, exec_redirection);
 		return (return_value);

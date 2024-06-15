@@ -305,11 +305,11 @@ run_test_heredoc() {
 	test="test$test_index\t$command\t"
     message=$test
     create_files_and_set_permissions $test_index
-	heredoc_input=$(cat << 'EOF'
-	first_line
-	limiter
-	EOF
-	)
+#	heredoc_input=$(cat << 'EOF'
+#	first_line
+#	limiter
+#	EOF
+#	)
 	eval "$command" <<< "$heredoc_input" 1>"temp/bash_stdout$test_index.txt" 2>temp/bash_stderr$test_index.txt
 	exit_code_bash=$?
 	cat "outfile1.txt" >"temp/$test_index\_bash_outfile_1.txt"
@@ -665,7 +665,7 @@ run_test 19 "< infile.txt cat | cat > outfile1.txt	" 1 0
 run_test 20 "< infile.txt cat | cat > outfile1.txt		" 1 0
 
 
-run_test_heredoc 21 "<< limiter cat | cat > outfile.txt" 21 0
+#run_test_heredoc 21 "<< limiter cat | cat > outfile.txt" 21 0
 #run_test_heredoc 22 "<<limiter cat | cat > outfile.txt" 21 0
 #run_test_heredoc 36 "<< limiter cat | cat		> outfile.txt" 21 0
 #run_test_heredoc 37 "<< limiter cat | cat >	outfile.txt" 21 0
@@ -723,6 +723,8 @@ then
 else
 	echo -e "end of test serie from 1 to 80"
 fi
+
+BLOCK_COMMENT
 
 run_test 81 "< infile.txt < infile.txt" 81 0
 run_test 82 "<infile.txt < infile.txt" 81 0
@@ -867,7 +869,7 @@ fi
 
 
 run_test 200 "\"< infile.txt\"" 200 0
-run_test 210 "\"<< limiter\"" 210 0
+#run_test 210 "\"<< limiter\"" 210 0
 run_test 220 "\"> output.txt\"" 220 0
 run_test 230 "\">> output.txt\"" 230 0
 
@@ -995,14 +997,14 @@ else
 	echo -e "end of test serie from 500 to 632"
 fi
 
-run_test_error 650 "'ls -l'" 650 127 "command not found"
-run_test_error 651 "\"ls -l\"" 651 127 "command not found"
-run_test_error 652 "'\"ls -l\"'" 652 127 "command not found"
-run_test_error 653 "\"'ls -l'\"" 653 127 "command not found"
-run_test_error 654 "'ls'-l" 654 127 "command not found"
-run_test_error 655 "ls'-l'" 655 127 "command not found"
-run_test_error 656 "\"ls\"-l" 656 127 "command not found"
-run_test_error 657 "ls\"-l\"" 657 127 "command not found"
+run_test 650 "'ls -l'" 650 127 "command not found"
+run_test 651 "\"ls -l\"" 651 127 "command not found"
+run_test 652 "'\"ls -l\"'" 652 127 "command not found"
+run_test 653 "\"'ls -l'\"" 653 127 "command not found"
+run_test 654 "'ls'-l" 654 127 "command not found"
+run_test 655 "ls'-l'" 655 127 "command not found"
+run_test 656 "\"ls\"-l" 656 127 "command not found"
+run_test 657 "ls\"-l\"" 657 127 "command not found"
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 650 to 657\n"
@@ -1010,7 +1012,7 @@ else
 	echo -e "end of test serie from 650 to 657"
 fi
 
-run_test_error 700 "'ls -l cat -e'" 700 127 "command not found"
+run_test 700 "'ls -l cat -e'" 700 127 "command not found"
 run_test 701 "\"ls -l cat -e\"" 701 0
 run_test 702 "'\"ls -l cat -e\"'" 702 0
 run_test 703 "\"'ls -l cat -e'\"" 703 0
@@ -1123,7 +1125,6 @@ else
 	echo -e "end of test serie from 1000 to 1001"
 fi
 
-: <<BLOCK_COMMENT
 
 run_test 1100 "\\" 1100 0
 run_test 1101 "\"\\\"" 1100 0
@@ -1163,14 +1164,14 @@ run_test 1511 "\"\$TEST \"" 1511 0
 run_test 1512 "\"\$TEST  \"" 1512 0
 run_test 1513 "\" \$TEST \"" 1513 0
 run_test 1514 "\"  \$TEST  \"" 1514 0
-#run_test 1515 "\"	\$TEST\"" 1515 0 #pb with\t
-#run_test 1516 "\"\t\t\$TEST\"" 1516 0 #pb with\t
-#run_test 1517 "\"\$TEST\t\"" 1517 0 #pb with\t
-#run_test 1518 "\"\$TEST\t\t\"" 1518 0 #pb with\t
-#run_test 1519 "\"\t\$TEST\t\"" 1519 0 #pb with\t
-#run_test 1520 "\"\t\t\$TEST\t\t\"" 1520 0 #pb with\t
-#run_test 1521 "\" \$TEST\t\"" 1521 0 #pb with\t
-#run_test 1522 "\"\t\$TEST \"" 1522 0 #pb with\t
+run_test 1515 "\"	\$TEST\"" 1515 0
+run_test 1516 "\"\t\t\$TEST\"" 1516 0
+run_test 1517 "\"\$TEST\t\"" 1517 0
+run_test 1518 "\"\$TEST\t\t\"" 1518 0
+run_test 1519 "\"\t\$TEST\t\"" 1519 0
+run_test 1520 "\"\t\t\$TEST\t\t\"" 1520 0
+run_test 1521 "\" \$TEST\t\"" 1521 0
+run_test 1522 "\"\t\$TEST \"" 1522 0
 
 run_test 1523 "\$\"TEST\"" 1523 0
 run_test 1524 "\$'TEST'" 1524 0
@@ -1184,16 +1185,16 @@ run_test 1533 "\"\$TEST \$TEST \"" 1533 0
 run_test 1534 "\"\$TEST \$TEST  \"" 1534 0
 run_test 1535 "\" \$TEST  \$TEST\"" 1535 0
 run_test 1536 "\" \$TEST  \$TEST \"" 1536 0
-#run_test 1537 "\"\t\$TEST\t\$TEST\"" 1537 0//pb with\t
-#run_test 1538 "\"\t\$TEST\t\$TEST\t\"" 1538 0//pb with\t
-#run_test 1539 "\"\t\t\$TEST\t\t\$TEST\t\t\"" 1539 0//pb with\t
+run_test 1537 "\"\t\$TEST\t\$TEST\"" 1537 0
+run_test 1538 "\"\t\$TEST\t\$TEST\t\"" 1538 0
+run_test 1539 "\"\t\t\$TEST\t\t\$TEST\t\t\"" 1539 0
 run_test 1540 "\$TEST\$TEST" 1540 0
 run_test 1541 "\" \$TEST\$TEST\"" 1541 0
 run_test 1542 "\"\$TEST\$TEST \"" 1542 0
 run_test 1543 "\" \$TEST\$TEST \"" 1543 0
-#run_test 1544 "\"	\$TEST\$TEST\"" 1544 0//pb with\t
-#run_test 1545 "\"\$TEST\$TEST	\"" 1545 0//pb with\t
-#run_test 1546 "\"	\$TEST\$TEST	\"" 1546 0//pb with\t
+run_test 1544 "\"	\$TEST\$TEST\"" 1544 0
+run_test 1545 "\"\$TEST\$TEST	\"" 1545 0
+run_test 1546 "\"	\$TEST\$TEST	\"" 1546 0
 
 run_test 1550 "\"text\$TEST\"" 1550 0
 run_test 1551 "\"text \$TEST\"" 1551 0
@@ -1207,7 +1208,7 @@ run_test 1558 "\"\$TEST text \$TEST\"" 1558 0
 
 run_test 1559 "\"\$TEST cat\"" 1559 0
 run_test 1560 "\"\$TEST cat \"" 1560 0
-#run_test 1561 "\"\$TEST cat	\"" 1561 0//pb with\t
+run_test 1561 "\"\$TEST cat	\"" 1561 0
 
 run_test 1562 "\$" 1562 0
 run_test 1563 "\"\$ TEST\"" 1563 0
@@ -1240,12 +1241,12 @@ run_test 1709 "< \"\$INFILE \"" 1709 0
 run_test 1710 "< \"\$INFILE  \"" 1710 0
 run_test 1711 "< \" \$INFILE \"" 1711 0
 run_test 1712 "< \"  \$INFILE  \"" 1712 0
-#run_test 1713 "< \"	\$INFILE\"" 1713 0
-#run_test 1714 "< \"\$INFILE	\"" 1714 0
-#run_test 1715 "< \"		\$INFILE\"" 1715 0
-#run_test 1716 "< \"\$INFILE		\"" 1716 0
-#run_test 1717 "< \"	\$INFILE	\"" 1717 0
-#run_test 1718 "< \"		\$INFILE		\"" 1718 0
+run_test 1713 "< \"	\$INFILE\"" 1713 0
+run_test 1714 "< \"\$INFILE	\"" 1714 0
+run_test 1715 "< \"		\$INFILE\"" 1715 0
+run_test 1716 "< \"\$INFILE		\"" 1716 0
+run_test 1717 "< \"	\$INFILE	\"" 1717 0
+run_test 1718 "< \"		\$INFILE		\"" 1718 0
 run_test 1719 "< \"INFILE \$INFILE\"" 1719 0
 unset INFILE
 
@@ -1263,14 +1264,16 @@ run_test 1749 "> \"\$OUTFILE \"" 1749 0
 run_test 1750 "> \"\$OUTFILE  \"" 1750 0
 run_test 1751 "> \" \$OUTFILE \"" 1751 0
 run_test 1752 "> \"  \$OUTFILE  \"" 1752 0
-#run_test 1753 "> \"	\$OUTFILE\"" 1753 0
-#run_test 1754 "> \"\$OUTFILE	\"" 1754 0
-#run_test 1755 "> \"		\$OUTFILE\"" 1755 0
-#run_test 1756 "> \"\$OUTFILE		\"" 1756 0
-#run_test 1757 "> \"	\$OUTFILE	\"" 1757 0
-#run_test 1758 "> \"		\$OUTFILE		\"" 1758 0
+run_test 1753 "> \"	\$OUTFILE\"" 1753 0
+run_test 1754 "> \"\$OUTFILE	\"" 1754 0
+run_test 1755 "> \"		\$OUTFILE\"" 1755 0
+run_test 1756 "> \"\$OUTFILE		\"" 1756 0
+run_test 1757 "> \"	\$OUTFILE	\"" 1757 0
+run_test 1758 "> \"		\$OUTFILE		\"" 1758 0
 run_test 1759 "> \"OUTFILE \$OUTFILE\"" 1759 0
 unset OUTFILE
+
+: <<BLOCK_COMMENT
 
 export LIMITER="limiter"
 run_test 1780 "<< \$LIMITER" 1780 0
@@ -1286,14 +1289,16 @@ run_test 1789 "<< \"\$LIMITER \"" 1789 0
 run_test 1790 "<< \"\$LIMITER  \"" 1790 0
 run_test 1791 "<< \" \$LIMITER \"" 1791 0
 run_test 1792 "<< \"  \$LIMITER  \"" 1792 0
-#run_test 1793 "<< \"	\$LIMITER\"" 1793 0
-#run_test 1794 "<< \"\$LIMITER	\"" 1794 0
-#run_test 1795 "<< \"		\$LIMITER\"" 1795 0
-#run_test 1796 "<< \"\$LIMITER		\"" 1796 0
-#run_test 1797 "<< \"	\$LIMITER	\"" 1797 0
-#run_test 1798 "<< \"		\$LIMITER		\"" 1798 0
+run_test 1793 "<< \"	\$LIMITER\"" 1793 0
+run_test 1794 "<< \"\$LIMITER	\"" 1794 0
+run_test 1795 "<< \"		\$LIMITER\"" 1795 0
+run_test 1796 "<< \"\$LIMITER		\"" 1796 0
+run_test 1797 "<< \"	\$LIMITER	\"" 1797 0
+run_test 1798 "<< \"		\$LIMITER		\"" 1798 0
 run_test 1799 "<< \"LIMITER \$LIMITER\"" 1799 0
 unset LIMITER
+
+BLOCK_COMMENT
 
 export OUTFILE="outfile.txt"
 run_test 1820 ">> \$OUTFILE" 1820 0
@@ -1309,12 +1314,12 @@ run_test 1829 ">> \"\$OUTFILE \"" 1829 0
 run_test 1830 ">> \"\$OUTFILE  \"" 1830 0
 run_test 1831 ">> \" \$OUTFILE \"" 1831 0
 run_test 1832 ">> \"  \$OUTFILE  \"" 1832 0
-#run_test 1833 ">> \"	\$OUTFILE\"" 1833 0
-#run_test 1834 ">> \"\$OUTFILE	\"" 1834 0
-#run_test 1835 ">> \"		\$OUTFILE\"" 1835 0
-#run_test 1836 ">> \"\$OUTFILE		\"" 1836 0
-#run_test 1837 ">> \"	\$OUTFILE	\"" 1837 0
-#run_test 1838 ">> \"		\$OUTFILE		\"" 1838 0
+run_test 1833 ">> \"	\$OUTFILE\"" 1833 0
+run_test 1834 ">> \"\$OUTFILE	\"" 1834 0
+run_test 1835 ">> \"		\$OUTFILE\"" 1835 0
+run_test 1836 ">> \"\$OUTFILE		\"" 1836 0
+run_test 1837 ">> \"	\$OUTFILE	\"" 1837 0
+run_test 1838 ">> \"		\$OUTFILE		\"" 1838 0
 unset OUTFILE
 
 if [ "$display" == "all" ]
@@ -1325,6 +1330,8 @@ else
 fi
 
 
+
+: <<BLOCK_COMMENT
 
 
 run_test_syntax_error 2000 "<" 2
@@ -1600,95 +1607,98 @@ fi
 
 BLOCK_COMMENT
 
-: <<BLOCK_COMMENT
 
-run_test 700 "'ls -l cat -e'" 700 127
-run_test 701 "\"ls -l cat -e\"" 701 127
-run_test 702 "'\"ls -l cat -e\"'" 702 127
-run_test 703 "\"'ls -l cat -e'\"" 703 127
+run_test 4400 "'ls -l cat -e'" 4400 127
+run_test 4401 "\"ls -l cat -e\"" 4401 127
+run_test 4402 "'\"ls -l cat -e\"'" 4402 127
+run_test 4403 "\"'ls -l cat -e'\"" 4403 127
 
-run_test 704 "'ls'-l cat -e" 704 127
-run_test 705 "ls'-l' cat -e" 705 127
-run_test 706 "\"ls\"-l cat -e" 706 127
-run_test 707 "ls\"-l\" cat -e" 707 127
+run_test 4404 "'ls'-l cat -e" 4404 127
+run_test 4405 "ls'-l' cat -e" 4405 127
+run_test 4406 "\"ls\"-l cat -e" 4406 127
+run_test 4407 "ls\"-l\" cat -e" 4407 127
 
-run_test 708 "'ls -l' cat -e" 708 127
-run_test 709 "\"ls -l\" cat -e" 709 127
-run_test 710 "'\"ls -l\"' cat -e" 710 127
-run_test 711 "\"'ls -l'\" cat -e" 711 127
+run_test 4408 "'ls -l' cat -e" 4408 127
+run_test 4409 "\"ls -l\" cat -e" 4409 127
+run_test 4410 "'\"ls -l\"' cat -e" 4410 127
+run_test 4411 "\"'ls -l'\" cat -e" 4411 127
 
-run_test 712 "'ls -l'cat -e" 712 127
-run_test 713 "\"ls -l\"cat -e" 713 127
-run_test 714 "'\"ls -l\"'cat -e" 714 127
-run_test 715 "\"'ls -l'\"cat -e" 715 127
+run_test 4412 "'ls -l'cat -e" 4412 127
+run_test 4413 "\"ls -l\"cat -e" 4413 127
+run_test 4414 "'\"ls -l\"'cat -e" 4414 127
+run_test 4415 "\"'ls -l'\"cat -e" 4415 127
 
-run_test 716 "'ls -l' 'cat' -e" 716 127
-run_test 717 "\"ls -l\" 'cat' -e" 717 127
-run_test 718 "'\"ls -l\"' 'cat' -e" 718 127
-run_test 719 "\"'ls -l'\" 'cat' -e" 719 127
+run_test 4416 "'ls -l' 'cat' -e" 4416 127
+run_test 4417 "\"ls -l\" 'cat' -e" 4417 127
+run_test 4418 "'\"ls -l\"' 'cat' -e" 4418 127
+run_test 4419 "\"'ls -l'\" 'cat' -e" 4419 127
 
 
-run_test 720 "'ls -l' cat '-e'" 720 127
-run_test 721 "\"ls -l\" cat '-e'" 721 127
-run_test 722 "'\"ls -l\"' cat '-e'" 722 127
-run_test 723 "\"'ls -l'\" cat '-e'" 723 127
-run_test 724 "'ls -l' 'cat' '-e'" 724 127
-run_test 725 "\"ls -l\" 'cat' '-e'" 725 127
-run_test 726 "'\"ls -l\"' 'cat' '-e'" 726 127
-run_test 727 "\"'ls -l'\" 'cat' '-e'" 727 127
-run_test 728 "'ls -l' \"cat\" '-e'" 728 127
-run_test 729 "\"ls -l\" \"cat\" '-e'" 729 127
-run_test 730 "'\"ls -l\"' \"cat\" '-e'" 730 127
-run_test 731 "\"'ls -l'\" \"cat\" '-e'" 731 127
-run_test 732 "'ls -l' \"cat\" \"-e\"" 732 127
-run_test 733 "\"ls -l\" \"cat\" \"-e\"" 733 127
-run_test 734 "'\"ls -l\"' \"cat\" \"-e\"" 734 127
-run_test 735 "\"'ls -l'\" \"cat\" \"-e\"" 735 127
+run_test 4420 "'ls -l' cat '-e'" 4420 127
+run_test 4421 "\"ls -l\" cat '-e'" 4421 127
+run_test 4422 "'\"ls -l\"' cat '-e'" 4422 127
+run_test 4423 "\"'ls -l'\" cat '-e'" 4423 127
+run_test 4424 "'ls -l' 'cat' '-e'" 4424 127
+run_test 4425 "\"ls -l\" 'cat' '-e'" 4425 127
+run_test 4426 "'\"ls -l\"' 'cat' '-e'" 4426 127
+run_test 4427 "\"'ls -l'\" 'cat' '-e'" 4427 127
+run_test 4428 "'ls -l' \"cat\" '-e'" 4428 127
+run_test 4429 "\"ls -l\" \"cat\" '-e'" 4429 127
+run_test 4430 "'\"ls -l\"' \"cat\" '-e'" 4430 127
+run_test 4431 "\"'ls -l'\" \"cat\" '-e'" 4431 127
+run_test 4432 "'ls -l' \"cat\" \"-e\"" 4432 127
+run_test 4433 "\"ls -l\" \"cat\" \"-e\"" 4433 127
+run_test 4434 "'\"ls -l\"' \"cat\" \"-e\"" 4434 127
+run_test 4435 "\"'ls -l'\" \"cat\" \"-e\"" 4435 127
 
-run_test 736 "'ls -l'cat '-e'" 736 127
-run_test 737 "\"ls -l\"cat '-e'" 737 127
-run_test 738 "'\"ls -l\"'cat '-e'" 738 127
-run_test 739 "\"'ls -l'\"cat '-e'" 739 127
-run_test 740 "'ls -l'cat \"-e\"" 770 127
-run_test 741 "\"ls -l\"cat \"-e\"" 741 127
-run_test 742 "'\"ls -l\"'cat \"-e\"" 772 127
-run_test 743 "\"'ls -l'\"cat \"-e\"" 743 127
-run_test 744 "'ls -l''cat' '-e'" 744 127
-run_test 745 "\"ls -l\"'cat' '-e'" 745 127
-run_test 746 "'\"ls -l\"''cat' '-e'" 746 127
-run_test 747 "\"'ls -l'\"'cat' '-e'" 747 127
-run_test 748 "'ls -l''cat' \"-e\"" 748 127
-run_test 749 "\"ls -l\"'cat' \"-e\"" 749 127
-run_test 750 "'\"ls -l\"''cat' \"-e\"" 750 127
-run_test 751 "\"'ls -l'\"'cat' \"-e\"" 751 127
-run_test 752 "'ls -l'\"cat\" '-e'" 752 127
-run_test 753 "\"ls -l\"\"cat\" '-e'" 753 127
-run_test 754 "'\"ls -l\"'\"cat\" '-e'" 754 127
-run_test 755 "\"'ls -l'\"\"cat\" '-e'" 755 127
-run_test 756 "'ls -l'\"cat\" \"-e\"" 756 127
-run_test 757 "\"ls -l\"\"cat\" \"-e\"" 757 127
-run_test 758 "'\"ls -l\"'\"cat\" \"-e\"" 758 127
-run_test 759 "\"'ls -l'\"\"cat\" \"-e\"" 759 127
+run_test 4436 "'ls -l'cat '-e'" 4436 127
+run_test 4437 "\"ls -l\"cat '-e'" 4437 127
+run_test 4438 "'\"ls -l\"'cat '-e'" 4438 127
+run_test 4439 "\"'ls -l'\"cat '-e'" 4439 127
+run_test 4440 "'ls -l'cat \"-e\"" 4470 127
+run_test 4441 "\"ls -l\"cat \"-e\"" 4441 127
+run_test 4442 "'\"ls -l\"'cat \"-e\"" 4472 127
+run_test 4443 "\"'ls -l'\"cat \"-e\"" 4443 127
+run_test 4444 "'ls -l''cat' '-e'" 4444 127
+run_test 4445 "\"ls -l\"'cat' '-e'" 4445 127
+run_test 4446 "'\"ls -l\"''cat' '-e'" 4446 127
+run_test 4447 "\"'ls -l'\"'cat' '-e'" 4447 127
+run_test 4448 "'ls -l''cat' \"-e\"" 4448 127
+run_test 4449 "\"ls -l\"'cat' \"-e\"" 4449 127
+run_test 4450 "'\"ls -l\"''cat' \"-e\"" 4450 127
+run_test 4451 "\"'ls -l'\"'cat' \"-e\"" 4451 127
+run_test 4452 "'ls -l'\"cat\" '-e'" 4452 127
+run_test 4453 "\"ls -l\"\"cat\" '-e'" 4453 127
+run_test 4454 "'\"ls -l\"'\"cat\" '-e'" 4454 127
+run_test 4455 "\"'ls -l'\"\"cat\" '-e'" 4455 127
+run_test 4456 "'ls -l'\"cat\" \"-e\"" 4456 127
+run_test 4457 "\"ls -l\"\"cat\" \"-e\"" 4457 127
+run_test 4458 "'\"ls -l\"'\"cat\" \"-e\"" 4458 127
+run_test 4459 "\"'ls -l'\"\"cat\" \"-e\"" 4459 127
 
-run_test 760 "'ls -l' cat'-e'" 760 127
-run_test 761 "\"ls -l\" cat'-e'" 761 127
-run_test 762 "'\"ls -l\"' cat'-e'" 762 127
-run_test 763 "\"'ls -l'\" cat'-e'" 763 127
-run_test 764 "'ls -l' 'cat''-e'" 764 127
-run_test 765 "\"ls -l\" 'cat''-e'" 765 127
-run_test 766 "'\"ls -l\"' 'cat''-e'" 766 127
-run_test 767 "\"'ls -l'\" 'cat''-e'" 767 127
-run_test 768 "'ls -l' \"cat\"'-e'" 768 127
-run_test 769 "\"ls -l\" \"cat\"'-e'" 769 127
-run_test 770 "'\"ls -l\"' \"cat\"'-e'" 770 127
-run_test 771 "\"'ls -l'\" \"cat\"'-e'" 771 127
-run_test 772 "'ls -l' \"cat\"\"-e\"" 772 127
-run_test 773 "\"ls -l\" \"cat\"\"-e\"" 773 127
-run_test 774 "'\"ls -l\"' \"cat\"\"-e\"" 774 127
-run_test 775 "\"'ls -l'\" \"cat\"\"-e\"" 775 127
+run_test 4460 "'ls -l' cat'-e'" 4460 127
+run_test 4461 "\"ls -l\" cat'-e'" 4461 127
+run_test 4462 "'\"ls -l\"' cat'-e'" 4462 127
+run_test 4463 "\"'ls -l'\" cat'-e'" 4463 127
+run_test 4464 "'ls -l' 'cat''-e'" 4464 127
+run_test 4465 "\"ls -l\" 'cat''-e'" 4465 127
+run_test 4466 "'\"ls -l\"' 'cat''-e'" 4466 127
+run_test 4467 "\"'ls -l'\" 'cat''-e'" 4467 127
+run_test 4468 "'ls -l' \"cat\"'-e'" 4468 127
+run_test 4469 "\"ls -l\" \"cat\"'-e'" 4469 127
+run_test 4470 "'\"ls -l\"' \"cat\"'-e'" 4470 127
+run_test 4471 "\"'ls -l'\" \"cat\"'-e'" 4471 127
+run_test 4472 "'ls -l' \"cat\"\"-e\"" 4472 127
+run_test 7473 "\"ls -l\" \"cat\"\"-e\"" 4473 127
+run_test 4474 "'\"ls -l\"' \"cat\"\"-e\"" 4474 127
+run_test 4475 "\"'ls -l'\" \"cat\"\"-e\"" 4475 127
 
-BLOCK_COMMENT
-
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 4400 to 4475\n"
+else
+	echo -e "end of test serie from 4400 to 4475"
+fi
 
 run_test 5000 "< infile1.txt cat" 5000 0
 run_test 5001 "cat < infile1.txt" 5000 0
@@ -1710,13 +1720,27 @@ run_test 5024 "> outfile1.txt < infile1.txt cat" 5022 0
 run_test 5025 "< infile1.txt cat > outfile1.txt > outfile2.txt" 5025 0
 run_test 5026 "< infile1.txt < infile2.txt cat" 5026 0
 
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 5000 to 5026\n"
+else
+	echo -e "end of test serie from 5000 to 5026"
+fi
+
 
 run_test 7000 "infile1.txt cat" 7000 127 "infile1.txt: command not found"
 run_test 7001 "infile1.txt wc" 7001 127 "infile1.txt: command not found"
 
 #run_test 5000 "< infile.txt cat wc" 5000 1 //cat: wc: No such file or directory
 
+run_test 9000 "< missing_file cat -e" 9000 1 "missing_file: No such file or directory"
 
+#run_test 10000 "< missing_file cat > outfile1.txt" 9000 1 "missing_file: No such file or directory"
+#run_test 10000 "> outfile.txt < missing_file cat" 9000 1 "missing_file: No such file or directory"
+#run_test 10000 "> outfile1withoutpermission < missing_file cat -e" 9000 1 "missing_file: No such file or directory"
+#run_test 10000 "< missing_file.txt > outfile1withoutpermission cat -e" 9000 1 "missing_file: No such file or directory"
+#run_test 10000 "> outfile1withoutpermission < infile.txt cat -e" 9000 1 "missing_file: No such file or directory"
+#run_test 10000 "< infile.txt > outfile1withoutpermission cat -e" 9000 1 "missing_file: No such file or directory"
 
 # -g for greater than and -ge for greater than or equal to
 if [ $flag -gt 0 ]

@@ -76,7 +76,7 @@ void	expand_content_when_heredoc(char **str);
 
 void	build_exec_struct(t_exec_struct **exec_struct);
 
-int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection);
+int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection, t_exec_substring **exec_substring);
 
 void	check_exec_arguments(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 char	**build_envp_arr(t_exec_struct **exec_struct);
@@ -87,7 +87,7 @@ int		check_path_cmd_validity(char **path, t_exec_substring **exec_substring);
 
 void	execution(t_exec_struct **exec_struct);
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct);
-void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp);
+void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp);
 
 
 

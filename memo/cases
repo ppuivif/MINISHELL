@@ -118,3 +118,6 @@ echo $0 donne le nom du programme
 $1, ... les arguments du programme
 
 $$ affiche le PID
+
+attention qd saisie de plsrs heredoc d'affilée CTRL-C doit kill la saisie de tous les heredoc
+CTRL-D ne les ferme que les uns après les autres.

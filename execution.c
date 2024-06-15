@@ -10,17 +10,19 @@
 	error_execve_and_exit(exec_struct);//to verify
 }*/
 
-static int	search_definitive_input(t_exec_redirection *redirection, int fd_in)
+static int	search_last_input(t_exec_redirection *redirection, int fd_in)
 {
 	while (redirection)
 	{
 		if (redirection->fd_input != 0)
 			fd_in = redirection->fd_input;
+		if (redirection->next)
+			close (redirection->fd_input);
 		redirection = redirection->next;
 	}
 	return (fd_in);
 }
-static int	search_definitive_output(t_exec_redirection *redirection)
+static int	search_last_output(t_exec_redirection *redirection)
 {
 	int	fd_out;
 
@@ -29,6 +31,8 @@ static int	search_definitive_output(t_exec_redirection *redirection)
 	{
 		if (redirection->fd_output != 1)
 			fd_out = redirection->fd_output;
+		if (redirection->next)
+			close (redirection->fd_output);
 		redirection = redirection->next;
 	}
 	return (fd_out);
@@ -68,14 +72,16 @@ void	execution(t_exec_struct **exec_struct)
 	int		fd_out;
 	size_t	substrings_nmemb;
 	char	**envp_arr;
-//	int		status;
+	int		status;
 	int		*pid_arr;
-
+	int		wait_return;
+		
 	cursor = (*exec_struct)->exec_substrings;
 	substrings_nmemb = ft_lst_size7(cursor);
 //	printf("substrings nmemb : %ld", substrings_nmemb);
 	i = 0;
-//	status = 0;
+	status = 0;
+	wait_return = 0;
 	fd_in = STDIN_FILENO;
 	pid_arr = NULL;
 //	if (substrings_nmemb == 1)
@@ -88,8 +94,8 @@ void	execution(t_exec_struct **exec_struct)
 		fd_out = STDOUT_FILENO;
 		if (cursor->exec_redirections)
 		{
-			fd_in = search_definitive_input(cursor->exec_redirections, fd_in);
-			fd_out = search_definitive_output(cursor->exec_redirections);
+			fd_in = search_last_input(cursor->exec_redirections, fd_in);
+			fd_out = search_last_output(cursor->exec_redirections);
 		}
 		if (cursor != ft_lst_last7((*exec_struct)->exec_substrings))
 		{
@@ -109,16 +115,14 @@ void	execution(t_exec_struct **exec_struct)
 			error_fork_creation_and_exit(exec_struct);
 		}
 		pid_arr[i] = pid_1;
+//		printf("pid : %d\n", pid_1);
 		if (pid_1 == 0)
 		{
-//			exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct);
-//			printf("pid_arr[%ld] : %d\n", i, pid_arr[i]);
+//		exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct);
+//		printf("pid_arr[%ld] : %d\n", i, pid_arr[i]);
 			exec_child(cursor, fd_in, fd_out, envp_arr);
-			//return ?
-		}	
-		cursor = cursor->next;
-		close_fd(fd_in);
-		close_fd(fd_out);
+		//return ?
+		}
 	/*	if (cursor == ft_lst_last7((*exec_struct)->exec_substrings))
 		{
 			close_fd(fd[0]);
@@ -126,6 +130,9 @@ void	execution(t_exec_struct **exec_struct)
 		else*/
 		if (substrings_nmemb != 1)
 			close_fd(fd[1]);
+		cursor = cursor->next;
+		close_fd(fd_in);
+		close_fd(fd_out);
 		fd_in = fd[0];
 		free_and_null(envp_arr);
 		i++;
@@ -135,40 +142,47 @@ void	execution(t_exec_struct **exec_struct)
 //	while(waitpid(-1, NULL, 0) != -1)
 //		continue;
 	i -= 1;
-	while(waitpid(-1, NULL, 0) != -1)
+	
+	while (wait_return != -1)
 	{
-//			printf("j : %ld\n", i);
-//			printf("number of childs : %ld\n", i);
-//			printf("3 pid_arr[%ld] : %d\n", j, pid_arr[j]);
-		
-/*		if (waitpid(pid_arr[i], &status, 0))
+		wait_return = wait(&status);
+		if (wait_return == pid_arr[i])
 		{
-			printf("exit_code : %d\n", WEXITSTATUS(status));
-		}*/
-		continue;
+//			printf("pid_arr[i] : %d\n", pid_arr[i]);
+			//printf("here");
+//			printf("wexitstatus : %d\n", WEXITSTATUS(status));
+			(*exec_struct)->command_line->current_exit_code = WEXITSTATUS(status);
+		}
 	}
-
 }
 
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct)
-void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp)
+void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp)
 {
-	
+	int	exit_code;
+
+	exit_code = 0;
+	if (substring->exec_arguments->is_argument_valid == false)
+		exit_code = 127;
+	if (fd_in == -1 || fd_out == -1)
+		exit_code = 1;
 	dup2(fd_in, STDIN_FILENO);
 	dup2(fd_out, STDOUT_FILENO);
 	close_fd(fd_in);
 	close_fd(fd_out);
-	while (substrings->exec_redirections)
+	while (substring->exec_redirections)
 	{
-		close_fd(substrings->exec_redirections->fd_output);
-		close_fd(substrings->exec_redirections->fd_input);
-		substrings->exec_redirections = substrings->exec_redirections->next;
+		close_fd(substring->exec_redirections->fd_output);
+		close_fd(substring->exec_redirections->fd_input);
+		substring->exec_redirections = substring->exec_redirections->next;
 	}
-	if (substrings->path_with_cmd && substrings->cmd_arr \
-	&& substrings->cmd_arr[0])
+	if (substring->path_with_cmd && substring->cmd_arr \
+	&& substring->cmd_arr[0] && exit_code == 0)
 	{
-		if (execve(substrings->path_with_cmd, substrings->cmd_arr, envp) == -1)
+		if (execve(substring->path_with_cmd, substring->cmd_arr, envp) == -1)
 			perror("error\nexecve of a cmd failed");//to verify
 	}
+//	printf("exit_code : %d\n", exit_code);
+	exit(exit_code);
 //	error_execve_and_exit(exec_struct);//to verify
 }
