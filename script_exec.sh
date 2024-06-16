@@ -26,16 +26,16 @@ function create_files_and_set_permissions() {
 	chmod 644 outfile2.txt
 	echo > "temp/minishell_stdout$test_index.txt"
     chmod 644 "temp/minishell_stdout$test_index.txt"
-	exec 100> "temp/minishell_stdout$test_index.txt"
+#	exec 100> "temp/minishell_stdout$test_index.txt"
 	echo > "temp/minishell_stderr$test_index.txt"
     chmod 644 "temp/minishell_stderr$test_index.txt"
-	exec 101> "temp/minishell_stderr$test_index.txt"
+#	exec 101> "temp/minishell_stderr$test_index.txt"
 	echo > "temp/bash_stdout$test_index.txt"
     chmod 644 "temp/bash_stdout$test_index.txt"
-	exec 200> "temp/bash_stdout$test_index.txt"
+#	exec 200> "temp/bash_stdout$test_index.txt"
 	echo > "temp/bash_stderr$test_index.txt"
     chmod 644 "temp/bash_stderr$test_index.txt"
-	exec 201> "temp/bash_stderr$test_index.txt"
+#	exec 201> "temp/bash_stderr$test_index.txt"
 }
 
 function delete_infiles() {
@@ -198,13 +198,14 @@ run_test() {
 	test="test$test_index\t$command\t"
     message=$test
     create_files_and_set_permissions $test_index
-	eval "$command" 1>"temp/bash_stdout$test_index.txt" 2>temp/bash_stderr$test_index.txt
+	eval "$command" 1>"temp/bash_stdout$test_index.txt" 2>"temp/bash_stderr$test_index.txt"
 	exit_code_bash=$?
 	cat "outfile1.txt" >"temp/$test_index\_bash_outfile_1.txt"
 	cat "outfile2.txt" >"temp/$test_index\_bash_outfile_2.txt"
 	echo > outfile1.txt
 	echo > outfile2.txt	
-    echo "$command" | ./minishell 100 1>"temp/minishell_stdout$test_index.txt" 2>temp/minishell_stderr$test_index.txt
+    #echo "$command" | ./minishell 100 1>"temp/minishell_stdout$test_index.txt" 2>temp/minishell_stderr$test_index.txt
+    echo -e "$command" ./minishell 1>"temp/minishell_stdout$test_index.txt" 2>"temp/minishell_stderr$test_index.txt"
 #	exit_code_minishell=$?
 #	echo "$exit_code_minishell"
 	cat "outfile1.txt" >"temp/$test_index\_minishell_outfile_1.txt"
@@ -643,26 +644,26 @@ case $choice in
 esac
 
 
-run_test 1 "< infile.txt cat | cat > outfile1.txt" 1 0
-run_test 2 "<infile.txt cat | cat > outfile1.txt" 1 0
-run_test 3 "< infile.txt cat| cat > outfile1.txt" 1 0
-run_test 4 "< infile.txt cat |cat > outfile1.txt" 1 0
-run_test 5 "< infile.txt cat | cat >outfile1.txt" 1 0
-run_test 6 "<infile.txt cat|cat >outfile1.txt" 1 0
-run_test 7 "<	infile.txt cat | cat > outfile1.txt" 1 0
-run_test 8 "<		infile.txt cat | cat > outfile1.txt" 1 0
-run_test 9 "< infile.txt cat	| cat > outfile1.txt" 1 0
-run_test 10 "< infile.txt cat		| cat > outfile1.txt" 1 0
-run_test 11 "< infile.txt cat |	cat > outfile1.txt" 1 0
-run_test 12 "< infile.txt cat |		cat > outfile1.txt" 1 0
-run_test 13 "< infile.txt cat |	cat > outfile1.txt" 1 0
-run_test 14 "< infile.txt cat |		cat > outfile1.txt" 1 0
-run_test 15 "< infile.txt cat | cat	> outfile1.txt" 1 0
-run_test 16 "< infile.txt cat | cat		> outfile1.txt" 1 0
-run_test 17 "< infile.txt cat | cat >	outfile1.txt" 1 0
-run_test 18 "< infile.txt cat | cat >		outfile1.txt" 1 0
-run_test 19 "< infile.txt cat | cat > outfile1.txt	" 1 0
-run_test 20 "< infile.txt cat | cat > outfile1.txt		" 1 0
+run_test 1 "< infile1.txt cat | cat > outfile1.txt" 1 0
+run_test 2 "<infile1.txt cat | cat > outfile1.txt" 1 0
+run_test 3 "< infile1.txt cat| cat > outfile1.txt" 1 0
+run_test 4 "< infile1.txt cat |cat > outfile1.txt" 1 0
+run_test 5 "< infile1.txt cat | cat >outfile1.txt" 1 0
+run_test 6 "<infile1.txt cat|cat >outfile1.txt" 1 0
+run_test 7 "<	infile1.txt cat | cat > outfile1.txt" 1 0
+run_test 8 "<		infile1.txt cat | cat > outfile1.txt" 1 0
+run_test 9 "< infile1.txt cat	| cat > outfile1.txt" 1 0
+run_test 10 "< infile1.txt cat		| cat > outfile1.txt" 1 0
+run_test 11 "< infile1.txt cat |	cat > outfile1.txt" 1 0
+run_test 12 "< infile1.txt cat |		cat > outfile1.txt" 1 0
+run_test 13 "< infile1.txt cat |	cat > outfile1.txt" 1 0
+run_test 14 "< infile1.txt cat |		cat > outfile1.txt" 1 0
+run_test 15 "< infile1.txt cat | cat	> outfile1.txt" 1 0
+run_test 16 "< infile1.txt cat | cat		> outfile1.txt" 1 0
+run_test 17 "< infile1.txt cat | cat >	outfile1.txt" 1 0
+run_test 18 "< infile1.txt cat | cat >		outfile1.txt" 1 0
+run_test 19 "< infile1.txt cat | cat > outfile1.txt	" 1 0
+run_test 20 "< infile1.txt cat | cat > outfile1.txt		" 1 0
 
 
 #run_test_heredoc 21 "<< limiter cat | cat > outfile.txt" 21 0

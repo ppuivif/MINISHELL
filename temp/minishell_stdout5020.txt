@@ -1,0 +1,1 @@
+ls > outfile1.txt ./minishell

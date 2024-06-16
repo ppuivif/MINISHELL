@@ -1,0 +1,1 @@
+./script_exec.sh: line 201: 'ls -l': command not found

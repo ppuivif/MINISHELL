@@ -38,7 +38,7 @@ static int	search_last_output(t_exec_redirection *redirection)
 	return (fd_out);
 }
 
-static int	*build_pid_arr(int *pid_arr, int i)
+/*static int	*build_pid_arr(int *pid_arr, int i)
 {
 	int	*new_pid_arr;
 	int	j;
@@ -53,14 +53,15 @@ static int	*build_pid_arr(int *pid_arr, int i)
 		new_pid_arr[0] = 0;
 		return (new_pid_arr);
 	}
-	while (j <= i)
+	while (j < i)
 	{
 		new_pid_arr[j] = pid_arr[j];
 		j++;
 	}
+	new_pid_arr[j] = 0;
 	free_and_null(pid_arr);
 	return(new_pid_arr);
-}
+}*/
 
 void	execution(t_exec_struct **exec_struct)
 {
@@ -73,8 +74,9 @@ void	execution(t_exec_struct **exec_struct)
 	size_t	substrings_nmemb;
 	char	**envp_arr;
 	int		status;
-	int		*pid_arr;
+//	int		*pid_arr;
 	int		wait_return;
+	int		pid_last_process;
 		
 	cursor = (*exec_struct)->exec_substrings;
 	substrings_nmemb = ft_lst_size7(cursor);
@@ -83,13 +85,15 @@ void	execution(t_exec_struct **exec_struct)
 	status = 0;
 	wait_return = 0;
 	fd_in = STDIN_FILENO;
-	pid_arr = NULL;
+//	pid_arr = NULL;
+	pid_last_process = 0;
+
 //	if (substrings_nmemb == 1)
 //		unique_substring_execution(cursor, exec_struct);
 	
 	while (i < substrings_nmemb)
 	{
-		pid_arr = build_pid_arr(pid_arr, i);
+//		pid_arr = build_pid_arr(pid_arr, i);
 //		printf("1 pid_arr[%ld] : %d\n", i, pid_arr[i]);
 		fd_out = STDOUT_FILENO;
 		if (cursor->exec_redirections)
@@ -101,6 +105,7 @@ void	execution(t_exec_struct **exec_struct)
 		{
 			if (pipe(fd) == -1)
 			{
+//				free(pid_arr);
 				perror("error\ncreate pipe failed");
 				error_pipe_creation_and_exit(exec_struct);
 			}
@@ -111,16 +116,19 @@ void	execution(t_exec_struct **exec_struct)
 		pid_1 = fork();
 		if (pid_1 == -1)
 		{
+//			free(pid_arr);
 			perror("error\ncreate fork failed");
 			error_fork_creation_and_exit(exec_struct);
 		}
-		pid_arr[i] = pid_1;
+//		pid_arr[i] = pid_1;
+		pid_last_process = pid_1;
+//		free(pid_arr);
 //		printf("pid : %d\n", pid_1);
 		if (pid_1 == 0)
 		{
 //		exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct);
 //		printf("pid_arr[%ld] : %d\n", i, pid_arr[i]);
-			exec_child(cursor, fd_in, fd_out, envp_arr);
+			exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct);
 		//return ?
 		}
 	/*	if (cursor == ft_lst_last7((*exec_struct)->exec_substrings))
@@ -146,7 +154,7 @@ void	execution(t_exec_struct **exec_struct)
 	while (wait_return != -1)
 	{
 		wait_return = wait(&status);
-		if (wait_return == pid_arr[i])
+		if (wait_return == pid_last_process)
 		{
 //			printf("pid_arr[i] : %d\n", pid_arr[i]);
 			//printf("here");
@@ -154,10 +162,11 @@ void	execution(t_exec_struct **exec_struct)
 			(*exec_struct)->command_line->current_exit_code = WEXITSTATUS(status);
 		}
 	}
+//	free(pid_arr);
 }
 
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct)
-void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp)
+void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct)
 {
 	int	exit_code;
 
@@ -179,10 +188,15 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp)
 	if (substring->path_with_cmd && substring->cmd_arr \
 	&& substring->cmd_arr[0] && exit_code == 0)
 	{
-		if (execve(substring->path_with_cmd, substring->cmd_arr, envp) == -1)
+		if (execve(substring->path_with_cmd, substring->cmd_arr, envp_arr) == -1)
 			perror("error\nexecve of a cmd failed");//to verify
 	}
 //	printf("exit_code : %d\n", exit_code);
+	free_envp_struct(&(*exec_struct)->envp_struct);
+	free_all_command_line(&(*exec_struct)->command_line);
+	free_all_exec_struct(exec_struct);
+	free(envp_arr);
+	clear_history();
 	exit(exit_code);
 //	error_execve_and_exit(exec_struct);//to verify
 }

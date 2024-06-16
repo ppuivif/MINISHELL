@@ -22,9 +22,8 @@
 void			print_arr(char **arr);
 //!t_command_line 	*parse_command_line(char *str);
 
-void get_envp(char **envp, t_envp_struct **envp_struct);
+void get_envp(char **envp, t_envp_struct **envp_struct, char *line);
 
-//t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct, int exit_code, int fd);
 t_command_line 	*parse_command_line(char **argv, char *str, t_envp_struct **envp_struct, int exit_code);
 int		cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line);
 int		parse_substrings(char **remaining_line, t_command_line **command_line);
@@ -87,7 +86,7 @@ int		check_path_cmd_validity(char **path, t_exec_substring **exec_substring);
 
 void	execution(t_exec_struct **exec_struct);
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct);
-void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp);
+void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct);
 
 
 

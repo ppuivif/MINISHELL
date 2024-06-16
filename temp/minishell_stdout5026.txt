@@ -1,0 +1,1 @@
+< infile1.txt < infile2.txt cat ./minishell

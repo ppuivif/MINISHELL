@@ -11,7 +11,7 @@ static void	add_line(char *envp, t_envp_struct **envp_struct)
 	ft_lst_add_back6(envp_struct, new_element);
 }
 
-void	get_envp(char **envp, t_envp_struct **envp_struct)
+void	get_envp(char **envp, t_envp_struct **envp_struct, char *line)
 {
 	int	i;
 
@@ -19,6 +19,7 @@ void	get_envp(char **envp, t_envp_struct **envp_struct)
 	if (!envp_struct || !envp[0])
 	{
 		ft_putstr_fd("error\nenvp doesn't exists or is empty\n", 2);
+		free_and_null(line);
 		exit(EXIT_FAILURE);
 	}
 	while (envp[i])
