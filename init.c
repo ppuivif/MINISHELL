@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/15 18:07:26 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/17 16:10:19 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,8 +112,8 @@ int	init_exec_redirection_struct(t_exec_redirection **exec_redirection)
 	(*exec_redirection)->substring_index = 0;
 	(*exec_redirection)->file = NULL;
 	(*exec_redirection)->e_redirection = 2;
-	(*exec_redirection)->fd_input = STDIN_FILENO;
-	(*exec_redirection)->fd_output = STDOUT_FILENO;
+	(*exec_redirection)->fd_input = -2;
+	(*exec_redirection)->fd_output = -2;
 	(*exec_redirection)->next = NULL;
 	return (0);
 }

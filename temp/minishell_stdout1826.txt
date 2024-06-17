@@ -1,1 +1,0 @@
->> "$OUTFILE $OUTFILE" ./minishell

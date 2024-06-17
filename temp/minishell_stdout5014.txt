@@ -1,1 +1,0 @@
-wc -l infile1.txt ./minishell

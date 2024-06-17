@@ -12,28 +12,43 @@
 
 static int	search_last_input(t_exec_redirection *redirection, int fd_in)
 {
-	while (redirection)
+	t_exec_redirection	*cursor;
+
+	cursor = redirection;
+	while (cursor)
 	{
-		if (redirection->fd_input != 0)
-			fd_in = redirection->fd_input;
-		if (redirection->next)
-			close (redirection->fd_input);
-		redirection = redirection->next;
+		if (cursor->fd_input == -1)
+		{
+			fd_in = cursor->fd_input;
+			break;
+		}
+		if (cursor->fd_input > 2)
+			fd_in = cursor->fd_input;
+//		if (cursor->next)
+//			close_fd(cursor->fd_input);
+		cursor = cursor->next;
 	}
 	return (fd_in);
 }
 static int	search_last_output(t_exec_redirection *redirection)
 {
 	int	fd_out;
+	t_exec_redirection	*cursor;
 
 	fd_out = 1;
-	while (redirection)
+	cursor = redirection;
+	while (cursor)
 	{
-		if (redirection->fd_output != 1)
-			fd_out = redirection->fd_output;
-		if (redirection->next)
-			close (redirection->fd_output);
-		redirection = redirection->next;
+		if (cursor->fd_output == -1)
+		{
+			fd_out = cursor->fd_output;
+			break;
+		}
+		if (cursor->fd_output > 2)
+			fd_out = cursor->fd_output;
+//		if (cursor->next)
+//			close_fd(cursor->fd_output);
+		cursor = cursor->next;
 	}
 	return (fd_out);
 }
@@ -138,6 +153,12 @@ void	execution(t_exec_struct **exec_struct)
 		else*/
 		if (substrings_nmemb != 1)
 			close_fd(fd[1]);
+/*		while (cursor->exec_redirections)
+		{
+			close_fd(cursor->exec_redirections->fd_output);
+			close_fd(cursor->exec_redirections->fd_input);
+			cursor->exec_redirections = cursor->exec_redirections->next;
+		}*/
 		cursor = cursor->next;
 		close_fd(fd_in);
 		close_fd(fd_out);
@@ -149,7 +170,7 @@ void	execution(t_exec_struct **exec_struct)
 //	while(waitpid(-1, &tmp, 0) != -1)
 //	while(waitpid(-1, NULL, 0) != -1)
 //		continue;
-	i -= 1;
+//	i -= 1;
 	
 	while (wait_return != -1)
 	{
@@ -175,16 +196,22 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 		exit_code = 127;
 	if (fd_in == -1 || fd_out == -1)
 		exit_code = 1;
-	dup2(fd_in, STDIN_FILENO);
-	dup2(fd_out, STDOUT_FILENO);
-	close_fd(fd_in);
-	close_fd(fd_out);
-	while (substring->exec_redirections)
+	if (fd_in > 2)
+	{
+		dup2(fd_in, STDIN_FILENO);
+		close_fd(fd_in);
+	}
+	if (fd_out > 2)
+	{
+		dup2(fd_out, STDOUT_FILENO);
+		close_fd(fd_out);
+	}
+/*	while (substring->exec_redirections)
 	{
 		close_fd(substring->exec_redirections->fd_output);
 		close_fd(substring->exec_redirections->fd_input);
 		substring->exec_redirections = substring->exec_redirections->next;
-	}
+	}*/
 	if (substring->path_with_cmd && substring->cmd_arr \
 	&& substring->cmd_arr[0] && exit_code == 0)
 	{

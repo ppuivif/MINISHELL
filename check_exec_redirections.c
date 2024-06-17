@@ -32,7 +32,7 @@ t_exec_redirection **exec_redirection)
 			perror(exp_redirection->content);
 		else
 			perror(exp_redirection->content);
-		return_value = 1;
+		return_value = -2;
 	}
 	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
 	(*exec_redirection)->e_redirection = exp_redirection->e_redirection;
@@ -74,7 +74,7 @@ t_exec_redirection **exec_redirection)
 	free(limiter);
 	limiter = NULL;
 	(*exec_redirection)->file = filename;
-	(*exec_redirection)->e_redirection = 1;
+	(*exec_redirection)->e_redirection = REDIRECTION_INFILE;
 	(*exec_redirection)->fd_input = open((*exec_redirection)->file, O_RDONLY);
 	if ((*exec_redirection)->fd_input == -1)
 	{

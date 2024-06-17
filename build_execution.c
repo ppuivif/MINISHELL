@@ -3,18 +3,18 @@
 static void	build_exec_redirection_struct(t_expanded_redirection *exp_redirection, \
 t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
-	int					exit_code;
+	int					status_code;
 	t_exec_redirection	*exec_redirection;
 
-	exit_code = 0;
+	status_code = 0;
 	if (init_exec_redirection_struct(&exec_redirection) == -1)
 		error_allocation_exec_struct_and_exit(exec_struct);
 	exec_redirection->substring_index = (*exec_substring)->index;
-	exit_code = open_and_check_file(exp_redirection, &exec_redirection, exec_substring);
-	if (exit_code != 0)
+	status_code = open_and_check_file(exp_redirection, &exec_redirection, exec_substring);
+	if (status_code != 0)
 	{
 		(*exec_substring)->is_previous_file_opened = false;
-		(*exec_struct)->command_line->current_exit_code = exit_code;
+		(*exec_struct)->command_line->current_exit_code = 1;
 	}
 	else
 		(*exec_struct)->command_line->current_exit_code = 0;

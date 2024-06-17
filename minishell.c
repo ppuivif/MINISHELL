@@ -48,8 +48,6 @@ int main(void)
 	printf("%s\n", bp);
 
 }*/
-
-
 int main(int argc, char **argv, char **envp)
 {
 	char	*line;
@@ -61,7 +59,6 @@ int main(int argc, char **argv, char **envp)
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;
-	(void) argc;
 //	if (envp_struct)
 //		ft_envp_struct_lst_print(envp_struct, 1);
 	/*if (!isatty(STDIN_FILENO))
@@ -73,15 +70,24 @@ int main(int argc, char **argv, char **envp)
 		free(line);
 		exit(0);
 	}*/
-	if (!isatty(STDIN_FILENO))
+	if (argc == 2)//for tests
+	{
+	 	int fd = ft_atoi(argv[1]);
+		line = get_next_line(fd);
+	}
+	else if (!isatty(STDIN_FILENO))
 		line = get_next_line(STDIN_FILENO);
 	while (1)
 	{
 		get_envp(envp, &envp_struct, line);
-		if (isatty(STDIN_FILENO))
+		if (isatty(STDIN_FILENO) && argc != 2)
 			line = readline("minishell : ");
 		if (!line)
+		{
+			free_envp_struct(&envp_struct);
+			clear_history();
 			break;
+		}
 		if (line[0])//no history on empty lines
 			add_history(line);//here?
 		if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
@@ -114,15 +120,18 @@ int main(int argc, char **argv, char **envp)
 			build_exec_struct(&exec_struct);
 //			if (command_line->exit_code != 0)
 //				error_handling(&command_line);
-//			ft_execution_lst_print(exec_struct, atoi(argv[1]));
+//			ft_execution_lst_print(exec_struct, 1);
 			execution(&exec_struct);
 		}
 		if (command_line)
 			previous_exit_code = command_line->current_exit_code;
-		free_and_null(line);
+		free(line);
+		line = NULL;
+//		free_and_null(line);
 		free_envp_struct(&envp_struct);
 		free_all_command_line(&command_line);
 		free_all_exec_struct(&exec_struct);
 	}
 	return (0);
 }
+

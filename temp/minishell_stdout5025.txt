@@ -1,1 +1,0 @@
-< infile1.txt cat > outfile1.txt > outfile2.txt ./minishell

@@ -1,1 +1,0 @@
-cat infile1.txt ./minishell

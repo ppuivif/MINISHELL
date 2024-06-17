@@ -14,53 +14,66 @@ function create_temp_directory() {
 
 function create_files_and_set_permissions() {
 	test_index=$1
-	echo -e "ceci est\nun test1\n" > infile1.txt
-	echo -e "ceci est\nun test2\n" > infile2.txt
-	echo > bash_outfile1.txt
-	chmod 644 bash_outfile1.txt
-	echo > bash_outfile2.txt
-	chmod 644 bash_outfile2.txt
-	echo > outfile1.txt
-	chmod 644 outfile1.txt
-	echo > outfile2.txt
-	chmod 644 outfile2.txt
-	echo > "temp/minishell_stdout$test_index.txt"
-    chmod 644 "temp/minishell_stdout$test_index.txt"
+	echo -e "ceci est\nun test1\n" > temp/infile1.txt
+	echo -e "ceci est\nun test2\n" > temp/infile2.txt
+	echo -e "ceci est\nun test3\n" > temp/infile3.txt
+	echo > temp/outfile1.txt
+	chmod 644 temp/outfile1.txt
+	echo > temp/outfile2.txt
+	chmod 644 temp/outfile2.txt
+	echo > temp/outfile3.txt
+	chmod 644 temp/outfile3.txt
+	echo > "temp/$test_index-minishell_stdout.txt"
+    chmod 644 "temp/$test_index-minishell_stdout.txt"
 #	exec 100> "temp/minishell_stdout$test_index.txt"
-	echo > "temp/minishell_stderr$test_index.txt"
-    chmod 644 "temp/minishell_stderr$test_index.txt"
+	echo > "temp/$test_index-minishell_stderr.txt"
+    chmod 644 "temp/$test_index-minishell_stderr.txt"
 #	exec 101> "temp/minishell_stderr$test_index.txt"
-	echo > "temp/bash_stdout$test_index.txt"
-    chmod 644 "temp/bash_stdout$test_index.txt"
+	echo > "temp/$test_index-bash_stdout.txt"
+    chmod 644 "temp/$test_index-bash_stdout.txt"
 #	exec 200> "temp/bash_stdout$test_index.txt"
-	echo > "temp/bash_stderr$test_index.txt"
-    chmod 644 "temp/bash_stderr$test_index.txt"
+	echo > "temp/$test_index-bash_stderr.txt"
+    chmod 644 "temp/$test_index-bash_stderr.txt"
 #	exec 201> "temp/bash_stderr$test_index.txt"
+	echo > "temp/tmp_to_read_command.txt"
+    chmod 644 "temp/tmp_to_read_command.txt"
+	exec 100< "temp/tmp_to_read_command.txt"
+
 }
 
 function delete_infiles() {
-	if [ -f "infile1.txt" ] # to check if the given path exists and is a regular file
+	if [ -f "temp/infile1.txt" ] # to check if the given path exists and is a regular file
 	then
-		chmod 644 infile1.txt
-		rm infile1.txt
+		chmod 644 temp/infile1.txt
+		rm temp/infile1.txt
 	fi
-	if [ -f "infile2.txt" ]
+	if [ -f "temp/infile2.txt" ]
 	then
-		chmod 644 infile2.txt
-		rm infile2.txt
+		chmod 644 temp/infile2.txt
+		rm temp/infile2.txt
+	fi
+	if [ -f "temp/infile3.txt" ]
+	then
+		chmod 644 temp/infile3.txt
+		rm temp/infile3.txt
 	fi
 }
 
 function delete_outfiles() {
-	if [ -f "outfile1.txt" ]
+	if [ -f "temp/outfile1.txt" ]
 	then
-		chmod 644 outfile1.txt
-		rm outfile1.txt
+		chmod 644 temp/outfile1.txt
+		rm temp/outfile1.txt
 	fi
-	if [ -f "outfile2.txt" ]
+	if [ -f "temp/outfile2.txt" ]
 	then
-		chmod 644 outfile2.txt
-		rm outfile2.txt
+		chmod 644 temp/outfile2.txt
+		rm temp/outfile2.txt
+	fi
+	if [ -f "temp/outfile3.txt" ]
+	then
+		chmod 644 temp/outfile3.txt
+		rm temp/outfile3.txt
 	fi
 }
 
@@ -197,83 +210,101 @@ run_test() {
  	substring=$5
 	test="test$test_index\t$command\t"
     message=$test
-    create_files_and_set_permissions $test_index
-	eval "$command" 1>"temp/bash_stdout$test_index.txt" 2>"temp/bash_stderr$test_index.txt"
+    
+	create_files_and_set_permissions $test_index
+	
+	eval "$command" 1>"temp/$test_index-bash_stdout.txt" 2>"temp/$test_index-bash_stderr.txt"
 	exit_code_bash=$?
-	cat "outfile1.txt" >"temp/$test_index\_bash_outfile_1.txt"
-	cat "outfile2.txt" >"temp/$test_index\_bash_outfile_2.txt"
-	echo > outfile1.txt
-	echo > outfile2.txt	
-    #echo "$command" | ./minishell 100 1>"temp/minishell_stdout$test_index.txt" 2>temp/minishell_stderr$test_index.txt
-    echo -e "$command" ./minishell 1>"temp/minishell_stdout$test_index.txt" 2>"temp/minishell_stderr$test_index.txt"
+	cat "temp/outfile1.txt" >"temp/$test_index-bash_outfile1.txt"
+	cat "temp/outfile2.txt" >"temp/$test_index-bash_outfile2.txt"
+	
+	echo > temp/outfile1.txt
+	echo > temp/outfile2.txt	
+    
+#	echo "$command" >&100
+	echo "$command" >"temp/tmp_to_read_command.txt"
+
+#	ls -l /proc/$$/fd
+
+#    echo "$command" | ./minishell 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+    ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
 #	exit_code_minishell=$?
 #	echo "$exit_code_minishell"
-	cat "outfile1.txt" >"temp/$test_index\_minishell_outfile_1.txt"
-	cat "outfile2.txt" >"temp/$test_index\_minishell_outfile_2.txt"
- 	diff_outfile1=$(diff "temp/$test_index\_minishell_outfile_1.txt" "temp/$test_index\_bash_outfile_1.txt" > /dev/null)
+	cat "temp/outfile1.txt" >"temp/$test_index-minishell_outfile1.txt"
+	cat "temp/outfile2.txt" >"temp/$test_index-minishell_outfile2.txt"
+ 	
+	diff_outfile1=$(diff "temp/$test_index-minishell_outfile1.txt" "temp/$test_index-bash_outfile1.txt" > /dev/null)
 	diff_exit_outfile1=$?
-	diff_outfile1=$(diff "temp/$test_index\_minishell_outfile_2.txt" "temp/$test_index\_bash_outfile_2.txt" > /dev/null)
+	diff_outfile2=$(diff "temp/$test_index-minishell_outfile2.txt" "temp/$test_index-bash_outfile2.txt" > /dev/null)
 	diff_exit_outfile2=$?
-	diff_stdout=$(diff "temp/minishell_stdout$test_index.txt" "temp/bash_stdout$test_index.txt" > /dev/null)
+	diff_stdout=$(diff "temp/$test_index-minishell_stdout.txt" "temp/$test_index-bash_stdout.txt" > /dev/null)
 	diff_exit_stdout=$?
+	
 	empty_substring=""
-	if [ "$substring" = "$empty_substring" ] && [ ! -s "temp/minishell_stderr$test_index.txt" ]
+	if [ "$substring" = "$empty_substring" ] && [ ! -s "temp/$test_index-minishell_stderr.txt" ]
 	then
 		diff_empty_substring=0
 	else
 		diff_empty_substring=1
 	fi
- 	diff_stderr=$(grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null)
+ 	diff_stderr=$(grep "$substring" temp/$test_index-minishell_stderr.txt >/dev/null)
 	diff_exit_stderr=$?
+	
 	if [ $diff_exit_outfile1 -eq 1 ]
 	then
+		status1="KO"
 		error_detail1="${RED}outfile1.txt ${NC}"
-		status_message="${RED}KO : ${NC}"
 		flag=$((flag + 1))
 	else
-		status_message="${GREEN} OK${NC}"
-		delete_file "temp/$test_index\_minishell_outfile_1.txt"
-		delete_file "temp/$test_index\_bash_outfile_1.txt"
+		status1="OK"
+		delete_file "temp/$test_index-minishell_outfile1.txt"
+		delete_file "temp/$test_index-bash_outfile1.txt"
 	fi
+	
 	if [ $diff_exit_outfile2 -eq 1 ]
 	then
+		status2="KO"
 		error_detail2="${RED}outfile2.txt ${NC}"
-		status_message="${RED}KO : ${NC}"
 		flag=$((flag + 1))
 	else
-		status_message="${GREEN} OK${NC}"
-		delete_file "temp/$test_index\_minishell_outfile_2.txt"
-		delete_file "temp/$test_index\_bash_outfile_2.txt"
+		status2="OK"
+		delete_file "temp/$test_index-minishell_outfile2.txt"
+		delete_file "temp/$test_index-bash_outfile2.txt"
 	fi
+	
 	if [ $diff_exit_stdout -eq 1 ]
 	then
+		status3="KO"
 		error_detail3="${RED}std_output ${NC}"
-		status_message="${RED}KO : ${NC}"
 		flag=$((flag + 1))
 	else
-		status_message="${GREEN} OK${NC}"
-		delete_file "temp/minishell_stdout$test_index.txt"
-		delete_file "temp/bash_stdout$test_index.txt"
+		status3="OK"
+		delete_file "temp/$test_index-minishell_stdout.txt"
+		delete_file "temp/$test_index-bash_stdout.txt"
 	fi
+	
 	if [ $diff_exit_stderr -eq 0 ] || [ $diff_empty_substring -eq 0 ]
 #	if	grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null
 	then
-    	status_message="${GREEN} OK${NC}"
-		delete_file "temp/minishell_stderr$test_index.txt"
-		delete_file "temp/bash_stderr$test_index.txt"
+		status4="OK"
+		delete_file "temp/$test_index-minishell_stderr.txt"
+		delete_file "temp/$test_index-bash_stderr.txt"
 	else	
+		status4="KO"
 		error_detail4="${RED}stderr_output ${NC}"
-		status_message="${RED}KO : ${NC}"
 		flag=$((flag + 1))
     fi
+
 #	if [ $exit_code_minishell -ne $exit_code_bash ]
 #   then
+#		status5="KO"
 #		error_detail5="${RED}exit_code ${NC}"
-#	    status_message="${RED}KO : ${NC}"
 #		flag=$((flag + 1))
 #	else
+		status5="OK"
 #       status_message="${GREEN} OK${NC}"
 #    fi
+
 	# Calculate the length of the message
     message_length=${#message}
     # Calculate the number of spaces needed for alignment
@@ -284,17 +315,30 @@ run_test() {
   #  spaces=$(printf "%-${num_spaces}s" "")
     spaces=$(printf "%-30s" "")
     # Print the message with aligned status
+
 	if [ "$display" == "wrong_only" ]
 	then
-		if [ "$status_message" == "${RED}KO : ${NC}" ]
+#		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ]
+		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ]
 		then
-			echo -e "${message}${spaces}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}"
+			status_message="${RED}KO : ${NC}"
+			echo -e "${message}${spaces}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}"
 		fi
 	else
+#		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ]
+		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ]
+		then
+			status_message="${RED}KO : ${NC}"
+			echo -e "${message}${spaces}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}"
+		else
+			status_message="${GREEN} OK${NC}"
 			echo -e "${message}${spaces}${status_message}"
+		fi
 	fi
 	delete_infiles
 	delete_outfiles
+	delete_file "temp/tmp_to_read_command.txt"
+	exec 100>&-
 }
 
 run_test_heredoc() {
@@ -644,108 +688,117 @@ case $choice in
 esac
 
 
-run_test 1 "< infile1.txt cat | cat > outfile1.txt" 1 0
-run_test 2 "<infile1.txt cat | cat > outfile1.txt" 1 0
-run_test 3 "< infile1.txt cat| cat > outfile1.txt" 1 0
-run_test 4 "< infile1.txt cat |cat > outfile1.txt" 1 0
-run_test 5 "< infile1.txt cat | cat >outfile1.txt" 1 0
-run_test 6 "<infile1.txt cat|cat >outfile1.txt" 1 0
-run_test 7 "<	infile1.txt cat | cat > outfile1.txt" 1 0
-run_test 8 "<		infile1.txt cat | cat > outfile1.txt" 1 0
-run_test 9 "< infile1.txt cat	| cat > outfile1.txt" 1 0
-run_test 10 "< infile1.txt cat		| cat > outfile1.txt" 1 0
-run_test 11 "< infile1.txt cat |	cat > outfile1.txt" 1 0
-run_test 12 "< infile1.txt cat |		cat > outfile1.txt" 1 0
-run_test 13 "< infile1.txt cat |	cat > outfile1.txt" 1 0
-run_test 14 "< infile1.txt cat |		cat > outfile1.txt" 1 0
-run_test 15 "< infile1.txt cat | cat	> outfile1.txt" 1 0
-run_test 16 "< infile1.txt cat | cat		> outfile1.txt" 1 0
-run_test 17 "< infile1.txt cat | cat >	outfile1.txt" 1 0
-run_test 18 "< infile1.txt cat | cat >		outfile1.txt" 1 0
-run_test 19 "< infile1.txt cat | cat > outfile1.txt	" 1 0
-run_test 20 "< infile1.txt cat | cat > outfile1.txt		" 1 0
+run_test 1 "< temp/infile1.txt cat | cat > temp/outfile1.txt" 1 0
+run_test 2 "<temp/infile1.txt cat | cat > temp/outfile1.txt" 1 0
+run_test 3 "< temp/infile1.txt cat| cat > temp/outfile1.txt" 1 0
+run_test 4 "< temp/infile1.txt cat |cat > temp/outfile1.txt" 1 0
+run_test 5 "< temp/infile1.txt cat | cat >temp/outfile1.txt" 1 0
+run_test 6 "<temp/infile1.txt cat|cat >temp/outfile1.txt" 1 0
+run_test 7 "<	temp/infile1.txt cat | cat > temp/outfile1.txt" 1 0
+run_test 8 "<		temp/infile1.txt cat | cat > temp/outfile1.txt" 1 0
+run_test 9 "< temp/infile1.txt cat	| cat > temp/outfile1.txt" 1 0
+run_test 10 "< temp/infile1.txt cat		| cat > temp/outfile1.txt" 1 0
+run_test 11 "< temp/infile1.txt cat |	cat > temp/outfile1.txt" 1 0
+run_test 12 "< temp/infile1.txt cat |		cat > temp/outfile1.txt" 1 0
+run_test 13 "< temp/infile1.txt cat |	cat > temp/outfile1.txt" 1 0
+run_test 14 "< temp/infile1.txt cat |		cat > temp/outfile1.txt" 1 0
+run_test 15 "< temp/infile1.txt cat | cat	> temp/outfile1.txt" 1 0
+run_test 16 "< temp/infile1.txt cat | cat		> temp/outfile1.txt" 1 0
+run_test 17 "< temp/infile1.txt cat | cat >	temp/outfile1.txt" 1 0
+run_test 18 "< temp/infile1.txt cat | cat >		temp/outfile1.txt" 1 0
+run_test 19 "< temp/infile1.txt cat | cat > temp/outfile1.txt	" 1 0
+run_test 20 "< temp/infile1.txt cat | cat > temp/outfile1.txt		" 1 0
 
 
-#run_test_heredoc 21 "<< limiter cat | cat > outfile.txt" 21 0
-#run_test_heredoc 22 "<<limiter cat | cat > outfile.txt" 21 0
-#run_test_heredoc 36 "<< limiter cat | cat		> outfile.txt" 21 0
-#run_test_heredoc 37 "<< limiter cat | cat >	outfile.txt" 21 0
-#run_test_heredoc 38 "<< limiter cat | cat >		outfile.txt" 21 0
-#run_test_heredoc 39 "<< limiter cat | cat > outfile.txt	" 21 0
-#run_test_heredoc 40 "<< limiter cat | cat > outfile.txt		" 21 0
+#run_test_heredoc 21 "<< limiter cat | cat > outfile1.txt" 21 0
+#run_test_heredoc 22 "<<limiter cat | cat > outfile1.txt" 21 0
+#run_test_heredoc 36 "<< limiter cat | cat		> outfile1.txt" 21 0
+#run_test_heredoc 37 "<< limiter cat | cat >	outfile1.txt" 21 0
+#run_test_heredoc 38 "<< limiter cat | cat >		outfile1.txt" 21 0
+#run_test_heredoc 39 "<< limiter cat | cat > outfile1.txt	" 21 0
+#run_test_heredoc 40 "<< limiter cat | cat > outfile1.txt		" 21 0
 
-run_test 41 "< infile.txt cat | cat >> outfile.txt" 41 0
-run_test 42 "<infile.txt cat | cat >> outfile.txt" 41 0
-run_test 43 "< infile.txt cat| cat >> outfile.txt" 41 0
-run_test 44 "< infile.txt cat |cat >> outfile.txt" 41 0
-run_test 45 "< infile.txt cat | cat>> outfile.txt" 41 0
-run_test 46 "< infile.txt cat | cat >>outfile.txt" 41 0
-run_test 47 "<infile.txt cat|cat >>outfile.txt" 41 0
-run_test 48 "< infile.txt cat | cat >> outfile.txt" 41 0
-run_test 49 "<	infile.txt cat | cat >> outfile.txt" 41 0
-run_test 50 "<		infile.txt cat | cat >> outfile.txt" 41 0
-run_test 51 "< infile.txt cat	| cat >> outfile.txt" 41 0
-run_test 52 "< infile.txt cat		| cat >> outfile.txt" 41 0
-run_test 53 "< infile.txt cat |	cat >> outfile.txt" 41 0
-run_test 54 "< infile.txt cat |		cat >> outfile.txt" 41 0
-run_test 55 "< infile.txt cat | cat	>> outfile.txt" 41 0
-run_test 56 "< infile.txt cat | cat		>> outfile.txt" 41 0
-run_test 57 "< infile.txt cat | cat >>	outfile.txt" 41 0
-run_test 58 "< infile.txt cat | cat >>		outfile.txt" 41 0
-run_test 59 "< infile.txt cat | cat >> outfile.txt	" 41 0
-run_test 60 "< infile.txt cat | cat >> outfile.txt		" 41 0
+run_test 41 "< temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
+run_test 42 "<temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
+run_test 43 "< temp/infile1.txt cat| cat >> temp/outfile1.txt" 41 0
+run_test 44 "< temp/infile1.txt cat |cat >> temp/outfile1.txt" 41 0
+run_test 45 "< temp/infile1.txt cat | cat>> temp/outfile1.txt" 41 0
+run_test 46 "< temp/infile1.txt cat | cat >>temp/outfile1.txt" 41 0
+run_test 47 "<temp/infile1.txt cat|cat >>temp/outfile1.txt" 41 0
+run_test 48 "< temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
+run_test 49 "<	temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
+run_test 50 "<		temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
+run_test 51 "< temp/infile1.txt cat	| cat >> temp/outfile1.txt" 41 0
+run_test 52 "< temp/infile1.txt cat		| cat >> temp/outfile1.txt" 41 0
+run_test 53 "< temp/infile1.txt cat |	cat >> temp/outfile1.txt" 41 0
+run_test 54 "< temp/infile1.txt cat |		cat >> temp/outfile1.txt" 41 0
+run_test 55 "< temp/infile1.txt cat | cat	>> temp/outfile1.txt" 41 0
+run_test 56 "< temp/infile1.txt cat | cat		>> temp/outfile1.txt" 41 0
+run_test 57 "< temp/infile1.txt cat | cat >>	temp/outfile1.txt" 41 0
+run_test 58 "< temp/infile1.txt cat | cat >>		temp/outfile1.txt" 41 0
+run_test 59 "< temp/infile1.txt cat | cat >> temp/outfile1.txt	" 41 0
+run_test 60 "< temp/infile1.txt cat | cat >> temp/outfile1.txt		" 41 0
+
+if [ "$display" == "all" ]
+then
+	echo -e "end of test serie from 1 to 60\n"
+else
+	echo -e "end of test serie from 1 to 60"
+fi
 
 : <<BLOCK_COMMENT
 
 
-#run_test_heredoc 61 "<< limiter cat | cat >> outfile.txt" 61 0
-#run_test_heredoc 62 "<<limiter cat | cat >> outfile.txt" 61 0
-#run_test_heredoc 63 "<< limiter cat| cat >> outfile.txt" 61 0
-#run_test_heredoc 64 "<< limiter cat |cat >> outfile.txt" 61 0
-#run_test_heredoc 65 "<< limiter cat | cat>> outfile.txt" 61 0
-#run_test_heredoc 66 "<< limiter cat | cat >>outfile.txt" 61 0
-#run_test_heredoc 67 "<<limiter cat|cat >>outfile.txt" 61 0
-#run_test_heredoc 68 "<< limiter cat | cat >> outfile.txt" 61 0
-#run_test_heredoc 69 "<<	limiter cat | cat >> outfile.txt" 61 0
-#run_test_heredoc 70 "<<		limiter cat | cat >> outfile.txt" 61 0
-#run_test_heredoc 71 "<< limiter cat	| cat >> outfile.txt" 61 0
-#run_test_heredoc 72 "<< limiter cat		| cat >> outfile.txt" 61 0
-#run_test_heredoc 73 "<< limiter cat |	cat >> outfile.txt" 61 0
-#run_test_heredoc 74 "<< limiter cat |		cat >> outfile.txt" 61 0
-#run_test_heredoc 75 "<< limiter cat | cat	>> outfile.txt" 61 0
-#run_test_heredoc 76 "<< limiter cat | cat		>> outfile.txt" 61 0
-#run_test_heredoc 77 "<< limiter cat | cat >>	outfile.txt" 61 0
-#run_test_heredoc 78 "<< limiter cat | cat >>		outfile.txt" 61 0
-#run_test_heredoc 79 "<< limiter cat | cat >> outfile.txt	" 61 0
-#run_test_heredoc 80 "<< limiter cat | cat >> outfile.txt		" 61 0
+#run_test_heredoc 61 "<< limiter cat | cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 62 "<<limiter cat | cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 63 "<< limiter cat| cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 64 "<< limiter cat |cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 65 "<< limiter cat | cat>> temp/outfile1.txt" 61 0
+#run_test_heredoc 66 "<< limiter cat | cat >>temp/outfile1.txt" 61 0
+#run_test_heredoc 67 "<<limiter cat|cat >>temp/outfile1.txt" 61 0
+#run_test_heredoc 68 "<< limiter cat | cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 69 "<<	limiter cat | cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 70 "<<		limiter cat | cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 71 "<< limiter cat	| cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 72 "<< limiter cat		| cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 73 "<< limiter cat |	cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 74 "<< limiter cat |		cat >> temp/outfile1.txt" 61 0
+#run_test_heredoc 75 "<< limiter cat | cat	>> temp/outfile1.txt" 61 0
+#run_test_heredoc 76 "<< limiter cat | cat		>> temp/outfile1.txt" 61 0
+#run_test_heredoc 77 "<< limiter cat | cat >>	temp/outfile1.txt" 61 0
+#run_test_heredoc 78 "<< limiter cat | cat >>		temp/outfile1.txt" 61 0
+#run_test_heredoc 79 "<< limiter cat | cat >> temp/outfile1.txt	" 61 0
+#run_test_heredoc 80 "<< limiter cat | cat >> temp/outfile1.txt		" 61 0
+
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 1 to 80\n"
+	echo -e "end of test serie from 61 to 80\n"
 else
-	echo -e "end of test serie from 1 to 80"
+	echo -e "end of test serie from 61 to 80"
 fi
 
 BLOCK_COMMENT
 
-run_test 81 "< infile.txt < infile.txt" 81 0
-run_test 82 "<infile.txt < infile.txt" 81 0
-run_test 83 "< infile.txt <infile.txt" 81 0
-run_test 84 "<infile.txt <infile.txt" 81 0
-run_test 85 "<infile.txt<infile.txt" 81 0
-run_test 86 "<infile.txt<infile.txt" 81 0
-run_test 87 " <	infile.txt < infile.txt" 81 0
-run_test 88 " < infile.txt	< infile.txt" 81 0
-run_test 89 " < infile.txt <	infile.txt" 81 0
-run_test 90 " < infile.txt < infile.txt	" 81 0
-run_test 91 "< infile.txt < infile.txt < infile.txt" 91 0
-run_test 92 "<infile.txt < infile.txt < infile.txt" 91 0
-run_test 93 "< infile.txt <infile.txt < infile.txt" 91 0
-run_test 94 "< infile.txt < infile.txt <infile.txt" 91 0
-run_test 95 "< infile.txt < infile.txt < infile.txt" 91 0
-run_test 96 "<infile.txt <infile.txt < infile.txt" 91 0
-run_test 97 "<infile.txt <infile.txt <infile.txt" 91 0
-run_test 98 "<infile.txt<infile.txt <infile.txt" 91 0
-run_test 99 "<infile.txt<infile.txt<infile.txt" 91 0
+run_test 81 "< temp/infile1.txt < temp/infile2.txt" 81 0
+run_test 82 "<temp/infile1.txt < temp/infile2.txt" 81 0
+run_test 83 "< temp/infile1.txt <temp/infile2.txt" 81 0
+run_test 84 "<temp/infile1.txt <temp/infile2.txt" 81 0
+run_test 85 "<temp/infile1.txt<temp/infile2.txt" 81 0
+run_test 86 "<temp/infile1.txt<temp/infile2.txt" 81 0
+run_test 87 " <	temp/infile1.txt < temp/infile2.txt" 81 0
+run_test 88 " < temp/infile1.txt	< temp/infile2.txt" 81 0
+run_test 89 " < temp/infile1.txt <	temp/infile2.txt" 81 0
+run_test 90 " < temp/infile1.txt < temp/infile2.txt	" 81 0
+run_test 91 "< temp/infile1.txt < temp/infile2.txt < temp/infile3.txt" 91 0
+run_test 92 "<temp/infile1.txt < temp/infile2.txt < temp/infile3.txt" 91 0
+run_test 93 "< temp/infile1.txt <temp/infile2.txt < temp/infile3.txt" 91 0
+run_test 94 "< temp/infile1.txt < temp/infile2.txt <temp/infile3.txt" 91 0
+run_test 95 "< temp/infile1.txt < temp/infile2.txt < temp/infile3.txt" 91 0
+run_test 96 "<temp/infile1.txt <temp/infile2.txt < temp/infile3.txt" 91 0
+run_test 97 "<temp/infile1.txt <temp/infile2.txt <temp/infile3.txt" 91 0
+run_test 98 "<temp/infile1.txt<temp/infile2.txt <temp/infile3.txt" 91 0
+run_test 99 "<temp/infile1.txt<temp/infile2.txt<temp/infile3.txt" 91 0
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 81 to 99\n"
@@ -753,25 +806,26 @@ else
 	echo -e "end of test serie from 81 to 99"
 fi
 
-run_test 100 "> outfile.txt > outfile.txt" 100 0
-run_test 101 ">outfile.txt > outfile.txt" 100 0
-run_test 102 "> outfile.txt >outfile.txt" 100 0
-run_test 103 ">outfile.txt >outfile.txt" 100 0
-run_test 104 ">outfile.txt>outfile.txt" 100 0
-run_test 105 ">outfile.txt>outfile.txt" 100 0
-run_test 106 " >	outfile.txt > outfile.txt" 100 0
-run_test 107 " > outfile.txt	> outfile.txt" 100 0
-run_test 108 " > outfile.txt >	outfile.txt" 100 0
-run_test 109 " > outfile.txt > outfile.txt	" 100 0
-run_test 110 "> outfile.txt > outfile.txt > outfile.txt" 110 0
-run_test 111 ">outfile.txt > outfile.txt > outfile.txt" 110 0
-run_test 112 "> outfile.txt >outfile.txt > outfile.txt" 110 0
-run_test 113 "> outfile.txt > outfile.txt >outfile.txt" 110 0
-run_test 114 "> outfile.txt > outfile.txt > outfile.txt" 110 0
-run_test 115 ">outfile.txt >outfile.txt > outfile.txt" 110 0
-run_test 116 ">outfile.txt >outfile.txt >outfile.txt" 110 0
-run_test 117 ">outfile.txt>outfile.txt >outfile.txt" 110 0
-run_test 118 ">outfile.txt>outfile.txt>outfile.txt" 110 0
+run_test 100 "> temp/outfile1.txt > temp/outfile2.txt" 100 0
+run_test 101 ">temp/outfile1.txt > temp/outfile2.txt" 100 0
+run_test 102 "> temp/outfile1.txt >temp/outfile2.txt" 100 0
+run_test 103 ">temp/outfile1.txt >temp/outfile2.txt" 100 0
+run_test 104 ">temp/outfile1.txt>temp/outfile2.txt" 100 0
+run_test 105 ">temp/outfile1.txt>temp/outfile2.txt" 100 0
+run_test 106 " >	temp/outfile1.txt > temp/outfile2.txt" 100 0
+run_test 107 " > temp/outfile1.txt	> temp/outfile2.txt" 100 0
+run_test 108 " > temp/outfile1.txt >	temp/outfile2.txt" 100 0
+run_test 109 " > temp/outfile1.txt > temp/outfile2.txt	" 100 0
+run_test 110 "> temp/outfile1.txt > temp/outfile2.txt > temp/outfile3.txt" 110 0
+run_test 111 ">temp/outfile1.txt > temp/outfile2.txt > temp/outfile3.txt" 110 0
+run_test 112 "> temp/outfile1.txt >temp/outfile2.txt > temp/outfile3.txt" 110 0
+run_test 113 "> temp/outfile1.txt > temp/outfile2.txt >temp/outfile3.txt" 110 0
+run_test 114 "> temp/outfile1.txt > temp/outfile2.txt > temp/outfile3.txt" 110 0
+run_test 115 ">temp/outfile1.txt >temp/outfile2.txt > temp/outfile3.txt" 110 0
+run_test 116 ">temp/outfile1.txt >temp/outfile2.txt >temp/outfile3.txt" 110 0
+run_test 117 ">temp/outfile1.txt>temp/outfile2.txt >temp/outfile3.txt" 110 0
+run_test 118 ">temp/outfile1.txt>temp/outfile2.txt>temp/outfile3.txt" 110 0
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 100 to 118\n"
@@ -799,6 +853,7 @@ fi
 #run_test_heredoc 136 "<<limiter1 <<limiter2 <<limiter3" 130 0
 #run_test_heredoc 137 "<<limiter1<<limiter2 <<limiter3" 130 0
 #run_test_heredoc 138 "<<limiter1<<limiter2<<limiter3" 130 0
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 120 to 138\n"
@@ -806,25 +861,26 @@ else
 	echo -e "end of test serie from 120 to 138"
 fi
 
-run_test 140 ">> outfile.txt >> outfile.txt" 140 0
-run_test 141 ">>outfile.txt >> outfile.txt" 140 0
-run_test 142 ">> outfile.txt >>outfile.txt" 140 0
-run_test 143 ">>outfile.txt >>outfile.txt" 140 0
-run_test 144 ">>outfile.txt>>outfile.txt" 140 0
-run_test 145 ">>outfile.txt>>outfile.txt" 140 0
-run_test 146 " >>	outfile.txt >> outfile.txt" 140 0
-run_test 147 " >> outfile.txt	>> outfile.txt" 140 0
-run_test 148 " >> outfile.txt >>	outfile.txt" 140 0
-run_test 149 " >> outfile.txt >> outfile.txt	" 140 0
-run_test 150 ">> outfile.txt >> outfile.txt >> outfile.txt" 150 0
-run_test 151 ">>outfile.txt >> outfile.txt >> outfile.txt" 150 0
-run_test 152 ">> outfile.txt >>outfile.txt >> outfile.txt" 150 0
-run_test 153 ">> outfile.txt >> outfile.txt >>outfile.txt" 150 0
-run_test 154 ">> outfile.txt >> outfile.txt >> outfile.txt" 150 0
-run_test 155 ">>outfile.txt >>outfile.txt >> outfile.txt" 150 0
-run_test 156 ">>outfile.txt >>outfile.txt >>outfile.txt" 150 0
-run_test 157 ">>outfile.txt>>outfile.txt >>outfile.txt" 150 0
-run_test 158 ">>outfile.txt>>outfile.txt>>outfile.txt" 150 0
+run_test 140 ">> temp/outfile1.txt >> temp/outfile2.txt" 140 0
+run_test 141 ">>temp/outfile1.txt >> temp/outfile2.txt" 140 0
+run_test 142 ">> temp/outfile1.txt >>temp/outfile2.txt" 140 0
+run_test 143 ">>temp/outfile1.txt >>temp/outfile2.txt" 140 0
+run_test 144 ">>temp/outfile1.txt>>temp/outfile2.txt" 140 0
+run_test 145 ">>temp/outfile1.txt>>temp/outfile2.txt" 140 0
+run_test 146 " >>	temp/outfile1.txt >> temp/outfile2.txt" 140 0
+run_test 147 " >> temp/outfile1.txt	>> temp/outfile2.txt" 140 0
+run_test 148 " >> temp/outfile1.txt >>	temp/outfile2.txt" 140 0
+run_test 149 " >> temp/outfile1.txt >> temp/outfile2.txt	" 140 0
+run_test 150 ">> temp/outfile1.txt >> temp/outfile2.txt >> temp/outfile3.txt" 150 0
+run_test 151 ">>temp/outfile1.txt >> temp/outfile2.txt >> temp/outfile3.txt" 150 0
+run_test 152 ">> temp/outfile1.txt >>temp/outfile2.txt >> temp/outfile3.txt" 150 0
+run_test 153 ">> temp/outfile1.txt >> temp/outfile2.txt >>temp/outfile3.txt" 150 0
+run_test 154 ">> temp/outfile1.txt >> temp/outfile2.txt >> temp/outfile3.txt" 150 0
+run_test 155 ">>temp/outfile1.txt >>temp/outfile2.txt >> temp/outfile3.txt" 150 0
+run_test 156 ">>temp/outfile1.txt >>temp/outfile2.txt >>temp/outfile3.txt" 150 0
+run_test 157 ">>temp/outfile1.txt>>temp/outfile2.txt >>temp/outfile3.txt" 150 0
+run_test 158 ">>temp/outfile1.txt>>temp/outfile2.txt>>temp/outfile3.txt" 150 0
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 140 to 158\n"
@@ -833,18 +889,18 @@ else
 fi
 
 
-run_test 160 "< 'infile.txt'" 160 0
-run_test 161 "< \"infile.txt\"" 160 0
-run_test 162 "< '\"infile.txt\"'" 162 0
-run_test 163 "< \"'infile.txt'\"" 163 0
-run_test 164 "< '\"'infile.txt'\"'" 164 0
-run_test 165 "< \"'\"infile.txt\"'\"" 165 0
-run_test 166 "> 'outfile.txt'" 166 0
-run_test 167 "> \"outfile.txt\"" 166 0
-run_test 168 "> '\"outfile.txt\"'" 168 0
-run_test 169 "> \"'outfile.txt'\"" 169 0
-run_test 170 "> '\"'outfile.txt'\"'" 170 0
-run_test 171 "> \"'\"outfile.txt\"'\"" 171 0
+run_test 160 "< 'temp/infile1.txt'" 160 0
+run_test 161 "< \"temp/infile1.txt\"" 160 0
+run_test 162 "< '\"temp/infile1.txt\"'" 162 0
+run_test 163 "< \"'temp/infile1.txt'\"" 163 0
+run_test 164 "< '\"'temp/infile1.txt'\"'" 164 0
+run_test 165 "< \"'\"temp/infile1.txt\"'\"" 165 0
+run_test 166 "> 'temp/outfile1.txt'" 166 0
+run_test 167 "> \"temp/outfile1.txt\"" 166 0
+run_test 168 "> '\"temp/outfile1.txt\"'" 168 0
+run_test 169 "> \"'temp/outfile1.txt'\"" 169 0
+run_test 170 "> '\"'temp/outfile1.txt'\"'" 170 0
+run_test 171 "> \"'\"temp/outfile1.txt\"'\"" 171 0
 #run_test_heredoc 172 "<< 'limiter'" 172 0
 #run_test_heredoc 173 "<< \"limiter\"" 172 0
 #run_test_heredoc 174 "<< '\"limiter\"'" 174 0
@@ -854,12 +910,12 @@ run_test 171 "> \"'\"outfile.txt\"'\"" 171 0
 #run_test_heredoc 178 "<< '<limiter'" 178 0
 #run_test_heredoc 179 "<< \"<limiter\"" 179 0
 
-run_test 190 ">> 'outfile.txt'" 190 0
-run_test 191 ">> \"outfile.txt\"" 190 0
-run_test 192 ">> '\"outfile.txt\"'" 192 0
-run_test 193 ">> \"'outfile.txt'\"" 193 0
-run_test 194 ">> '\"'outfile.txt'\"'" 194 0
-run_test 195 ">> \"'\"outfile.txt\"'\"" 195 0
+run_test 190 ">> 'temp/outfile1.txt'" 190 0
+run_test 191 ">> \"temp/outfile1.txt\"" 190 0
+run_test 192 ">> '\"temp/outfile1.txt\"'" 192 0
+run_test 193 ">> \"'temp/outfile1.txt'\"" 193 0
+run_test 194 ">> '\"'temp/outfile1.txt'\"'" 194 0
+run_test 195 ">> \"'\"temp/outfile1.txt\"'\"" 195 0
 
 if [ "$display" == "all" ]
 then
@@ -869,10 +925,10 @@ else
 fi
 
 
-run_test 200 "\"< infile.txt\"" 200 0
+run_test 200 "\"< temp/infile1.txt\"" 200 0
 #run_test 210 "\"<< limiter\"" 210 0
-run_test 220 "\"> output.txt\"" 220 0
-run_test 230 "\">> output.txt\"" 230 0
+run_test 220 "\"> temp/output1.txt\"" 220 0
+run_test 230 "\">> temp/output1.txt\"" 230 0
 
 if [ "$display" == "all" ]
 then
@@ -991,6 +1047,7 @@ run_test 630 "ls \"-l\" | \"cat\" \"-e\"" 550 0
 run_test 631 "'ls' \"-l\" | \"cat\" \"-e\"" 550 0
 
 run_test 632 "\"ls\" \"-l\" | \"cat\" \"-e\"" 550 0
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 500 to 632\n"
@@ -1006,6 +1063,7 @@ run_test 654 "'ls'-l" 654 127 "command not found"
 run_test 655 "ls'-l'" 655 127 "command not found"
 run_test 656 "\"ls\"-l" 656 127 "command not found"
 run_test 657 "ls\"-l\"" 657 127 "command not found"
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 650 to 657\n"
@@ -1055,6 +1113,7 @@ run_test 732 "'ls -l' \"cat\" \"-e\"" 732 0
 run_test 733 "\"ls -l\" \"cat\" \"-e\"" 733 0
 run_test 734 "'\"ls -l\"' \"cat\" \"-e\"" 734 0
 run_test 735 "\"'ls -l'\" \"cat\" \"-e\"" 735 0
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 700 to 735\n"
@@ -1086,6 +1145,7 @@ run_test 756 "'ls -l'\"cat\" \"-e\"" 756 0
 run_test 757 "\"ls -l\"\"cat\" \"-e\"" 757 0
 run_test 758 "'\"ls -l\"'\"cat\" \"-e\"" 758 0
 run_test 759 "\"'ls -l'\"\"cat\" \"-e\"" 759 0
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 735 to 759\n"
@@ -1110,6 +1170,7 @@ run_test 773 "\"ls -l\" \"cat\"\"-e\"" 773 0
 run_test 774 "'\"ls -l\"' \"cat\"\"-e\"" 774 0
 run_test 775 "\"'ls -l'\" \"cat\"\"-e\"" 775 0
 run_test 776 "\"ls\"'-l'cat\"-e\"" 776 0
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 760 to 776\n"
@@ -1119,6 +1180,7 @@ fi
 
 run_test 1000 "'ls'-l'cat -e'" 1000 0
 run_test 1001 "'ls'-l'cat  -e'" 1001 0
+
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 1000 to 1001\n"
@@ -1701,47 +1763,160 @@ else
 	echo -e "end of test serie from 4400 to 4475"
 fi
 
-run_test 5000 "< infile1.txt cat" 5000 0
-run_test 5001 "cat < infile1.txt" 5000 0
-run_test 5002 "< infile1.txt cat -e" 5002 0
-run_test 5003 "cat -e < infile1.txt" 5002 0
-run_test 5004 "cat infile1.txt" 5004 0
+run_test 5000 "< temp/infile1.txt cat" 5000 0
+run_test 5001 "cat < temp/infile1.txt" 5000 0
+run_test 5002 "< temp/infile1.txt cat -e" 5002 0
+run_test 5003 "cat -e < temp/infile1.txt" 5002 0
+run_test 5004 "cat temp/infile1.txt" 5004 0
 
-run_test 5010 "< infile1.txt wc" 5010 0
-run_test 5011 "wc < infile1.txt" 5010 0
-run_test 5012 "< infile1.txt wc -l" 5012 0
-run_test 5013 "wc -l < infile1.txt" 5012 0
-run_test 5014 "wc -l infile1.txt" 5014 0
+run_test 5010 "< temp/infile1.txt wc" 5010 0
+run_test 5011 "wc < temp/infile1.txt" 5010 0
+run_test 5012 "< temp/infile1.txt wc -l" 5012 0
+run_test 5013 "wc -l < temp/infile1.txt" 5012 0
+run_test 5014 "wc -l temp/infile1.txt" 5014 0
 
-run_test 5020 "ls > outfile1.txt" 5020 0
-run_test 5021 "> outfile1.txt ls" 5020 0
-run_test 5022 "< infile1.txt cat > outfile1.txt" 5022 0
-run_test 5023 "< infile1.txt > outfile1.txt cat" 5022 0
-run_test 5024 "> outfile1.txt < infile1.txt cat" 5022 0
-run_test 5025 "< infile1.txt cat > outfile1.txt > outfile2.txt" 5025 0
-run_test 5026 "< infile1.txt < infile2.txt cat" 5026 0
+run_test 5020 "ls > temp/outfile1.txt" 5020 0
+run_test 5021 "> temp/outfile1.txt ls" 5020 0
+
+run_test 5030 "< temp/infile1.txt cat > temp/outfile1.txt" 5030 0
+run_test 5031 "< temp/infile1.txt > temp/outfile1.txt cat" 5030 0
+run_test 5032 "> temp/outfile1.txt < temp/infile1.txt cat" 5030 0
+
+run_test 5035 "< temp/infile1.txt wc -l > temp/outfile1.txt" 5035 0
+run_test 5036 "< temp/infile1.txt > temp/outfile1.txt wc -l" 5035 0
+run_test 5037 "> temp/outfile1.txt < temp/infile1.txt wc -l" 5035 0
+
+run_test 5040 "< temp/infile1.txt ls > temp/outfile1.txt" 5040 0
+run_test 5041 "< temp/infile1.txt > temp/outfile1.txt ls" 5040 0
+run_test 5042 "> temp/outfile1.txt < temp/infile1.txt ls" 5040 0
+
+run_test 5045 "< temp/infile1.txt < temp/infile2.txt cat" 5045 0
+run_test 5046 "< temp/infile1.txt cat < temp/infile2.txt" 5045 0
+run_test 5047 "cat < temp/infile1.txt < temp/infile2.txt" 5045 0
+
+run_test 5050 "< temp/infile1.txt < temp/infile2.txt wc -l" 5050 0
+run_test 5051 "< temp/infile1.txt wc -l < temp/infile2.txt" 5050 0
+run_test 5052 "wc -l < temp/infile1.txt < temp/infile2.txt" 5050 0
+
+run_test 5055 "< temp/infile1.txt < temp/infile2.txt ls" 5055 0
+run_test 5056 "< temp/infile1.txt ls < temp/infile2.txt" 5055 0
+run_test 5057 "ls < temp/infile1.txt < temp/infile2.txt" 5055 0
+
+#run_test 5060 "> temp/outfile1.txt > temp/outfile2.txt cat" 5060 0
+#run_test 5061 "> temp/outfile1.txt cat > temp/outfile2.txt" 5060 0
+#run_test 5062 "cat > temp/outfile1.txt > temp/outfile2.txt" 5060 0
+
+#run_test 5065 "> temp/outfile1.txt > temp/outfile2.txt wc -l" 5065 0
+#run_test 5066 "> temp/outfile1.txt wc -l > temp/outfile2.txt" 5065 0
+#run_test 5067 "wc -l > temp/outfile1.txt > temp/outfile2.txt" 5065 0
+
+run_test 5070 "> temp/outfile1.txt > temp/outfile2.txt ls" 5070 0
+run_test 5071 "> temp/outfile1.txt ls > temp/outfile2.txt" 5070 0
+run_test 5072 "ls > temp/outfile1.txt > temp/outfile2.txt" 5070 0
+
+run_test 5080 "cat < temp/infile1.txt < temp/infile2.txt > temp/outfile1.txt" 5080 0
+run_test 5081 "< temp/infile1.txt cat < temp/infile2.txt > temp/outfile1.txt" 5080 0
+run_test 5082 "< temp/infile1.txt < temp/infile2.txt cat > temp/outfile1.txt" 5080 0
+run_test 5083 "< temp/infile1.txt < temp/infile2.txt > temp/outfile1.txt cat" 5080 0
+run_test 5084 "> temp/outfile1.txt < temp/infile1.txt < temp/infile2.txt cat" 5080 0
+run_test 5085 "< temp/infile1.txt > temp/outfile1.txt < temp/infile2.txt cat" 5080 0
+
+run_test 5090 "wc -l < temp/infile1.txt < temp/infile2.txt > temp/outfile1.txt" 5090 0
+run_test 5091 "< temp/infile1.txt wc -l < temp/infile2.txt > temp/outfile1.txt" 5090 0
+run_test 5092 "< temp/infile1.txt < temp/infile2.txt wc -l > temp/outfile1.txt" 5090 0
+run_test 5093 "< temp/infile1.txt < temp/infile2.txt > temp/outfile1.txt wc -l" 5090 0
+run_test 5094 "> temp/outfile1.txt < temp/infile1.txt < temp/infile2.txt wc -l" 5090 0
+run_test 5095 "< temp/infile1.txt > temp/outfile1.txt < temp/infile2.txt wc -l" 5090 0
+
+run_test 5100 "ls < temp/infile1.txt < temp/infile2.txt > temp/outfile1.txt" 5100 0
+run_test 5101 "< temp/infile1.txt ls < temp/infile2.txt > temp/outfile1.txt" 5100 0
+run_test 5102 "< temp/infile1.txt < temp/infile2.txt ls > temp/outfile1.txt" 5100 0
+run_test 5103 "< temp/infile1.txt < temp/infile2.txt > temp/outfile1.txt ls" 5100 0
+run_test 5104 "> temp/outfile1.txt < temp/infile1.txt < temp/infile2.txt ls" 5100 0
+run_test 5105 "< temp/infile1.txt > temp/outfile1.txt < temp/infile2.txt ls" 5100 0
+
+run_test 5110 "cat < temp/infile1.txt > temp/outfile1.txt > temp/outfile2.txt" 5110 0
+run_test 5111 "< temp/infile1.txt cat > temp/outfile1.txt > temp/outfile2.txt" 5110 0
+run_test 5112 "< temp/infile1.txt > temp/outfile1.txt cat > temp/outfile2.txt" 5110 0
+run_test 5113 "< temp/infile1.txt > temp/outfile1.txt > temp/outfile2.txt cat" 5110 0
+run_test 5114 "> temp/outfile1.txt < temp/infile1.txt > temp/outfile2.txt cat" 5110 0
+run_test 5115 "> temp/outfile1.txt > temp/outfile2.txt < temp/infile1.txt cat" 5110 0
+
+run_test 5120 "wc -l < temp/infile1.txt > temp/outfile1.txt > temp/outfile2.txt" 5120 0
+run_test 5121 "< temp/infile1.txt wc -l > temp/outfile1.txt > temp/outfile2.txt" 5120 0
+run_test 5122 "< temp/infile1.txt > temp/outfile1.txt wc -l > temp/outfile2.txt" 5120 0
+run_test 5123 "< temp/infile1.txt > temp/outfile1.txt > temp/outfile2.txt wc -l" 5120 0
+run_test 5124 "> temp/outfile1.txt < temp/infile1.txt > temp/outfile2.txt wc -l" 5120 0
+run_test 5125 "> temp/outfile1.txt > temp/outfile2.txt < temp/infile1.txt wc -l" 5120 0
+
+run_test 5130 "ls < temp/infile1.txt > temp/outfile1.txt > temp/outfile2.txt" 5130 0
+run_test 5131 "< temp/infile1.txt ls > temp/outfile1.txt > temp/outfile2.txt" 5130 0
+run_test 5132 "< temp/infile1.txt > temp/outfile1.txt ls > temp/outfile2.txt" 5130 0
+run_test 5133 "< temp/infile1.txt > temp/outfile1.txt > temp/outfile2.txt ls" 5130 0
+run_test 5134 "> temp/outfile1.txt < temp/infile1.txt > temp/outfile2.txt ls" 5130 0
+run_test 5135 "> temp/outfile1.txt > temp/outfile2.txt < temp/infile1.txt ls" 5130 0
+
+run_test 5150 "< temp/infile1.txt < temp/infile2.txt cat > temp/outfile1.txt > temp/outfile2.txt" 5150 0
+run_test 5151 "< temp/infile1.txt > temp/outfile1.txt < temp/infile2.txt > temp/outfile2.txt cat" 5150 0
+run_test 5152 "> temp/outfile1.txt < temp/infile1.txt < temp/infile2.txt > temp/outfile2.txt cat" 5150 0
+run_test 5153 "> temp/outfile1.txt < temp/infile1.txt > temp/outfile2.txt < temp/infile2.txt cat" 5150 0
+run_test 5154 "> temp/outfile1.txt > temp/outfile2.txt < temp/infile1.txt < temp/infile2.txt cat" 5150 0
+
+run_test 5155 "< temp/infile1.txt < temp/infile2.txt wc -l > temp/outfile1.txt > temp/outfile2.txt" 5155 0
+run_test 5156 "< temp/infile1.txt > temp/outfile1.txt < temp/infile2.txt > temp/outfile2.txt wc -l" 5155 0
+run_test 5157 "> temp/outfile1.txt < temp/infile1.txt < temp/infile2.txt > temp/outfile2.txt wc -l" 5155 0
+run_test 5158 "> temp/outfile1.txt < temp/infile1.txt > temp/outfile2.txt < temp/infile2.txt wc -l" 5155 0
+run_test 5159 "> temp/outfile1.txt > temp/outfile2.txt < temp/infile1.txt < temp/infile2.txt wc -l" 5155 0
+
+run_test 5165 "< temp/infile1.txt < temp/infile2.txt ls > temp/outfile1.txt > temp/outfile2.txt" 5165 0
+run_test 5166 "< temp/infile1.txt > temp/outfile1.txt < temp/infile2.txt > temp/outfile2.txt ls" 5165 0
+run_test 5167 "> temp/outfile1.txt < temp/infile1.txt < temp/infile2.txt > temp/outfile2.txt ls" 5165 0
+run_test 5168 "> temp/outfile1.txt < temp/infile1.txt > temp/outfile2.txt < temp/infile2.txt ls" 5165 0
+run_test 5169 "> temp/outfile1.txt > temp/outfile2.txt < temp/infile1.txt < temp/infile2.txt ls" 5165 0
 
 if [ "$display" == "all" ]
 then
-	echo -e "end of test serie from 5000 to 5026\n"
+	echo -e "end of test serie from 5000 to 5169\n"
 else
-	echo -e "end of test serie from 5000 to 5026"
+	echo -e "end of test serie from 5000 to 5169"
 fi
 
 
-run_test 7000 "infile1.txt cat" 7000 127 "infile1.txt: command not found"
-run_test 7001 "infile1.txt wc" 7001 127 "infile1.txt: command not found"
+run_test 7000 "temp/infile1.txt cat" 7000 127 "temp/infile1.txt: command not found"
+run_test 7001 "temp/infile1.txt wc" 7001 127 "temp/infile1.txt: command not found"
 
-#run_test 5000 "< infile.txt cat wc" 5000 1 //cat: wc: No such file or directory
+run_test 7002 "< temp/infile1.txt cat wc" 7002 1 "cat: wc: No such file or directory"
 
-run_test 9000 "< missing_file cat -e" 9000 1 "missing_file: No such file or directory"
+run_test 7100 "< missing_file cat -e" 7100 1 "missing_file: No such file or directory"
+run_test 7101 "< missing_file invalid_command" 7101 1 "missing_file: No such file or directory"
 
-#run_test 10000 "< missing_file cat > outfile1.txt" 9000 1 "missing_file: No such file or directory"
-#run_test 10000 "> outfile.txt < missing_file cat" 9000 1 "missing_file: No such file or directory"
-#run_test 10000 "> outfile1withoutpermission < missing_file cat -e" 9000 1 "missing_file: No such file or directory"
-#run_test 10000 "< missing_file.txt > outfile1withoutpermission cat -e" 9000 1 "missing_file: No such file or directory"
-#run_test 10000 "> outfile1withoutpermission < infile.txt cat -e" 9000 1 "missing_file: No such file or directory"
-#run_test 10000 "< infile.txt > outfile1withoutpermission cat -e" 9000 1 "missing_file: No such file or directory"
+run_test 7200 "< missing_file cat > outfile1.txt" 7200 1 "missing_file: No such file or directory"
+run_test 7201 "> temp/outfile1.txt < missing_file cat" 7201 1 "missing_file: No such file or directory"
+
+echo > temp/outfile_without_permission
+chmod 000 temp/outfile_without_permission
+run_test 7300 "> temp/outfile_without_permission < missing_file cat -e" 7300 1 "temp/outfile_without_permission: Permission denied"
+run_test 7301 "< missing_file.txt > temp/outfile_without_permission cat -e" 7301 1 "missing_file: No such file or directory"
+run_test 7302 "> temp/outfile_without_permission < temp/infile1.txt cat -e" 7302 1 "temp/outfile_without_permission: Permission denied"
+run_test 7303 "< temp/infile1.txt > temp/outfile_without_permission cat -e" 7303 1 "temp/outfile_without_permission: Permission denied"
+run_test 7304 "> temp/outfile_without_permission < missing_file invalid_command" 7304 1 "temp/outfile_without_permission: Permission denied"
+run_test 7305 "> invalid_command temp/outfile_without_permission < missing_file" 7305 1 "temp/outfile_without_permission: Permission denied"
+
+echo > temp/infile_without_permission
+chmod 000 temp/infile_without_permission
+run_test 7300 "< temp/infile_without_permission > temp/outfile1.txt cat -e" 7300 1 "temp/infile_without_permission: Permission denied"
+run_test 7301 "> temp/outfile_without_permission.txt < temp/infile_without_permission cat -e" 7301 1 "temp/outfile_without_permission: Permission denied"
+run_test 7302 "< temp/infile_without_permission > temp/outfile_without_permission.txt cat -e" 7302 1 "temp/infile_without_permission: Permission denied"
+run_test 7303 "< temp/infile_without_permission > temp/outfile1.txt cat -e" 7303 1 "temp/infile_without_permission: Permission denied"
+run_test 7304 "> temp/outfile1.txt < temp/infile_without_permission cat -e" 7304 1 "temp/infile_without_permission: Permission denied"
+run_test 7305 "< temp/infile_without_permission > temp/outfile1.txt invalid_command" 7305 1 "temp/infile_without_permission: Permission denied"
+run_test 7306 "invalid_command < temp/infile_without_permission > temp/outfile1.txt" 7306 1 "temp/infile_without_permission: Permission denied"
+
+chmod 644 temp/outfile_without_permission
+delete_file temp/outfile_without_permission
+chmod 644 temp/infile_without_permission
+delete_file temp/infile_without_permission
+
 
 # -g for greater than and -ge for greater than or equal to
 if [ $flag -gt 0 ]
