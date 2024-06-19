@@ -55,6 +55,7 @@ int main(int argc, char **argv, char **envp)
 	t_command_line	*command_line;
 	t_exec_struct	*exec_struct;
 	int				previous_exit_code;
+	int				exit_code;
 
 	line = NULL;
 	envp_struct = NULL;
@@ -124,7 +125,10 @@ int main(int argc, char **argv, char **envp)
 			execution(&exec_struct);
 		}
 		if (command_line)
+		{
 			previous_exit_code = command_line->current_exit_code;
+			exit_code = command_line->current_exit_code;
+		}
 		free(line);
 		line = NULL;
 //		free_and_null(line);
@@ -132,6 +136,6 @@ int main(int argc, char **argv, char **envp)
 		free_all_command_line(&command_line);
 		free_all_exec_struct(&exec_struct);
 	}
-	return (0);
+	return (exit_code);//for script_test
 }
 

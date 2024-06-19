@@ -121,3 +121,67 @@ $$ affiche le PID
 
 attention qd saisie de plsrs heredoc d'affilée CTRL-C doit kill la saisie de tous les heredoc
 CTRL-D ne les ferme que les uns après les autres.
+
+
+verifications
+
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ export a=a b=b c='         a            b           c           ' d='echo   "   a'
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ ./m
+memo/             minishell         minishell_tester/ 
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ ./m
+memo/             minishell         minishell_tester/ 
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ ./minishell
+minishell : echo $a
+a
+minishell : echo $a$a
+aa
+minishell : echo $a""$a
+aa
+minishell : echo $a"d"$a
+ada
+minishell : echo $""$a"d"$a
+ada
+minishell : echo $""$a"d"$a$
+ada$
+minishell : echo $""$a"d"$a""$
+ada$
+minishell : echo $""$a"d"$a""''$
+ada$
+minishell : echo $""$a"d"$a""$''$
+ada$
+minishell : echo $asdfsdf$""$a"d"$a""$''$
+ada$
+minishell : echo $a's'''dfsdf$""$a"d"$a""$''$
+asdfsdfada$
+minishell : echo $a's'''dfsdf$""$a"d"$a""$''$'
+syntax error
+minishell : echo $a's'''dfsdf$""$a"d"$a""$''$
+asdfsdfada$
+minishell : echo $a$b
+ab
+minishell : echo $c
+         a            b           c           
+minishell : bash
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ echo $c
+a b c
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ echo    a  a    b       c
+a a b c
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ echo $c'abc'
+a b c abc
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ echo "$c"'abc'
+         a            b           c           abc
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ echo '$c''abc'
+$cabc
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ $d
+" a
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ export k='echo   "  a    b   c  "'
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ $d
+" a
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ $k
+" a b c "
+ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ 
+exit
+minishell : $d
+echo   "   a: command not found
+minishell : 
+

@@ -8,7 +8,7 @@ t_exec_redirection **exec_redirection)
 		open(exp_redirection->content, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	else if (exp_redirection->e_redirection == REDIRECTION_APPEND)
 		(*exec_redirection)->fd_output = \
-		open(exp_redirection->content, O_WRONLY | O_CREAT, 0644);
+		open(exp_redirection->content, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
 	(*exec_redirection)->e_redirection = exp_redirection->e_redirection;
 	if ((*exec_redirection)->fd_output == -1)

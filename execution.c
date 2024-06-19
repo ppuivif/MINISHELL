@@ -175,6 +175,9 @@ void	execution(t_exec_struct **exec_struct)
 	while (wait_return != -1)
 	{
 		wait_return = wait(&status);
+//		if (WIFEXITED(status))
+//		else
+//			return EXIT_FAILURE;
 		if (wait_return == pid_last_process)
 		{
 //			printf("pid_arr[i] : %d\n", pid_arr[i]);
@@ -192,7 +195,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	int	exit_code;
 
 	exit_code = 0;
-	if (substring->exec_arguments->is_argument_valid == false)
+	if (substring->exec_arguments && substring->exec_arguments->is_argument_valid == false)
 		exit_code = 127;
 	if (fd_in == -1 || fd_out == -1)
 		exit_code = 1;
@@ -217,6 +220,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	{
 		if (execve(substring->path_with_cmd, substring->cmd_arr, envp_arr) == -1)
 			perror("error\nexecve of a cmd failed");//to verify
+			//exit_code = -1 ?
 	}
 //	printf("exit_code : %d\n", exit_code);
 	free_envp_struct(&(*exec_struct)->envp_struct);
