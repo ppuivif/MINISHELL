@@ -14,7 +14,10 @@ static int	expand_variables_when_dollar_first(char *remaining_line, char **resul
 		{
 			len_to_cut = (int)strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
 			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);//malloc à protéger
-			*result = getenv(tmp);
+			*result = getenv(tmp);//do not use getenv but work on copy 
+
+			//special_treatment of result when spaces
+
 			free_and_null(tmp);
 			if (!*result)
 				*result = "";

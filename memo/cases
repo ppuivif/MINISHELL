@@ -123,6 +123,9 @@ attention qd saisie de plsrs heredoc d'affilée CTRL-C doit kill la saisie de to
 CTRL-D ne les ferme que les uns après les autres.
 
 
+export : gerer +=
+
+
 verifications
 
 ppuivif@3G1:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ export a=a b=b c='         a            b           c           ' d='echo   "   a'

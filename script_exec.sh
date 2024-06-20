@@ -696,8 +696,12 @@ choice_three() {
 
 choice_four() {
 	execute="free_choice"
-	start_index=2000
-	end_index=2100
+	read -p "Enter the start of the range: " start_index
+    read -p "Enter the end of the range: " end_index
+#	if [ start_index < 0 ] || [ end_index > 10000 ]
+#	then
+#		echo "Invalid range. Please enter valid numbers and ensure start is less than or equal to end."
+#    fi
 }
 
 #: << BLOCK_COMMENT
@@ -1329,7 +1333,7 @@ then
 fi
 
 
-export TEST="temp/test_minishell"
+export TEST="test_minishell"
 run_test 1500 "\$TEST" 1500 0
 run_test 1501 "\$DO_NOT_EXIST" 1501 0
 run_test 1502 "'\$TEST'" 1502 0
@@ -1412,7 +1416,57 @@ then
 	fi
 fi
 
+export TEST1="test1"
+export TEST2="test2"
+export TEST3="a     b     c"
+export TEST4='echo    "     a'
+#export TEST5='echo    "     a     b     c'
+
+echo ""
+echo "\$TEST1 = \"test1\""
+echo "\$TEST2 = \"test2\""
+echo "\$TEST3 = 'a     b     c'"
+echo "\$TEST4 = 'echo    \"     a'"
+echo "\$TEST5 = 'echo    \"     a     b     c'"
+echo ""
+
+run_test 1600 "echo \$TEST1\$TEST2" 1600 0
+run_test 1601 "echo \$TEST1\"\"\$TEST2" 1601 0
+run_test 1602 "echo \$TEST1"text"\$TEST2" 1602 0
+run_test 1603 "echo \$TEST1"text"\$TEST2$" 1603 0
+run_test 1604 "echo \$\"\"\$TEST1"text"\$TEST2$" 1604 0
+run_test 1605 "echo \$DO_NOT_EXIST\$TEST1"text"\$TEST2$" 1605 0
+run_test 1606 "echo    \$TEST1   \$TEST2   " 1610 0
+
+run_test 1610 "echo \$TEST3" 1610 0
+run_test 1611 "echo \$TEST3'text'" 1611 0
+run_test 1612 "echo '\$TEST3'" 1612 0
+run_test 1613 "echo '\$TEST3''text'" 1613 0
+run_test 1614 "echo \"\$TEST3\"" 1614 0
+run_test 1615 "echo \"\$TEST3\"'text'" 1615 0
+run_test 1616 "$TEST4" 1616 0
+run_test 1617 "$TEST4" 1617 0
+
+unset TEST1
+unset TEST2
+unset TEST3
+
+if (( "$start_index" >= 1600 && "$start_index" <= 1699 && "$end_index" >= 1600 && "$end_index" <= 1699 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo -e "end of test serie from 1600 to 1699\n"
+	else
+		echo -e "end of test serie from 1600 to 1699"
+	fi
+fi
+
 export INFILE="temp/infile1.txt"
+
+echo ""
+echo "\$INFILE = \"temp/infile.txt\""
+echo ""
+
 run_test 1700 "< \$INFILE" 1700 0
 run_test 1701 "< \$DO_NOT_EXIST" 1701 0
 run_test 1702 "< '\$INFILE'" 1702 0
@@ -1436,6 +1490,11 @@ run_test 1719 "< \"INFILE \$INFILE\"" 1719 0
 unset INFILE
 
 export OUTFILE="temp/outfile1.txt"
+
+echo ""
+echo "\$OUTFILE = \"temp/outfile.txt\""
+echo ""
+
 run_test 1740 "> \$OUTFILE" 1740 0
 run_test 1741 "> \$DO_NOT_EXIST" 1741 0
 run_test 1742 "> '\$OUTFILE'" 1742 0
@@ -1461,6 +1520,11 @@ unset OUTFILE
 : <<BLOCK_COMMENT
 
 export LIMITER="limiter"
+
+echo ""
+echo "\$LIMITER = \"limiter\""
+echo ""
+
 run_test 1780 "<< \$LIMITER" 1780 0
 run_test 1781 "<< \$DO_NOT_EXIST" 1781 0
 run_test 1782 "<< '\$LIMITER'" 1782 0
@@ -1486,6 +1550,11 @@ unset LIMITER
 BLOCK_COMMENT
 
 export OUTFILE="temp/outfile1.txt"
+
+echo ""
+echo "\$OUTFILE = \"temp/outfile.txt\""
+echo ""
+
 run_test 1820 ">> \$OUTFILE" 1820 0
 run_test 1821 ">> \$DO_NOT_EXIST" 1821 0
 run_test 1822 ">> '\$OUTFILE'" 1822 0
@@ -1623,49 +1692,49 @@ then
 fi
 
 
-run_test 3000 "<<< infile.txt" 2 "syntax error"
-run_test 3001 "<<<< infile.txt" 2 "syntax error"
-run_test 3002 "<<<<< infile.txt" 2 "syntax error"
-run_test 3003 "<<> infile.txt" 2 "syntax error"
-run_test 3004 "<<>> infile.txt" 2 "syntax error"
-run_test 3005 "<<>>> infile.txt" 2 "syntax error"
-run_test 3006 "<<>>>> infile.txt" 2 "syntax error"
-run_test 3007 "<<>< infile.txt" 2 "syntax error"
-run_test 3008 "<<><< infile.txt" 2 "syntax error"
-run_test 3009 "<<><<< infile.txt" 2 "syntax error"
-run_test 3010 "<<><<<< infile.txt" 2 "syntax error"
-run_test 3011 "<<><> infile.txt" 2 "syntax error"
-run_test 3012 "<<><>> infile.txt" 2 "syntax error"
-run_test 3013 "<<><>>> infile.txt" 2 "syntax error"
-run_test 3014 "<<><>>>> infile.txt" 2 "syntax error"
-run_test 3014 "<> infile.txt" 2 "syntax error"
-run_test 3015 "<>> infile.txt" 2 "syntax error"
-run_test 3016 "<>>> infile.txt" 2 "syntax error"
-run_test 3017 "<>>>> infile.txt" 2 "syntax error"
-run_test 3018 "<>>>>> infile.txt" 2 "syntax error"
-run_test 3019 "<>< infile.txt" 2 "syntax error"
-run_test 3020 "<><< infile.txt" 2 "syntax error"
-run_test 3021 "<><<< infile.txt" 2 "syntax error"
-run_test 3022 "<><<<< infile.txt" 2 "syntax error"
-run_test 3023 "<><> infile.txt" 2 "syntax error"
-run_test 3024 "<><>> infile.txt" 2 "syntax error"
-run_test 3025 "<><>>> infile.txt" 2 "syntax error"
-run_test 3026 "<><>>>> infile.txt" 2 "syntax error"
-run_test 3027 "<><>>>>> infile.txt" 2 "syntax error"
-run_test 3028 ">>> outfile.txt" 2 "syntax error"
-run_test 3029 ">>>> outfile.txt" 2 "syntax error"
-run_test 3030 ">>>>> outfile.txt" 2 "syntax error"
-run_test 3031 ">>>>>> outfile.txt" 2 "syntax error"
-run_test 3032 ">>< outfile.txt" 2 "syntax error"
-run_test 3033 ">><< outfile.txt" 2 "syntax error"
-run_test 3034 ">><<< outfile.txt" 2 "syntax error"
-run_test 3035 ">><<<< outfile.txt" 2 "syntax error"
-run_test 3036 ">><<<<< outfile.txt" 2 "syntax error"
-run_test 3037 ">><> outfile.txt" 2 "syntax error"
-run_test 3038 ">><>> outfile.txt" 2 "syntax error"
-run_test 3039 ">><>>> outfile.txt" 2 "syntax error"
-run_test 3040 ">><>>>> outfile.txt" 2 "syntax error"
-run_test 3041 ">><>>>>> outfile.txt" 2 "syntax error"
+run_test 3000 "<<< infile.txt" 3000 2 "syntax error"
+run_test 3001 "<<<< infile.txt" 3001 2 "syntax error"
+run_test 3002 "<<<<< infile.txt" 3002 2 "syntax error"
+run_test 3003 "<<> infile.txt" 3003 2 "syntax error"
+run_test 3004 "<<>> infile.txt" 3004 2 "syntax error"
+run_test 3005 "<<>>> infile.txt" 3005 2 "syntax error"
+run_test 3006 "<<>>>> infile.txt" 3006 2 "syntax error"
+run_test 3007 "<<>< infile.txt" 3007 2 "syntax error"
+run_test 3008 "<<><< infile.txt" 3008 2 "syntax error"
+run_test 3009 "<<><<< infile.txt" 3009 2 "syntax error"
+run_test 3010 "<<><<<< infile.txt" 3010 2 "syntax error"
+run_test 3011 "<<><> infile.txt" 3011 2 "syntax error"
+run_test 3012 "<<><>> infile.txt" 3012 2 "syntax error"
+run_test 3013 "<<><>>> infile.txt" 3013 2 "syntax error"
+run_test 3014 "<<><>>>> infile.txt" 3014 2 "syntax error"
+run_test 3015 "<> infile.txt" 3015 2 "syntax error"
+run_test 3016 "<>> infile.txt" 3016 2 "syntax error"
+run_test 3017 "<>>> infile.txt" 3017 2 "syntax error"
+run_test 3018 "<>>>> infile.txt" 3018 2 "syntax error"
+run_test 3019 "<>>>>> infile.txt" 3019 2 "syntax error"
+run_test 3020 "<>< infile.txt" 3020 2 "syntax error"
+run_test 3021 "<><< infile.txt" 3021 2 "syntax error"
+run_test 3022 "<><<< infile.txt" 3022 2 "syntax error"
+run_test 3023 "<><<<< infile.txt" 3023 2 "syntax error"
+run_test 3024 "<><> infile.txt" 3024 2 "syntax error"
+run_test 3025 "<><>> infile.txt" 3025 2 "syntax error"
+run_test 3026 "<><>>> infile.txt" 3026 2 "syntax error"
+run_test 3027 "<><>>>> infile.txt" 3027 2 "syntax error"
+run_test 3028 "<><>>>>> infile.txt" 3028 2 "syntax error"
+run_test 3029 ">>> outfile.txt" 3029 2 "syntax error"
+run_test 3030 ">>>> outfile.txt" 3030 2 "syntax error"
+run_test 3031 ">>>>> outfile.txt" 3031 2 "syntax error"
+run_test 3032 ">>>>>> outfile.txt" 3032 2 "syntax error"
+run_test 3033 ">>< outfile.txt" 3033 2 "syntax error"
+run_test 3034 ">><< outfile.txt" 3034 2 "syntax error"
+run_test 3035 ">><<< outfile.txt" 3035 2 "syntax error"
+run_test 3036 ">><<<< outfile.txt" 3036 2 "syntax error"
+run_test 3037 ">><<<<< outfile.txt" 3037 2 "syntax error"
+run_test 3038 ">><> outfile.txt" 3038 2 "syntax error"
+run_test 3039 ">><>> outfile.txt" 3039 2 "syntax error"
+run_test 3040 ">><>>> outfile.txt" 3040 2 "syntax error"
+run_test 3041 ">><>>>> outfile.txt" 3041 2 "syntax error"
+run_test 3042 ">><>>>>> outfile.txt" 3042 2 "syntax error"
 
 if (( "$start_index" >= 3000 && "$start_index" <= 3050 && "$end_index" >= 3000 && "$end_index" <= 3050 ))
 then
@@ -1677,39 +1746,39 @@ then
 	fi
 fi
 
-run_test 3300 "< 'infile.txt" 2  "syntax error"
-run_test 3301 "< infile.txt'" 2 "syntax error"
-run_test 3302 "< \"infile.txt" 2 "syntax error"
-run_test 3303 "< infile.txt\"" 2 "syntax error"
-run_test 3304 "< 'infile.txt\"" 2 "syntax error"
-run_test 3305 "< 'infile.txt'\"" 2 "syntax error"
-#run_test 3306 "< \"infile.txt'\"" 2 "syntax error"
-run_test 3307 "< \"infile.txt\"'" 2 "syntax error"
-run_test 3308 "<< 'infile.txt" 2 "syntax error"
-run_test 3309 "<< infile.txt'" 2 "syntax error"
-run_test 3310 "<< \"infile.txt" 2 "syntax error"
-run_test 3311 "<< infile.txt\"" 2 "syntax error"
-run_test 3312 "<< 'infile.txt\"" 2 "syntax error"
-run_test 3313 "<< 'infile.txt'\"" 2 "syntax error"
-#run_test 3314 "<< \"infile.txt'\"" 2 "syntax error"
-run_test 3315 "<< \"infile.txt\"'" 2 "syntax error"
+run_test 3300 "< 'infile.txt" 3300 2  "syntax error"
+run_test 3301 "< infile.txt'" 3301 2 "syntax error"
+run_test 3302 "< \"infile.txt" 3302 2 "syntax error"
+run_test 3303 "< infile.txt\"" 3303 2 "syntax error"
+run_test 3304 "< 'infile.txt\"" 3304 2 "syntax error"
+run_test 3305 "< 'infile.txt'\"" 3305 2 "syntax error"
+#run_test 3306 "< \"infile.txt'\"" 3306 2 "syntax error"
+run_test 3307 "< \"infile.txt\"'" 3307 2 "syntax error"
+run_test 3308 "<< 'infile.txt" 3308 2 "syntax error"
+run_test 3309 "<< infile.txt'" 3309 2 "syntax error"
+run_test 3310 "<< \"infile.txt" 3310 2 "syntax error"
+run_test 3311 "<< infile.txt\"" 3311 2 "syntax error"
+run_test 3312 "<< 'infile.txt\"" 3312 2 "syntax error"
+run_test 3313 "<< 'infile.txt'\"" 3313 2 "syntax error"
+#run_test 3314 "<< \"infile.txt'\"" 3314 2 "syntax error"
+run_test 3315 "<< \"infile.txt\"'" 3315 2 "syntax error"
 
-run_test 3400 "> 'outfile.txt" 2 "syntax error"
-run_test 3401 "> outfile.txt'" 2 "syntax error"
-run_test 3402 "> \"outfile.txt" 2 "syntax error"
-run_test 3403 "> outfile.txt\"" 2 "syntax error"
-run_test 3404 "> 'outfile.txt\"" 2 "syntax error"
-run_test 3405 "> 'outfile.txt'\"" 2 "syntax error"
-#run_test 3406 "> \"outfile.txt'\"" 2 "syntax error"
-run_test 3407 "> \"outfile.txt\"'" 2 "syntax error"
-run_test 3408 ">> 'outfile.txt" 2 "syntax error"
-run_test 3409 ">> outfile.txt'" 2 "syntax error"
-run_test 3410 ">> \"outfile.txt" 2 "syntax error"
-run_test 3411 ">> outfile.txt\"" 2 "syntax error"
-run_test 3412 ">> 'outfile.txt\"" 2 "syntax error"
-run_test 3413 ">> 'outfile.txt'\"" 2 "syntax error"
-#run_test 3414 ">> \"outfile.txt'\"" 2 "syntax error"
-run_test 3415 ">> \"outfile.txt\"'" 2 "syntax error"
+run_test 3400 "> 'outfile.txt" 3400 2 "syntax error"
+run_test 3401 "> outfile.txt'" 3401 2 "syntax error"
+run_test 3402 "> \"outfile.txt" 3402 2 "syntax error"
+run_test 3403 "> outfile.txt\"" 3403 2 "syntax error"
+run_test 3404 "> 'outfile.txt\"" 3404 2 "syntax error"
+run_test 3405 "> 'outfile.txt'\"" 3405 2 "syntax error"
+#run_test 3406 "> \"outfile.txt'\"" 3406 2 "syntax error"
+run_test 3407 "> \"outfile.txt\"'" 3407 2 "syntax error"
+run_test 3408 ">> 'outfile.txt" 3408 2 "syntax error"
+run_test 3409 ">> outfile.txt'" 3409 2 "syntax error"
+run_test 3410 ">> \"outfile.txt" 3410 2 "syntax error"
+run_test 3411 ">> outfile.txt\"" 3411 2 "syntax error"
+run_test 3412 ">> 'outfile.txt\"" 3412 2 "syntax error"
+run_test 3413 ">> 'outfile.txt'\"" 3413 2 "syntax error"
+#run_test 3414 ">> \"outfile.txt'\"" 3414 2 "syntax error"
+run_test 3415 ">> \"outfile.txt\"'" 3415 2 "syntax error"
 
 if (( "$start_index" >= 3300 && "$start_index" <= 3415 && "$end_index" >= 3300 && "$end_index" <= 3415 ))
 then
@@ -1721,24 +1790,24 @@ then
 	fi
 fi
 
-run_test 4000 "'ls" 2 "syntax error"
-run_test 4001 "ls'" 2 "syntax error"
-run_test 4002 "\"ls" 2 "syntax error"
-run_test 4003 "ls\"" 2 "syntax error"
-run_test 4004 "'ls\"" 2 "syntax error"
-run_test 4005 "'ls'\"" 2 "syntax error"
-run_test 4006 "\"ls'" 2 "syntax error"
-run_test 4007 "\"ls\"'" 2 "syntax error"
-#run_test 4008 "''ls" 2 "syntax error"
-run_test 4009 "''ls'" 2 "syntax error"
-run_test 4010 "'''ls" 2 "syntax error"
-#run_test 4011 "'''ls'" 2 "syntax error"
-run_test 4012 "'''ls''" 2 "syntax error"
-#run_test 4013 "\"\"ls" 2 "syntax error"
-run_test 4014 "\"\"ls\"" 2 "syntax error"
-run_test 4015 "\"\"\"ls" 2 "syntax error"
-#run_test 4016 "\"\"\"ls\"" 2 "syntax error"
-run_test 4017 "\"\"\"ls\"\"" 2 "syntax error"
+run_test 4000 "'ls" 4000 2 "syntax error"
+run_test 4001 "ls'" 4001 2 "syntax error"
+run_test 4002 "\"ls" 4002 2 "syntax error"
+run_test 4003 "ls\"" 4003 2 "syntax error"
+run_test 4004 "'ls\"" 4004 2 "syntax error"
+run_test 4005 "'ls'\"" 4005 2 "syntax error"
+run_test 4006 "\"ls'" 4006 2 "syntax error"
+run_test 4007 "\"ls\"'" 4007 2 "syntax error"
+#run_test 4008 "''ls" 4008 2 "syntax error"
+run_test 4009 "''ls'" 4009 2 "syntax error"
+run_test 4010 "'''ls" 4010 2 "syntax error"
+#run_test 4011 "'''ls'" 4011 2 "syntax error"
+run_test 4012 "'''ls''" 4012 2 "syntax error"
+#run_test 4013 "\"\"ls" 4013 2 "syntax error"
+run_test 4014 "\"\"ls\"" 4014 2 "syntax error"
+run_test 4015 "\"\"\"ls" 4015 2 "syntax error"
+#run_test 4016 "\"\"\"ls\"" 4016 2 "syntax error"
+run_test 4017 "\"\"\"ls\"\"" 4017 2 "syntax error"
 #to continue
 
 
@@ -1754,32 +1823,32 @@ fi
 
 
 
-run_test 4100 "cat 'ls" 2 "syntax error"
-run_test 4101 "cat ls'" 2 "syntax error"
-run_test 4102 "cat \"ls" 2 "syntax error"
-run_test 4103 "cat ls\"" 2 "syntax error"
-run_test 4104 "'cat' 'ls" 2 "syntax error"
-run_test 4105 "'cat' ls'" 2 "syntax error"
-run_test 4106 "'cat' ls'" 2 "syntax error"
-run_test 4107 "'cat' \"ls" 2 "syntax error"
-run_test 4108 "'cat' ls\"" 2 "syntax error"
-run_test 4109 ""cat" 'ls" 2 "syntax error"
-run_test 4110 ""cat" ls'" 2 "syntax error"
-run_test 4111 ""cat" ls'" 2 "syntax error"
-run_test 4112 ""cat" \"ls" 2 "syntax error"
-run_test 4113 ""cat" ls\"" 2 "syntax error"
-run_test 4114 "cat 'ls " 2 "syntax error"
-run_test 4115 "cat ls' " 2 "syntax error"
-run_test 4116 "cat \"ls " 2 "syntax error"
-run_test 4117 "cat ls\" " 2 "syntax error"
-run_test 4118 "cat 'ls  " 2 "syntax error"
-run_test 4119 "cat ls'  " 2 "syntax error"
-run_test 4120 "cat \"ls  " 2 "syntax error"
-run_test 4121 "cat ls\"  " 2 "syntax error"
-run_test 4122 "cat ' ls" 2 "syntax error"
-run_test 4123 "cat  ls'" 2 "syntax error"
-run_test 4124 "cat \" ls" 2 "syntax error"
-run_test 4125 "cat ls \"" 2 "syntax error"
+run_test 4100 "cat 'ls" 4100 2 "syntax error"
+run_test 4101 "cat ls'" 4101 2 "syntax error"
+run_test 4102 "cat \"ls" 4102 2 "syntax error"
+run_test 4103 "cat ls\"" 4103 2 "syntax error"
+run_test 4104 "'cat' 'ls" 4104 2 "syntax error"
+run_test 4105 "'cat' ls'" 4105 2 "syntax error"
+run_test 4106 "'cat' ls'" 4106 2 "syntax error"
+run_test 4107 "'cat' \"ls" 4107 2 "syntax error"
+run_test 4108 "'cat' ls\"" 4108 2 "syntax error"
+run_test 4109 ""cat" 'ls" 4109 2 "syntax error"
+run_test 4110 ""cat" ls'" 4110 2 "syntax error"
+run_test 4111 ""cat" ls'" 4111 2 "syntax error"
+run_test 4112 ""cat" \"ls" 4112 2 "syntax error"
+run_test 4113 ""cat" ls\"" 4113 2 "syntax error"
+run_test 4114 "cat 'ls " 4114 2 "syntax error"
+run_test 4115 "cat ls' " 4115 2 "syntax error"
+run_test 4116 "cat \"ls " 4116 2 "syntax error"
+run_test 4117 "cat ls\" " 4117 2 "syntax error"
+run_test 4118 "cat 'ls  " 4118 2 "syntax error"
+run_test 4119 "cat ls'  " 4119 2 "syntax error"
+run_test 4120 "cat \"ls  " 4120 2 "syntax error"
+run_test 4121 "cat ls\"  " 4121 2 "syntax error"
+run_test 4122 "cat ' ls" 4122 2 "syntax error"
+run_test 4123 "cat  ls'" 4123 2 "syntax error"
+run_test 4124 "cat \" ls" 4124 2 "syntax error"
+run_test 4125 "cat ls \"" 4125 2 "syntax error"
 
 if (( "$start_index" >= 4100 && "$start_index" <= 4125 && "$end_index" >= 4100 && "$end_index" <= 4125 ))
 then
@@ -1791,9 +1860,9 @@ then
 	fi
 fi
 
-run_test 4300 "'" 2 #exit_status to confirm
-run_test 4301 "\"" 2 #exit_status to confirm
-run_test 4302 "\"\"\"" 2 #exit_status to confirm
+run_test 4300 "'" 4300 2 #exit_status to confirm
+run_test 4301 "\"" 4301 2 #exit_status to confirm
+run_test 4302 "\"\"\"" 4302 2 #exit_status to confirm
 
 if (( "$start_index" >= 4300 && "$start_index" <= 4350 && "$end_index" >= 4300 && "$end_index" <= 4350 ))
 then
