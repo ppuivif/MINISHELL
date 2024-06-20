@@ -40,7 +40,7 @@ t_exec_redirection **exec_redirection)
 }
 
 static int	check_heredoc(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection)
+t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 {
 	char	*line;
 	int		fd;
@@ -66,7 +66,7 @@ t_exec_redirection **exec_redirection)
 			close(fd);
 			break;
 		}
-		expand_content_when_heredoc(&line);
+		expand_content_when_heredoc(&line, envp_struct);
 		ft_putstr_fd(line, fd);
 		free(line);
 		line = NULL;
@@ -85,7 +85,8 @@ t_exec_redirection **exec_redirection)
 }
 
 int	open_and_check_file(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection, t_exec_substring **exec_substring)
+t_exec_redirection **exec_redirection, t_exec_substring **exec_substring, \
+t_exec_struct *exec_struct)
 {
 	int	return_value;
 
@@ -108,7 +109,7 @@ t_exec_redirection **exec_redirection, t_exec_substring **exec_substring)
 	}
 	if (exp_redirection->e_redirection == REDIRECTION_HEREDOC)
 	{
-		return_value = check_heredoc(exp_redirection, exec_redirection);
+		return_value = check_heredoc(exp_redirection, exec_redirection, exec_struct->envp_struct);
 		return (return_value);
 	}
 	else

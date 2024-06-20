@@ -1,6 +1,21 @@
 #include "minishell.h"
 
-static int	expand_variables_when_dollar_first(char *remaining_line, char **result)
+static char	*get_variable_content(char *variable, t_envp_struct *envp_struct)
+{
+	t_envp_struct	*cursor;
+
+	cursor = envp_struct;
+	while (cursor)
+	{
+		printf("content%s\n", cursor->content);
+		if (ft_strcmp(variable, cursor->content) == 0)
+			return (cursor->content);
+		cursor = cursor->next;
+	}
+	return (NULL);
+}
+
+static int	expand_variables_when_dollar_first(char *remaining_line, char **result, t_envp_struct *envp_struct)
 {
 	int		len_to_cut;
 	char	*tmp;
@@ -14,7 +29,7 @@ static int	expand_variables_when_dollar_first(char *remaining_line, char **resul
 		{
 			len_to_cut = (int)strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
 			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);//malloc à protéger
-			*result = getenv(tmp);//do not use getenv but work on copy 
+			*result = get_variable_content(tmp, envp_struct); 
 
 			//special_treatment of result when spaces
 
@@ -28,7 +43,7 @@ static int	expand_variables_when_dollar_first(char *remaining_line, char **resul
 	return (len_to_cut);
 }
 
-static char	*expand_variables(char **remaining_line)
+static char	*expand_variables(char **remaining_line, t_envp_struct *envp_struct)
 {
 	int		len_to_cut;
 	char	*result;
@@ -37,7 +52,7 @@ static char	*expand_variables(char **remaining_line)
 	result = NULL;
 	if (remaining_line[0][0] == '$')
 	{
-		len_to_cut = expand_variables_when_dollar_first(remaining_line[0], &result);
+		len_to_cut = expand_variables_when_dollar_first(remaining_line[0], &result, envp_struct);
 		*remaining_line += len_to_cut + 1;
 	}
 	else
@@ -49,7 +64,7 @@ static char	*expand_variables(char **remaining_line)
 	return (result);
 }
 
-void	expand_string_after_dollar(char **str)
+void	expand_string_after_dollar(char **str, t_envp_struct *envp_struct)
 {
 	char	*remaining_line;
 	char	*variable;
@@ -59,7 +74,7 @@ void	expand_string_after_dollar(char **str)
 	remaining_line = *str;
 	while (remaining_line && remaining_line[0])
 	{
-		variable = expand_variables(&remaining_line);
+		variable = expand_variables(&remaining_line, envp_struct);
 		if (!result)
 			result = ft_strdup(variable);//malloc à protéger
 		else

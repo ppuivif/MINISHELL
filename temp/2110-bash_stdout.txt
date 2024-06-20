@@ -1,5 +1,6 @@
 "$OUTFILE"
 $OUTFILE
+10000
 arr_utils.c
 arr_utils.o
 build_execution.c
@@ -77,7 +78,6 @@ memo
 minishell
 minishell.c
 minishell.o
-minishell_tester
 OUTFILE outfile.txt
 		outfile.txt
 		outfile.txt		

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static void	expand_string_between_single_quotes(char **str)
+static void	expand_string_between_single_quotes(char **str, t_envp_struct *envp_struct)
 {
 	int		i;
 	char	*tmp;
@@ -13,7 +13,7 @@ static void	expand_string_between_single_quotes(char **str)
 		if (str[0][i] == '$')
 		{
 			i += get_len_and_extract_after_first_dollar(&str[0][i], &tmp);
-			expand_string_after_dollar(&tmp);
+			expand_string_after_dollar(&tmp, envp_struct);
 		}
 		else
 			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp);
@@ -26,7 +26,7 @@ static void	expand_string_between_single_quotes(char **str)
 	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
-static int	expand_content_when_dollar_first(char *str, char **tmp)
+static int	expand_content_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
 {
 	int	len;
 
@@ -39,12 +39,12 @@ static int	expand_content_when_dollar_first(char *str, char **tmp)
 	else
 	{
 		len += get_len_and_extract_after_first_dollar(str, tmp);
-		expand_string_after_dollar(tmp);
+		expand_string_after_dollar(tmp, envp_struct);
 	}
 	return (len);
 }
 
-static int	expand_content_when_dollar_not_first(char *str, char **tmp)
+static int	expand_content_when_dollar_not_first(char *str, char **tmp, t_envp_struct *envp_struct)
 {
 	int	len;
 
@@ -55,7 +55,7 @@ static int	expand_content_when_dollar_not_first(char *str, char **tmp)
 	{
 		len += get_len_and_extract_with_single_quotes(str, tmp);
 		if (strcspn(*tmp, "$") < ft_strlen(*tmp))
-			expand_string_between_single_quotes(tmp);
+			expand_string_between_single_quotes(tmp, envp_struct);
 	}
 	else if (ft_isspace(str[0]) == 0)
 		len += get_len_and_extract_until_next_quote_or_dollar(str, tmp);
@@ -82,10 +82,10 @@ void	complete_expand_content(char **str, t_command_line *command_line)
 				i += 2;
 			}
 			else
-				i += expand_content_when_dollar_first(&str[0][i], &tmp);
+				i += expand_content_when_dollar_first(&str[0][i], &tmp, command_line->envp_struct);
 		}
 		else
-			i += expand_content_when_dollar_not_first(&str[0][i], &tmp);
+			i += expand_content_when_dollar_not_first(&str[0][i], &tmp, command_line->envp_struct);
 		if (!result)
 			result = ft_strdup_freed(tmp);//malloc à protéger
 		else

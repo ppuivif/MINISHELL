@@ -69,12 +69,12 @@ t_command_line **command_line)
 	else
 	{
 		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-		expand_string_after_dollar(extracted_line);
+		expand_string_after_dollar(extracted_line, (*command_line)->envp_struct);
 	}
 	return (len);
 }
 
-static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp)
+static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
 {
 	int	len;
 
@@ -82,7 +82,7 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp)
 	if (str[1] != '\"' && str[1] != '\'' && ft_isspace(str[1]) != 0)
 	{
 		len += get_len_and_extract_after_first_dollar(str, tmp);
-		expand_string_after_dollar(tmp);
+		expand_string_after_dollar(tmp, envp_struct);
 	}
 	else
 		len += get_len_and_extract_until_next_separator_dollar_excluded \
@@ -90,7 +90,7 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp)
 	return (len);
 }
 
-void	expand_content_when_heredoc(char **str)
+void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct)
 {
 	int		i;
 	char	*tmp;
@@ -101,7 +101,7 @@ void	expand_content_when_heredoc(char **str)
 	while (str[0][i])
 	{
 		if (str[0][i] == '$')
-			i += expand_content_heredoc_when_dollar_first(&str[0][i], &tmp);
+			i += expand_content_heredoc_when_dollar_first(&str[0][i], &tmp, envp_struct);
 		else
 			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp);
 		if (!result)

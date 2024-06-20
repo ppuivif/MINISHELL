@@ -10,7 +10,7 @@ t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 	if (init_exec_redirection_struct(&exec_redirection) == -1)
 		error_allocation_exec_struct_and_exit(exec_struct);
 	exec_redirection->substring_index = (*exec_substring)->index;
-	status_code = open_and_check_file(exp_redirection, &exec_redirection, exec_substring);
+	status_code = open_and_check_file(exp_redirection, &exec_redirection, exec_substring, *exec_struct);
 	if (status_code != 0)
 	{
 		(*exec_substring)->is_previous_file_opened = false;

@@ -68,14 +68,14 @@ size_t	get_len_and_extract_until_next_separator_first_dollar_included\
 size_t	get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
 size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line);
 
-void	expand_string_after_dollar(char **str);
+void	expand_string_after_dollar(char **str, t_envp_struct *envp_struct);
 void	complete_expand_content(char **str, t_command_line *command_line);
 size_t	simple_expand_content(char *str, char **extracted_line, t_command_line **command_line);
-void	expand_content_when_heredoc(char **str);
+void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct);
 
 void	build_exec_struct(t_exec_struct **exec_struct);
 
-int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection, t_exec_substring **exec_substring);
+int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection, t_exec_substring **exec_substring, t_exec_struct *exec_struct);
 
 void	check_exec_arguments(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 char	**build_envp_arr(t_exec_struct **exec_struct);
