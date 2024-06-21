@@ -1,6 +1,31 @@
 #include "minishell.h"
 
-static int	expand_variables_when_dollar_first(char *remaining_line, char **result)
+static char	*get_variable_content(char *variable, t_envp_struct *envp_struct)
+{
+	int				n;
+	int				start;
+	int				len;
+	t_envp_struct	*cursor;
+	char			*result;
+
+	n = ft_strlen (variable);
+	cursor = envp_struct;
+	result = NULL;
+	while (cursor)
+	{
+		if (ft_strncmp(variable, cursor->content, n) == 0)
+		{
+			len = ft_strlen(cursor->content);
+			start = strcspn(cursor->content, "=") + 1;//remplacer parft_strcspn
+			result = ft_substr(cursor->content, start, len);
+			return (result);
+		}
+		cursor = cursor->next;
+	}
+	return (result);
+}
+
+static int	expand_variables_when_dollar_first(char *remaining_line, char **result, t_envp_struct *envp_struct)
 {
 	int		len_to_cut;
 	char	*tmp;

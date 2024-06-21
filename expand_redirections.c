@@ -11,7 +11,7 @@ static int	is_ambiguous_redirection(char *extracted_line)
 
 
 static size_t	common_extract_and_expand_content_of_redirections(char *content, \
-char **extracted_line)
+char **extracted_line, t_command_line **command_line)
 {
 	size_t	len;
 
@@ -24,12 +24,12 @@ char **extracted_line)
 		len = get_len_and_extract_between_double_quotes \
 		(&content[1], extracted_line);
 		if (strcspn(*extracted_line, "$") < ft_strlen(*extracted_line))
-			complete_expand_content(extracted_line, NULL);
+			complete_expand_content(extracted_line, *command_line);
 	}
 	else if (content[0] == '$')
 	{
 		len = simple_expand_content(content, \
-		extracted_line, NULL);
+		extracted_line, command_line);
 		if (is_ambiguous_redirection(*extracted_line) == true)
 			len = -2;
 	}
@@ -65,7 +65,7 @@ char **extracted_line)
 }
 
 static int	get_definitive_content_of_redirections(char *content, char **definitive_content, \
-int e_redirection)
+int e_redirection, t_command_line **command_line)
 {
 	int		len;
 	char	*extracted_line;
@@ -74,7 +74,7 @@ int e_redirection)
 	if (e_redirection != 4)
 	{
 		len = (int)common_extract_and_expand_content_of_redirections \
-		(content, &extracted_line);
+		(content, &extracted_line, command_line);
 		if (len == -2)
 		{
 			free_and_null(extracted_line);
@@ -114,7 +114,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 	while (n_redirection && n_redirection->content[i])
 	{
 		len = get_definitive_content_of_redirections(&n_redirection->content[i], \
-		&definitive_content, n_redirection->e_redirection);
+		&definitive_content, n_redirection->e_redirection, command_line);
 		if (len == -2)
 		{
 			ft_putstr_fd(n_redirection->content, 2);			
