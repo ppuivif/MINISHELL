@@ -24,10 +24,10 @@ int previous_exit_code)
 	status_code = cut_remaining_line_on_pipes(&command_line, remaining_line);
 	if (status_code != 0)
 		return (command_line);
-//	ft_native_lst_print(command_line, 1);
+	ft_native_lst_print(command_line, 1);
 //	ft_native_lst_print(command_line, fd);//to use bash script test parsing
 	expand_contents(&command_line);
-//	ft_expanded_lst_print(command_line, 1);
+	ft_expanded_lst_print(command_line, 1);
 //	ft_expanded_lst_print(command_line, fd);//to use bash script test parsing
 	return (command_line);
 }

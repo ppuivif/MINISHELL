@@ -73,6 +73,9 @@ void	complete_expand_content(char **str, t_command_line *command_line);
 size_t	simple_expand_content(char *str, char **extracted_line, t_command_line **command_line);
 void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct);
 
+size_t	simple_expand_content_on_split(char *str, char **extracted_line, t_command_line **command_line);
+
+
 void	build_exec_struct(t_exec_struct **exec_struct);
 
 int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection, t_exec_substring **exec_substring, t_exec_struct *exec_struct);
