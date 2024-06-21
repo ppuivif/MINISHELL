@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/17 16:10:19 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/21 06:24:22 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int	init_command_line_struct(t_command_line **command_line)
 	(*command_line)->previous_exit_code = 0;
 	(*command_line)->current_exit_code = 0;
 	(*command_line)->substrings = NULL;
+	(*command_line)->envp_struct = NULL;
 	return (0);
 }
 
