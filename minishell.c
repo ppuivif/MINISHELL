@@ -48,7 +48,6 @@ int main(void)
 	printf("%s\n", bp);
 
 }*/
-
 int main(int argc, char **argv, char **envp)
 {
 	char	*line;
@@ -56,69 +55,87 @@ int main(int argc, char **argv, char **envp)
 	t_command_line	*command_line;
 	t_exec_struct	*exec_struct;
 	int				previous_exit_code;
+	int				exit_code;
 
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;
-//	(void) argv;
 //	if (envp_struct)
 //		ft_envp_struct_lst_print(envp_struct, 1);
-	if (argc == 2)
+	/*if (!isatty(STDIN_FILENO))
 	{
-		while (1)
-		{
-			get_envp(envp, &envp_struct);
+		line = get_next_line(STDIN_FILENO);
+		ft_putstr_fd("line: ", STDERR_FILENO);
+		ft_putstr_fd(line, STDERR_FILENO);
+		write (STDERR_FILENO, "\n", 1);
+		free(line);
+		exit(0);
+	}*/
+	if (argc == 2)//for tests
+	{
+	 	int fd = ft_atoi(argv[1]);
+		line = get_next_line(fd);
+	}
+	else if (!isatty(STDIN_FILENO))
+		line = get_next_line(STDIN_FILENO);
+	while (1)
+	{
+		get_envp(envp, &envp_struct, line);
+		if (isatty(STDIN_FILENO) && argc != 2)
 			line = readline("minishell : ");
-			if (!line)
-				break;
-			if (line[0])//no history on empty lines
-				add_history(line);//here?
-			if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
-			{
-//				command_line = parse_command_line(line, &envp_struct, atoi(argv[1]));//to run script.sh
-				command_line = parse_command_line(argv, line, &envp_struct, previous_exit_code);
-//				if (command_line->exit_code != 0)
-//					error_handling(&command_line);
-			}
-//			if (ft_strncmp(command_line->substrings->exp_arguments->content, "exit_code", 9) == 0)
-/*			if (ft_strncmp(command_line->substrings->exp_arguments->content, "?", 1) == 0)
-			{
-				ft_putstr_fd("exit_code : ", 1);
-				ft_putnbr_fd(command_line->exit_code, 1);
-				ft_putstr_fd("\n", 1);
-			}*/
-
-			if (ft_strncmp(line, "exit", 5) == 0)
-			{
-				free_envp(&envp_struct);
-				free(line);
-				line = NULL;
-				clear_history();
-				exit (EXIT_SUCCESS);
-			}
-			if (init_exec_struct(&exec_struct) == -1)
-				error_allocation_exec_struct_and_exit(&exec_struct);
-			exec_struct->envp_struct = envp_struct;
-			exec_struct->command_line = command_line;
-			if (command_line->substrings && command_line->current_exit_code == 0)
-			{
-				build_exec_struct(&exec_struct);
-//				if (command_line->exit_code != 0)
-//					error_handling(&command_line);
-
-				ft_execution_lst_print(exec_struct, atoi(argv[1]));
-			}
-			if (command_line)
-				previous_exit_code = command_line->current_exit_code;
+		if (!line)
+		{
+			free_envp_struct(&envp_struct);
+			clear_history();
+			break;
+		}
+		if (line[0])//no history on empty lines
+			add_history(line);//here?
+		if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
+		{
+			command_line = parse_command_line(argv, line, &envp_struct, previous_exit_code);
+//			if (command_line->exit_code != 0)
+//				error_handling(&command_line);
+		}
+//		if (ft_strncmp(command_line->substrings->exp_arguments->content, "exit_code", 9) == 0)
+/*		if (ft_strncmp(command_line->substrings->exp_arguments->content, "?", 1) == 0)
+		{
+			ft_putstr_fd("exit_code : ", 1);
+			ft_putnbr_fd(command_line->exit_code, 1);
+			ft_putstr_fd("\n", 1);
+		}*/
+		if (ft_strncmp(line, "exit", 4) == 0)
+		{
+			free_envp_struct(&envp_struct);
 			free(line);
 			line = NULL;
-			free_envp(&envp_struct);
-			free_all_command_line(&command_line);
-			free_all_exec_struct(&exec_struct);
-			
+			clear_history();
+			exit (EXIT_SUCCESS);
 		}
+		if (init_exec_struct(&exec_struct) == -1)
+			error_allocation_exec_struct_and_exit(&exec_struct);
+		exec_struct->envp_struct = envp_struct;
+		exec_struct->command_line = command_line;
+		if (command_line->substrings && command_line->current_exit_code != 2)
+		{
+			build_exec_struct(&exec_struct);
+//			if (command_line->exit_code != 0)
+//				error_handling(&command_line);
+//			ft_execution_lst_print(exec_struct, 1);
+			execution(&exec_struct);
+		}
+		if (command_line)
+		{
+			previous_exit_code = command_line->current_exit_code;
+			exit_code = command_line->current_exit_code;
+		}
+		free(line);
+		line = NULL;
+//		free_and_null(line);
+		free_envp_struct(&envp_struct);
+		free_all_command_line(&command_line);
+		free_all_exec_struct(&exec_struct);
 	}
-	else
-		ft_putstr_fd("please, give an fd to display\n", 1);
-	return (0);
+	return (exit_code);//for script_test
 }
+

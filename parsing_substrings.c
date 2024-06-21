@@ -1,6 +1,5 @@
 #include "minishell.h"
 
-//t_command_line	*parse_command_line(char *str, t_envp_struct **envp_struct, int fd)//int fd is used only for script.sh execution
 t_command_line	*parse_command_line(char **argv, char *str, t_envp_struct **envp_struct, \
 int previous_exit_code)
 {
@@ -12,7 +11,7 @@ int previous_exit_code)
 	status_code = 0;
 	if (init_command_line_struct(&command_line) == -1)
 	{
-		free_envp(envp_struct);
+		free_envp_struct(envp_struct);
 		error_allocation_command_line_and_exit(&command_line);
 	}
 	command_line->argv = argv;
@@ -25,11 +24,11 @@ int previous_exit_code)
 	status_code = cut_remaining_line_on_pipes(&command_line, remaining_line);
 	if (status_code != 0)
 		return (command_line);
-//	ft_native_lst_print(command_line, 1);
-//	ft_native_lst_print(command_line, fd);//to use bash script
+	ft_native_lst_print(command_line, 1);
+//	ft_native_lst_print(command_line, fd);//to use bash script test parsing
 	expand_contents(&command_line);
-//	ft_expanded_lst_print(command_line, 1);
-//	ft_expanded_lst_print(command_line, fd);//to use bash script
+	ft_expanded_lst_print(command_line, 1);
+//	ft_expanded_lst_print(command_line, fd);//to use bash script test parsing
 	return (command_line);
 }
 

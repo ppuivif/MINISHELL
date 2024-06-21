@@ -12,7 +12,9 @@
 
 # include <stdio.h>//to delete
 # include <fcntl.h>
+# include <sys/wait.h>
 
+#include <errno.h>//to delete
 
 
 
@@ -20,9 +22,8 @@
 void			print_arr(char **arr);
 //!t_command_line 	*parse_command_line(char *str);
 
-void get_envp(char **envp, t_envp_struct **envp_struct);
+void get_envp(char **envp, t_envp_struct **envp_struct, char *line);
 
-//t_command_line 	*parse_command_line(char *str, t_envp_struct **envp_struct, int exit_code, int fd);
 t_command_line 	*parse_command_line(char **argv, char *str, t_envp_struct **envp_struct, int exit_code);
 int		cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line);
 int		parse_substrings(char **remaining_line, t_command_line **command_line);
@@ -67,24 +68,37 @@ size_t	get_len_and_extract_until_next_separator_first_dollar_included\
 size_t	get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
 size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line);
 
-void	expand_string_after_dollar(char **str);
+void	expand_string_after_dollar(char **str, t_envp_struct *envp_struct);
 void	complete_expand_content(char **str, t_command_line *command_line);
 size_t	simple_expand_content(char *str, char **extracted_line, t_command_line **command_line);
-void	expand_content_when_heredoc(char **str);
+void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct);
+
+size_t	simple_expand_content_on_split(char *str, char **extracted_line, t_command_line **command_line);
+
 
 void	build_exec_struct(t_exec_struct **exec_struct);
 
-int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection);
+int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redirection **exec_redirection, t_exec_substring **exec_substring, t_exec_struct *exec_struct);
 
 void	check_exec_arguments(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
+char	**build_envp_arr(t_exec_struct **exec_struct);
 void	build_cmd_arr(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 void	check_command_with_options(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 void	check_path_in_envp(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 int		check_path_cmd_validity(char **path, t_exec_substring **exec_substring);
 
+void	execution(t_exec_struct **exec_struct);
+//void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct);
+void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct);
+
+
+
 void	error_allocation_envp_struct_and_exit(void);
 void	error_allocation_command_line_and_exit(t_command_line **command_line);
 void	error_allocation_exec_struct_and_exit(t_exec_struct **exec_struct);
+void	error_pipe_creation_and_exit(t_exec_struct **exec_struct);
+void	error_fork_creation_and_exit(t_exec_struct **exec_struct);
+void	error_execve_and_exit(t_exec_struct **exec_struct);
 void	error_handling(t_command_line *command_line);
 
 

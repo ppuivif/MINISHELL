@@ -38,7 +38,7 @@ t_exec_struct **exec_struct)
 	char	**cmd_arr;
 
 	cmd_arr = (*exec_substring)->cmd_arr;
-	if (access(cmd_arr[0], F_OK) == 0)
+	if (access(cmd_arr[0], X_OK) == 0)//F_OK to verify if file exists, X_OK to verify if the file is executable
 	{
 		(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
 		if (!(*exec_substring)->path_with_cmd)
@@ -48,7 +48,7 @@ t_exec_struct **exec_struct)
 		check_path_in_envp(exec_substring, exec_struct);
 }
 
-static char	**build_envp_arr(t_exec_struct **exec_struct)
+char	**build_envp_arr(t_exec_struct **exec_struct)
 {
 	char			**envp_arr;
 	size_t			envp_arr_size;
@@ -117,7 +117,8 @@ t_exec_struct **exec_struct)
 		{
 			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
 			ft_putstr_fd(": command not found\n", 2);
-			(*exec_struct)->command_line->current_exit_code = 127;
+			(*exec_substring)->exec_arguments->is_argument_valid = false;
+//			(*exec_struct)->command_line->current_exit_code = 127;
 		}
 		else
 			(*exec_struct)->command_line->current_exit_code = 0;
@@ -140,7 +141,7 @@ int	check_path_cmd_validity(char **path, t_exec_substring **exec_substring)
 		path_with_cmd = ft_strjoin_freed(path_with_cmd, cmd_arr[0]);
 		if (!path_with_cmd || !path_with_cmd[0])
 			return (1);
-		if (access(path_with_cmd, F_OK) == 0)
+		if (access(path_with_cmd, X_OK) == 0)
 		{
 			(*exec_substring)->path_with_cmd = ft_strdup(path_with_cmd);
 			if (!(*exec_substring)->path_with_cmd)

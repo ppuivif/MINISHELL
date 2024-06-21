@@ -5,6 +5,8 @@ GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+#run_test_heredoc 120 "<< limiter1 << limiter2\ntexte1\nlimiter1\ntexte2\nlimiter2" 120 0
+
 function create_files_and_set_permissions() {
 #	local file1="$1"
 #	local file2="$2"
@@ -406,6 +408,7 @@ run_test_error() {
 	exec 3> "temp/minishell_test$test_index.txt"
 	echo "$command" | ./minishell 3 1>/dev/null 2>"temp/stderr2_minishell$test_index.txt"
     status_output_minishell=$?
+	echo "$status_output_minishell"
 	diff_output=$(diff "temp/minishell_test$test_index.txt" "Tests/test$file_test.txt" > /dev/null)
 	diff_exit_status=$?
 	if [ $diff_exit_status -eq 1 ]
