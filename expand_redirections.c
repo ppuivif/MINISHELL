@@ -110,7 +110,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 	exp_redirection = NULL;
 	definitive_content = NULL;
 	if (init_expanded_redirection_struct(&exp_redirection) == -1)
-		exp_redirection->alloc_succeed = false;
+		exp_redirection->alloc_succeed = false;//to complete
 	while (n_redirection && n_redirection->content[i])
 	{
 		len = get_definitive_content_of_redirections(&n_redirection->content[i], \

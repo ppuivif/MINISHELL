@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/17 14:37:42 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/22 14:13:59 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -377,12 +377,12 @@ void	ft_native_lst_print(t_command_line *command_line, int fd)
 		tmp2 = tmp1->n_redirections;
 		while (tmp1->n_redirections && j < ft_lst_size2(tmp1->n_redirections))
 		{
-			ft_putstr_fd("\t-redirection ", fd);
+			ft_putstr_fd("\t-n_redirection ", fd);
 			ft_putnbr_fd(j, fd);
 			ft_putstr_fd(" : \t", fd);
 			ft_putstr_fd(tmp2->content, fd);
 			ft_putstr_fd("\n", fd);
-			ft_putstr_fd("\t-redirection_type ", fd);
+			ft_putstr_fd("\t-n_redirection_type ", fd);
 			ft_putnbr_fd(j, fd);
 			ft_putstr_fd(" : \t", fd);
 			print_e_redirection (tmp2->e_redirection, fd);
@@ -394,7 +394,7 @@ void	ft_native_lst_print(t_command_line *command_line, int fd)
 		tmp3 = tmp1->n_arguments;
 		while (tmp1->n_arguments && j < ft_lst_size3(tmp1->n_arguments))
 		{
-			ft_putstr_fd("\t-argument ", fd);
+			ft_putstr_fd("\t-n_argument ", fd);
 			ft_putnbr_fd(j, fd);
 			ft_putstr_fd(" : ", fd);
 			ft_putstr_fd(tmp3->content, fd);
@@ -427,12 +427,12 @@ void	ft_expanded_lst_print(t_command_line *command_line, int fd)
 		tmp2 = tmp1->exp_redirections;
 		while (tmp1->exp_redirections && j < ft_lst_size4(tmp1->exp_redirections))
 		{
-			ft_putstr_fd("\t-redirection ", fd);
+			ft_putstr_fd("\t-exp_redirection ", fd);
 			ft_putnbr_fd(j, fd);
 			ft_putstr_fd(" : \t", fd);
 			ft_putstr_fd(tmp2->content, fd);
 			ft_putstr_fd("\n", fd);
-			ft_putstr_fd("\t-redirection_type ", fd);
+			ft_putstr_fd("\t-exp_redirection_type ", fd);
 			ft_putnbr_fd(j, fd);
 			ft_putstr_fd(" : \t", fd);
 			print_e_redirection (tmp2->e_redirection, fd);
@@ -444,7 +444,7 @@ void	ft_expanded_lst_print(t_command_line *command_line, int fd)
 		tmp3 = tmp1->exp_arguments;
 		while (tmp1->exp_arguments && j < ft_lst_size5(tmp1->exp_arguments))
 		{
-			ft_putstr_fd("\t-argument ", fd);
+			ft_putstr_fd("\t-exp_argument ", fd);
 			ft_putnbr_fd(j, fd);
 			ft_putstr_fd(" : ", fd);
 			ft_putstr_fd(tmp3->content, fd);
@@ -470,7 +470,7 @@ void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd)
 	tmp1 = exec_struct->exec_substrings;
 	while (exec_struct->exec_substrings && i < ft_lst_size7(exec_struct->exec_substrings))
 	{
-		ft_putstr_fd("substring ", fd);
+		ft_putstr_fd("exec_substring ", fd);
 		ft_putnbr_fd(i, fd);
 		ft_putstr_fd(" : \n", fd);
 		j = 0;

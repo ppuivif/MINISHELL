@@ -1,11 +1,11 @@
 #include "minishell.h"
 
-static int	is_there_content_in_redirection(char *remaining_line)
+static int	is_content_empty(char *remaining_line)
 {
 	if (ft_strlen(skip_first_whitespaces(remaining_line)) == 0)
-		return (false);
-	else
 		return (true);
+	else
+		return (false);
 }
 
 static int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
@@ -46,13 +46,13 @@ static int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
 	return (len_to_quote + (flag + 1) + (j - 1));
 }
 
-static int	count_len_to_reach_first_quote_or_ifs(char *remaining_line)
+static int	count_len_to_reach_second_quote_or_ifs(char *remaining_line)
 {
 	int	len;
 	int	len_to_ifs;
 	int	len_to_quote;
 
-	if (is_there_content_in_redirection(remaining_line) == false)
+	if (is_content_empty(remaining_line) == true)
 		return (-1);//syntax_error
 	len = (int)strcspn(remaining_line, "\'\"");
 	len_to_ifs = (int)strcspn(remaining_line, "<>| \t\n\v\f\r\0");
@@ -87,7 +87,7 @@ int	count_len_to_cut(char *remaining_line)
 	else if (remaining_line[0] == '\"')
 		len_to_quote = count_len_to_next_quotes(remaining_line, "\"", 0);
 	else
-		len = count_len_to_reach_first_quote_or_ifs(remaining_line);
+		len = count_len_to_reach_second_quote_or_ifs(remaining_line);
 	if (len_to_quote == - 1 || len == -1)
 		return (-1);//syntax_error
 	len += len_to_quote;

@@ -57,25 +57,6 @@ t_command_line **command_line)
 	return (len);
 }
 
-
-size_t	simple_expand_content_on_split(char *str, char **extracted_line, \
-t_command_line **command_line)
-{
-	int		len;
-
-	len = handle_special_characters_after_dollar(str, extracted_line, \
-	command_line);
-	if (len != 0)
-		return (len);
-	else
-	{
-		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-		expand_string_after_dollar(extracted_line, (*command_line)->envp_struct);
-	}
-	return (len);
-}
-
-
 size_t	simple_expand_content(char *str, char **extracted_line, \
 t_command_line **command_line)
 {

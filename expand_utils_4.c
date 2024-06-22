@@ -26,24 +26,6 @@ static void	expand_string_between_single_quotes(char **str, t_envp_struct *envp_
 	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
-static int	expand_content_when_dollar_first_on_split(char *str, char **tmp, t_envp_struct *envp_struct)
-{
-	int	len;
-
-	len = 0;
-	if (str[1] == '\"' || str[1] == '\'')
-	{
-		*tmp = ft_strdup("$");//malloc à protéger
-		len += 1;
-	}
-	else
-	{
-		len += get_len_and_extract_after_first_dollar(str, tmp);
-		expand_string_after_dollar_on_split(tmp, envp_struct);
-	}
-	return (len);
-}
-
 static int	expand_content_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
 {
 	int	len;

@@ -1675,7 +1675,7 @@ run_test 2105 "|||ls" 2105 2 "syntax error"
 run_test 2106 "ls |||" 2106 2 "syntax error"
 run_test 2107 "ls|||" 2107 2 "syntax error"
 
-run_test 2110 "ls || cat" 2110 2 "syntax error"
+#run_test 2110 "ls || cat" 2110 2 "syntax error"//invalid test because bash has a special behaviour
 run_test 2111 "ls | | cat" 2111 2 "syntax error"
 run_test 2112 "ls | cat |" 2112 2 "syntax error"
 run_test 2113 "ls || cat |" 2113 2 "syntax error"
@@ -1692,7 +1692,7 @@ then
 fi
 
 
-run_test 3000 "<<< infile.txt" 3000 2 "syntax error"
+#run_test 3000 "<<< infile.txt" 3000 2 "syntax error"//invalid test because bash has a special behaviour
 run_test 3001 "<<<< infile.txt" 3001 2 "syntax error"
 run_test 3002 "<<<<< infile.txt" 3002 2 "syntax error"
 run_test 3003 "<<> infile.txt" 3003 2 "syntax error"
@@ -1707,7 +1707,7 @@ run_test 3011 "<<><> infile.txt" 3011 2 "syntax error"
 run_test 3012 "<<><>> infile.txt" 3012 2 "syntax error"
 run_test 3013 "<<><>>> infile.txt" 3013 2 "syntax error"
 run_test 3014 "<<><>>>> infile.txt" 3014 2 "syntax error"
-run_test 3015 "<> infile.txt" 3015 2 "syntax error"
+#run_test 3015 "<> infile.txt" 3015 2 "syntax error"//invalid test because bash has a special behaviour
 run_test 3016 "<>> infile.txt" 3016 2 "syntax error"
 run_test 3017 "<>>> infile.txt" 3017 2 "syntax error"
 run_test 3018 "<>>>> infile.txt" 3018 2 "syntax error"

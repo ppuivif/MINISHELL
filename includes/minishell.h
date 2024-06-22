@@ -73,7 +73,6 @@ void	complete_expand_content(char **str, t_command_line *command_line);
 size_t	simple_expand_content(char *str, char **extracted_line, t_command_line **command_line);
 void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct);
 
-size_t	simple_expand_content_on_split(char *str, char **extracted_line, t_command_line **command_line);
 
 
 void	build_exec_struct(t_exec_struct **exec_struct);

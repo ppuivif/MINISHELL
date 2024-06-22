@@ -116,7 +116,7 @@ int main(int argc, char **argv, char **envp)
 			error_allocation_exec_struct_and_exit(&exec_struct);
 		exec_struct->envp_struct = envp_struct;
 		exec_struct->command_line = command_line;
-		if (command_line->substrings && command_line->current_exit_code != 2)
+		if (command_line->substrings && command_line->current_exit_code == 0)
 		{
 			build_exec_struct(&exec_struct);
 //			if (command_line->exit_code != 0)
