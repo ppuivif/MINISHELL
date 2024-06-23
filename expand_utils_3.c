@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-static char	*get_variable_content(char *variable, t_envp_struct *envp_struct)
+static char	*get_variable_content_in_envp(char *variable, t_envp_struct *envp_struct)
 {
 	int				n;
 	int				start;
@@ -16,7 +16,7 @@ static char	*get_variable_content(char *variable, t_envp_struct *envp_struct)
 		if (ft_strncmp(variable, cursor->content, n) == 0)
 		{
 			len = ft_strlen(cursor->content);
-			start = strcspn(cursor->content, "=") + 1;//remplacer parft_strcspn
+			start = strcspn(cursor->content, "=") + 1;//remplacer par ft_strcspn
 			result = ft_substr(cursor->content, start, len);
 			return (result);
 		}
@@ -34,19 +34,19 @@ static int	expand_variables_when_dollar_first(char *remaining_line, char **resul
 	if ((remaining_line[1] && ft_isspace(remaining_line[1]) != 0))
 	{
 		if (remaining_line[1] == '\"' || remaining_line[1] == '\'')
-			*result = "";
+			*result = ft_strdup("");
 		else
 		{
 			len_to_cut = (int)strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
 			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);//malloc à protéger
-			*result = get_variable_content(tmp, envp_struct); 
-			free_and_null(tmp);
+			*result = get_variable_content_in_envp(tmp, envp_struct); 
+			tmp = free_and_null(tmp);
 			if (!*result)
-				*result = "";
+				*result = ft_strdup("");
 		}
 	}
 	else
-		*result = "$";
+		*result = ft_strdup("$");
 	return (len_to_cut);
 }
 
@@ -86,6 +86,7 @@ void	expand_string_after_dollar(char **str, t_envp_struct *envp_struct)
 			result = ft_strdup(variable);//malloc à protéger
 		else
 			result = ft_strjoin_freed(result, variable);//malloc à protéger
+		variable = free_and_null(variable);
 	}
 	free (*str);
 	*str = ft_strdup_freed(result);//malloc à protéger

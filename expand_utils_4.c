@@ -89,7 +89,10 @@ void	complete_expand_content(char **str, t_command_line *command_line)
 		if (!result)
 			result = ft_strdup_freed(tmp);//malloc à protéger
 		else
+		{
 			result = ft_strjoin_freed(result, tmp);//malloc à protéger
+			tmp = free_and_null(tmp);
+		}
 	}
 	free(*str);
 	*str = ft_strdup_freed(result);//malloc à protéger

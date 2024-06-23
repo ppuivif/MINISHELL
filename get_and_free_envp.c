@@ -19,7 +19,7 @@ void	get_envp(char **envp, t_envp_struct **envp_struct, char *line)
 	if (!envp_struct || !envp[0])
 	{
 		ft_putstr_fd("error\nenvp doesn't exists or is empty\n", 2);
-		free_and_null(line);
+		line = free_and_null(line);
 		exit(EXIT_FAILURE);
 	}
 	while (envp[i])
@@ -36,9 +36,8 @@ void	free_envp_struct(t_envp_struct **envp_struct)
 	while (ft_lst_size6(*envp_struct))
 	{
 		tmp = (*envp_struct)->next;
-		free_and_null((*envp_struct)->content);
-		free_and_null(*envp_struct);
-		*envp_struct = NULL;
+		(*envp_struct)->content = free_and_null((*envp_struct)->content);
+		free(*envp_struct);
 		*envp_struct = tmp;
 	}
 }

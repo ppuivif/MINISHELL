@@ -1,1 +1,1 @@
-a b c a b ctext
+a b c text

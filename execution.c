@@ -163,6 +163,7 @@ void	execution(t_exec_struct **exec_struct)
 		close_fd(fd_in);
 		close_fd(fd_out);
 		fd_in = fd[0];
+		envp_arr = 
 		free_and_null(envp_arr);
 		i++;
 	}

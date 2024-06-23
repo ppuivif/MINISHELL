@@ -129,9 +129,7 @@ int main(int argc, char **argv, char **envp)
 			previous_exit_code = command_line->current_exit_code;
 			exit_code = command_line->current_exit_code;
 		}
-		free(line);
-		line = NULL;
-//		free_and_null(line);
+		line = free_and_null(line);
 		free_envp_struct(&envp_struct);
 		free_all_command_line(&command_line);
 		free_all_exec_struct(&exec_struct);

@@ -1351,14 +1351,14 @@ run_test 1513 "\" \$TEST \"" 1513 0
 run_test 1514 "\"  \$TEST  \"" 1514 0
 run_test 1515 "\"	\$TEST\"" 1515 0
 run_test 1516 "\"\t\t\$TEST\"" 1516 0
-run_test 1517 "\"\$TEST\t\"" 1517 0
-run_test 1518 "\"\$TEST\t\t\"" 1518 0
-run_test 1519 "\"\t\$TEST\t\"" 1519 0
-run_test 1520 "\"\t\t\$TEST\t\t\"" 1520 0
-run_test 1521 "\" \$TEST\t\"" 1521 0
-run_test 1522 "\"\t\$TEST \"" 1522 0
+run_test 1517 "\"\$TEST	\"" 1517 127 "test_minishell	: command not found"
+run_test 1518 "\"\$TEST		\"" 1518 127 "test_minishell		: command not found"
+run_test 1519 "\"	\$TEST	\"" 1519 127 "	test_minishell	: command not found"
+run_test 1520 "\"		\$TEST		\"" 1520 127 "		test_minishell		: command not found"
+run_test 1521 "\" \$TEST	\"" 1521 127 " test_minishell	: command not found"
+run_test 1522 "\"	\$TEST \"" 1522 127 "	test_minishell : command not found"
 
-run_test 1523 "\$\"TEST\"" 1523 0
+run_test 1523 "\$\"TEST\"" 1523 127 "TEST: command not found"
 run_test 1524 "\$'TEST'" 1524 0
 run_test 1525 "\"\$ \"TEST\"\"" 1525 0
 run_test 1526 "\"\$ 'TEST'\"" 1526 0
@@ -1397,8 +1397,8 @@ run_test 1561 "\"\$TEST cat	\"" 1561 0
 
 run_test 1562 "\$" 1562 0
 run_test 1563 "\"\$ TEST\"" 1563 0
-run_test 1564 "\$\"\"" 1564 0
-run_test 1565 "\$''" 1565 0
+run_test 1564 "\$\"\"" 1564 127 ": command not found"
+run_test 1565 "\$''" 1565 127 ": command not found"
 run_test 1566 "\"\$\"\"\"" 1566 0
 run_test 1567 "\"\$''\"" 1567 0
 run_test 1568 "\"\$\" \"\"" 1568 0

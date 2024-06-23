@@ -77,7 +77,7 @@ int e_redirection, t_command_line **command_line)
 		(content, &extracted_line, command_line);
 		if (len == -2)
 		{
-			free_and_null(extracted_line);
+			extracted_line = free_and_null(extracted_line);
 			return (-2);//ambiguous_redirection
 		}
 	}
@@ -91,7 +91,7 @@ int e_redirection, t_command_line **command_line)
 	else
 		*definitive_content = ft_strjoin_freed(*definitive_content, \
 		extracted_line);//protection sur malloc à prévoir
-	free_and_null(extracted_line);
+	extracted_line = free_and_null(extracted_line);
 	if (!definitive_content)
 		return (-1);
 	return (len);
@@ -119,7 +119,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 		{
 			ft_putstr_fd(n_redirection->content, 2);			
 			ft_putstr_fd(": ambiguous redirect\n", 2);			
-			free_and_null(exp_redirection);
+			exp_redirection = free_and_null(exp_redirection);
 			(*command_line)->current_exit_code = 1;
 			return ;
 		}

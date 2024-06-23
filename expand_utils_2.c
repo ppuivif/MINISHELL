@@ -58,3 +58,4 @@ size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line)
 	len = len_to_next_separator + 1;
 	return (len);
 }
+

@@ -26,7 +26,7 @@ int				ft_isspace(int c);
 char			*ft_itoa(int n);
 int				ft_atoi(const char *nptr);
 void			close_fd(int fd);
-void			free_and_null(void *ptr);
+void			*free_and_null(void *ptr);
 
 
 #endif

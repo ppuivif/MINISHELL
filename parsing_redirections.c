@@ -39,20 +39,20 @@ t_command_line **command_line)
 		error_allocation_command_line_and_exit(command_line);
 	if (get_redirection_type(remaining_line, n_redirection) == 2)
 	{
-		free_and_null(n_redirection);
+		n_redirection = free_and_null(n_redirection);
 		return(2);//syntax_error
 	}
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	len = count_len_to_cut(*remaining_line);
 	if (len == -1)
 	{
-		free_and_null(n_redirection);	
+		n_redirection = free_and_null(n_redirection);	
 		return (2);//syntax_error
 	}
 	n_redirection->content = ft_substr(*remaining_line, 0, len);
 	if (!n_redirection->content)
 	{
-		free_and_null(n_redirection);
+		n_redirection = free_and_null(n_redirection);
 		error_allocation_command_line_and_exit(command_line);
 	}
 	*remaining_line += len;

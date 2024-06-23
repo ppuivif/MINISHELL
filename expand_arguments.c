@@ -1,6 +1,19 @@
 #include "minishell.h"
 
-static int	get_content(t_expanded_argument **exp_arguments, char *argument)
+static size_t	get_len_and_extract_until_next_whitespace_or_dollar(char *str, char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_separator;
+
+	len_to_next_separator = strcspn(&str[1], "$ \t\n\v\f\r\0");
+	*extracted_line = ft_substr(str, 0, len_to_next_separator + 1);//malloc à protéger
+	len = len_to_next_separator + 1;
+	return (len);
+}
+
+
+
+static int	get_content(t_expanded_argument **exp_arguments, char *content)
 {
 	t_expanded_argument	*exp_argument;
 
@@ -10,9 +23,37 @@ static int	get_content(t_expanded_argument **exp_arguments, char *argument)
 		exp_argument->alloc_succeed = false;//return error alloc ?
 		return (-1);
 	}
-	exp_argument->content = ft_strdup(argument);
+	exp_argument->content = ft_strdup(content);
+	content = free_and_null(content);
 	ft_lst_add_back5(exp_arguments, exp_argument);
 	return (0);
+}
+
+
+static int cut_content_on_whitespaces(t_expanded_argument **exp_arguments, char **content)
+{
+	int		i;
+	int		start;
+	int		flag;
+	size_t	len;
+	char 	**extracted_line;
+
+	i = 0;
+	start = 0;
+	len = 0;
+	flag = 0;
+	extracted_line = NULL;
+	flag = ft_isspace(*content[i]);
+	*content = skip_first_whitespaces(*content);
+	len = get_len_and_extract_until_next_whitespace_or_dollar(*content, extracted_line);
+	if (flag == 0)
+	{
+		while (*content)
+		{
+			get_content(exp_arguments, *extracted_line);
+		}
+	}
+	content += len;
 }
 
 
@@ -71,32 +112,23 @@ t_command_line **command_line)
 	t_expanded_argument	*exp_argument;
 	int					len;
 	char				*definitive_content;
-	char 	**tmp;
 
 	len = 0;
 	exp_argument = NULL;
 	definitive_content = NULL;
-	tmp = NULL;
 	i = 0;
+	if (init_expanded_argument_struct(&exp_argument) == -1)
+		exp_argument->alloc_succeed = false;//return error alloc ?
 	while ((n_argument->content[i]))
 	{
-		if (n_argument->content[0] == '$')
+		if (n_argument->content[i] == '$')
 		{
 			len = get_definitive_content_of_arguments(&n_argument->content[i], \
 			&definitive_content, command_line);
 			i += len;
-//			if (*tmp == 0)
-//				get_content(&substring->exp_arguments, "");
-//			else
-			{
-				tmp = ft_split(definitive_content, 32);//add split on $, whitespaces
-				while (*tmp)
-				{
-					get_content(&substring->exp_arguments, *tmp);
-					tmp++;
-				}
-		}
-	//prevoir le cas ou la variable contient une variable qui contient une variable ?
+			cut_content_on_whitespaces(&substring->exp_arguments, &definitive_content);
+//			free(definitive_content);
+//			definitive_content = NULL;
 		}
 		else
 		{

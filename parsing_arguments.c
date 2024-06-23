@@ -17,7 +17,7 @@ t_command_line **command_line)
 	n_argument->content = ft_substr(*remaining_line, 0, len);
 	if (!n_argument->content)
 	{
-		free_and_null(n_argument);
+		n_argument = free_and_null(n_argument);
 		error_allocation_command_line_and_exit(command_line);
 	}
 	*remaining_line += len;

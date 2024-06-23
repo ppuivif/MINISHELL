@@ -51,7 +51,7 @@ t_command_line **command_line)
 		argv_index = ft_substr(str, 1, 1);
 //		*extracted_line = ft_strdup((*command_line)->argv[atoi(argv_index)]);
 		*extracted_line = ft_strdup(&(*command_line)->argv[atoi(argv_index)][2]);
-		free_and_null(argv_index);
+		argv_index = free_and_null(argv_index);
 		len = 2;
 	}
 	return (len);
