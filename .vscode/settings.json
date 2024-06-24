@@ -20,6 +20,7 @@
 		"minishell.h": "c",
 		"wait.h": "c",
 		"cstdlib": "c",
-		"__locale": "c"
+		"__locale": "c",
+		"sstream": "c"
 	}
 }

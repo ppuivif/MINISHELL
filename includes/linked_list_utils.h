@@ -31,6 +31,7 @@ typedef struct s_expanded_argument
 {
 	bool				alloc_succeed;
 	char				*content;
+//	char				*definitive_content;
 	t_expanded_argument	*next;
 }	t_expanded_argument;
 

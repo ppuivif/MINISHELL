@@ -68,9 +68,9 @@ size_t	get_len_and_extract_until_next_separator_first_dollar_included\
 size_t	get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
 size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line);
 
-void	expand_string_after_dollar(char **str, t_envp_struct *envp_struct);
+void	expand_string_after_dollar(char **str, t_expanded_argument **exp_arguments,t_envp_struct *envp_struct, int flag);
 void	complete_expand_content(char **str, t_command_line *command_line);
-size_t	simple_expand_content(char *str, char **extracted_line, t_command_line **command_line);
+size_t	simple_expand_content(char *str, char **extracted_line, t_expanded_argument **exp_arguments, t_command_line **command_line, char **definitive_content, int flag);
 void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct);
 
 

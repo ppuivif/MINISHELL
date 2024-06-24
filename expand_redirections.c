@@ -29,7 +29,7 @@ char **extracted_line, t_command_line **command_line)
 	else if (content[0] == '$')
 	{
 		len = simple_expand_content(content, \
-		extracted_line, command_line);
+		extracted_line, NULL, command_line, 0);
 		if (is_ambiguous_redirection(*extracted_line) == true)
 			len = -2;
 	}

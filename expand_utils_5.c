@@ -58,7 +58,7 @@ t_command_line **command_line)
 }
 
 size_t	simple_expand_content(char *str, char **extracted_line, \
-t_command_line **command_line)
+t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line, int flag)
 {
 	int		len;
 
@@ -69,7 +69,7 @@ t_command_line **command_line)
 	else
 	{
 		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-		expand_string_after_dollar(extracted_line, (*command_line)->envp_struct);
+		expand_string_after_dollar(extracted_line, exp_arguments, (*command_line)->envp_struct, definitive_content, flag);//flag 0 to verify
 	}
 	return (len);
 }
@@ -82,7 +82,7 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_env
 	if (str[1] != '\"' && str[1] != '\'' && ft_isspace(str[1]) != 0)
 	{
 		len += get_len_and_extract_after_first_dollar(str, tmp);
-		expand_string_after_dollar(tmp, envp_struct);
+		expand_string_after_dollar(tmp, NULL, envp_struct, 0);
 	}
 	else
 		len += get_len_and_extract_until_next_separator_dollar_excluded \
