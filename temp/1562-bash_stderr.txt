@@ -1,0 +1,1 @@
+./script_exec.sh: line 221: $: command not found

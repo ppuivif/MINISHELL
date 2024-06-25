@@ -57,8 +57,7 @@ t_command_line **command_line)
 	return (len);
 }
 
-size_t	simple_expand_content(char *str, char **extracted_line, \
-t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line, int flag)
+size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t_command_line **command_line)
 {
 	int		len;
 
@@ -69,7 +68,29 @@ t_expanded_argument **exp_arguments, char **definitive_content, t_command_line *
 	else
 	{
 		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-		expand_string_after_dollar(extracted_line, exp_arguments, (*command_line)->envp_struct, definitive_content, flag);//flag 0 to verify
+		expand_string_after_dollar1(extracted_line, (*command_line)->envp_struct);
+	}
+	return (len);
+}
+
+
+size_t	simple_expand_content_of_arguments(char *str, char **extracted_line, \
+t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line)
+{
+	int		len;
+
+	len = handle_special_characters_after_dollar(str, extracted_line, \
+	command_line);
+	if (len != 0)
+	{
+		*definitive_content = ft_strdup_freed(*extracted_line);
+		*extracted_line = NULL;
+		return (len);
+	}
+	else
+	{
+		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
+		expand_string_after_dollar2(*extracted_line, exp_arguments, (*command_line)->envp_struct, definitive_content);
 	}
 	return (len);
 }
@@ -79,10 +100,10 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_env
 	int	len;
 
 	len = 0;
-	if (str[1] != '\"' && str[1] != '\'' && ft_isspace(str[1]) != 0)
+	if (str[1] != '\"' && str[1] != '\'' && (str[1]) != 0)
 	{
 		len += get_len_and_extract_after_first_dollar(str, tmp);
-		expand_string_after_dollar(tmp, NULL, envp_struct, 0);
+		expand_string_after_dollar1(tmp, envp_struct);
 	}
 	else
 		len += get_len_and_extract_until_next_separator_dollar_excluded \
@@ -105,9 +126,15 @@ void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct)
 		else
 			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp);
 		if (!result)
+		{
 			result = ft_strdup_freed(tmp);
+			tmp = NULL;
+		}
 		else
+		{
 			result = ft_strjoin_freed(result, tmp);
+			tmp = NULL;
+		}
 	}
 	free(*str);
 	*str = ft_strdup_freed(result);

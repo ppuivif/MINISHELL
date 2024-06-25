@@ -31,7 +31,7 @@ int	check_char_validity(char *remaining_line, int len_to_quote, int flag, int j)
 		return (-1);
 	if (remaining_line[len_to_quote + flag + j] == '>' || \
 	remaining_line[len_to_quote + flag + j] == '|' || \
-	ft_isspace(remaining_line[len_to_quote + flag + j]) == 0)
+	ft_isspace(remaining_line[len_to_quote + flag + j]) == true)
 		return (-1);
 	else
 		return(0);
@@ -42,7 +42,7 @@ unsigned int count_angled_bracket(char *str)
 	unsigned int nmemb;
 
 	nmemb = 0; 
-	while(str && (*str == '<' || *str == '>' || ft_isspace(*str) == 0))
+	while(str && (*str == '<' || *str == '>' || ft_isspace(*str) == true))
 	{
 		if (*str == '<' || *str == '>')
 		nmemb++;

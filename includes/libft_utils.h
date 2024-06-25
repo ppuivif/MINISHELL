@@ -4,6 +4,8 @@
 
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdbool.h>//is permitted ?
+
 
 size_t			ft_strlen(const char *s);
 int				ft_strcmp(char *s1, char *s2);
@@ -22,7 +24,7 @@ char			**ft_split(char const *s, char c);
 void			ft_putnbr_fd(int n, int fd);
 char			*skip_first_whitespaces(char *str);
 void			*free_arr(char **arr);
-int				ft_isspace(int c);
+bool				ft_isspace(int c);
 char			*ft_itoa(int n);
 int				ft_atoi(const char *nptr);
 void			close_fd(int fd);

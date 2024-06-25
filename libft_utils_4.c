@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/05 07:59:39 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/06/25 10:17:32 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,16 @@ void	ft_putnbr_fd(int n, int fd)
 
 char	*skip_first_whitespaces(char *str)
 {
-	while (str && *str && (ft_isspace(*str) == 0))
+	while (str && *str && (ft_isspace(*str) == true))
 		str++;
 	return (str);
 }
 
-int	ft_isspace(int c)
+bool	ft_isspace(int c)
 {
 	if (((c >= 9) && (c <= 13)) || c == 32)
-		return (0);
-	return (1);
+		return (true);
+	return (false);
 }
 
 int	ft_strcmp(char *s1, char *s2)

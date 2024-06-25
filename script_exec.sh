@@ -1337,8 +1337,8 @@ export TEST="test_minishell"
 run_test 1500 "\$TEST" 1500 0
 run_test 1501 "\$DO_NOT_EXIST" 1501 0
 run_test 1502 "'\$TEST'" 1502 0
-run_test 1503 "\"\$TEST\"" 1503 0
-run_test 1504 "'\"\$TEST\"'" 1504 0
+run_test 1503 "\"\$TEST\"" 1503 127 "test_minishell	: command not found"
+run_test 1504 "'\"\$TEST\"'" 1504 127
 run_test 1505 "\"'\"\$TEST\"'\"" 1505 0
 run_test 1506 "\"'\$TEST'\"" 1506 0
 run_test 1507 "'\"'\$TEST'\"'" 1507 0

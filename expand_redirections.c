@@ -24,12 +24,11 @@ char **extracted_line, t_command_line **command_line)
 		len = get_len_and_extract_between_double_quotes \
 		(&content[1], extracted_line);
 		if (strcspn(*extracted_line, "$") < ft_strlen(*extracted_line))
-			complete_expand_content(extracted_line, *command_line);
+			complete_expand_content_of_redirections(extracted_line, *command_line);
 	}
 	else if (content[0] == '$')
 	{
-		len = simple_expand_content(content, \
-		extracted_line, NULL, command_line, 0);
+		len = simple_expand_content_of_redirections(content, extracted_line, command_line);
 		if (is_ambiguous_redirection(*extracted_line) == true)
 			len = -2;
 	}

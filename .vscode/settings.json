@@ -21,6 +21,8 @@
 		"wait.h": "c",
 		"cstdlib": "c",
 		"__locale": "c",
-		"sstream": "c"
-	}
+		"sstream": "c",
+		"fcntl.h": "c"
+	},
+	"search.experimental.closedNotebookRichContentResults": false
 }

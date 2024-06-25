@@ -31,6 +31,7 @@ int		get_arguments_and_redirections(t_substring **substring, char **remaining_li
 int		get_redirections(char **remaining_line, t_substring *substring, t_command_line **command_line);
 int		get_arguments(char **remaining_line, t_substring *substring, t_command_line **command_line);
 
+
 int				is_pipe_latest_character(char **remaining_line);
 int				is_pipe_first_character(char *remaining_line);
 int				count_len_to_cut(char *remaining_line);
@@ -54,7 +55,8 @@ int		init_exec_argument_struct(t_exec_argument **exec_argument);
 
 void	expand_contents(t_command_line **command_line);
 void	expand_redirections(t_substring *substring, t_native_redirection *n_redirection, t_command_line **command_line);
-void	expand_arguments(t_substring *substring, t_native_argument *n_argument, t_command_line **command_line);
+int		expand_arguments(t_substring *substring, t_native_argument *n_argument, t_command_line **command_line);
+void	add_exp_arguments(t_expanded_argument **exp_arguments, char **definitive_content);
 
 size_t	get_len_and_extract_between_single_quotes(char *str, char **extracted_line);
 size_t	get_len_and_extract_with_single_quotes(char *str, char **extracted_line);
@@ -68,10 +70,15 @@ size_t	get_len_and_extract_until_next_separator_first_dollar_included\
 size_t	get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
 size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line);
 
-void	expand_string_after_dollar(char **str, t_expanded_argument **exp_arguments,t_envp_struct *envp_struct, int flag);
-void	complete_expand_content(char **str, t_command_line *command_line);
-size_t	simple_expand_content(char *str, char **extracted_line, t_expanded_argument **exp_arguments, t_command_line **command_line, char **definitive_content, int flag);
+void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct);
+void	expand_string_after_dollar2(char *str, t_expanded_argument **exp_arguments,t_envp_struct *envp_struct, char **definitive_content);
+void	complete_expand_content_of_redirections(char **str, t_command_line *command_line);
+//void	complete_expand_content_of_arguments(char *str, char **extracted_line, t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line);
+void	complete_expand_content_of_arguments(char **str, t_command_line *command_line);
+size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t_command_line **command_line);
+size_t	simple_expand_content_of_arguments(char *str, char **extracted_line, t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line);
 void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct);
+int		add_to_definitive_content(char **definitive_content, char *extracted_line);
 
 
 
