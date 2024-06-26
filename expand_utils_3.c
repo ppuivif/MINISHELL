@@ -93,7 +93,10 @@ char **extracted_argument)
 {
 	size_t	len_to_next_separator;
 
-	len_to_next_separator = strcspn(*str, "$ \t\n\v\f\r\0");
+	if (**str == '$')
+		len_to_next_separator = 1;
+	else
+		len_to_next_separator = strcspn(*str, "$ \t\n\v\f\r\0");
 //	printf("len : %ld\n", len_to_next_separator);
 //	printf("str : %s\n", *str);
 	*extracted_argument = ft_substr(*str, 0, len_to_next_separator);//malloc à protéger

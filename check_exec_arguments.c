@@ -110,7 +110,10 @@ t_exec_struct **exec_struct)
 	}
 	else
 	{
-		return_value = check_path_cmd_validity(path_envp, exec_substring);
+		if ((*exec_substring)->cmd_arr[0][0] == 0)
+			return_value = 1;
+		else
+			return_value = check_path_cmd_validity(path_envp, exec_substring);
 		if (return_value == -1)
 			error_allocation_exec_struct_and_exit(exec_struct);
 		if (return_value == 1)

@@ -213,6 +213,7 @@ execute_test() {
 	file_test=$3
     exit_code_expected=$4
  	substring=$5
+ 	invalid_test=$6
 	test="test$test_index\t$command\t"
     message=$test
     
@@ -330,14 +331,14 @@ execute_test() {
 #		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ]
 		then
 			status_message="${RED} KO : ${NC}"
-			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}"
+			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}${invalid_test}"
 		fi
 	else
 		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ]
 #		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ]
 		then
 			status_message="${RED} KO : ${NC}"
-			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}"
+			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}${invalid_test}"
 		else
 			status_message="${GREEN} OK${NC}"
 			echo -e "${message}${spaces}${status_message}"
@@ -1307,15 +1308,15 @@ then
 fi
 
 
-run_test 1100 "\\" 1100 0
-run_test 1101 "\"\\\"" 1100 0
-run_test 1102 "\"\\cat\"" 1102 0
-run_test 1103 "'\'" 1103 0
-run_test 1104 "'\cat'" 1104 0
-run_test 1105 "(" 1105 0
-run_test 1106 ")" 1106 0
-run_test 1107 "()" 1107 0
-run_test 1108 ";" 1108 0
+run_test 1100 "\\" 1100 127 "" "invalid test because bash has a special behaviour"
+run_test 1101 "\"\\\"" 1100 127 "" "invalid test because bash has a special behaviour"
+run_test 1102 "\"\\ls\"" 1102 127 "\ls: command not found"
+run_test 1103 "'\'" 1103 127 "\: command not found"
+run_test 1104 "'\ls'" 1104 127 "\ls: command not found"
+run_test 1105 "(" 1105 127 "" "invalid test because bash has a special behaviour"
+run_test 1106 ")" 1106 127 "" "invalid test because bash has a special behaviour"
+run_test 1107 "()" 1107 127 "" "invalid test because bash has a special behaviour"
+run_test 1108 ";" 1108 127 "" "invalid test because bash has a special behaviour"
 run_test 1109 "\"'\"" 1109 0
 run_test 1110 "@" 1110 0
 run_test 1111 "\"@\"" 1110 0
@@ -1337,7 +1338,7 @@ export TEST="test_minishell"
 run_test 1500 "\$TEST" 1500 0
 run_test 1501 "\$DO_NOT_EXIST" 1501 0
 run_test 1502 "'\$TEST'" 1502 0
-run_test 1503 "\"\$TEST\"" 1503 127 "test_minishell	: command not found"
+run_test 1503 "\"\$TEST\"" 1503 127 ": command not found"
 run_test 1504 "'\"\$TEST\"'" 1504 127
 run_test 1505 "\"'\"\$TEST\"'\"" 1505 0
 run_test 1506 "\"'\$TEST'\"" 1506 0
@@ -1712,7 +1713,7 @@ then
 fi
 
 
-#run_test 3000 "<<< infile.txt" 3000 2 "syntax error"//invalid test because bash has a special behaviour
+run_test 3000 "<<< infile.txt" 3000 2 "syntax error" "invalid test because bash has a special behaviour"
 run_test 3001 "<<<< infile.txt" 3001 2 "syntax error"
 run_test 3002 "<<<<< infile.txt" 3002 2 "syntax error"
 run_test 3003 "<<> infile.txt" 3003 2 "syntax error"
@@ -1727,7 +1728,7 @@ run_test 3011 "<<><> infile.txt" 3011 2 "syntax error"
 run_test 3012 "<<><>> infile.txt" 3012 2 "syntax error"
 run_test 3013 "<<><>>> infile.txt" 3013 2 "syntax error"
 run_test 3014 "<<><>>>> infile.txt" 3014 2 "syntax error"
-#run_test 3015 "<> infile.txt" 3015 2 "syntax error"//invalid test because bash has a special behaviour
+run_test 3015 "<> infile.txt" 3015 2 "syntax error" "invalid test because bash has a special behaviour"
 run_test 3016 "<>> infile.txt" 3016 2 "syntax error"
 run_test 3017 "<>>> infile.txt" 3017 2 "syntax error"
 run_test 3018 "<>>>> infile.txt" 3018 2 "syntax error"
@@ -1989,6 +1990,44 @@ then
 		echo -e "end of test serie from 4400 to 4475"
 	fi
 fi
+
+
+echo -e "lucas tests implementation\n"
+
+run_test 4801 "echo hello world" 4801 0
+run_test 4802 "echo \"hello world\"" 4802 0
+run_test 4803 "echo 'hello world'" 4803 0
+run_test 4804 "echo hello'world'" 4804 0
+run_test 4805 "echo hello\"\"world" 4805 0
+run_test 4806 "echo ''" 4806 0
+run_test 4807 "echo \"\$PWD\"" 4807 0
+run_test 4808 "echo '\$PWD'" 4808 0
+run_test 4809 "echo \"aspas ->'\"" 4809 0
+run_test 4810 "echo \"aspas -> ' \"" 4810 0
+run_test 4811 "echo 'aspas ->\"'" 4811 0
+run_test 4812 "echo 'aspas -> \" '" 4812 0
+run_test 4813 "echo \"> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<\"" 4813 0
+
+
+run_test 4857 "grep est <./temp/infile.txt" 4857 0
+run_test 4858 "grep est \"<infile.txt\" <         ./temp/infile.txt" 4858 0
+
+
+
+
+if (( "$start_index" >= 4800 && "$start_index" <= 4999 && "$end_index" >= 4800 && "$end_index" <= 4999 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo -e "end of test serie from 4800 to 4999\n"
+	else
+		echo -e "end of test serie from 4800 to 4999"
+	fi
+fi
+
+
+
+
 
 run_test 5000 "< temp/infile1.txt cat" 5000 0
 run_test 5001 "cat < temp/infile1.txt" 5000 0

@@ -78,6 +78,8 @@ int	add_to_definitive_content(char **definitive_content, char *extracted_line)
 t_expanded_argument **exp_arguments, t_command_line **command_line)*/
 
 
+
+
 int	expand_arguments(t_substring *substring, t_native_argument *n_argument, \
 t_command_line **command_line)
 {
@@ -157,7 +159,6 @@ t_command_line **command_line)
 	}
 	return (0);
 }
-
 
 
 

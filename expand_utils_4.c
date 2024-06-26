@@ -33,7 +33,7 @@ static void	expand_string_between_single_quotes(char **str, t_envp_struct *envp_
 	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
-static int	expand_content_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
+static int	expand_content_of_redirections_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
 {
 	int	len;
 
@@ -46,7 +46,25 @@ static int	expand_content_when_dollar_first(char *str, char **tmp, t_envp_struct
 	else
 	{
 		len += get_len_and_extract_after_first_dollar(str, tmp);
-		expand_string_after_dollar2(*tmp, NULL, envp_struct, NULL);//to complete
+		expand_string_after_dollar1(tmp, envp_struct);
+	}
+	return (len);
+}
+
+static int	expand_content_of_arguments_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
+{
+	int	len;
+
+	len = 0;
+	if (str[1] == '\"' || str[1] == '\'')
+	{
+		*tmp = ft_strdup("$");//malloc à protéger
+		len += 1;
+	}
+	else
+	{
+		len += get_len_and_extract_after_first_dollar(str, tmp);
+		expand_string_after_dollar1(tmp, envp_struct);
 	}
 	return (len);
 }
@@ -89,7 +107,7 @@ void	complete_expand_content_of_redirections(char **str, t_command_line *command
 				i += 2;
 			}
 			else
-				i += expand_content_when_dollar_first(&str[0][i], &tmp, command_line->envp_struct);//to complete whith case of sapces in variable value
+				i += expand_content_of_redirections_when_dollar_first(&str[0][i], &tmp, command_line->envp_struct);
 		}
 		else
 			i += expand_content_when_dollar_not_first(&str[0][i], &tmp, command_line->envp_struct);
@@ -108,8 +126,7 @@ void	complete_expand_content_of_redirections(char **str, t_command_line *command
 	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
-//void	complete_expand_content_of_arguments(char *str, char **extracted_line, t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line)
-void	complete_expand_content_of_arguments(char **str, t_command_line *command_line)
+void	complete_expand_content_of_arguments(char **extracted_line, t_command_line *command_line)
 {
 	int		i;
 	char	*tmp;
@@ -118,20 +135,20 @@ void	complete_expand_content_of_arguments(char **str, t_command_line *command_li
 	i = 0;
 	tmp = NULL;
 	result = NULL;
-	while (str[0][i])
+	while (extracted_line[0][i])
 	{
-		if (str[0][i] == '$')
+		if (extracted_line[0][i] == '$')
 		{
-			if (str[0][i + 1] == '?')
+			if (extracted_line[0][i + 1] == '?')
 			{
 				tmp = ft_itoa(command_line->previous_exit_code);//malloc à protéger
 				i += 2;
 			}
 			else
-				i += expand_content_when_dollar_first(&str[0][i], &tmp, command_line->envp_struct);//to complete whith case of sapces in variable value
+				i += expand_content_of_arguments_when_dollar_first(&extracted_line[0][i], &tmp, command_line->envp_struct);//to complete whith case of sapces in variable value
 		}
 		else
-			i += expand_content_when_dollar_not_first(&str[0][i], &tmp, command_line->envp_struct);
+			i += expand_content_when_dollar_not_first(&extracted_line[0][i], &tmp, command_line->envp_struct);
 		if (!result)
 		{
 			result = ft_strdup_freed(tmp);//malloc à protéger
@@ -143,7 +160,7 @@ void	complete_expand_content_of_arguments(char **str, t_command_line *command_li
 			tmp = free_and_null(tmp);
 		}
 	}
-	free(*str);
-	*str = ft_strdup_freed(result);//malloc à protéger
+	free(*extracted_line);
+	*extracted_line = ft_strdup_freed(result);//malloc à protéger
 }
 

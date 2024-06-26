@@ -1,1 +1,0 @@
-./script_exec.sh: line 221: $'\ttest_minishell ': command not found
