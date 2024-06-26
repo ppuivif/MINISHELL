@@ -57,6 +57,7 @@ int main(int argc, char **argv, char **envp)
 	int				previous_exit_code;
 	int				exit_code;
 
+	(void)argc;
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;
@@ -71,17 +72,17 @@ int main(int argc, char **argv, char **envp)
 		free(line);
 		exit(0);
 	}*/
-	if (argc == 2)//for tests
+/*	if (argc == 2)//for tests
 	{
 	 	int fd = ft_atoi(argv[1]);
 		line = get_next_line(fd);
 	}
 	else if (!isatty(STDIN_FILENO))
-		line = get_next_line(STDIN_FILENO);
+		line = get_next_line(STDIN_FILENO);*/
 	while (1)
 	{
 		get_envp(envp, &envp_struct, line);
-		if (isatty(STDIN_FILENO) && argc != 2)
+		//if (isatty(STDIN_FILENO) && argc != 2)
 			line = readline("minishell : ");
 		if (!line)
 		{
