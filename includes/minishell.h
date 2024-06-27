@@ -75,7 +75,7 @@ void	expand_string_after_dollar2(char *str, t_expanded_argument **exp_arguments,
 void	complete_expand_content_of_redirections(char **str, t_command_line *command_line);
 void	complete_expand_content_of_arguments(char **extracted_line, t_command_line *command_line);
 size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t_command_line **command_line);
-size_t	simple_expand_content_of_arguments(char *str, char **extracted_line, t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line);
+size_t	simple_expand_content_of_arguments(char *str, t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line);
 void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct);
 int		add_to_definitive_content(char **definitive_content, char *extracted_line);
 

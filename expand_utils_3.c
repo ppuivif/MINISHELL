@@ -179,6 +179,7 @@ void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct)
 	}
 	*str = free_and_null (*str);
 	*str = ft_strdup_freed(result);//malloc à protéger
+	variable = free_and_null(variable);
 }
 
 
@@ -188,31 +189,34 @@ t_envp_struct *envp_struct, char **definitive_content)
 	char	*variable;
 	char	*extracted_argument;
 	bool	last_arg_with_wspaces;
+	char	*tmp;
 
 //	result = NULL;
 	extracted_argument = NULL;
 	last_arg_with_wspaces = true;
 	variable = expand_variables(&str, envp_struct);
-	while (variable && variable[0])
+	tmp = variable;
+	while (tmp && tmp[0])
 	{
 //		printf("variable : %s\n", variable);
-		if (ft_isspace(variable[0]) == true)
+		if (ft_isspace(tmp[0]) == true)
 		{
 			if (*definitive_content)
 				add_exp_arguments(exp_arguments, definitive_content);
-			while (variable && variable[0] && last_arg_with_wspaces == true)
+			while (tmp && tmp[0] && last_arg_with_wspaces == true)
 			{
-				cut_variable_on_whitespaces(exp_arguments, &variable, &last_arg_with_wspaces);
-//				printf ("variable : %s\n", variable);
+				cut_variable_on_whitespaces(exp_arguments, &tmp, &last_arg_with_wspaces);
+//				printf ("tmp : %s\n", tmp);
 			}
 		}
 		else
 		{
-			extract_argument_until_next_whitespace_or_dollar(&variable, &extracted_argument);
+			extract_argument_until_next_whitespace_or_dollar(&tmp, &extracted_argument);
 			if (add_to_definitive_content(definitive_content, extracted_argument) == -1)
 //				add_exp_arguments(exp_arguments, definitive_content);
 //			else
 				printf("error\n");
 		}				
 	}
+	variable = free_and_null(variable);
 }

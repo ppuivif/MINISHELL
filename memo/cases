@@ -188,3 +188,6 @@ minishell : $d
 echo   "   a: command not found
 minishell : 
 
+
+gérer export _=kmwkoemw
+ne modifie pas la variable qui a priori contient le chemin d'accès à l'env. 

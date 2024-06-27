@@ -26,7 +26,7 @@ static void	expand_string_between_single_quotes(char **str, t_envp_struct *envp_
 		else
 		{
 			result = ft_strjoin_freed(result, tmp);//malloc à protéger
-			tmp = NULL;
+			tmp = free_and_null(tmp);
 		}
 	}
 	free(*str);

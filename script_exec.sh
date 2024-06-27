@@ -42,7 +42,9 @@ function create_files_and_set_permissions() {
 	echo > "temp/tmp_to_read_command.txt"
     chmod 644 "temp/tmp_to_read_command.txt"
 	exec 100< "temp/tmp_to_read_command.txt"
-
+	echo > "temp/tmp_to_execute_valgrind.txt"
+    chmod 644 "temp/tmp_to_execute_valgrind.txt"
+	exec 101< "temp/tmp_to_execute_valgrind.txt"
 }
 
 function delete_infiles() {
@@ -235,13 +237,31 @@ execute_test() {
 #	ls -l /proc/$$/fd
 
 #    echo "$command" | ./minishell 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
-    ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
 	exit_code_minishell=$?
 #	echo "exit_code_minishell"
 #	echo "$exit_code_minishell"
 	cat "temp/outfile1.txt" >"temp/$test_index-minishell_outfile1.txt"
 	cat "temp/outfile2.txt" >"temp/$test_index-minishell_outfile2.txt"
- 	
+	delete_file "temp/tmp_to_read_command.txt"
+	exec 100>&-
+
+	echo "$command" >"temp/tmp_to_execute_valgrind.txt"
+	echo "exit" >>"temp/tmp_to_execute_valgrind.txt"
+
+
+	if [ "$run_valgrind" == "yes" ]
+	then
+#	 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --trace-children=yes --error-exitcode=1 ./minishell 101
+ 		valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+#		beware : if minishell exit_code is 10, there will be a valgrind_error	
+		exit_code_valgrind=$?
+		echo "$exit_code_valgrind"
+	else
+		exit_code_valgrind=0
+	fi
+
+
 	diff_outfile1=$(diff "temp/$test_index-minishell_outfile1.txt" "temp/$test_index-bash_outfile1.txt" > /dev/null)
 	diff_exit_outfile1=$?
 	diff_outfile2=$(diff "temp/$test_index-minishell_outfile2.txt" "temp/$test_index-bash_outfile2.txt" > /dev/null)
@@ -314,6 +334,16 @@ execute_test() {
 		status_message="${GREEN} OK${NC}"
     fi
 
+	if [ $exit_code_valgrind -eq 10 ]
+	then
+		status6="KO"
+		error_detail6="${RED}valgrind_error ${NC}"
+		flag=$((flag + 1))
+	else
+		status6="OK"
+		status_message="${GREEN} OK${NC}"
+    fi
+
 	# Calculate the length of the message
     message_length=${#message}
     # Calculate the number of spaces needed for alignment
@@ -327,18 +357,18 @@ execute_test() {
 
 	if [ "$display" == "wrong_only" ]
 	then
-		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ]
+		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ] || [ "$status6" == "KO" ]
 #		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ]
 		then
 			status_message="${RED} KO : ${NC}"
-			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}${invalid_test}"
+			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}${error_detail6}${invalid_test}"
 		fi
 	else
-		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ]
+		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ] || [ "$status6" == "KO" ]
 #		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ]
 		then
 			status_message="${RED} KO : ${NC}"
-			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}${invalid_test}"
+			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}${error_detail6}${invalid_test}"
 		else
 			status_message="${GREEN} OK${NC}"
 			echo -e "${message}${spaces}${status_message}"
@@ -347,8 +377,8 @@ execute_test() {
 	substring=""
 	delete_infiles
 	delete_outfiles
-	delete_file "temp/tmp_to_read_command.txt"
-	exec 100>&-
+	delete_file "temp/tmp_to_execute_valgrind.txt"
+	exec 101>&-
 }
 
 run_test_heredoc() {
@@ -666,6 +696,9 @@ run_test_error() {
 	#echo -e "$message"
 }
 
+
+#trap EXIT SIGINT SIGTERM
+
 create_temp_directory
 
 run_test() {
@@ -699,6 +732,7 @@ choice_four() {
 	execute="free_choice"
 	read -p "Enter the start of the range: " start_index
     read -p "Enter the end of the range: " end_index
+	echo ""
 #	if [ start_index < 0 ] || [ end_index > 10000 ]
 #	then
 #		echo "Invalid range. Please enter valid numbers and ensure start is less than or equal to end."
@@ -711,6 +745,7 @@ echo "To execute only parsing tests choice 2"
 echo "To execute only tests choice 3"
 echo "To execute specify tests choice 4"
 read -p "Enter your choice : " choice
+echo ""
 
 # Handle the user's choice
 case $choice in
@@ -731,6 +766,40 @@ case $choice in
         echo -e "${RED}Invalid choice. Please enter 1 or 2.${NC}"
         ;;
 esac
+
+
+choice_one() {
+	run_valgrind="yes"
+}
+
+choice_two() {
+    run_valgrind="no"
+}
+
+echo "To run valgrind_test choice 1"
+echo "Not to run valgrind_test choice 2"
+echo "Warning : running tests with valgrind will execute the script slower"  
+read -p "Enter your choice (1 or 2): " choice
+echo ""
+
+# Handle the user's choice
+case $choice in
+    1)
+        choice_one
+        ;;
+    2)
+        choice_two
+        ;;
+#do not work    
+	*)
+        echo -e "${RED}Invalid choice. Please enter 1 or 2.${NC}"
+        ;;
+esac
+
+
+
+
+
 
 #BLOCK_COMMENT
 
@@ -1025,8 +1094,8 @@ fi
 
 run_test 200 "\"< temp/infile1.txt\"" 200 0
 #run_test 210 "\"<< limiter\"" 210 0
-run_test 220 "\"> temp/output1.txt\"" 220 0
-run_test 230 "\">> temp/output1.txt\"" 230 0
+run_test 220 "\"> temp/outfile1.txt\"" 220 0
+run_test 230 "\">> temp/outfile1.txt\"" 230 0
 
 if (( "$start_index" >= 200 && "$start_index" <= 250 && "$end_index" >= 200 && "$end_index" <= 250 ))
 then
@@ -1335,6 +1404,16 @@ fi
 
 
 export TEST="test_minishell"
+
+if (( "$start_index" >= 1500 && "$start_index" <= 1570 && "$end_index" >= 1500 && "$end_index" <= 1570 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo ""
+		echo -e echo "\$TEST = \"test_minishell\"\n"
+	fi
+fi
+
 run_test 1500 "\$TEST" 1500 0
 run_test 1501 "\$DO_NOT_EXIST" 1501 0
 run_test 1502 "'\$TEST'" 1502 0
@@ -1417,6 +1496,9 @@ then
 	fi
 fi
 
+
+
+
 export TEST1="test1"
 export TEST2="test2"
 export TEST3="salut     les     amis"
@@ -1427,13 +1509,18 @@ export TEST3="salut     les     amis"
 export TEST4='echo    "     salut'
 #export TEST5='echo    "     salut     les     amis'
 
-echo ""
-echo "\$TEST1 = \"test1\""
-echo "\$TEST2 = \"test2\""
-echo "\$TEST3 = 'salut     les     amis'"
-echo "\$TEST4 = 'echo    \"     salut'"
-echo "\$TEST5 = 'echo    \"     salut     les     amis'"
-echo ""
+if (( "$start_index" >= 1600 && "$start_index" <= 1699 && "$end_index" >= 1600 && "$end_index" <= 1699 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo ""
+		echo "\$TEST1 = \"test1\""
+		echo "\$TEST2 = \"test2\""
+		echo "\$TEST3 = 'salut     les     amis'"
+		echo "\$TEST4 = 'echo    \"     salut'"
+		echo "\$TEST5 = 'echo    \"     salut     les     amis'\n"
+	fi
+fi
 
 run_test 1600 "echo \$TEST1\$TEST2" 1600 0
 run_test 1601 "echo \$TEST1\"\"\$TEST2" 1601 0
@@ -2012,6 +2099,21 @@ run_test 4813 "echo \"> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<\"" 4813 0
 run_test 4857 "grep est <./temp/infile.txt" 4857 0
 run_test 4858 "grep est \"<infile.txt\" <         ./temp/infile.txt" 4858 0
 
+
+run_test 4873 "cat <\"./temp/infile.txt\" | echo hi" 4873 0
+run_test 4874 "cat <\"./test_files/infile\" | grep hello\" | echo hi" 4874 0
+#run_test 4875 "cat <\"./temp/infile_big.txt\" | echo hi" 4875 0
+
+
+
+run_test 4933 "\$PWD" 4933 126 ": is a directory"
+
+#run_test 4936 "./temp/invalid_permission" 4936 126 "permission denied"
+
+run_test 4937 "./missing.out" 4937 127 "./missing.out: No such file or directory"
+
+run_test 4941 "./temp" 4941 126 "./temp: is a directory"
+run_test 4942 "/temp" 4942 127 "/temp: No such file or directory"
 
 
 

@@ -1,0 +1,2 @@
+error
+execve of a cmd failed: Permission denied

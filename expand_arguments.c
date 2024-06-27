@@ -126,7 +126,7 @@ t_command_line **command_line)
 		}
 		else if (n_argument_content[0] == '$')
 		{
-			len = simple_expand_content_of_arguments(&n_argument_content[0], &extracted_line, &substring->exp_arguments, &definitive_content, command_line);
+			len = simple_expand_content_of_arguments(&n_argument_content[0], &substring->exp_arguments, &definitive_content, command_line);
 			n_argument_content += len;// is it necessary to give extracted_line? 
 /*			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
 			{

@@ -74,23 +74,27 @@ size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t
 }
 
 
-size_t	simple_expand_content_of_arguments(char *str, char **extracted_line, \
+size_t	simple_expand_content_of_arguments(char *str, \
 t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line)
 {
 	int		len;
+	char 	*extracted_line;
 
-	len = handle_special_characters_after_dollar(str, extracted_line, \
+
+	extracted_line = NULL;
+	len = handle_special_characters_after_dollar(str, &extracted_line, \
 	command_line);
 	if (len != 0)
 	{
-		*definitive_content = ft_strdup_freed(*extracted_line);
-		*extracted_line = NULL;
+		*definitive_content = ft_strdup_freed(extracted_line);
+		extracted_line = NULL;
 		return (len);
 	}
 	else
 	{
-		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-		expand_string_after_dollar2(*extracted_line, exp_arguments, (*command_line)->envp_struct, definitive_content);
+		len = get_len_and_extract_after_first_dollar(&str[0], &extracted_line);
+		expand_string_after_dollar2(extracted_line, exp_arguments, (*command_line)->envp_struct, definitive_content);
+		extracted_line = free_and_null(extracted_line);
 	}
 	return (len);
 }

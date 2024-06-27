@@ -75,7 +75,8 @@ int	parse_substrings(char **remaining_line, t_command_line **command_line)
 	command_line);
 	if (status_code == 2)
 	{
-		substring = free_and_null(substring);
+		free_substring(&substring);
+		//substring = free_and_null(substring);
 		return (2);//syntax_error 
 	}
 	ft_lst_add_back1(&(*command_line)->substrings, substring);
