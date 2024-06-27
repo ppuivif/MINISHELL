@@ -106,5 +106,9 @@ void	error_fork_creation_and_exit(t_exec_struct **exec_struct);
 void	error_execve_and_exit(t_exec_struct **exec_struct);
 void	error_handling(t_command_line *command_line);
 
+//Builtin
+int		ft_is_builtin(t_exec_argument *exec_arguments);
+int		echo(t_exec_argument *exec_arguments);
+int		pwd(void);
 
 #endif

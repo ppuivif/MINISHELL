@@ -219,9 +219,12 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	if (substring->path_with_cmd && substring->cmd_arr \
 	&& substring->cmd_arr[0] && exit_code == 0)
 	{
-		if (execve(substring->path_with_cmd, substring->cmd_arr, envp_arr) == -1)
-			perror("error\nexecve of a cmd failed");//to verify
-			//exit_code = -1 ?
+		if (!ft_is_builtin(substring->exec_arguments))
+		{
+			if (execve(substring->path_with_cmd, substring->cmd_arr, envp_arr) == -1)
+				perror("error\nexecve of a cmd failed");//to verify
+				//exit_code = -1 ?
+		}
 	}
 //	printf("exit_code : %d\n", exit_code);
 	free_envp_struct(&(*exec_struct)->envp_struct);
