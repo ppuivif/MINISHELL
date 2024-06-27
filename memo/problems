@@ -1,0 +1,8 @@
+leaks when CTRL C on cat
+leaks on add_line in envp, init, parsing after CTRL C when < infile.txt cat wc and $? at 0 (1 expected) with No such file or directory
+
+verify exit exit
+
+clear history when exit on error
+
+export a="file | 'Makefile'"
