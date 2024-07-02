@@ -32,17 +32,83 @@ t_exec_struct **exec_struct)
 	(*exec_substring)->cmd_arr = cmd_arr;
 }
 
+
+static void	check_dir(char *cmd_arr_0, t_exec_struct **exec_struct)
+{
+	char	**envp_arr;
+	char	**path_envp;
+	size_t	cmd_arr_0_len;
+	int		i;
+
+	i = 0;
+	if ((cmd_arr_0[0]  == '.' && cmd_arr_0[1] == '/') || \
+	strcspn(cmd_arr_0, "/") == ft_strlen(cmd_arr_0) - 1)
+	{
+		ft_putstr_fd(cmd_arr_0, 2);
+		ft_putstr_fd(": Is a directory\n", 2);
+		(*exec_struct)->command_line->current_exit_code = 126;
+	}
+	else
+	{
+		envp_arr = build_envp_arr(exec_struct);
+		path_envp = search_path(envp_arr);
+		cmd_arr_0_len = ft_strlen(cmd_arr_0);
+		if (!path_envp || !path_envp[0])
+		{
+			ft_putstr_fd(cmd_arr_0, 2);
+			ft_putstr_fd(": command not found\n", 2);
+			(*exec_struct)->command_line->current_exit_code = 127;
+		}
+		else
+		{
+			while (path_envp[i])
+			{
+				if (ft_strncmp(cmd_arr_0, path_envp[i], cmd_arr_0_len) == 0)
+				{
+					ft_putstr_fd(cmd_arr_0, 2);
+					ft_putstr_fd(": Is a directory\n", 2);
+					(*exec_struct)->command_line->current_exit_code = 126;
+					break;
+				}
+				i++;
+			}
+		}
+		envp_arr = free_and_null(envp_arr);
+		free_arr(path_envp);
+	}
+}
+
+
 void	check_command_with_options(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
 	char	**cmd_arr;
+	DIR		*dir;
 
 	cmd_arr = (*exec_substring)->cmd_arr;
+	dir = NULL;
 	if (access(cmd_arr[0], X_OK) == 0)//F_OK to verify if file exists, X_OK to verify if the file is executable
 	{
-		(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
-		if (!(*exec_substring)->path_with_cmd)
-			error_allocation_exec_struct_and_exit(exec_struct);
+		dir = opendir(cmd_arr[0]);
+		if (dir)
+		{
+			check_dir(cmd_arr[0], exec_struct);
+			(*exec_substring)->exec_arguments->is_argument_valid = false;
+			closedir(dir);
+		}
+		else
+		{
+			(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
+			if (!(*exec_substring)->path_with_cmd)
+				error_allocation_exec_struct_and_exit(exec_struct);
+		}
+	}
+	else if (cmd_arr[0][0] == '/')
+	{
+		ft_putstr_fd(cmd_arr[0], 2);
+		ft_putstr_fd(": No such file or directory\n", 2);
+		(*exec_substring)->exec_arguments->is_argument_valid = false;
+		(*exec_struct)->command_line->current_exit_code = 127;
 	}
 	else
 		check_path_in_envp(exec_substring, exec_struct);
@@ -71,7 +137,7 @@ char	**build_envp_arr(t_exec_struct **exec_struct)
 	return (envp_arr);
 }
 
-static char	**search_path(char **envp)
+char	**search_path(char **envp)
 {
 	int		i;
 	char	**path;
@@ -106,6 +172,7 @@ t_exec_struct **exec_struct)
 	{
 		ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
 		ft_putstr_fd(": command not found\n", 2);
+		(*exec_substring)->exec_arguments->is_argument_valid = false;
 		(*exec_struct)->command_line->current_exit_code = 127;
 	}
 	else
@@ -126,8 +193,7 @@ t_exec_struct **exec_struct)
 		else
 			(*exec_struct)->command_line->current_exit_code = 0;
 	}
-	free(envp_arr);
-	envp_arr = NULL;
+	envp_arr = free_and_null(envp_arr);
 	free_arr(path_envp);
 }
 

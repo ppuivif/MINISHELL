@@ -1536,8 +1536,8 @@ run_test 1612 "echo '\$TEST3'" 1612 0
 run_test 1613 "echo '\$TEST3''text'" 1613 0
 run_test 1614 "echo \"\$TEST3\"" 1614 0
 run_test 1615 "echo \"\$TEST3\"'text'" 1615 0
-run_test 1616 "$TEST4" 1616 0
-run_test 1617 "$TEST4" 1617 0
+run_test 1616 "\$TEST4" 1616 0
+run_test 1617 "\$TEST4" 1617 0
 
 unset TEST1
 unset TEST2
@@ -2079,7 +2079,7 @@ then
 fi
 
 
-echo -e "lucas tests implementation\n"
+echo -e "lucas tests implementation, and more\n"
 
 run_test 4801 "echo hello world" 4801 0
 run_test 4802 "echo \"hello world\"" 4802 0
@@ -2106,14 +2106,20 @@ run_test 4874 "cat <\"./test_files/infile\" | grep hello\" | echo hi" 4874 0
 
 
 
-run_test 4933 "\$PWD" 4933 126 ": is a directory"
+run_test 4933 "\$PWD" 4933 126 ": Is a directory"
 
 #run_test 4936 "./temp/invalid_permission" 4936 126 "permission denied"
 
 run_test 4937 "./missing.out" 4937 127 "./missing.out: No such file or directory"
 
-run_test 4941 "./temp" 4941 126 "./temp: is a directory"
-run_test 4942 "/temp" 4942 127 "/temp: No such file or directory"
+run_test 4941 "./temp" 4941 126 "./temp: Is a directory"
+run_test 4942 "temp/" 4942 126 "temp/: Is a directory"
+run_test 4943 "/temp" 4943 127 "/temp: No such file or directory"
+run_test 4944 "/nfs" 4944 126 "/nfs: Is a directory"
+run_test 4945 "/nfs/homes" 4945 126 "/nfs/homes: Is a directory"
+run_test 4946 "/nix" 4946 126 "/nix: Is a directory"
+
+run_test 4947 "temp" 4947 127 "temp: Command not found"
 
 
 
@@ -2256,6 +2262,10 @@ run_test 5200 "grep un < temp/infile1.txt" 5200 0
 run_test 5201 "echo < temp/infile1.txt added_word" 5201 0
 run_test 5202 "echo < temp/infile1.txt added_word" 5202 0
 run_test 5203 "echo added_word1 < temp/infile1.txt added_word2" 5203 0
+
+
+#run_test 5250 "cat | cat | ls" 5250 0
+
 
 if (( "$start_index" >= 5200 && "$start_index" <= 5300 && "$end_index" >= 5200 && "$end_index" <= 5300 ))
 then

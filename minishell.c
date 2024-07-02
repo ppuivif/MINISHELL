@@ -63,7 +63,7 @@ int main(int argc, char **argv, char **envp)
 	previous_exit_code = 0;
 //	if (envp_struct)
 //		ft_envp_struct_lst_print(envp_struct, 1);
-	/*if (!isatty(STDIN_FILENO))
+	if (!isatty(STDIN_FILENO))
 	{
 		line = get_next_line(STDIN_FILENO);
 		ft_putstr_fd("line: ", STDERR_FILENO);
@@ -71,7 +71,7 @@ int main(int argc, char **argv, char **envp)
 		write (STDERR_FILENO, "\n", 1);
 		free(line);
 		exit(0);
-	}*/
+	}
 	if (argc == 2)//for tests
 	{
 	 	int fd = ft_atoi(argv[1]);
