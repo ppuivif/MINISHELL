@@ -256,7 +256,7 @@ execute_test() {
  		valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
 #		beware : if minishell exit_code is 10, there will be a valgrind_error	
 		exit_code_valgrind=$?
-		echo "$exit_code_valgrind"
+#		echo "$exit_code_valgrind"
 	else
 		exit_code_valgrind=0
 	fi
@@ -358,14 +358,12 @@ execute_test() {
 	if [ "$display" == "wrong_only" ]
 	then
 		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ] || [ "$status6" == "KO" ]
-#		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ]
 		then
 			status_message="${RED} KO : ${NC}"
 			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}${error_detail6}${invalid_test}"
 		fi
 	else
 		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ] || [ "$status6" == "KO" ]
-#		if [ "$status1" == "KO" ] || [ "$status2" == "KO" ] || [ "$status3" == "KO" ] || [ "$status4" == "KO" ]
 		then
 			status_message="${RED} KO : ${NC}"
 			echo -e "${message}${spaces}${test_index}${status_message}${error_detail1}${error_detail2}${error_detail3}${error_detail4}${error_detail5}${error_detail6}${invalid_test}"
@@ -2108,18 +2106,38 @@ run_test 4874 "cat <\"./test_files/infile\" | grep hello\" | echo hi" 4874 0
 
 run_test 4933 "\$PWD" 4933 126 ": Is a directory"
 
-#run_test 4936 "./temp/invalid_permission" 4936 126 "permission denied"
+mkdir ./temp/no_permission_dir
+chmod 000 ./temp/no_permission_dir
+run_test 4935 "./temp/no_permission_dir" 4935 126 "./temp/no_permission_dir: Is a directory"
+#run_test 4936 "cd ./temp/no_permission_dir" 4936 1 "cd: ./temp/directory/: Permission denied"
+
+
+chmod 744 ./temp/no_permission_dir
+rmdir ./temp/no_permission_dir
 
 run_test 4937 "./missing.out" 4937 127 "./missing.out: No such file or directory"
+#run_test 4938 "./minishell" 4938 0
 
 run_test 4941 "./temp" 4941 126 "./temp: Is a directory"
 run_test 4942 "temp/" 4942 126 "temp/: Is a directory"
 run_test 4943 "/temp" 4943 127 "/temp: No such file or directory"
-run_test 4944 "/nfs" 4944 126 "/nfs: Is a directory"
-run_test 4945 "/nfs/homes" 4945 126 "/nfs/homes: Is a directory"
-run_test 4946 "/nix" 4946 126 "/nix: Is a directory"
+run_test 4944 "./missing" 4944 127 "./missing: No such file or directory"
+run_test 4945 "/missing" 4945 127 "/missing: No such file or directory"
+run_test 4946 "missing/" 4946 127 "missing/: No such file or directory"
+run_test 4947 "/missing/" 4947 127 "/missing/: No such file or directory"
+run_test 4948 "./missing/" 4948 127 "./missing/: No such file or directory"
+run_test 4949 "./missing/missing" 4949 127 "./missing/missing: No such file or directory"
+run_test 4950 "/missing/missing" 4950 127 "/missing/missing: No such file or directory"
+run_test 4951 "missing/missing" 4951 127 "missing/missing: No such file or directory"
+run_test 4952 "missing/missing/" 4952 127 "missing/missing/: No such file or directory"
+run_test 4953 "/missing/missing/" 4953 127 "/missing/missing/: No such file or directory"
+run_test 4954 "./missing/missing/" 4954 127 "./missing/missing/: No such file or directory"
 
-run_test 4947 "temp" 4947 127 "temp: Command not found"
+run_test 4960 "/nfs" 4960 126 "/nfs: Is a directory"
+run_test 4961 "/nfs/homes" 4961 126 "/nfs/homes: Is a directory"
+run_test 4962 "/nix" 4962 126 "/nix: Is a directory"
+
+run_test 4970 "temp" 4970 127 "temp: command not found"
 
 
 
@@ -2278,8 +2296,8 @@ then
 fi
 
 
-run_test 7000 "temp/infile1.txt cat" 7000 127 "temp/infile1.txt: No such file or directory"
-run_test 7001 "temp/infile1.txt wc" 7001 127 "temp/infile1.txt: No such file or directory"
+run_test 7000 "temp/infile1.txt cat" 7000 126 "temp/infile1.txt: Permission denied"
+run_test 7001 "temp/infile1.txt wc" 7001 126 "temp/infile1.txt: Permission denied"
 run_test 7002 "Makefile cat" 7002 127 "Makefile: command not found"
 run_test 7003 "Makefile wc" 7003 127 "Makefile: command not found"
 

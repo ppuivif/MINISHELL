@@ -57,13 +57,13 @@ int main(int argc, char **argv, char **envp)
 	int				previous_exit_code;
 	int				exit_code;
 
-//	(void)argc;
+	(void)argc;
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;
 //	if (envp_struct)
 //		ft_envp_struct_lst_print(envp_struct, 1);
-	if (!isatty(STDIN_FILENO))
+/*	if (!isatty(STDIN_FILENO))
 	{
 		line = get_next_line(STDIN_FILENO);
 		ft_putstr_fd("line: ", STDERR_FILENO);
@@ -78,11 +78,11 @@ int main(int argc, char **argv, char **envp)
 		line = get_next_line(fd);
 	}
 	else if (!isatty(STDIN_FILENO))
-		line = get_next_line(STDIN_FILENO);
+		line = get_next_line(STDIN_FILENO);*/
 	while (1)
 	{
 		get_envp(envp, &envp_struct, line);
-		if (isatty(STDIN_FILENO) && argc != 2)
+//		if (isatty(STDIN_FILENO) && argc != 2)
 			line = readline("minishell : ");
 		if (!line)
 		{

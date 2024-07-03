@@ -29,6 +29,7 @@ char			*ft_itoa(int n);
 int				ft_atoi(const char *nptr);
 void			close_fd(int fd);
 void			*free_and_null(void *ptr);
+char        	**arr_copy(char **arr);
 
 
 #endif

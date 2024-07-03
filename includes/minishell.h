@@ -96,7 +96,7 @@ int		check_path_cmd_validity(char **path, t_exec_substring **exec_substring);
 
 void	execution(t_exec_struct **exec_struct);
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct);
-void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr);
+void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd);
 
 
 

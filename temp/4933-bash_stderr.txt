@@ -1,1 +1,0 @@
-./script_exec.sh: line 224: /nfs/homes/ppuivif/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL: Is a directory

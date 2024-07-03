@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:59:46 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/04 15:27:53 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/03 07:39:06 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	*ft_strchr(const char *s, int c)
 	return (0);
 }
 
-unsigned int	search_first_occurence(char *str, char c)
+unsigned int	search_first_occurence(char *str, char c)//=ft_strcspn ?
 {
 	int	i;
 
