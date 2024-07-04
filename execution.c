@@ -93,13 +93,13 @@ static int	*build_pid_arr(int *pid_arr, int i)
 }
 
 
-static bool is_fd_open(int fd) {
+/*static bool is_fd_open(int fd) {
     int flags = fcntl(fd, F_GETFL);
     if (flags == -1 && errno == EBADF) {
         return (false);  // File descriptor is closed
     }
     return (true);  // File descriptor is open
-}
+}*/
 
 
 
@@ -151,18 +151,15 @@ void	execution(t_exec_struct **exec_struct)
 			}
 			if (fd_out == STDOUT_FILENO)//no out redirection
 				fd_out = fd[1];
-			printf("status fd[0] value : %d - open : %s\n", fd[0], is_fd_open(fd[0]) ? "true" : "false");	
-			printf("status fd[1] value : %d - open : %s\n", fd[1], is_fd_open(fd[1]) ? "true" : "false");	
+
+//			printf("status fd[0] before fork value : %d - open : %s\n", fd[0], is_fd_open(fd[0]) ? "true" : "false");	
+//			printf("status fd[1] before fork value : %d - open : %s\n", fd[1], is_fd_open(fd[1]) ? "true" : "false");	
 		}
 
 		envp_arr = build_envp_arr(exec_struct);
 
-	//	if (substrings_nmemb != 1)
-	//		close_fd(fd[1]);
-
-
-		printf("status fd_in value : %d - open : %s\n", fd_in, is_fd_open(fd_in) ? "true" : "false");	
-		printf("status fd_out value : %d - open : %s\n", fd_out, is_fd_open(fd_out) ? "true" : "false");
+//		printf("status fd_in before fork value : %d - open : %s\n", fd_in, is_fd_open(fd_in) ? "true" : "false");	
+//		printf("status fd_out before fork value : %d - open : %s\n", fd_out, is_fd_open(fd_out) ? "true" : "false");
 
 		pid_1 = fork();
 		if (pid_1 == -1)
@@ -181,7 +178,7 @@ void	execution(t_exec_struct **exec_struct)
 
 		if (pid_1 == 0)
 		{
-			exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct, pid_arr, fd);
+			exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct, pid_arr, fd, i);
 		}
 	/*	if (cursor == ft_lst_last7((*exec_struct)->exec_substrings))
 		{
@@ -189,11 +186,11 @@ void	execution(t_exec_struct **exec_struct)
 		}
 		else*/
 
-		if (substrings_nmemb != 1 && cursor == ft_lst_last7((*exec_struct)->exec_substrings))
+/*		if (substrings_nmemb != 1 && cursor == ft_lst_last7((*exec_struct)->exec_substrings))
 		{
 			close_fd(fd[0]);
 //			close_fd(fd[1]);
-		}
+		}*/
 
 		close_fd(fd_in);
 		close_fd(fd_out);
@@ -202,8 +199,8 @@ void	execution(t_exec_struct **exec_struct)
 		cursor = cursor->next;
 		i++;
 		
-		printf("status fd_in value after parent : %d - open : %s\n", fd_in, is_fd_open(fd_in) ? "true" : "false");	
-		printf("status fd_out value after parent : %d - open : %s\n\n", fd_out, is_fd_open(fd_out) ? "true" : "false");	
+//		printf("status fd_in after fork in parent value : %d - open : %s\n", fd_in, is_fd_open(fd_in) ? "true" : "false");	
+//		printf("status fd_out after fork in parent value : %d - open : %s\n\n", fd_out, is_fd_open(fd_out) ? "true" : "false");	
 
 	}
 //	printf("%s\n", strerror(errno));
@@ -260,7 +257,7 @@ void	execution(t_exec_struct **exec_struct)
 
 
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct)
-void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd)
+void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd, int i)
 {
 	int	exit_code;
 	char *path_with_cmd;
@@ -274,21 +271,32 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 		exit_code = (*exec_struct)->command_line->current_exit_code;
 	if (fd_in == -1 || fd_out == -1)
 		exit_code = 1;
-	if (fd[0] != 0 && fd[1] != 1)
-	{
-		close_fd(fd[0]);
-		close_fd(fd[1]);
-	}
+	//(void)fd;
+	(void)i;
+
+
+/*	printf("status fd[0] in child%d value : %d - open : %s\n", i, fd[0], is_fd_open(fd[0]) ? "true" : "false");	
+	printf("status fd[1] in child%d value : %d - open : %s\n", i, fd[1], is_fd_open(fd[1]) ? "true" : "false");
+	printf("status fd_in in child%d value : %d - open : %s\n", i, fd_in, is_fd_open(fd_in) ? "true" : "false");
+	printf("status fd_out in child%d value : %d - open : %s\n\n", i, fd_out, is_fd_open(fd_out) ? "true" : "false");*/
+
 	if (fd_in > 2)
 	{
 		dup2(fd_in, STDIN_FILENO);
+//		printf("status fd_in in child%d after dup value : %d - open : %s\n", i, fd_in, is_fd_open(fd_in) ? "true" : "false");
 		close_fd(fd_in);
 	}
 	if (fd_out > 2)
 	{
 		dup2(fd_out, STDOUT_FILENO);
+//		printf("status fd_out in child%d after dup value : %d - open : %s\n\n", i, fd_out, is_fd_open(fd_out) ? "true" : "false");
 		close_fd(fd_out);
-	}	
+	}
+	if (fd[0] != 0 && fd[1] != 1)
+	{
+		close_fd(fd[0]);
+		close_fd(fd[1]);
+	}
 	free(pid_arr);
 	free_envp_struct(&(*exec_struct)->envp_struct);
 	free_all_command_line(&(*exec_struct)->command_line);

@@ -1,0 +1,5 @@
+status fd_out in child0 after dup value : 3 - open : true
+
+ceci est
+un test
+
