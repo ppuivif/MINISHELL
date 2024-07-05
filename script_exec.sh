@@ -120,6 +120,8 @@ execute_test() {
     
 	create_files_and_set_permissions $test_index
 
+#: << BLOCK_COMMENT
+
 	if [ "$test_type" == "heredoc1" ]
 	then
 	heredoc1_content="line1
@@ -132,14 +134,16 @@ limiter1"
 		full_command="$command" 
 	fi
 
+#BLOCK_COMMENT
+
 #	cat "temp/tmp_to_read_command.txt"
 
 	echo "$command" >"temp/tmp_to_read_command.txt"
-	cat "temp/tmp_to_read_command.txt"
+#	cat "temp/tmp_to_read_command.txt"
 
 
-	#eval "$command" 1>"temp/$test_index-bash_stdout.txt" 2>"temp/$test_index-bash_stderr.txt"
-	eval "$full_command"
+	eval "$command" 1>"temp/$test_index-bash_stdout.txt" 2>"temp/$test_index-bash_stderr.txt"
+#	eval "$full_command"
 	exit_code_bash=$?
 	echo "exit_code_bash"
 	echo "$exit_code_bash"
@@ -149,11 +153,11 @@ limiter1"
 	echo > temp/outfile1.txt
 	echo > temp/outfile2.txt	
     
-#	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
-	./minishell 100
+	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+#	./minishell 100
 	exit_code_minishell=$?
-	echo "exit_code_minishell"
-	echo "$exit_code_minishell"
+#	echo "exit_code_minishell"
+#	echo "$exit_code_minishell"
 	cat "temp/outfile1.txt" >"temp/$test_index-minishell_outfile1.txt"
 	cat "temp/outfile2.txt" >"temp/$test_index-minishell_outfile2.txt"
 	delete_file "temp/tmp_to_read_command.txt"
