@@ -6,19 +6,147 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:57:29 by drabarza          #+#    #+#             */
-/*   Updated: 2024/06/27 12:59:01 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/05 21:09:39 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	exit(t_exec_argument *exec_arguments)
+#include "minishell.h"
+/*#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>*/
+#include <limits.h>
+
+/*typedef struct s_exec_argument
 {
-	if(!exec_arguments->next)
+    char	**argument;
+}	t_exec_argument;
+
+static void	ft_putstr_fd(char *s, int fd)
+{
+	int	i;
+
+	i = 0;
+	if (s != 0)
 	{
-		write(1, "\n", 1);
-		return (1);
-	}	
+		while (s[i])
+		{
+			write(fd, &s[i], 1);
+			i++;
+		}
+	}
+}*/
+
+static void	message_exit(t_exec_struct *exec_struct, char **envp_arr)
+{
+	int	code;
+
+	code = exec_struct->command_line->previous_exit_code;
+	free_envp_struct(&exec_struct->envp_struct);
+	free_all_command_line(&exec_struct->command_line);
+	free_all_exec_struct(&exec_struct);
+	if (envp_arr)
+		free(envp_arr);
+	clear_history();
+	exit(code);
 }
 
-int	main(void)
+static void	message_error(char *str,
+	t_exec_struct *exec_struct, char **envp_arr)
 {
+	write(2, "exit\n", 5);
+	write(2, "bash: exit: ", 12);
+	ft_putstr_fd(str, 2);
+	write(2, ": numeric argument required\n", 28);
+	exec_struct->command_line->previous_exit_code = 2;
+	message_exit(exec_struct, envp_arr);
 }
+
+static int	arguments_is_valid(char *nptr,
+	unsigned long long nbr, int sign, int i)
+{
+	if ((sign == 1 && nbr > LLONG_MAX)
+		|| (sign == -1 && nbr > (unsigned long long)LLONG_MAX + 1))
+		return (1);
+	if (nptr[i] != '\0')
+		return (1);
+	if ((nptr[0] == '-' || nptr[0] == '+') && nptr[1] == '\0')
+		return (1);
+	return (0);
+}
+
+static void	calculint(char *nptr, int i,
+	t_exec_struct *exec_struct, char **envp_arr)
+{
+	int	countnumber;
+
+	countnumber = 0;
+	while (nptr[i] == '0')
+		i++;
+	while (nptr[i])
+	{
+		i++;
+		countnumber++;
+	}
+	if (countnumber > 19)
+		message_error(nptr, exec_struct, envp_arr);
+}
+
+static int	ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr)
+{
+	unsigned long long	nbr;
+	int					sign;
+	int					i;
+
+	nbr = 0;
+	sign = 1;
+	i = 0;
+	while ((nptr[i] >= '\t' && nptr[i] <= '\r') || nptr[i] == ' ')
+		i++;
+	if (nptr[i] == '-' || nptr[i] == '+')
+	{
+		if (nptr[i] == '-')
+			sign = -1;
+		i++;
+	}
+	calculint(nptr, i, exec_struct, envp_arr);
+	while (nptr[i] && (nptr[i] >= '0' && nptr[i] <= '9'))
+	{
+		nbr = 10 * nbr + (nptr[i] - 48);
+		i++;
+	}
+	if (arguments_is_valid(nptr, nbr, sign, i))
+		message_error(nptr, exec_struct, envp_arr);
+	if (nbr > 255)
+		nbr = nbr % 256;
+	return (nbr * sign);
+}
+
+int	exit_builting(t_exec_struct *exec_struct, char **envp_arr)
+{
+	if (!exec_struct->exec_substrings->exec_arguments->next)
+	{
+		write(2, "exit\n", 5);
+		message_exit(exec_struct, envp_arr);
+	}
+	exec_struct->command_line->previous_exit_code = ft_aatoi(exec_struct->\
+		exec_substrings->exec_arguments->next->argument, exec_struct, envp_arr);
+	write(2, "exit\n", 5);
+	message_exit(exec_struct, envp_arr);
+	return (1);
+}
+
+/*int main(void)
+{
+    // Création d'arguments de test
+    t_exec_argument exec_arguments;
+    char *args[] = {"exit", NULL, NULL};
+    exec_arguments.argument = args;
+
+    // Appel de la fonction exit_builting avec les arguments de test
+    int exit_code = exit_builting(&exec_arguments);
+
+    // Affichage du code de sortie retourné par la fonction
+    printf("Code de sortie: %d\n", exit_code);
+
+    return 0;
+}*/

@@ -3,6 +3,11 @@
 void	check_exec_arguments(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
+	if ((*exec_substring)->exec_arguments->argument)
+	{
+		if (check_is_builtin((*exec_substring)->exec_arguments))
+			return ;
+	}
 	build_cmd_arr(exec_substring, exec_struct);
 	if ((*exec_substring)->cmd_arr && (*exec_substring)->cmd_arr[0])
 		check_command_with_options(exec_substring, exec_struct);

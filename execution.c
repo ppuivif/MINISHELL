@@ -105,7 +105,11 @@ void	execution(t_exec_struct **exec_struct)
 
 //	if (substrings_nmemb == 1)
 //		unique_substring_execution(cursor, exec_struct);
-	
+	if ((*exec_struct)->exec_substrings->exec_arguments->is_builtin == 2 && substrings_nmemb == 1)
+	{
+		exec_builtin(*exec_struct, NULL);
+		return ;
+	}
 	while (i < substrings_nmemb)
 	{
 //		pid_arr = build_pid_arr(pid_arr, i);
@@ -163,8 +167,7 @@ void	execution(t_exec_struct **exec_struct)
 		close_fd(fd_in);
 		close_fd(fd_out);
 		fd_in = fd[0];
-		envp_arr = 
-		free_and_null(envp_arr);
+		envp_arr = free_and_null(envp_arr);
 		i++;
 	}
 //	printf("%s\n", strerror(errno));
@@ -195,6 +198,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 {
 	int	exit_code;
 
+	(void)exec_struct;
 	exit_code = 0;
 	if (substring->exec_arguments && substring->exec_arguments->is_argument_valid == false)
 		exit_code = 127;
@@ -216,17 +220,19 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 		close_fd(substring->exec_redirections->fd_input);
 		substring->exec_redirections = substring->exec_redirections->next;
 	}*/
+	if (substring->exec_arguments->is_builtin)
+		exec_builtin(*exec_struct, envp_arr);
 	if (substring->path_with_cmd && substring->cmd_arr \
 	&& substring->cmd_arr[0] && exit_code == 0)
 	{
-		if (!ft_is_builtin(substring->exec_arguments))
-		{
+		//if (!exec_builtin(substring->exec_arguments))
+		//{
 			if (execve(substring->path_with_cmd, substring->cmd_arr, envp_arr) == -1)
 				perror("error\nexecve of a cmd failed");//to verify
 				//exit_code = -1 ?
-		}
+		//}
 	}
-//	printf("exit_code : %d\n", exit_code);
+	//printf("exit_code : %d\n", exit_code);
 	free_envp_struct(&(*exec_struct)->envp_struct);
 	free_all_command_line(&(*exec_struct)->command_line);
 	free_all_exec_struct(exec_struct);

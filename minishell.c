@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/05 09:32:29 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/05 19:50:45 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 /*int main (void)
@@ -63,7 +75,7 @@ int main(int argc, char **argv, char **envp)
 	previous_exit_code = 0;
 //	if (envp_struct)
 //		ft_envp_struct_lst_print(envp_struct, 1);
-	/*if (!isatty(STDIN_FILENO))
+/*	if (!isatty(STDIN_FILENO))
 	{
 		line = get_next_line(STDIN_FILENO);
 		ft_putstr_fd("line: ", STDERR_FILENO);
@@ -77,8 +89,8 @@ int main(int argc, char **argv, char **envp)
 	 	int fd = ft_atoi(argv[1]);
 		line = get_next_line(fd);
 	}
-	else if (!isatty(STDIN_FILENO))
-		line = get_next_line(STDIN_FILENO);
+/*	else if (!isatty(STDIN_FILENO))
+		line = get_next_line(STDIN_FILENO);*/
 	while (1)
 	{
 		get_envp(envp, &envp_struct, line);
@@ -92,12 +104,12 @@ int main(int argc, char **argv, char **envp)
 		}
 		if (line[0])//no history on empty lines
 			add_history(line);//here?
-		if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
-		{
-			command_line = parse_command_line(argv, line, &envp_struct, previous_exit_code);
+		/* if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
+		{ */
+		command_line = parse_command_line(argv, line, &envp_struct, previous_exit_code);
 //			if (command_line->exit_code != 0)
 //				error_handling(&command_line);
-		}
+		/* } */
 //		if (ft_strncmp(command_line->substrings->exp_arguments->content, "exit_code", 9) == 0)
 /*		if (ft_strncmp(command_line->substrings->exp_arguments->content, "?", 1) == 0)
 		{
@@ -105,14 +117,14 @@ int main(int argc, char **argv, char **envp)
 			ft_putnbr_fd(command_line->exit_code, 1);
 			ft_putstr_fd("\n", 1);
 		}*/
-		if (ft_strncmp(line, "exit", 4) == 0)
+		/* if (ft_strncmp(line, "exit", 4) == 0)
 		{
 			free_envp_struct(&envp_struct);
 			free(line);
 			line = NULL;
 			clear_history();
 			exit (EXIT_SUCCESS);
-		}
+		} */
 		if (init_exec_struct(&exec_struct) == -1)
 			error_allocation_exec_struct_and_exit(&exec_struct);
 		exec_struct->envp_struct = envp_struct;
@@ -137,4 +149,3 @@ int main(int argc, char **argv, char **envp)
 	}
 	return (exit_code);//for script_test
 }
-
