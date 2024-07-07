@@ -1,4 +1,0 @@
-substring 0 : 
-	-redirection 0 : 	$DO_NOT_EXIST
-	-redirection_type 0 : 	REDIRECTION_HEREDOC
-
