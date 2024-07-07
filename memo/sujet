@@ -1,0 +1,15 @@
+Sujet
+
+en mode interactif * :
+
+	
+	- CTRL C affiche un nouveau prompt sur une nouvelle ligne
+	
+	
+* Shell permet deux modes de fonctionnement 
+	- mode interactif : il prend les entrées du clavier,
+	- mode non-interactif : shell exécute les commandes lues dans un fichier.
+exemple : saisir cat dans la ligne de commande, sans arguments, ouvre l'entrée standard.
+Il semblerait que la gestion des signaux soit différente (Cf. Discord du 25/02/2024)
+
+Dans la même idée, la gestion des signaux serait différente avec le Heredoc
