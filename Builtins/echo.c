@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 13:29:44 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/05 21:04:51 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/07 10:52:44 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,25 +50,27 @@ static void	ft_putstrr(t_exec_argument *exec_arguments)
 
 int	echo(t_exec_argument *exec_arguments)
 {
+	t_exec_argument	*arguments;
 	int	n;
 
+	arguments = exec_arguments;
 	n = 1;
-	if (!exec_arguments->next)
+	if (!arguments->next)
 	{
 		write(1, "\n", 1);
 		return (1);
 	}
-	if (check_argument(exec_arguments->next))
+	while (arguments && check_argument(arguments->next))
 	{
-		exec_arguments = exec_arguments->next;
+		arguments = arguments->next;
 		n = 0;
 	}
-	while (exec_arguments->next)
+	while (arguments->next)
 	{
-		ft_putstrr(exec_arguments->next);
-		if (exec_arguments->next->next)
+		ft_putstrr(arguments->next);
+		if (arguments->next->next)
 			write(1, " ", 1);
-		exec_arguments = exec_arguments->next;
+		arguments = arguments->next;
 	}
 	if (n == 1)
 		write(1, "\n", 1);

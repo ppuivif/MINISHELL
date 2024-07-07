@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:32:29 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/05 19:50:45 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/06 22:27:34 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,9 +91,10 @@ int main(int argc, char **argv, char **envp)
 	}
 /*	else if (!isatty(STDIN_FILENO))
 		line = get_next_line(STDIN_FILENO);*/
+	get_envp(envp, &envp_struct, line);
 	while (1)
 	{
-		get_envp(envp, &envp_struct, line);
+		//get_envp(envp, &envp_struct, line);
 		if (isatty(STDIN_FILENO) && argc != 2)
 			line = readline("minishell : ");
 		if (!line)
@@ -143,7 +144,7 @@ int main(int argc, char **argv, char **envp)
 			exit_code = command_line->current_exit_code;
 		}
 		line = free_and_null(line);
-		free_envp_struct(&envp_struct);
+		//free_envp_struct(&envp_struct);
 		free_all_command_line(&command_line);
 		free_all_exec_struct(&exec_struct);
 	}

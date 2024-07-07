@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/21 06:24:22 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/06 18:27:33 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,8 @@ int	init_envp_struct(t_envp_struct **envp_struct)
 	if (!*envp_struct)
 		return (-1);
 	(*envp_struct)->content = NULL;
+	(*envp_struct)->name = NULL;
+	(*envp_struct)->value = NULL;
 	(*envp_struct)->next = NULL;
 	return (0);
 }

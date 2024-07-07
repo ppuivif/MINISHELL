@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:57:29 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/05 21:09:39 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/07 10:23:35 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,10 @@ static int	ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr)
 
 int	exit_builting(t_exec_struct *exec_struct, char **envp_arr)
 {
-	if (!exec_struct->exec_substrings->exec_arguments->next)
+	size_t	len;
+
+	len = ft_lst_size9(exec_struct->exec_substrings->exec_arguments);
+	if (len == 1)
 	{
 		write(2, "exit\n", 5);
 		message_exit(exec_struct, envp_arr);
@@ -131,6 +134,11 @@ int	exit_builting(t_exec_struct *exec_struct, char **envp_arr)
 	exec_struct->command_line->previous_exit_code = ft_aatoi(exec_struct->\
 		exec_substrings->exec_arguments->next->argument, exec_struct, envp_arr);
 	write(2, "exit\n", 5);
+	if (len > 2)
+	{
+		write(2, "bash: exit: too many arguments\n", 31);
+		return (1);
+	}
 	message_exit(exec_struct, envp_arr);
 	return (1);
 }

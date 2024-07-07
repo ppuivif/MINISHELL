@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:54:36 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/06 16:40:43 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/07 09:25:46 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,12 @@ int	exec_builtin(t_exec_struct *exec_struct, char **envp_arr)
 		var = cd(exec_struct);
 	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "pwd"))
 		var = pwd();
-	/*if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "export"))
-		var = export(exec_struct->exec_substrings->exec_arguments);
+	//if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "export"))
+	//	var = export(exec_struct->exec_substrings->exec_arguments);
 	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "unset"))
-		var = unset(exec_struct->exec_substrings->exec_arguments;
+		var = unset(exec_struct);
 	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "env"))
-		var = env(exec_struct->exec_substrings->exec_arguments);*/
+		var = env(exec_struct);
 	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "exit"))
 		var = exit_builting(exec_struct, envp_arr);
 	return (var);

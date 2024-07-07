@@ -113,5 +113,7 @@ int		pwd(void);
 int		exit_builting(t_exec_struct *exec_struct, char **envp_arr);
 int		check_is_builtin(t_exec_argument *exec_arguments);
 int		cd(t_exec_struct *exec_struct);
+int		env(t_exec_struct *exec_struct);
+int		unset(t_exec_struct *exec_struct);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:16 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/06 17:09:13 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/07 10:05:41 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,36 @@
 
 static char	*search_home(t_exec_struct *exec_struct)
 {
-	while (exec_struct->envp_struct->next)
+	t_envp_struct	*env;
+
+	env = exec_struct->envp_struct;
+	while (env)
 	{
-		printf("%s\n", exec_struct->envp_struct->content);
-		if (!strncmp(exec_struct->envp_struct->content, "HOME", 4))
+		if (!strncmp(env->content, "HOME", 4))
 		{
-			return (exec_struct->envp_struct->content);
+			return (env->value);
 		}
-		exec_struct->envp_struct = exec_struct->envp_struct->next;
+		env = env->next;
+	}
+	return (NULL);
+}
+
+static char	*search_or_replace_oldpwd(t_exec_struct *exec_struct, char *str)
+{
+	t_envp_struct	*env;
+
+	env = exec_struct->envp_struct;
+	while (env)
+	{
+		if (!strncmp(env->content, "OLDPWD", 6))
+		{
+			if (!str)
+				return (env->value);
+			free(env->value);
+			env->value = ft_strdup(str);
+			return (NULL);
+		}
+		env = env->next;
 	}
 	return (NULL);
 }
@@ -29,15 +51,40 @@ static char	*search_home(t_exec_struct *exec_struct)
 int	cd(t_exec_struct *exec_struct)
 {
 	char	*home;
+	char	*old;
+	size_t	size;
 
-    if (!exec_struct->exec_substrings->exec_arguments->next)
+	size = ft_lst_size9(exec_struct->exec_substrings->exec_arguments);
+	if (size > 2)
 	{
-		home = strdup(search_home(exec_struct));
-        if (home)
-			printf("%s\n", home);
-		else
-			printf("Error\n");
+		write(2, "bash: cd: too many arguments\n", 29);
 		return (1);
 	}
+	if (size == 1 || !ft_strcmp \
+		(exec_struct->exec_substrings->exec_arguments->next->argument, "--"))
+	{
+		home = strdup(search_home(exec_struct));
+		if (!home)
+			printf("Error\n");
+		else if (chdir(home) == -1)
+			printf("Error\n");
+		free(home);
+		return (1);
+	}
+	if (exec_struct->exec_substrings->exec_arguments->next->argument[0] == '-')
+	{
+		printf("%s\n", search_or_replace_oldpwd(exec_struct, NULL));
+		return (1);
+	}
+	old = getcwd(NULL, 0);
+	if (chdir(exec_struct->exec_substrings \
+		->exec_arguments->next->argument) == -1)
+	{
+		printf("Error\n");
+		free(old);
+		return (1);
+	}
+	search_or_replace_oldpwd(exec_struct, old);
+	free(old);
 	return (1);
 }
