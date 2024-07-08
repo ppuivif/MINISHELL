@@ -39,8 +39,8 @@ function create_files_and_set_permissions() {
 	echo > "temp/$test_index-bash_stderr.txt"
     chmod 644 "temp/$test_index-bash_stderr.txt"
 #	exec 201> "temp/bash_stderr$test_index.txt"
-#	echo > "temp/tmp_to_read_command.txt"
- #   chmod 644 "temp/tmp_to_read_command.txt"
+	echo > "temp/tmp_to_read_command.txt"
+    chmod 644 "temp/tmp_to_read_command.txt"
 	exec 100< "temp/tmp_to_read_command.txt"
 	echo > "temp/tmp_to_execute_valgrind.txt"
     chmod 644 "temp/tmp_to_execute_valgrind.txt"
@@ -120,6 +120,8 @@ execute_test() {
     
 	create_files_and_set_permissions $test_index
 
+#: << BLOCK_COMMENT
+
 	if [ "$test_type" == "heredoc1" ]
 	then
 	heredoc1_content="line1
@@ -156,18 +158,14 @@ EOF
 	echo > temp/outfile1.txt
 	echo > temp/outfile2.txt	
     
-#	echo "$command" | ./minishell | echo -e "first line" | echo -e "limiter" 1>"temp/minishell_stdout$test_index.txt" 2>temp/minishell_stderr$test_index.txt
-#	echo "$command" | ./minishell | echo -e "first line" | echo -e "limiter1"
-#	echo "$full_command" | ./minishell
-
-#	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
-	./minishell 100
+	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+#	./minishell 100
 	exit_code_minishell=$?
-	echo "exit_code_minishell"
-	echo "$exit_code_minishell"
+#	echo "exit_code_minishell"
+#	echo "$exit_code_minishell"
 	cat "temp/outfile1.txt" >"temp/$test_index-minishell_outfile1.txt"
 	cat "temp/outfile2.txt" >"temp/$test_index-minishell_outfile2.txt"
-#	delete_file "temp/tmp_to_read_command.txt"
+	delete_file "temp/tmp_to_read_command.txt"
 	exec 100>&-
 
 	echo "$command" >"temp/tmp_to_execute_valgrind.txt"
