@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/03 14:05:13 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/08 13:11:17 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,24 @@ char	**arr_copy(char **arr)
 		i++;
 	}
 	return (result);	
+}
+
+int    ft_strcspn(char *remaining_line, char *str)
+{
+    int    i;
+    int    j;
+
+    i = 0;
+    while (remaining_line[i])
+    {
+        j = 0;
+        while (str[j])
+        {
+            if (remaining_line[i] == str[j])
+                return (i);
+            j++;
+        }
+        i++;
+    }
+    return (i);
 }

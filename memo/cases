@@ -190,4 +190,11 @@ minishell :
 
 
 gérer export _=kmwkoemw
-ne modifie pas la variable qui a priori contient le chemin d'accès à l'env. 
+ne modifie pas la variable qui a priori contient le chemin d'accès à l'env.
+
+
+ls | < in
+ls | < in (exit code 0)
+
+echo titi >>./temp/outfile hi > ./temp/invalid_permission
+ 

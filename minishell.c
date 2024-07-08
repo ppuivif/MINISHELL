@@ -80,9 +80,9 @@ int main(int argc, char **argv, char **envp)
 	}
 /*	else if (!isatty(STDIN_FILENO))
 		line = get_next_line(STDIN_FILENO);*/
+	get_envp(envp, &envp_struct, line);
 	while (1)
 	{
-		get_envp(envp, &envp_struct, line);
 		if (isatty(STDIN_FILENO) && argc != 2)
 //		if (isatty(STDIN_FILENO))
 			line = readline("minishell : ");
