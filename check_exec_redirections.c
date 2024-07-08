@@ -62,14 +62,13 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 		line = get_next_line(0);
 		if (ft_strcmp(line, limiter) == 0)
 		{
-			free(line);
+			line = free_and_null(line);
 			close(fd);
 			break;
 		}
 		expand_content_when_heredoc(&line, envp_struct);
 		ft_putstr_fd(line, fd);
-		free(line);
-		line = NULL;
+		line = free_and_null(line);
 	}
 	free(limiter);
 	limiter = NULL;

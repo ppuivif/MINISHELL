@@ -13,6 +13,7 @@
 # include <stdio.h>//to delete
 # include <fcntl.h>
 # include <sys/wait.h>
+#include <dirent.h>//for opendir in check_exec_arguments.c
 
 #include <errno.h>//to delete
 
@@ -87,6 +88,7 @@ int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redir
 
 void	check_exec_arguments(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 char	**build_envp_arr(t_exec_struct **exec_struct);
+char	**search_path(char **envp);
 void	build_cmd_arr(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 void	check_command_with_options(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 void	check_path_in_envp(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
@@ -94,7 +96,7 @@ int		check_path_cmd_validity(char **path, t_exec_substring **exec_substring);
 
 void	execution(t_exec_struct **exec_struct);
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct);
-void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct);
+void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd, int i);
 
 
 
@@ -107,8 +109,13 @@ void	error_execve_and_exit(t_exec_struct **exec_struct);
 void	error_handling(t_command_line *command_line);
 
 //Builtin
-int		ft_is_builtin(t_exec_argument *exec_arguments);
+void	exec_builtin(t_exec_struct *exec_struct, t_exec_substring *substring, char **envp_arr);
 int		echo(t_exec_argument *exec_arguments);
 int		pwd(void);
+int		exit_builting(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, char **envp_arr);
+int		check_is_builtin(t_exec_argument *exec_arguments);
+int		cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
+int		env(t_exec_struct *exec_struct);
+int		unset(t_exec_struct *exec_struct);
 
 #endif

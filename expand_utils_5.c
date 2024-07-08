@@ -137,7 +137,7 @@ void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct)
 		else
 		{
 			result = ft_strjoin_freed(result, tmp);
-			tmp = NULL;
+			tmp = free_and_null(tmp);
 		}
 	}
 	free(*str);
