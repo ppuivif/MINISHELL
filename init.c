@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/07 12:54:01 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/08 11:18:54 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,7 @@ int	init_exec_argument_struct(t_exec_argument **exec_argument)
 		return (-1);	
 	(*exec_argument)->argument = NULL;
 	(*exec_argument)->is_argument_valid = true;
+	(*exec_argument)->is_builtin = 0;
 	(*exec_argument)->next = NULL;
 	return (0);
 }

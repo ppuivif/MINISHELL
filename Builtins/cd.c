@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:16 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/07 16:23:30 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/08 13:37:57 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,41 +48,58 @@ static char	*search_or_replace_oldpwd(t_exec_struct *exec_struct, char *str)
 	return (NULL);
 }
 
-int	cd(t_exec_struct *exec_struct)
+int	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
 	char	*home;
 	char	*old;
 	size_t	size;
 
-	size = ft_lst_size9(exec_struct->exec_substrings->exec_arguments);
+	size = ft_lst_size9(exec_arguments);
 	if (size > 2)
 	{
 		write(2, "bash: cd: too many arguments\n", 29);
 		return (1);
 	}
-	if (size == 1 || !ft_strcmp \
-		(exec_struct->exec_substrings->exec_arguments->next->argument, "--"))
+	if (size == 1 || !ft_strcmp(exec_arguments->next->argument, "--"))
 	{
 		home = strdup(search_home(exec_struct));
 		if (!home)
+		{
 			printf("bash: cd: HOME not set\n");
+			exec_struct->command_line->current_exit_code = 1;
+		}
 		else if (chdir(home) == -1)
-			printf("Error\n");
+		{
+			printf(": Permission denied\n");
+			exec_struct->command_line->current_exit_code = 1;
+		}
 		free(home);
 		return (1);
 	}
-	if (exec_struct->exec_substrings->exec_arguments->next->argument[0] == '-')
+	if (exec_arguments->next->argument[0] == '-')
 	{
 		printf("%s\n", search_or_replace_oldpwd(exec_struct, NULL));
 		return (1);
 	}
 	old = getcwd(NULL, 0);
-	if (chdir(exec_struct->exec_substrings \
-		->exec_arguments->next->argument) == -1)
+	if (chdir(exec_arguments->next->argument) == -1)
 	{
-		write(2, "cd: no such file or directory: ", 31);
-		ft_putstr_fd(exec_struct->exec_substrings->exec_arguments->next->argument, 2);
-		write(2, "\n", 1);
+		if (errno == EACCES)
+		{
+			ft_putstr_fd(exec_arguments->next->argument, 2);
+			ft_putstr_fd(": Permission denied\n", 2);
+		}
+		else if (access(exec_arguments->next->argument, F_OK) == 0)//F_OK to verify if file exists, X_OK to verify if the file is executable
+		{
+			ft_putstr_fd(exec_arguments->next->argument, 2);
+			ft_putstr_fd("cd: Makefile: Not a directory\n", 2);
+		}
+		else
+		{
+			ft_putstr_fd(exec_arguments->next->argument, 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
+		}
+		exec_struct->command_line->current_exit_code = 1;
 		free(old);
 		return (1);
 	}

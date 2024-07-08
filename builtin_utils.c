@@ -6,31 +6,31 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:54:36 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/07 13:02:48 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/08 13:18:03 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 # include "minishell.h"
 
-int	exec_builtin(t_exec_struct *exec_struct, char **envp_arr)
+int	exec_builtin(t_exec_struct *exec_struct, t_exec_substring *substring, char **envp_arr)
 {
 	int	var;
 	
 	var = 0;
-	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "echo"))
-		var = echo(exec_struct->exec_substrings->exec_arguments);
-	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "cd"))
-		var = cd(exec_struct);
-	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "pwd"))
+	if (!ft_strcmp(substring->exec_arguments->argument, "echo"))
+		var = echo(substring->exec_arguments);
+	if (!ft_strcmp(substring->exec_arguments->argument, "cd"))
+		var = cd(exec_struct, substring->exec_arguments);
+	if (!ft_strcmp(substring->exec_arguments->argument, "pwd"))
 		var = pwd();
-	//if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "export"))
+	//if (!ft_strcmp(substring->exec_arguments->argument, "export"))
 	//	var = export(exec_struct->exec_substrings->exec_arguments);
-	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "unset"))
+	if (!ft_strcmp(substring->exec_arguments->argument, "unset"))
 		var = unset(exec_struct);
-	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "env"))
+	if (!ft_strcmp(substring->exec_arguments->argument, "env"))
 		var = env(exec_struct);
-	if (!ft_strcmp(exec_struct->exec_substrings->exec_arguments->argument, "exit"))
-		var = exit_builting(exec_struct, envp_arr);
+	if (!ft_strcmp(substring->exec_arguments->argument, "exit"))
+		var = exit_builting(exec_struct, substring->exec_arguments, envp_arr);
 	return (var);
 }
 

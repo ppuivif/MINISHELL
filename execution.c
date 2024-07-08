@@ -130,10 +130,13 @@ void	execution(t_exec_struct **exec_struct)
 
 //	if (substrings_nmemb == 1)
 //		unique_substring_execution(cursor, exec_struct);
-	if ((*exec_struct)->exec_substrings->exec_arguments->is_builtin == 2 && substrings_nmemb == 1)
+	if ((*exec_struct)->exec_substrings->exec_arguments)
 	{
-		exec_builtin(*exec_struct, NULL); //! J'ai mis ca
-		return ;
+		if ((*exec_struct)->exec_substrings->exec_arguments->is_builtin == 2 && substrings_nmemb == 1)
+		{
+			exec_builtin(*exec_struct, (*exec_struct)->exec_substrings, NULL); //! J'ai mis ca
+			return ;
+		}
 	}
 	while (i < substrings_nmemb)
 	{
@@ -306,10 +309,16 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	//free_all_command_line(&(*exec_struct)->command_line);//! J'ai commenté ca
 	//free_all_exec_struct(exec_struct);//! J'ai commenté ca
 	clear_history();
-	if (substring->exec_arguments->is_builtin)
+	if (substring->exec_arguments)
 	{
-		exec_builtin(*exec_struct, envp_arr);	//! J'ai mis ca
+		if (substring->exec_arguments->is_builtin)
+		{
+			exec_builtin(*exec_struct, substring, envp_arr);	//! J'ai mis ca
+		}
 	}
+	free_envp_struct(&(*exec_struct)->envp_struct);//! J'ai mis ca
+	free_all_command_line(&(*exec_struct)->command_line);//! J'ai mis ca
+	free_all_exec_struct(exec_struct);//! J'ai mis ca
 	if (path_with_cmd && cmd_arr && cmd_arr[0] && exit_code == 0)
 	{
 		if (execve(path_with_cmd, cmd_arr, envp_arr) == -1)
@@ -323,9 +332,6 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 //	free_all_exec_struct(exec_struct);
 
 //	clear_history();
-	free_envp_struct(&(*exec_struct)->envp_struct);//! J'ai mis ca
-	free_all_command_line(&(*exec_struct)->command_line);//! J'ai mis ca
-	free_all_exec_struct(exec_struct);//! J'ai mis ca
 	free(path_with_cmd);
 	free_arr(cmd_arr);
 	free_arr(envp_arr);

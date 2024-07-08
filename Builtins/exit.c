@@ -6,35 +6,13 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:57:29 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/07 10:23:35 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/08 13:36:34 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-/*#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>*/
 #include <limits.h>
-
-/*typedef struct s_exec_argument
-{
-    char	**argument;
-}	t_exec_argument;
-
-static void	ft_putstr_fd(char *s, int fd)
-{
-	int	i;
-
-	i = 0;
-	if (s != 0)
-	{
-		while (s[i])
-		{
-			write(fd, &s[i], 1);
-			i++;
-		}
-	}
-}*/
+#include <unistd.h>
 
 static void	message_exit(t_exec_struct *exec_struct, char **envp_arr)
 {
@@ -121,40 +99,24 @@ static int	ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr)
 	return (nbr * sign);
 }
 
-int	exit_builting(t_exec_struct *exec_struct, char **envp_arr)
+int	exit_builting(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, char **envp_arr)
 {
 	size_t	len;
 
-	len = ft_lst_size9(exec_struct->exec_substrings->exec_arguments);
+	len = ft_lst_size9(exec_arguments);
 	if (len == 1)
 	{
 		write(2, "exit\n", 5);
 		message_exit(exec_struct, envp_arr);
 	}
-	exec_struct->command_line->previous_exit_code = ft_aatoi(exec_struct->\
-		exec_substrings->exec_arguments->next->argument, exec_struct, envp_arr);
+	exec_struct->command_line->previous_exit_code = ft_aatoi(exec_arguments->next->argument, exec_struct, envp_arr);
 	write(2, "exit\n", 5);
 	if (len > 2)
 	{
 		write(2, "bash: exit: too many arguments\n", 31);
+		exec_struct->command_line->current_exit_code = 1;
 		return (1);
 	}
 	message_exit(exec_struct, envp_arr);
 	return (1);
 }
-
-/*int main(void)
-{
-    // Création d'arguments de test
-    t_exec_argument exec_arguments;
-    char *args[] = {"exit", NULL, NULL};
-    exec_arguments.argument = args;
-
-    // Appel de la fonction exit_builting avec les arguments de test
-    int exit_code = exit_builting(&exec_arguments);
-
-    // Affichage du code de sortie retourné par la fonction
-    printf("Code de sortie: %d\n", exit_code);
-
-    return 0;
-}*/
