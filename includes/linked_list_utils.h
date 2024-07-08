@@ -110,6 +110,7 @@ typedef struct s_exec_argument
 {
 	char	*argument;
 	bool	is_argument_valid;
+	int		is_builtin;
 	t_exec_argument	*next;
 }t_exec_argument;
 
