@@ -30,6 +30,7 @@ int				ft_atoi(const char *nptr);
 void			close_fd(int fd);
 void			*free_and_null(void *ptr);
 char        	**arr_copy(char **arr);
+int             ft_strcspn(char *remaining_line, char *str);
 
 
 #endif

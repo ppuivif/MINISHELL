@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/08 17:54:51 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/08 21:24:05 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	init_envp_struct(t_envp_struct **envp_struct)
 	*envp_struct = ft_calloc(1, sizeof(t_envp_struct));
 	if (!*envp_struct)
 		return (-1);
-	(*envp_struct)->content = NULL;
+//	(*envp_struct)->content = NULL;
 	(*envp_struct)->name = NULL;
 	(*envp_struct)->value = NULL;
 	(*envp_struct)->next = NULL;

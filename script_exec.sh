@@ -134,15 +134,20 @@ limiter1"
 		full_command="$command" 
 	fi
 
-#BLOCK_COMMENT
+	limiter="limiter"
 
+	heredoc_input=$(cat << 'EOF'
+echo -e "first_line\n"
+EOF
+)
+
+
+#	echo "$full_command" >"temp/tmp_to_read_command.txt"
+#	echo "$heredoc_input" >"temp/tmp_to_read_command.txt"
 #	cat "temp/tmp_to_read_command.txt"
 
-	echo "$command" >"temp/tmp_to_read_command.txt"
-#	cat "temp/tmp_to_read_command.txt"
 
-
-	eval "$command" 1>"temp/$test_index-bash_stdout.txt" 2>"temp/$test_index-bash_stderr.txt"
+	eval "$full_command" 1>"temp/$test_index-bash_stdout.txt" 2>"temp/$test_index-bash_stderr.txt"
 #	eval "$full_command"
 	exit_code_bash=$?
 	echo "exit_code_bash"
