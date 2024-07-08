@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:16 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/08 13:37:57 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/08 21:31:41 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*search_home(t_exec_struct *exec_struct)
 	env = exec_struct->envp_struct;
 	while (env)
 	{
-		if (!strncmp(env->content, "HOME", 4))
+		if (!strncmp(env->name, "HOME", 4))
 		{
 			return (env->value);
 		}
@@ -35,7 +35,7 @@ static char	*search_or_replace_oldpwd(t_exec_struct *exec_struct, char *str)
 	env = exec_struct->envp_struct;
 	while (env)
 	{
-		if (!strncmp(env->content, "OLDPWD", 6))
+		if (!strncmp(env->name, "OLDPWD", 6))
 		{
 			if (!str)
 				return (env->value);
