@@ -109,7 +109,7 @@ void	error_execve_and_exit(t_exec_struct **exec_struct);
 void	error_handling(t_command_line *command_line);
 
 //Builtin
-int		exec_builtin(t_exec_struct *exec_struct, t_exec_substring *substring, char **envp_arr);
+void	exec_builtin(t_exec_struct *exec_struct, t_exec_substring *substring, char **envp_arr);
 int		echo(t_exec_argument *exec_arguments);
 int		pwd(void);
 int		exit_builting(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, char **envp_arr);
