@@ -58,6 +58,7 @@ int main(int argc, char **argv, char **envp)
 	int				exit_code;
 
 	(void)argc;
+	(void)argv;
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;
@@ -73,17 +74,18 @@ int main(int argc, char **argv, char **envp)
 		exit(0);
 	}*/
 //	if (!isatty(STDIN_FILENO))//for tests
-	if (argc == 2)//for tests
+	/*if (argc == 2)//for tests
 	{
 	 	int fd = ft_atoi(argv[1]);
 		line = get_next_line(fd);
-	}
+	}*/
 /*	else if (!isatty(STDIN_FILENO))
 		line = get_next_line(STDIN_FILENO);*/
-	get_envp(envp, &envp_struct, line);
+	get_envp(envp, &envp_struct, line);//! J'ai mis ca
 	while (1)
 	{
-		if (isatty(STDIN_FILENO) && argc != 2)
+		//get_envp(envp, &envp_struct, line);	//! J'ai commenté ca
+//		if (isatty(STDIN_FILENO) && argc != 2)
 //		if (isatty(STDIN_FILENO))
 			line = readline("minishell : ");
 		if (!line)
@@ -94,12 +96,12 @@ int main(int argc, char **argv, char **envp)
 		}
 		if (line[0])//no history on empty lines
 			add_history(line);//here?
-		if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
-		{
-			command_line = parse_command_line(argv, line, &envp_struct, previous_exit_code);
+		//if (ft_strncmp(line, "exit", 4) != 0)//pb free with exittt
+		//{
+		command_line = parse_command_line(argv, line, &envp_struct, previous_exit_code);
 //			if (command_line->exit_code != 0)
 //				error_handling(&command_line);
-		}
+		//}
 //		if (ft_strncmp(command_line->substrings->exp_arguments->content, "exit_code", 9) == 0)
 /*		if (ft_strncmp(command_line->substrings->exp_arguments->content, "?", 1) == 0)
 		{
@@ -107,14 +109,14 @@ int main(int argc, char **argv, char **envp)
 			ft_putnbr_fd(command_line->exit_code, 1);
 			ft_putstr_fd("\n", 1);
 		}*/
-		if (ft_strncmp(line, "exit", 4) == 0)
+		/* if (ft_strncmp(line, "exit", 4) == 0)
 		{
 			free_envp_struct(&envp_struct);
 			free(line);
 			line = NULL;
 			clear_history();
 			exit (EXIT_SUCCESS);
-		}
+		} */
 		if (init_exec_struct(&exec_struct) == -1)
 			error_allocation_exec_struct_and_exit(&exec_struct);
 		exec_struct->envp_struct = envp_struct;
@@ -133,10 +135,11 @@ int main(int argc, char **argv, char **envp)
 			exit_code = command_line->current_exit_code;
 		}
 		line = free_and_null(line);
-		free_envp_struct(&envp_struct);
+		//free_envp_struct(&envp_struct);	//! J'ai commenté ca
 		free_all_command_line(&command_line);
 		free_all_exec_struct(&exec_struct);
 	}
+	free_envp_struct(&envp_struct);	//! J'ai mis ca
 	return (exit_code);//for script_test
 }
 

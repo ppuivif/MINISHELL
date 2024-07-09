@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/21 06:24:22 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/08 21:24:05 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ int	init_envp_struct(t_envp_struct **envp_struct)
 	*envp_struct = ft_calloc(1, sizeof(t_envp_struct));
 	if (!*envp_struct)
 		return (-1);
-	(*envp_struct)->content = NULL;
+//	(*envp_struct)->content = NULL;
+	(*envp_struct)->name = NULL;
+	(*envp_struct)->value = NULL;
 	(*envp_struct)->next = NULL;
 	return (0);
 }
@@ -101,6 +103,7 @@ int	init_exec_argument_struct(t_exec_argument **exec_argument)
 		return (-1);	
 	(*exec_argument)->argument = NULL;
 	(*exec_argument)->is_argument_valid = true;
+	(*exec_argument)->is_builtin = 0;
 	(*exec_argument)->next = NULL;
 	return (0);
 }

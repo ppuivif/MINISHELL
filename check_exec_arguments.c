@@ -3,6 +3,11 @@
 void	check_exec_arguments(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
+	if ((*exec_substring)->exec_arguments->argument)
+	{
+		if (check_is_builtin((*exec_substring)->exec_arguments))
+			return ;
+	}
 	build_cmd_arr(exec_substring, exec_struct);
 	if ((*exec_substring)->cmd_arr && (*exec_substring)->cmd_arr[0])
 		check_command_with_options(exec_substring, exec_struct);
@@ -122,6 +127,7 @@ t_exec_struct **exec_struct)
 	char	**cmd_arr;
 	DIR		*dir;
 
+	dir = NULL;
 	cmd_arr = (*exec_substring)->cmd_arr;
 	dir = opendir(cmd_arr[0]);
 	if (dir)
@@ -162,14 +168,15 @@ char	**build_envp_arr(t_exec_struct **exec_struct)
 	i = 0;
 	while (tmp)
 	{
-		envp_arr[i] = ft_strdup(tmp->content);
+		envp_arr[i] = ft_strjoin(tmp->name, "=");
+		envp_arr[i] = ft_strjoin_freed(envp_arr[i], tmp->value);
 		tmp = tmp->next;
 		i++;
 	}
 	return (envp_arr);
 }
 
-char	**search_path(char **envp)
+/*char	**search_path(char **envp)
 {
 	int		i;
 	char	**path;
@@ -187,18 +194,38 @@ char	**search_path(char **envp)
 			i++;
 	}
 	return (path);
+}*/
+
+char	**search_path(t_envp_struct *envp_struct)
+{
+	char			**path;
+	t_envp_struct	*cursor;
+
+	path = NULL;
+	cursor = envp_struct;
+	while (cursor)
+	{
+		if (ft_strncmp(cursor->name, "PATH", 4) == 0)
+		{
+			path = ft_split(cursor->value, ':');
+			return (path);
+		}
+		cursor = cursor->next;
+	}
+	return (path);
 }
 
 void	check_path_in_envp(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
 	int		return_value;
-	char	**envp_arr;
+//	char	**envp_arr;
 	char	**path_envp;
 
 	return_value = 0;
-	envp_arr = build_envp_arr(exec_struct);
-	path_envp = search_path(envp_arr);
+//	envp_arr = build_envp_arr(exec_struct);
+//	path_envp = search_path(envp_arr);
+	path_envp = search_path((*exec_struct)->envp_struct);
 	if (!path_envp || !path_envp[0])
 	{
 		ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
@@ -227,7 +254,7 @@ t_exec_struct **exec_struct)
 		else
 			(*exec_struct)->command_line->current_exit_code = 0;
 	}
-	envp_arr = free_arr(envp_arr);
+//	envp_arr = free_arr(envp_arr);
 	path_envp = free_arr(path_envp);
 }
 

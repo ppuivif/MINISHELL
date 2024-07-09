@@ -12,7 +12,9 @@
 typedef struct s_envp_struct t_envp_struct;
 typedef struct s_envp_struct
 {
-	char			*content;
+//	char			*content;
+	char			*name;
+	char			*value;
 	t_envp_struct	*next;
 }t_envp_struct;
 
@@ -108,6 +110,7 @@ typedef struct s_exec_argument
 {
 	char	*argument;
 	bool	is_argument_valid;
+	int		is_builtin;
 	t_exec_argument	*next;
 }t_exec_argument;
 

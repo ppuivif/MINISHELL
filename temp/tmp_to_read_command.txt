@@ -1,2 +1,1 @@
-<< limiter1 cat
-limiter1
+cat <"./temp/infile_big.txt" | echo hi

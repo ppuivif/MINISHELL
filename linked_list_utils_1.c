@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list_utils_1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/22 14:13:59 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/08 21:40:20 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,7 +349,9 @@ void	ft_envp_struct_lst_print(t_envp_struct *envp_struct, int fd)
 		ft_putstr_fd("envp[", fd);
 		ft_putnbr_fd(i, fd);
 		ft_putstr_fd("] : ", fd);
-		ft_putstr_fd(tmp->content, fd);
+		ft_putstr_fd(tmp->name, fd);
+		ft_putstr_fd("=", fd);
+		ft_putstr_fd(tmp->value, fd);
 //		ft_putstr_fd(envp_struct->content, fd);
 		ft_putstr_fd("\n", fd);
 		tmp = tmp->next;
