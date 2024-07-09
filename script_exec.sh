@@ -1953,13 +1953,17 @@ run_test "simple" 7305 " invalid_command > temp/outfile_without_permission < mis
 
 echo > temp/infile_without_permission
 chmod 000 temp/infile_without_permission
-run_test "simple" 7300 "< temp/infile_without_permission > temp/outfile1.txt cat -e" 7300 1 "temp/infile_without_permission: Permission denied"
-run_test "simple" 7301 "> temp/outfile_without_permission < temp/infile_without_permission cat -e" 7301 1 "temp/outfile_without_permission: Permission denied"
-run_test "simple" 7302 "< temp/infile_without_permission > temp/outfile_without_permission cat -e" 7302 1 "temp/infile_without_permission: Permission denied"
-run_test "simple" 7303 "< temp/infile_without_permission > temp/outfile1.txt cat -e" 7303 1 "temp/infile_without_permission: Permission denied"
-run_test "simple" 7304 "> temp/outfile1.txt < temp/infile_without_permission cat -e" 7304 1 "temp/infile_without_permission: Permission denied"
-run_test "simple" 7305 "< temp/infile_without_permission > temp/outfile1.txt invalid_command" 7305 1 "temp/infile_without_permission: Permission denied"
-run_test "simple" 7306 "invalid_command < temp/infile_without_permission > temp/outfile1.txt" 7306 1 "temp/infile_without_permission: Permission denied"
+run_test "simple" 7306 "temp/infile_without_permission" 7300 1 "temp/infile_without_permission: Permission denied"
+run_test "simple" 7307 "./temp/infile_without_permission" 7300 1 "temp/infile_without_permission: Permission denied"
+
+
+run_test "simple" 7310 "< temp/infile_without_permission > temp/outfile1.txt cat -e" 7310 1 "temp/infile_without_permission: Permission denied"
+run_test "simple" 7311 "> temp/outfile_without_permission < temp/infile_without_permission cat -e" 7311 1 "temp/outfile_without_permission: Permission denied"
+run_test "simple" 7312 "< temp/infile_without_permission > temp/outfile_without_permission cat -e" 7312 1 "temp/infile_without_permission: Permission denied"
+run_test "simple" 7313 "< temp/infile_without_permission > temp/outfile1.txt cat -e" 7313 1 "temp/infile_without_permission: Permission denied"
+run_test "simple" 7314 "> temp/outfile1.txt < temp/infile_without_permission cat -e" 7314 1 "temp/infile_without_permission: Permission denied"
+run_test "simple" 7315 "< temp/infile_without_permission > temp/outfile1.txt invalid_command" 7315 1 "temp/infile_without_permission: Permission denied"
+run_test "simple" 7316 "invalid_command < temp/infile_without_permission > temp/outfile1.txt" 7316 1 "temp/infile_without_permission: Permission denied"
 
 chmod 644 temp/outfile_without_permission
 delete_file temp/outfile_without_permission

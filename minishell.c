@@ -9,8 +9,8 @@ int main(int argc, char **argv, char **envp)
 	int				previous_exit_code;
 	int				exit_code;
 
-	(void)argc;
-	(void)argv;
+//	(void)argc;
+//	(void)argv;
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;

@@ -148,6 +148,13 @@ t_exec_struct **exec_struct)
 		if (!(*exec_substring)->path_with_cmd)
 			error_allocation_exec_struct_and_exit(exec_struct);
 	}
+	else if (access(cmd_arr[0], F_OK) == 0)
+	{
+		ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		(*exec_substring)->exec_arguments->is_argument_valid = false;
+		(*exec_struct)->command_line->current_exit_code = 126;
+	}
 	else
 		check_path_in_envp(exec_substring, exec_struct);
 }
@@ -245,11 +252,11 @@ t_exec_struct **exec_struct)
 		{
 			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
 			if (strcspn((*exec_substring)->cmd_arr[0], "/") < ft_strlen((*exec_substring)->cmd_arr[0]))
-				ft_putstr_fd(": No such file or directory\n", 2);
+				ft_putstr_fd(": No such file or directorytest\n", 2);
 			else
 				ft_putstr_fd(": command not found\n", 2);
-			(*exec_substring)->exec_arguments->is_argument_valid = false;
 			(*exec_struct)->command_line->current_exit_code = 127;
+			(*exec_substring)->exec_arguments->is_argument_valid = false;
 		}
 		else
 			(*exec_struct)->command_line->current_exit_code = 0;
