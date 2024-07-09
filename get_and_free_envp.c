@@ -9,6 +9,7 @@ static void	add_line(char *envp, t_envp_struct **envp_struct)
 		error_allocation_envp_struct_and_exit();
 //	new_element->content = ft_strdup(envp);
 	new_element->name = ft_substr(envp, 0, search_first_occurence(envp, '='));
+	new_element->equal = 1;
 	new_element->value = ft_substr(envp, search_first_occurence(envp, '=') + 1, ft_strlen(envp));
 	ft_lst_add_back6(envp_struct, new_element);
 }

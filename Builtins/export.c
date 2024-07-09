@@ -6,19 +6,70 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/08 19:55:36 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/09 13:59:46 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-static void	print_export(t_exec_struct *exec_struct)
+/* static int	is_range(char *s1, char *s2)
 {
-	(void)exec_struct;
-	return ;
+	char	*str;
+	int		i;
+	int		j;
+	int		k;
+	
+	str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_abcdefghijklmnopqrstvuwxyz";
+	i = 0;
+	j = 0;
+	k = 0;
+	while(s1[i] && s2[i])
+	{
+		if (s1[i] != s2[i])
+		{
+			while(s1[i] != str[j])
+				j++;
+			while(s2[i] != str[k])
+				k++;
+			if (j > k)
+				return (0);
+			else
+				return (1);
+		}
+		i++;
+	}
+	if (!s1[j])
+				return (0);
+			else
+				return (1);
+} */
+
+
+static void	ft_lstdelone(t_envp_struct *element_to_del)
+{
+	if (!element_to_del)
+		return ;
+	element_to_del->name = free_and_null(element_to_del->name);
+	element_to_del->value = free_and_null(element_to_del->value);
+	free(element_to_del);
 }
 
-static t_envp_struct	*ft_lstnew(char *name, char *value)
+void add_node_back(t_envp_struct **head, t_envp_struct *node_to_add)
+{
+	t_envp_struct *temp;
+
+    if (*head == NULL)
+    {
+        *head = node_to_add;
+    }
+    else
+    {
+        temp = *head;
+        temp->next = node_to_add;
+    }
+}
+
+static t_envp_struct	*ft_lstnew(char *name, char *value, bool equal)
 {
 	t_envp_struct	*lst;
 
@@ -26,12 +77,77 @@ static t_envp_struct	*ft_lstnew(char *name, char *value)
 	if (!lst)
 		return (NULL);
 	lst->name = ft_strdup(name);
+	lst->equal = equal;
 	if (value)
 		lst->value = ft_strdup(value);
 	else
 		lst->value = NULL;
+	lst->next = NULL;
 	return (lst);
 }
+
+static void	print_export(t_envp_struct *envp_struct)
+{
+	t_envp_struct	*new_envp;
+	t_envp_struct	*tmp_envp;
+	t_envp_struct	*tmp_node;
+	//t_envp_struct	*tmp_cursor;
+	t_envp_struct	*node_to_free;
+	int				i;
+	int				hits;
+
+	new_envp = envp_struct;
+//	ft_envp_struct_lst_print(envp_struct, 1);
+	hits = 1;
+	while (hits != 0)
+	{
+		hits = 0;
+		i = 0;
+		printf("1: %s\n", new_envp->name);
+		tmp_envp = new_envp;
+		printf("1: %s\n", tmp_envp->name);
+		while (tmp_envp != NULL && tmp_envp->next != NULL )
+		{
+			if (ft_strcmp(tmp_envp->name, tmp_envp->next->name) > 0)
+			{
+				//printf("1: %s\n", tmp_envp->name);
+				tmp_node = ft_lstnew(tmp_envp->next->name, tmp_envp->next->value, tmp_envp->next->equal);
+				//printf("2: %s\n", tmp_node->name);
+				tmp_node->next = tmp_envp;
+				//printf("2: %s\n", tmp_node->next->name);
+				node_to_free = tmp_envp->next;
+				//printf("2: %s\n", node_to_free->name);
+				tmp_envp->next = tmp_envp->next->next;
+				//printf("2: %s\n", tmp_envp->next->name);
+				ft_lstdelone(node_to_free);
+				//printf("2: %s\n", node_to_free->name);
+				tmp_envp = tmp_node;
+				/*printf("3: %s\n", tmp_envp->name);
+				printf("3: %s\n", tmp_envp->next->name);
+				printf("3: %s\n", tmp_envp->next->next->name);*/
+				hits++;
+			}
+			printf("%d\n", hits);
+			ft_envp_struct_lst_print(new_envp, 1);
+			//printf("1: %s\n", tmp_envp->name);
+			i++;
+			if (i == 1)
+			{
+				new_envp = tmp_envp;
+			}
+			tmp_envp = tmp_envp->next;
+		}
+	}
+	//ft_envp_struct_lst_print(new_envp, 1);
+
+	/* tmp_envp = new_envp;
+    while (tmp_envp != NULL)
+    {
+		printf("%s\n", tmp_envp->name);
+		tmp_envp = tmp_envp->next;
+    } */
+}
+
 
 static void	add_export(t_exec_struct *exec_struct, \
 	char *argument)
@@ -41,28 +157,27 @@ static void	add_export(t_exec_struct *exec_struct, \
 
 	env = exec_struct->envp_struct;
 	len_name = search_first_occurence(argument, '=');
-		if (len_name == 0)
-			len_name = (int)ft_strlen(argument);
+	if (len_name == 0)
+	{
+		ft_lst_add_back6(&exec_struct->envp_struct, ft_lstnew \
+			(ft_substr(argument, 0, ft_strlen(argument)), NULL, 0));
+		return ;
+	}
 	while (env)
 	{
 		if (!ft_strncmp(env->name, argument, len_name))
 		{
 			free(env->value);
 			env->value = ft_substr(argument, len_name + 1, ft_strlen(argument));
+			env->equal = 1;
 			return ;
 		}
 		env = env->next;
 	}
 	env = exec_struct->envp_struct;
-	if (len_name == 0)
-	{
-		ft_lst_add_back6(&exec_struct->envp_struct, ft_lstnew \
-			(ft_substr(argument, 0, ft_strlen(argument)), NULL));
-		return ;
-	}
 	ft_lst_add_back6(&exec_struct->envp_struct, \
 	ft_lstnew(ft_substr(argument, 0, len_name), \
-	ft_substr(argument, len_name + 1, ft_strlen(argument))));
+	ft_substr(argument, len_name + 1, ft_strlen(argument)), 1));
 }
 
 static int	is_alpha(char *argument)
@@ -91,13 +206,12 @@ void	export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
 	t_exec_argument	*arguments;
 
-	(void)print_export;
 	arguments = exec_arguments->next;
-	/*if (!arguments)
+	if (!arguments)
 	{
-	    print_export(exec_struct);
+	    print_export(exec_struct->envp_struct);
 		return ;
-	}*/
+	}
 	while (arguments)
 	{
 		if (!strcmp(arguments->argument, "_"))
