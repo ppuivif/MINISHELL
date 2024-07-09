@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/09 13:59:46 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/09 22:23:40 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ static void	ft_lstdelone(t_envp_struct *element_to_del)
 	free(element_to_del);
 }
 
-void add_node_back(t_envp_struct **head, t_envp_struct *node_to_add)
+/*void add_node_back(t_envp_struct **head, t_envp_struct *node_to_add)
 {
 	t_envp_struct *temp;
 
@@ -67,7 +67,7 @@ void add_node_back(t_envp_struct **head, t_envp_struct *node_to_add)
         temp = *head;
         temp->next = node_to_add;
     }
-}
+}*/
 
 static t_envp_struct	*ft_lstnew(char *name, char *value, bool equal)
 {
@@ -86,68 +86,72 @@ static t_envp_struct	*ft_lstnew(char *name, char *value, bool equal)
 	return (lst);
 }
 
+t_envp_struct *copy_envp_struct(t_envp_struct *envp_struct)
+{
+	t_envp_struct	*copy;
+	t_envp_struct	*new_element;
+	t_envp_struct	*cursor;
+//	size_t 			mnmemb;
+
+//	nmemb = ft_lst_size6(envp_struct);
+//	copy = ft_calloc(nmemb, sizeof(t_envp_struct));
+//	if (!copy)
+//		return (NULL);
+	cursor = envp_struct;
+	while (cursor)
+	{
+		new_element = ft_lstnew(cursor->name, cursor->value, cursor->equal);
+		ft_lst_add_back6(&copy, new_element);
+		cursor = cursor->next;
+	}
+	return (copy);
+}
+
 static void	print_export(t_envp_struct *envp_struct)
 {
-	t_envp_struct	*new_envp;
+	t_envp_struct	*sorted_envp;
 	t_envp_struct	*tmp_envp;
-	t_envp_struct	*tmp_node;
-	//t_envp_struct	*tmp_cursor;
+	t_envp_struct	*node_to_move;
+	t_envp_struct	*previous_node;
 	t_envp_struct	*node_to_free;
 	int				i;
-	int				hits;
+	int				hits;;
 
-	new_envp = envp_struct;
+	sorted_envp = copy_envp_struct(envp_struct);
 //	ft_envp_struct_lst_print(envp_struct, 1);
+//	printf("\n");
 	hits = 1;
 	while (hits != 0)
 	{
-		hits = 0;
+		hits = 0;;
 		i = 0;
-		printf("1: %s\n", new_envp->name);
-		tmp_envp = new_envp;
-		printf("1: %s\n", tmp_envp->name);
+		tmp_envp = sorted_envp;
+		previous_node = NULL;
 		while (tmp_envp != NULL && tmp_envp->next != NULL )
 		{
 			if (ft_strcmp(tmp_envp->name, tmp_envp->next->name) > 0)
 			{
-				//printf("1: %s\n", tmp_envp->name);
-				tmp_node = ft_lstnew(tmp_envp->next->name, tmp_envp->next->value, tmp_envp->next->equal);
-				//printf("2: %s\n", tmp_node->name);
-				tmp_node->next = tmp_envp;
-				//printf("2: %s\n", tmp_node->next->name);
+				node_to_move = ft_lstnew(tmp_envp->next->name, tmp_envp->next->value, tmp_envp->next->equal);
+				node_to_move->next = tmp_envp;
 				node_to_free = tmp_envp->next;
-				//printf("2: %s\n", node_to_free->name);
 				tmp_envp->next = tmp_envp->next->next;
-				//printf("2: %s\n", tmp_envp->next->name);
 				ft_lstdelone(node_to_free);
-				//printf("2: %s\n", node_to_free->name);
-				tmp_envp = tmp_node;
-				/*printf("3: %s\n", tmp_envp->name);
-				printf("3: %s\n", tmp_envp->next->name);
-				printf("3: %s\n", tmp_envp->next->next->name);*/
+				if (i)
+					previous_node->next = node_to_move;
+				tmp_envp = node_to_move;
 				hits++;
 			}
-			printf("%d\n", hits);
-			ft_envp_struct_lst_print(new_envp, 1);
-			//printf("1: %s\n", tmp_envp->name);
 			i++;
 			if (i == 1)
-			{
-				new_envp = tmp_envp;
-			}
+				sorted_envp = tmp_envp;
+			previous_node = tmp_envp;
 			tmp_envp = tmp_envp->next;
 		}
 	}
-	//ft_envp_struct_lst_print(new_envp, 1);
-
-	/* tmp_envp = new_envp;
-    while (tmp_envp != NULL)
-    {
-		printf("%s\n", tmp_envp->name);
-		tmp_envp = tmp_envp->next;
-    } */
+	ft_envp_struct_lst_print(sorted_envp, 1);
+	free_envp_struct(&sorted_envp);
+	
 }
-
 
 static void	add_export(t_exec_struct *exec_struct, \
 	char *argument)
