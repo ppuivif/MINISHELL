@@ -1,2 +1,0 @@
-< temp/infile1.txt cat | cat > temp/outfile1.txt
-exit

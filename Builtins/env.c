@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:20:53 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/09 03:19:44 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/09 04:33:57 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	env(t_exec_struct *exec_struct)
 	env = exec_struct->envp_struct;
 	while (env)
 	{
-		if (env->name)
+		if (env->name || env->equal == 1)
 		{
 			printf("%s=", env->name);
 			printf("%s\n", env->value);

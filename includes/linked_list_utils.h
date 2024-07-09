@@ -14,6 +14,7 @@ typedef struct s_envp_struct
 {
 //	char			*content;
 	char			*name;
+	bool			equal;
 	char			*value;
 	t_envp_struct	*next;
 }t_envp_struct;
