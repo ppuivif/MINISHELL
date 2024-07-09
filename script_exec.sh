@@ -142,24 +142,24 @@ EOF
 )
 
 
-#	echo "$full_command" >"temp/tmp_to_read_command.txt"
+	echo "$full_command" >"temp/tmp_to_read_command.txt"
 #	echo "$heredoc_input" >"temp/tmp_to_read_command.txt"
 #	cat "temp/tmp_to_read_command.txt"
 
 
-	eval "$full_command" 1>"temp/$test_index-bash_stdout.txt" 2>"temp/$test_index-bash_stderr.txt"
 #	eval "$full_command"
+	eval "$full_command" 1>"temp/$test_index-bash_stdout.txt" 2>"temp/$test_index-bash_stderr.txt"
 	exit_code_bash=$?
-	echo "exit_code_bash"
-	echo "$exit_code_bash"
+#	echo "exit_code_bash"
+#	echo "$exit_code_bash"
 	cat "temp/outfile1.txt" >"temp/$test_index-bash_outfile1.txt"
 	cat "temp/outfile2.txt" >"temp/$test_index-bash_outfile2.txt"
 	
 	echo > temp/outfile1.txt
 	echo > temp/outfile2.txt	
     
-	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
 #	./minishell 100
+	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
 	exit_code_minishell=$?
 #	echo "exit_code_minishell"
 #	echo "$exit_code_minishell"
@@ -168,7 +168,7 @@ EOF
 	delete_file "temp/tmp_to_read_command.txt"
 	exec 100>&-
 
-	echo "$command" >"temp/tmp_to_execute_valgrind.txt"
+	echo "$full_command" >"temp/tmp_to_execute_valgrind.txt"
 	echo "exit" >>"temp/tmp_to_execute_valgrind.txt"
 
 
@@ -178,7 +178,8 @@ EOF
  		valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
 #		beware : if minishell exit_code is 10, script will consider it as a valgrind_error	
 		exit_code_valgrind=$?
-		echo "$exit_code_valgrind"
+#		echo "exit_code_valgrind"
+#		echo "$exit_code_valgrind"
 	else
 		exit_code_valgrind=0
 	fi
@@ -241,7 +242,7 @@ EOF
 		delete_file "temp/$test_index-minishell_stderr.txt"
 		delete_file "temp/$test_index-bash_stderr.txt"
 	else	
-		echo "$substring"
+#		echo "$substring"
 		status4="KO"
 		error_detail4="${RED}stderr_output ${NC}"
 		flag=$((flag + 1))
@@ -458,7 +459,7 @@ run_test "simple" 19 "< temp/infile1.txt cat | cat > temp/outfile1.txt	" 1 0
 run_test "simple" 20 "< temp/infile1.txt cat | cat > temp/outfile1.txt		" 1 0
 
 
-run_test "heredoc1" 21 "<< limiter1 cat" 21 0
+#run_test "heredoc1" 21 "<< limiter1 cat" 21 0
 #run_test "heredoc" 21 "<< limiter1 cat | cat > outfile1.txt" 21 0
 #run_test_heredoc 22 "<<limiter1 cat | cat > outfile1.txt" 21 0
 #run_test_heredoc 36 "<< limiter1 cat | cat		> outfile1.txt" 21 0
@@ -475,7 +476,7 @@ run_test "simple" 45 "< temp/infile1.txt cat | cat>> temp/outfile1.txt" 41 0
 run_test "simple" 46 "< temp/infile1.txt cat | cat >>temp/outfile1.txt" 41 0
 run_test "simple" 47 "<temp/infile1.txt cat|cat >>temp/outfile1.txt" 41 0
 run_test "simple" 48 "< temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
-run_test "simple"49 "<	temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
+run_test "simple" 49 "<	temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
 run_test "simple" 50 "<		temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
 run_test "simple" 51 "< temp/infile1.txt cat	| cat >> temp/outfile1.txt" 41 0
 run_test "simple" 52 "< temp/infile1.txt cat		| cat >> temp/outfile1.txt" 41 0
@@ -664,7 +665,7 @@ run_test "simple" 163 "< \"'temp/infile1.txt'\"" 163 1 "'temp/infile1.txt': No s
 run_test "simple" 164 "< '\"'temp/infile1.txt'\"'" 164 1 "\"temp/infile1.txt\": No such file or directory"
 run_test "simple" 165 "< \"'\"temp/infile1.txt\"'\"" 165 1 "'temp/infile1.txt': No such file or directory"
 run_test "simple" 166 "> 'temp/outfile1.txt'" 166 0
-run_test "simple" 167 "> \"temp/outfile1.txt\"" 167 1 "\"temp/outfile1.txt\": No such file or directory"
+run_test "simple" 167 "> \"temp/outfile1.txt\"" 167 0
 run_test "simple" 168 "> '\"temp/outfile1.txt\"'" 168 1 "\"temp/outfile1.txt\": No such file or directory"
 run_test "simple" 169 "> \"'temp/outfile1.txt'\"" 169 1 "'temp/outfile1.txt': No such file or directory"
 run_test "simple" 170 "> '\"'temp/outfile1.txt'\"'" 170 1 "\"temp/outfile1.txt\": No such file or directory"
@@ -1159,9 +1160,15 @@ fi
 
 export INFILE="temp/infile1.txt"
 
-echo ""
-echo "\$INFILE = \"temp/infile.txt\""
-echo ""
+if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo ""
+		echo "\$INFILE = \"temp/infile.txt\""
+		echo ""
+	fi
+fi
 
 run_test "simple" 1700 "< \$INFILE" 1700 0
 run_test "simple" 1701 "< \$DO_NOT_EXIST" 1701 0
@@ -1187,9 +1194,15 @@ unset INFILE
 
 export OUTFILE="temp/outfile1.txt"
 
-echo ""
-echo "\$OUTFILE = \"temp/outfile.txt\""
-echo ""
+if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo ""
+		echo "\$OUTFILE = \"temp/outfile.txt\""
+		echo ""
+	fi
+fi
 
 run_test "simple" 1740 "> \$OUTFILE" 1740 0
 run_test "simple" 1741 "> \$DO_NOT_EXIST" 1741 0
@@ -1217,9 +1230,15 @@ unset OUTFILE
 
 export LIMITER="limiter"
 
-echo ""
-echo "\$LIMITER = \"limiter\""
-echo ""
+if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo ""
+		echo "\$LIMITER = \"limiter\""
+		echo ""
+	fi
+fi
 
 run_test "heredoc" 1780 "<< \$LIMITER" 1780 0
 run_test "heredoc" 1781 "<< \$DO_NOT_EXIST" 1781 0
@@ -1263,9 +1282,15 @@ BLOCK_COMMENT
 
 export OUTFILE="temp/outfile1.txt"
 
-echo ""
-echo "\$OUTFILE = \"temp/outfile.txt\""
-echo ""
+if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo ""
+		echo "\$OUTFILE = \"temp/outfile.txt\""
+		echo ""
+	fi
+fi
 
 run_test "simple" 1820 ">> \$OUTFILE" 1820 0
 run_test "simple" 1821 ">> \$DO_NOT_EXIST" 1821 0
@@ -1718,8 +1743,7 @@ run_test "simple" 4933 "\$PWD" 4933 126 ": Is a directory"
 mkdir ./temp/no_permission_dir
 chmod 000 ./temp/no_permission_dir
 run_test "simple" 4935 "./temp/no_permission_dir" 4935 126 "./temp/no_permission_dir: Is a directory"
-#run_test "simple" 4936 "cd ./temp/no_permission_dir" 4936 1 "cd: ./temp/directory/: Permission denied"
-
+run_test "simple" 4936 "cd ./temp/no_permission_dir" 4936 1 "cd: ./temp/no_permission_dir: Permission denied"
 
 chmod 744 ./temp/no_permission_dir
 rmdir ./temp/no_permission_dir
@@ -1885,13 +1909,13 @@ then
 	fi
 fi
 
-run_test "simple" 5200 "grep un < temp/infile1.txt" 5200 0
+run_test "simple" 5200 "grep un < temp/infile1.txt" 5200 0 "" "grep leak"
 run_test "simple" 5201 "echo < temp/infile1.txt added_word" 5201 0
 run_test "simple" 5202 "echo < temp/infile1.txt added_word" 5202 0
 run_test "simple" 5203 "echo added_word1 < temp/infile1.txt added_word2" 5203 0
 
 
-#run_test "simple" 5250 "cat | cat | ls" 5250 0
+run_test "simple" 5250 "cat | cat | ls" 5250 0 "" "needs 2 entries"
 
 
 if (( "$start_index" >= 5200 && "$start_index" <= 5300 && "$end_index" >= 5200 && "$end_index" <= 5300 ))
@@ -1905,8 +1929,8 @@ then
 fi
 
 
-run_test "simple" 7000 "temp/infile1.txt cat" 7000 126 "temp/infile1.txt: Permission denied"
-run_test "simple" 7001 "temp/infile1.txt wc" 7001 126 "temp/infile1.txt: Permission denied"
+run_test "simple" 7000 "temp/infile1.txt cat" 7000 127 "temp/infile1.txt: No such file or directory"
+run_test "simple" 7001 "temp/infile1.txt wc" 7001 127 "temp/infile1.txt: No such file or directory"
 run_test "simple" 7002 "Makefile cat" 7002 127 "Makefile: command not found"
 run_test "simple" 7003 "Makefile wc" 7003 127 "Makefile: command not found"
 
