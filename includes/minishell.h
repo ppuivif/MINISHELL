@@ -88,7 +88,8 @@ int		open_and_check_file(t_expanded_redirection *exp_redirections , t_exec_redir
 
 void	check_exec_arguments(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 char	**build_envp_arr(t_exec_struct **exec_struct);
-char	**search_path(char **envp);
+//char	**search_path(char **envp);
+char	**search_path(t_envp_struct *envp_struct);
 void	build_cmd_arr(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 void	check_command_with_options(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
 void	check_path_in_envp(t_exec_substring **exec_substring, t_exec_struct **exec_struct);

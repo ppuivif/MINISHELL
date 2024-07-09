@@ -3,8 +3,6 @@
 static char	*get_variable_content_in_envp(char *variable, t_envp_struct *envp_struct)
 {
 	int				n;
-	int				start;
-	int				len;
 	t_envp_struct	*cursor;
 	char			*result;
 
@@ -13,11 +11,9 @@ static char	*get_variable_content_in_envp(char *variable, t_envp_struct *envp_st
 	result = NULL;
 	while (cursor)
 	{
-		if (ft_strncmp(variable, cursor->content, n) == 0)
+		if (ft_strncmp(variable, cursor->name, n) == 0)
 		{
-			len = ft_strlen(cursor->content);
-			start = strcspn(cursor->content, "=") + 1;//remplacer par ft_strcspn
-			result = ft_substr(cursor->content, start, len);
+			result = ft_strdup(cursor->value);
 			return (result);
 		}
 		cursor = cursor->next;

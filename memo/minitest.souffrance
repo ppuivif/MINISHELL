@@ -311,7 +311,7 @@ export tkt=oui 1mdr
 UNSET
 =============================================================================================
 unset 6_a
-	bash: export: `6_a=b': not a valid identifier
+	bash: export: `6_a=b': not a valid identifier (ok pour options mais faux pour le reste)
 	-> $? = 1
 ---------------------------------------------------------------------------------------------
 unset -lol
