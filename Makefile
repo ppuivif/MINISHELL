@@ -11,7 +11,7 @@ SRCS = minishell.c \
 		expand_utils_1.c expand_utils_2.c expand_utils_3.c expand_utils_4.c expand_utils_5.c\
 		build_execution.c check_exec_redirections.c check_exec_arguments.c error_handling.c\
 		execution.c\
-		builtin_utils.c Builtins/echo.c Builtins/pwd.c	Builtins/exit.c	Builtins/cd.c	Builtins/env.c	Builtins/unset.c
+		builtin_utils.c Builtins/echo.c Builtins/pwd.c	Builtins/exit.c	Builtins/cd.c	Builtins/env.c	Builtins/unset.c	Builtins/export.c
 
 #SRCS += libft/libft_utils_1.c libft/libft_utils_2.c libft/libft_utils_3.c libft/libft_utils_4.c\
 #		linked_list/linked_list_utils_1.c linked_list/linked_list_utils_2.c linked_list/init.c

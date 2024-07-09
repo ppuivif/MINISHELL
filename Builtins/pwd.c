@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 11:30:07 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/08 13:42:45 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/08 14:08:45 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <errno.h>
 #include "minishell.h"
 
-int	pwd(void)
+void	pwd(void)
 {
 	char	str[PATH_MAX];
 
@@ -25,7 +25,6 @@ int	pwd(void)
 		ft_putstr_fd(str, 1);
 		write(1, "\n", 1);
 	}
-	else
-		return (errno);
-	return (1);
+	//else
+		//return (errno);
 }

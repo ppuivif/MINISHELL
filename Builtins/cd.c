@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:16 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/08 13:37:57 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/08 19:58:44 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*search_or_replace_oldpwd(t_exec_struct *exec_struct, char *str)
 	return (NULL);
 }
 
-int	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
+void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
 	char	*home;
 	char	*old;
@@ -58,7 +58,8 @@ int	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 	if (size > 2)
 	{
 		write(2, "bash: cd: too many arguments\n", 29);
-		return (1);
+		exec_struct->command_line->current_exit_code = 1;
+		return ;
 	}
 	if (size == 1 || !ft_strcmp(exec_arguments->next->argument, "--"))
 	{
@@ -74,12 +75,12 @@ int	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 			exec_struct->command_line->current_exit_code = 1;
 		}
 		free(home);
-		return (1);
+		return ;
 	}
 	if (exec_arguments->next->argument[0] == '-')
 	{
 		printf("%s\n", search_or_replace_oldpwd(exec_struct, NULL));
-		return (1);
+		return ;
 	}
 	old = getcwd(NULL, 0);
 	if (chdir(exec_arguments->next->argument) == -1)
@@ -101,9 +102,8 @@ int	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 		}
 		exec_struct->command_line->current_exit_code = 1;
 		free(old);
-		return (1);
+		return ;
 	}
 	search_or_replace_oldpwd(exec_struct, old);
 	free(old);
-	return (1);
 }
