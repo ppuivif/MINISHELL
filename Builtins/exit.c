@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:57:29 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/08 18:23:07 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/09 03:19:47 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,7 @@ static void	message_exit(t_exec_struct *exec_struct, char **envp_arr)
 	free_envp_struct(&exec_struct->envp_struct);
 	free_all_command_line(&exec_struct->command_line);
 	free_all_exec_struct(&exec_struct);
-	if (envp_arr)
-		free(envp_arr);
+	free_arr(envp_arr);
 	clear_history();
 	exit(code);
 }
@@ -99,7 +98,7 @@ static int	ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr)
 	return (nbr * sign);
 }
 
-int	exit_builting(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, char **envp_arr)
+void	exit_builting(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, char **envp_arr)
 {
 	size_t	len;
 
@@ -115,8 +114,7 @@ int	exit_builting(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, c
 	{
 		write(2, "bash: exit: too many arguments\n", 31);
 		exec_struct->command_line->current_exit_code = 1;
-		return (1);
+		return ;
 	}
 	message_exit(exec_struct, envp_arr);
-	return (1);
 }
