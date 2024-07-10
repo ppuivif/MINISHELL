@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:20:53 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/09 14:09:48 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/10 18:51:37 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,10 @@ void	env(t_exec_struct *exec_struct)
 	{
 		if (env->name || env->equal == 1)
 		{
-			printf("%s=", env->name);
-			printf("%s\n", env->value);
+			ft_putstr_fd(env->name, 1);
+			ft_putstr_fd("=", 1);
+			ft_putstr_fd(env->value, 1);
+			ft_putstr_fd("\n", 1);
 		}
 		env = env->next;
 	}
