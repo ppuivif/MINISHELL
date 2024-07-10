@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 13:29:44 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/09 03:19:26 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/10 18:24:34 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,21 +33,6 @@ static int	check_argument(t_exec_argument *exec_arguments)
 	return (1);
 }
 
-static void	ft_putstrr(t_exec_argument *exec_arguments)
-{
-	int	i;
-
-	i = 0;
-	if (exec_arguments->argument)
-	{
-		while (exec_arguments->argument[i])
-		{
-			write(1, &exec_arguments->argument[i], 1);
-			i++;
-		}
-	}
-}
-
 void	echo(t_exec_argument *exec_arguments)
 {
 	t_exec_argument	*arguments;
@@ -57,7 +42,7 @@ void	echo(t_exec_argument *exec_arguments)
 	n = 1;
 	if (!arguments->next)
 	{
-		write(1, "\n", 1);
+		ft_putstr_fd("\n", 1);
 		return ;
 	}
 	while (arguments && check_argument(arguments->next))
@@ -67,11 +52,11 @@ void	echo(t_exec_argument *exec_arguments)
 	}
 	while (arguments->next)
 	{
-		ft_putstrr(arguments->next);
+		ft_putstr_fd(arguments->next->argument, 1);
 		if (arguments->next->next)
-			write(1, " ", 1);
+			ft_putstr_fd(" ", 1);
 		arguments = arguments->next;
 	}
 	if (n == 1)
-		write(1, "\n", 1);
+		ft_putstr_fd("\n", 1);
 }
