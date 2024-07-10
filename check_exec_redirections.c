@@ -56,22 +56,25 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 		return (-1);
-	limiter = ft_strjoin(exp_redirection->content, "\n");
+	limiter = exp_redirection->content;
+//	limiter = ft_strjoin(exp_redirection->content, "\n");
 	while (1)
 	{
-		line = get_next_line(0);
+		line = readline("heredoc : ");
 		if (ft_strcmp(line, limiter) == 0)
 		{
 			line = free_and_null(line);
 			close(fd);
 			break;
 		}
+		if (line[0])
+			add_history(line);
 		expand_content_when_heredoc(&line, envp_struct);
 		ft_putstr_fd(line, fd);
 		line = free_and_null(line);
 	}
-	free(limiter);
-	limiter = NULL;
+//	free(limiter);
+//	limiter = NULL;
 	(*exec_redirection)->file = filename;
 	(*exec_redirection)->e_redirection = REDIRECTION_INFILE;
 	(*exec_redirection)->fd_input = open((*exec_redirection)->file, O_RDONLY);

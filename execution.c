@@ -321,10 +321,12 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	free_all_exec_struct(exec_struct);//! J'ai mis ca
 	if (path_with_cmd && cmd_arr && cmd_arr[0] && exit_code == 0)
 	{
-		execve(path_with_cmd, cmd_arr, envp_arr);
+//		execve(path_with_cmd, cmd_arr, envp_arr);
 
-/*		if (execve(path_with_cmd, cmd_arr, envp_arr) == -1)
-			perror("error\nexecve of a cmd failed");//to verify*/
+//		if (execve(path_with_cmd, cmd_arr, envp_arr) == -1)
+//		printf("%s\n", cmd_arr[0]);
+		execve(path_with_cmd, cmd_arr, envp_arr);
+		perror("error\nexecve of a cmd failed");//to verify
 			//exit_code = -1 ?
 	}
 //	printf("exit_code : %d\n", exit_code);

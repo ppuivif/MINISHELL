@@ -1728,12 +1728,12 @@ run_test "simple" 4812 "echo 'aspas -> \" '" 4812 0
 run_test "simple" 4813 "echo \"> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<\"" 4813 0
 
 
-run_test "simple" 4857 "grep est <./temp/infile.txt" 4857 0
-run_test "simple" 4858 "grep est \"<infile.txt\" <         ./temp/infile.txt" 4858 0
+run_test "simple" 4857 "grep est <./temp/infile1.txt" 4857 0 "" "grep leak"
+run_test "simple" 4858 "grep est \"<infile1.txt\" <         ./temp/infile1.txt" 4858 0 "" "grep leak"
 
 
-run_test "simple" 4873 "cat <\"./temp/infile.txt\" | echo hi" 4873 0
-run_test "simple" 4874 "cat <\"./test_files/infile\" | grep hello\" | echo hi" 4874 0
+run_test "simple" 4873 "cat <\"./temp/infile1.txt\" | echo hi" 4873 0
+run_test "simple" 4874 "cat <\"./test_files/infile1\" | grep hello\" | echo hi" 4874 0
 run_test "simple" 4875 "cat <\"./temp/infile_big.txt\" | echo hi" 4875 0
 
 
@@ -1915,7 +1915,7 @@ run_test "simple" 5202 "echo < temp/infile1.txt added_word" 5202 0
 run_test "simple" 5203 "echo added_word1 < temp/infile1.txt added_word2" 5203 0
 
 
-run_test "simple" 5250 "cat | cat | ls" 5250 0 "" "needs 2 entries"
+#run_test "simple" 5250 "cat | cat | ls" 5250 0 "" "needs 2 entries"
 
 
 if (( "$start_index" >= 5200 && "$start_index" <= 5300 && "$end_index" >= 5200 && "$end_index" <= 5300 ))
@@ -1929,12 +1929,23 @@ then
 fi
 
 
-run_test "simple" 7000 "temp/infile1.txt cat" 7000 127 "temp/infile1.txt: No such file or directory"
-run_test "simple" 7001 "temp/infile1.txt wc" 7001 127 "temp/infile1.txt: No such file or directory"
-run_test "simple" 7002 "Makefile cat" 7002 127 "Makefile: command not found"
-run_test "simple" 7003 "Makefile wc" 7003 127 "Makefile: command not found"
+run_test "simple" 7000 "temp/infile1.txt cat" 7000 126 "temp/infile1.txt: Permission denied"
+run_test "simple" 7001 "temp/infile1.txt wc" 7001 126 "temp/infile1.txt: Permission denied"
+run_test "simple" 7002 "./temp/infile1.txt cat" 7002 126 "temp/infile1.txt: Permission denied"
+run_test "simple" 7003 "./temp/infile1.txt wc" 7003 126 "temp/infile1.txt: Permission denied"
+run_test "simple" 7004 "Makefile cat" 7004 127 "Makefile: command not found"
+run_test "simple" 7005 "Makefile wc" 7005 127 "Makefile: command not found"
 
-run_test "simple" 7002 "< temp/infile1.txt cat wc" 7002 1 "cat: wc: No such file or directory"
+echo "ceci est un test" > temp/full_permission_file.txt
+chmod 777 temp/full_permission_file.txt
+run_test "simple" 7010 "./temp/full_permission_file.txt" 7010 127 "./temp/full_permission_file.txt: line 1: ceci: command not found"
+run_test "simple" 7011 "./temp/full_permission_file.txt cat" 7011 127 "./temp/full_permission_file.txt: line 1: ceci: command not found"
+
+echo "ls" > temp/full_permission_file.txt
+run_test "simple" 7015 "./temp/full_permission_file.txt" 7015 0
+
+
+run_test "simple" 7020 "< temp/infile1.txt cat wc" 7020 1 "cat: wc: No such file or directory"
 
 run_test "simple" 7100 "< missing_file cat -e" 7100 1 "missing_file: No such file or directory"
 run_test "simple" 7101 "< missing_file invalid_command" 7101 1 "missing_file: No such file or directory"

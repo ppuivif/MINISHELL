@@ -144,7 +144,10 @@ t_exec_struct **exec_struct)
 	}
 	else if (access(cmd_arr[0], X_OK) == 0)//F_OK to verify if file exists, X_OK to verify if the file is executable
 	{
-		(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
+/*		if ()
+			expand_file_content;
+		else*/
+			(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
 		if (!(*exec_substring)->path_with_cmd)
 			error_allocation_exec_struct_and_exit(exec_struct);
 	}
