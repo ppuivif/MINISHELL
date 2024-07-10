@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:57:29 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/10 14:48:46 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/10 23:30:26 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,14 +106,14 @@ void	exit_builting(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, 
 	len = ft_lst_size9(exec_arguments);
 	if (len == 1)
 	{
-		write(2, "exit\n", 5);//fd == 2 replace by 1
+		ft_putstr_fd("exit\n", 2);
 		message_exit(exec_struct, envp_arr);
 	}
 	exec_struct->command_line->previous_exit_code = ft_aatoi(exec_arguments->next->argument, exec_struct, envp_arr);
-	write(2, "exit\n", 5);//fd == 2 replace by 1
+	write(2, "exit\n", 5);
 	if (len > 2)
 	{
-		write(2, "bash: exit: too many arguments\n", 31);
+		ft_putstr_fd("bash: exit: too many arguments\n", 2);
 		exec_struct->command_line->current_exit_code = 1;
 		return ;
 	}
