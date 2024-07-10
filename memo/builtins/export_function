@@ -1,5 +1,0 @@
-export
-
-si export variable, ne pas afficher la variable qd env
-si export variable=, afficher la variable qd env et variable="" qd export
-

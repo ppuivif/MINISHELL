@@ -1,6 +1,0 @@
-exit
-
-exit prend un argument en paramètre
-il met fin immédiatement au processus appelant
-les fd liés aux processus sont fermés 
-"il ferme tous les processus fils"
