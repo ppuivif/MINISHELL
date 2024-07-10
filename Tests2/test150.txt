@@ -1,0 +1,8 @@
+substring 0 : 
+	-redirection 0 : 	outfile.txt
+	-redirection_type 0 : 	REDIRECTION_APPEND
+	-redirection 1 : 	outfile.txt
+	-redirection_type 1 : 	REDIRECTION_APPEND
+	-redirection 2 : 	outfile.txt
+	-redirection_type 2 : 	REDIRECTION_APPEND
+

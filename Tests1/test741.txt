@@ -1,0 +1,4 @@
+substring 0 : 
+	-argument 0 : "ls -l"cat
+	-argument 1 : "-e"
+
