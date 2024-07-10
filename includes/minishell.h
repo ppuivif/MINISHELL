@@ -50,7 +50,7 @@ int		init_envp_struct(t_envp_struct **envp_struct);
 int		init_native_argument_struct(t_native_argument **n_argument);
 int		init_native_redirection_struct(t_native_redirection **n_redirection);
 int		init_expanded_argument_struct(t_expanded_argument **exp_argument);
-int		init_expanded_redirection_struct(t_expanded_redirection  git config pull.rebase false**exp_redirection);
+int		init_expanded_redirection_struct(t_expanded_redirection **exp_redirection);
 int		init_substring_struct(t_substring **substring);
 int		init_command_line_struct(t_command_line **command_line);
 int		init_exec_struct(t_exec_struct **exec_struct);
