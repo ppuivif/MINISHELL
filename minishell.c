@@ -41,6 +41,7 @@ int main(int argc, char **argv, char **envp)
 
 	while (1)
 	{
+		signals(0);
 //		if (isatty(STDIN_FILENO))
 		signals(0);
 		if (argc != 2)
