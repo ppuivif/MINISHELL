@@ -1,0 +1,4 @@
+substring 0 : 
+	-redirection 0 : 	$LIMITER  
+	-redirection_type 0 : 	REDIRECTION_HEREDOC
+

@@ -1,0 +1,5 @@
+substring 0 : 
+	-argument 0 : '"ls -l"'
+	-argument 1 : "cat"
+	-argument 2 : "-e"
+

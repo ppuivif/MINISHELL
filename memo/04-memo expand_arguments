@@ -1,0 +1,39 @@
+
+-----------------------------------------------------------------------------------------------
+
+la fonction expand_arguments permet d'ajouter chaque argument à la liste chaînée contenant les
+expand après avoir traité les quotes et expand les natifs.
+	 - un maillon exp_argument est initialisé,
+	 - la valeur de retour de la fonction d'initialisation est vérifié,
+	 - un ft_substr permet d'extraire l'argument de remaining_line sur la longueur len,
+	 - le succès de l'extraction est verifié,
+	 - le pointeur sur remaining_line est décalé de len,
+	 - l'argument est ajouté par add_back à la liste chaînée contenant les arguments.
+
+-----------------------------------------------------------------------------------------------
+
+la fonction count_len_to_cut permet de determiner la len de l'argument à extraire.
+	- elle s'applique sur remaining_line,
+	- 3 cas de figure se présentent :
+		- le premier caractère de remaining_line est une single quote : la fonction
+		count_len_to_next_quotes est appelée,
+		ex : 'cat' -e -> len = 5
+		- le premier caractère de remaining_line est une double quote : la fonction
+		count_len_to_next_quotes est appelée,
+		ex : "cat" -e -> len = 5
+		- le premier caractère de remaining_line n'est ni une single quote, ni une double
+		quote : la fonction count_len_to_reach_seconde_quote_or_ifs est appelée,
+		ex : cat -e -> len = 3
+		ex : cat' -e' -> len = 8
+	- dans les 2 premiers cas, len_to_quote est renvoyée : il s'agit de la longueur de la
+>>>	première quote à la deuxième quote (quotes comprises).
+	Si la deuxième quote est manquante, -1 est renvoyé.
+>>>	Si < > |, ...
+	- dans le 3ème cas, len est renvoyée : il s'agit de la longueur jusqu'à la seconde
+	quote ou jusqu'au prochain séparateur (quotes comprises ou séparateur non compris).
+	Si remaining_line est vide, -1 est renvoyé.
+	Si une première quote a été trouvée, mais pas de deuxième quote, -1 est renvoyé.	
+	
+NB : séparateurs (ifs) : "<>| \t\n\v\f\r\0"
+
+-----------------------------------------------------------------------------------------------

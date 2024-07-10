@@ -1,0 +1,41 @@
+EXIT_CODES
+
+-----------------------------------------------------------------------------------------------
+
+ppuivif@1H7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ < toto
+bash: toto: No such file or directory
+
+echo $? give 1
+
+-----------------------------------------------------------------------------------------------
+
+ppuivif@1H7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ chmod 000 infile.txt 
+ppuivif@1H7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ < infile.txt cat
+bash: infile.txt: Permission denied
+
+echo $? give 1
+
+-----------------------------------------------------------------------------------------------
+
+ppuivif@2G3:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ unset PATH
+ppuivif@2G3:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ ls
+bash: ls: No such file or directory
+
+echo $? give 127
+
+-----------------------------------------------------------------------------------------------
+
+ppuivif@1H7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ export toto="a    b"
+ppuivif@1H7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ < $toto
+bash: $toto: ambiguous redirect
+
+echo $? give 1
+
+-----------------------------------------------------------------------------------------------
+
+ppuivif@1H7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL$ echo (
+bash: syntax error near unexpected token `newline'
+
+echo $? give 2
+
+-----------------------------------------------------------------------------------------------
