@@ -252,7 +252,7 @@ t_exec_struct **exec_struct)
 		{
 			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
 			if (strcspn((*exec_substring)->cmd_arr[0], "/") < ft_strlen((*exec_substring)->cmd_arr[0]))
-				ft_putstr_fd(": No such file or directorytest\n", 2);
+				ft_putstr_fd(": No such file or directory\n", 2);
 			else
 				ft_putstr_fd(": command not found\n", 2);
 			(*exec_struct)->command_line->current_exit_code = 127;
