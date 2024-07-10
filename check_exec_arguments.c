@@ -148,7 +148,7 @@ t_exec_struct **exec_struct)
 		if (!(*exec_substring)->path_with_cmd)
 			error_allocation_exec_struct_and_exit(exec_struct);
 	}
-	else if (access(cmd_arr[0], F_OK) == 0)
+	else if (access(cmd_arr[0], F_OK) == 0 && strcspn(cmd_arr[0], "/") < ft_strlen(cmd_arr[0]))
 	{
 		ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
 		ft_putstr_fd(": Permission denied\n", 2);
