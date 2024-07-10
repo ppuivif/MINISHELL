@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/09 22:23:40 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/10 09:40:20 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,8 @@ t_envp_struct *copy_envp_struct(t_envp_struct *envp_struct)
 //	copy = ft_calloc(nmemb, sizeof(t_envp_struct));
 //	if (!copy)
 //		return (NULL);
+	copy = NULL;
+	new_element = NULL;
 	cursor = envp_struct;
 	while (cursor)
 	{
@@ -106,6 +108,18 @@ t_envp_struct *copy_envp_struct(t_envp_struct *envp_struct)
 	}
 	return (copy);
 }
+
+/*void copy_node(t_envp_struct **tmp_envp, t_envp_struct **previous_node)
+{
+	t_envp_struct	*copied_node;
+	
+	copied_node = ft_lstnew((*tmp_envp)->name, (*tmp_envp)->value, (*tmp_envp)->equal);
+	if (*previous_node)
+		(*previous_node)->next = copied_node;
+	copied_node->next = (*tmp_envp)->next;
+	(*tmp_envp) = copied_node;
+}*/
+
 
 static void	print_export(t_envp_struct *envp_struct)
 {
@@ -118,6 +132,7 @@ static void	print_export(t_envp_struct *envp_struct)
 	int				hits;;
 
 	sorted_envp = copy_envp_struct(envp_struct);
+//	sorted_envp = envp_struct;
 //	ft_envp_struct_lst_print(envp_struct, 1);
 //	printf("\n");
 	hits = 1;
@@ -141,6 +156,8 @@ static void	print_export(t_envp_struct *envp_struct)
 				tmp_envp = node_to_move;
 				hits++;
 			}
+//			else
+//				copy_node(&tmp_envp, &previous_node);
 			i++;
 			if (i == 1)
 				sorted_envp = tmp_envp;
