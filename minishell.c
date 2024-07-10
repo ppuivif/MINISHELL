@@ -25,11 +25,11 @@ int main(int argc, char **argv, char **envp)
 		exit(0);
 	}*/
 
-	if (argc == 2)//for tests
+/*	if (argc == 2)//for tests
 	{
 	 	int fd = ft_atoi(argv[1]);
 		line = get_next_line(fd);
-	}
+	}*/
 
 	get_envp(envp, &envp_struct, line);
 
