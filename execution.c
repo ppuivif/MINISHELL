@@ -130,14 +130,22 @@ void	execution(t_exec_struct **exec_struct)
 
 //	if (substrings_nmemb == 1)
 //		unique_substring_execution(cursor, exec_struct);
+
+
 	if ((*exec_struct)->exec_substrings->exec_arguments)
 	{
+		fd_out = STDOUT_FILENO;
+		if (cursor->exec_redirections)
+			fd_out = search_last_output(cursor->exec_redirections);
 		if ((*exec_struct)->exec_substrings->exec_arguments->is_builtin == 2 && substrings_nmemb == 1)
 		{
-			exec_builtin(*exec_struct, (*exec_struct)->exec_substrings, NULL); //! J'ai mis ca
+//			printf("fd_out: %d\n", fd_out);
+			if (fd_out > 0)
+				exec_builtin(*exec_struct, (*exec_struct)->exec_substrings, NULL); //! J'ai mis ca
 			return ;
 		}
 	}
+
 	while (i < substrings_nmemb)
 	{
 		pid_arr = build_pid_arr(pid_arr, i);
@@ -309,13 +317,17 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	//free_all_command_line(&(*exec_struct)->command_line);//! J'ai commenté ca
 	//free_all_exec_struct(exec_struct);//! J'ai commenté ca
 	clear_history();
-	if (substring->exec_arguments)
+
+//	printf("fd_out: %d\n", fd_out);
+
+	if (substring->exec_arguments && fd_out > 0)
 	{
 		if (substring->exec_arguments->is_builtin)
 		{
 			exec_builtin(*exec_struct, substring, envp_arr);	//! J'ai mis ca
 		}
 	}
+
 	free_envp_struct(&(*exec_struct)->envp_struct);//! J'ai mis ca
 	free_all_command_line(&(*exec_struct)->command_line);//! J'ai mis ca
 	free_all_exec_struct(exec_struct);//! J'ai mis ca
@@ -326,7 +338,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 //		if (execve(path_with_cmd, cmd_arr, envp_arr) == -1)
 //		printf("%s\n", cmd_arr[0]);
 		execve(path_with_cmd, cmd_arr, envp_arr);
-		perror("error\nexecve of a cmd failed");//to verify
+//		perror("error\nexecve of a cmd failed");//to verify
 			//exit_code = -1 ?
 	}
 //	printf("exit_code : %d\n", exit_code);
