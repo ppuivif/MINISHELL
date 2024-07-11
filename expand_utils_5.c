@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils_5.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 11:50:59 by ppuivif          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static int is_non_valid_characters(char *str)
+static int	is_non_valid_characters(char *str)
 {
 	if (str[0] && !str[1] && (str[0] == '{' || str[0] == '[' || \
 	str[0] == '(' || str[0] == ')'))
@@ -15,7 +27,7 @@ static int is_non_valid_characters(char *str)
 static size_t	handle_special_characters_after_dollar(char *str, char **extracted_line, \
 t_command_line **command_line)
 {
-	int	len;
+	int		len;
 	char	*argv_index;
 
 	len = 0;
@@ -73,34 +85,33 @@ size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t
 	return (len);
 }
 
-
-size_t	simple_expand_content_of_arguments(char *str, \
+size_t    simple_expand_content_of_arguments(char *str, \
 t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line)
 {
-	int		len;
-	char 	*extracted_line;
-	char    *tmp;
+    int        len;
+    char     *extracted_line;
+    char    *tmp;
 
     tmp = NULL;
-	extracted_line = NULL;
-	len = handle_special_characters_after_dollar(str, &extracted_line, \
-	command_line);
-	if (len != 0)
-	{
-		tmp = ft_strdup_freed(extracted_line);
-		extracted_line = NULL;
-		if (*definitive_content)
-		    free(*definitive_content);
-		*definitive_content = tmp;
-		return (len);
-	}
-	else
-	{
-		len = get_len_and_extract_after_first_dollar(&str[0], &extracted_line);
-		expand_string_after_dollar2(extracted_line, exp_arguments, (*command_line)->envp_struct, definitive_content);
-		extracted_line = free_and_null(extracted_line);
-	}
-	return (len);
+    extracted_line = NULL;
+    len = handle_special_characters_after_dollar(str, &extracted_line, \
+    command_line);
+    if (len != 0)
+    {
+        tmp = ft_strdup_freed(extracted_line);
+        extracted_line = NULL;
+        if (*definitive_content)
+            free(*definitive_content);
+        *definitive_content = tmp;
+        return (len);
+    }
+    else
+    {
+        len = get_len_and_extract_after_first_dollar(&str[0], &extracted_line);
+        expand_string_after_dollar2(extracted_line, exp_arguments, (*command_line)->envp_struct, definitive_content);
+        extracted_line = free_and_null(extracted_line);
+    }
+    return (len);
 }
 
 static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
@@ -147,4 +158,3 @@ void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct)
 	free(*str);
 	*str = ft_strdup_freed(result);
 }
-

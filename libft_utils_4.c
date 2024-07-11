@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils_4.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/25 10:17:32 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/11 06:43:14 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../includes/libft_utils.h"
 #include "includes/libft_utils.h"
 
 void	ft_putnbr_fd(int n, int fd)
@@ -59,7 +58,7 @@ int	ft_strcmp(char *s1, char *s2)
 		if (s1[i] < s2[i] || s1[i] > s2[i])
 		{
 			return (s1[i] - s2[i]);
-		}			
+		}
 		i++;
 	}
 	return (0);

@@ -6,23 +6,23 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 12:27:17 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/11 05:28:33 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/11 11:51:16 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../includes/libft_utils.h"
 #include "includes/libft_utils.h"
 
 void	*free_arr(char **arr)
 {
 	int	i;
-	
-	i = 0;	
+
+	i = 0;
 	if (arr)
 	{
 		while (arr[i])
 		{
 			free (arr[i]);
+			arr[i] = NULL;
 			i++;
 		}
 		free (arr);

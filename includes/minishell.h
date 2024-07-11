@@ -18,6 +18,7 @@
 
 #include <errno.h>//to delete
 #include <signal.h>
+# include <limits.h>
 
 # ifndef GLOBAL
 # define GLOBAL
@@ -125,6 +126,8 @@ void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void	env(t_exec_struct *exec_struct);
 void	unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void	export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
+int		ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr);
+void	message_error(char *str, t_exec_struct *exec_struct, char **envp_arr);
 
 //Signals
 void signals(int sign);

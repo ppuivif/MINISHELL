@@ -1,6 +1,19 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_redirections.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:36:23 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 07:05:05 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static int get_redirection_type(char **str, t_native_redirection *n_redirection)
+static int	get_redirection_type(char **str, \
+t_native_redirection *n_redirection)
 {
 	if (count_angled_bracket(*str) > 2)
 		(*n_redirection).e_redirection = REDIRECTION_INDEFINED;
@@ -40,14 +53,14 @@ t_command_line **command_line)
 	if (get_redirection_type(remaining_line, n_redirection) == 2)
 	{
 		n_redirection = free_and_null(n_redirection);
-		return(2);//syntax_error
+		return (2);
 	}
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	len = count_len_to_cut(*remaining_line);
 	if (len == -1)
 	{
-		n_redirection = free_and_null(n_redirection);	
-		return (2);//syntax_error
+		n_redirection = free_and_null(n_redirection);
+		return (2);
 	}
 	n_redirection->content = ft_substr(*remaining_line, 0, len);
 	if (!n_redirection->content)

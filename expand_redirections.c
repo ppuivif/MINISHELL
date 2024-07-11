@@ -1,14 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_redirections.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 06:44:50 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	is_ambiguous_redirection(char *extracted_line)
 {
 	if (ft_strlen(extracted_line) == 0)
-			return (true);
+		return (true);
 	if (strcspn(extracted_line, " \t\n\v\f\r\0") < ft_strlen(extracted_line))
-			return (true);
+		return (true);
 	return (false);
 }
-
 
 static size_t	common_extract_and_expand_content_of_redirections(char *content, \
 char **extracted_line, t_command_line **command_line)
@@ -116,8 +127,8 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 		&definitive_content, n_redirection->e_redirection, command_line);
 		if (len == -2)
 		{
-			ft_putstr_fd(n_redirection->content, 2);			
-			ft_putstr_fd(": ambiguous redirect\n", 2);			
+			ft_putstr_fd(n_redirection->content, 2);
+			ft_putstr_fd(": ambiguous redirect\n", 2);
 			exp_redirection = free_and_null(exp_redirection);
 			(*command_line)->current_exit_code = 1;
 			return ;

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   check_exec_arguments.c                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:32:35 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 06:40:13 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	check_exec_arguments(t_exec_substring **exec_substring, \
@@ -36,7 +48,6 @@ t_exec_struct **exec_struct)
 	}
 	(*exec_substring)->cmd_arr = cmd_arr;
 }
-
 
 /*static bool is_part_of_envp_path(char *cmd_arr_0, t_exec_struct **exec_struct)
 {
@@ -147,7 +158,7 @@ t_exec_struct **exec_struct)
 /*		if ()
 			expand_file_content;
 		else*/
-			(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
+		(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
 		if (!(*exec_substring)->path_with_cmd)
 			error_allocation_exec_struct_and_exit(exec_struct);
 	}
@@ -176,7 +187,7 @@ char	**build_envp_arr(t_exec_struct **exec_struct)
 		error_allocation_exec_struct_and_exit(exec_struct);
 	tmp = (*exec_struct)->envp_struct;
 	i = 0;
-	while (tmp)
+	while (i < envp_arr_size - 1)
 	{
 		envp_arr[i] = ft_strjoin(tmp->name, "=");
 		envp_arr[i] = ft_strjoin_freed(envp_arr[i], tmp->value);

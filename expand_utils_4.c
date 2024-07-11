@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils_4.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 06:34:03 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	expand_string_between_single_quotes(char **str, t_envp_struct *envp_struct)
@@ -163,4 +175,3 @@ void	complete_expand_content_of_arguments(char **extracted_line, t_command_line 
 	free(*extracted_line);
 	*extracted_line = ft_strdup_freed(result);//malloc à protéger
 }
-

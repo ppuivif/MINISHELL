@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_and_free_envp.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:34:41 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 08:11:48 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static void	add_line(char *envp, t_envp_struct **envp_struct)
@@ -7,10 +19,10 @@ static void	add_line(char *envp, t_envp_struct **envp_struct)
 	new_element = NULL;
 	if (init_envp_struct(&new_element) == -1)
 		error_allocation_envp_struct_and_exit();
-//	new_element->content = ft_strdup(envp);
 	new_element->name = ft_substr(envp, 0, search_first_occurence(envp, '='));
 	new_element->equal = 1;
-	new_element->value = ft_substr(envp, search_first_occurence(envp, '=') + 1, ft_strlen(envp));
+	new_element->value = ft_substr(envp, search_first_occurence(envp, '=') + 1, \
+		ft_strlen(envp));
 	ft_lst_add_back6(envp_struct, new_element);
 }
 
@@ -39,7 +51,6 @@ void	free_envp_struct(t_envp_struct **envp_struct)
 	while (ft_lst_size6(*envp_struct))
 	{
 		tmp = (*envp_struct)->next;
-//		(*envp_struct)->content = free_and_null((*envp_struct)->content);
 		(*envp_struct)->name = free_and_null((*envp_struct)->name);
 		(*envp_struct)->value = free_and_null((*envp_struct)->value);
 		free(*envp_struct);
