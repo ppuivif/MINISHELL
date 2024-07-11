@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_exec_redirections.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:48:08 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 11:53:48 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 		{
 			clear_history();
 			close(fd);
-			break ;
+			break;
 		}
 		if (ft_strcmp(line, limiter) == 0)
 		{
