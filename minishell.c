@@ -72,6 +72,7 @@ int main(int argc, char **argv, char **envp)
 				signals(1);
 //				ft_execution_lst_print(exec_struct, 1);
 				execution(&exec_struct);
+				envp_struct = exec_struct->envp_struct;
 			}
 			//printf("%d\n", exit_code);
 			if (command_line)
