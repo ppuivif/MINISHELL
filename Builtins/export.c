@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:29:41 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 09:36:10 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,21 +226,16 @@ void	export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 	while (arguments)
 	{
 		if (!strcmp(arguments->argument, "_"))
-		{
 			return ;
-		}
 		if (is_alpha(arguments->argument) == 1)
 		{
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd(arguments->argument, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			exec_struct->command_line->current_exit_code = 1;
-			return ;
 		}
 		else if (is_alpha(arguments->argument) == 2)
-		{
 			add2_export(exec_struct, arguments->argument);
-		}
 		else
 			add_export(exec_struct, arguments->argument);
 		arguments = arguments->next;

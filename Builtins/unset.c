@@ -6,11 +6,24 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:11 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:31:32 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 09:28:30 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static void	unset_remove(t_exec_struct *exec_struct, t_envp_struct *current, \
+t_envp_struct *previous)
+{
+	if (current == previous)
+		exec_struct->envp_struct = current->next;
+	else
+		previous->next = current->next;
+	free(current->name);
+	if (current->value)
+		free(current->value);
+	free(current);
+}
 
 void	unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
@@ -29,14 +42,7 @@ void	unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 		{
 			if (!strcmp(arguments->argument, current->name))
 			{
-				if (current == previous)
-					exec_struct->envp_struct = current->next;
-				else
-					previous->next = current->next;
-				free(current->name);
-				if (current->value)
-					free(current->value);
-				free(current);
+				unset_remove(exec_struct, current, previous);
 				break ;
 			}
 			if (current != previous)
