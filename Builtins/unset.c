@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:11 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/08 14:19:25 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 02:49:31 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,35 @@ void	unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
 	(void) exec_struct;
 	(void) exec_arguments;
-	/*t_exec_argument *arguments;
-	t_envp_struct	*env;
-	t_envp_struct	*new_env;
+	t_exec_argument *arguments;
+	t_envp_struct	*current;
+	t_envp_struct	*previous;
 
-	arguments = exec_arguments;
+	arguments = exec_arguments->next;
+	if (arguments && arguments->argument[0] == '-')
+		exec_struct->command_line->current_exit_code = 2;
 	while (arguments)
 	{
-		env = exec_struct->envp_struct;
-		while (env)
+		current = exec_struct->envp_struct;
+		previous = exec_struct->envp_struct;
+		while (current)
 		{
-			if (!strcmp(exec_arguments->argument, env->name))
+			if (!strcmp(arguments->argument, current->name))
 			{
-				if (env)
-					new_env = env->next;
+				if (current == previous)
+					exec_struct->envp_struct = current->next;
 				else
-					exec_struct->envp_struct = env->next;
-				free(env->content);
-				free(env->name);
-				free(env->value);
-				free(env);
+					previous->next = current->next;
+				free(current->name);
+				if (current->value)
+					free(current->value);
+				free(current);
+				break;
 			}
-			new_env = env;
-			env = env->next;
+			if (current != previous)
+				previous = previous->next;
+			current = current->next;
 		}
 		arguments = arguments->next;
-	}*/
+	}
 }
