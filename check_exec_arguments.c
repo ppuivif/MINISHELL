@@ -176,7 +176,7 @@ char	**build_envp_arr(t_exec_struct **exec_struct)
 		error_allocation_exec_struct_and_exit(exec_struct);
 	tmp = (*exec_struct)->envp_struct;
 	i = 0;
-	while (tmp)
+	while (i < envp_arr_size - 1)
 	{
 		envp_arr[i] = ft_strjoin(tmp->name, "=");
 		envp_arr[i] = ft_strjoin_freed(envp_arr[i], tmp->value);

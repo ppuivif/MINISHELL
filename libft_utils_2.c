@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils_2.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:58:37 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/25 12:10:24 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/11 05:29:33 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,11 @@ char	*ft_strjoin(char *s1, char *s2)
 	i = 0;
 	j = 0;
 	if (!s1 || !s2)
+	{
+		free(s1);
+		s1 = NULL;
 		return (NULL);
+	}
 	str = ft_calloc((ft_strlen(s1) + ft_strlen(s2) + 1), sizeof (char));
 	if (!str)
 		return (NULL);
