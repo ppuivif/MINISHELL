@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:16 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:30:01 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 09:01:35 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,19 +71,11 @@ static void	check_error(t_exec_struct *exec_struct, char *argument)
 	exec_struct->command_line->current_exit_code = 1;
 }
 
-void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
+static int	cd_option(t_exec_struct *exec_struct, \
+t_exec_argument *exec_arguments, size_t size)
 {
 	char	*home;
-	char	*old;
-	size_t	size;
 
-	size = ft_lst_size9(exec_arguments);
-	if (size > 2)
-	{
-		ft_putstr_fd("bash: cd: too many arguments\n", 2);
-		exec_struct->command_line->current_exit_code = 1;
-		return ;
-	}
 	if (size == 1 || !ft_strcmp(exec_arguments->next->argument, "--")
 		|| !ft_strcmp(exec_arguments->next->argument, "~"))
 	{
@@ -98,14 +90,31 @@ void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 			check_error(exec_struct, home);
 		}
 		free(home);
-		return ;
+		return (1);
 	}
 	if (exec_arguments->next->argument[0] == '-')
 	{
 		ft_putstr_fd(search_or_replace_oldpwd(exec_struct, NULL), 2);
 		ft_putstr_fd("\n", 2);
+		return (1);
+	}
+	return (0);
+}
+
+void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
+{
+	char	*old;
+	size_t	size;
+
+	size = ft_lst_size9(exec_arguments);
+	if (size > 2)
+	{
+		ft_putstr_fd("bash: cd: too many arguments\n", 2);
+		exec_struct->command_line->current_exit_code = 1;
 		return ;
 	}
+	if (cd_option(exec_struct, exec_arguments, size))
+		return ;
 	old = getcwd(NULL, 0);
 	if (chdir(exec_arguments->next->argument) == -1)
 	{
