@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/10 21:01:50 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 04:45:39 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,13 +188,18 @@ static void	add_export(t_exec_struct *exec_struct, \
 {
 	t_envp_struct	*env;	
 	int				len_name;
+	char			*tmp1;
+	char			*tmp2;
 
 	env = exec_struct->envp_struct;
 	len_name = search_first_occurence(argument, '=');
 	if (len_name == 0)
 	{
+		tmp1 = ft_substr(argument, 0, ft_strlen(argument));
 		ft_lst_add_back6(&exec_struct->envp_struct, ft_lstnew \
-			(ft_substr(argument, 0, ft_strlen(argument)), NULL, 0));
+			(tmp1, NULL, 0));
+		free(tmp1);
+		tmp1 = NULL;
 		return ;
 	}
 	while (env)
@@ -209,9 +214,14 @@ static void	add_export(t_exec_struct *exec_struct, \
 		env = env->next;
 	}
 	env = exec_struct->envp_struct;
+	tmp1 = ft_substr(argument, 0, len_name);
+	tmp2 = ft_substr(argument, len_name + 1, ft_strlen(argument));
 	ft_lst_add_back6(&exec_struct->envp_struct, \
-	ft_lstnew(ft_substr(argument, 0, len_name), \
-	ft_substr(argument, len_name + 1, ft_strlen(argument)), 1));
+	ft_lstnew(tmp1, tmp2, 1));
+	free(tmp1);
+	tmp1 = NULL;
+	free(tmp2);
+	tmp2 = NULL;
 }
 
 static void	add2_export(t_exec_struct *exec_struct, \
