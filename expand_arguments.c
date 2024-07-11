@@ -123,11 +123,13 @@ t_command_line **command_line)
 //				no special_treatment with $
 			if (definitive_content && !n_argument_content[0])
 				add_exp_arguments(&substring->exp_arguments, &definitive_content);
+			else
+				definitive_content = free_and_null(definitive_content);
 		}
 		else if (n_argument_content[0] == '$')
 		{
 			len = simple_expand_content_of_arguments(&n_argument_content[0], &substring->exp_arguments, &definitive_content, command_line);
-			n_argument_content += len;// is it necessary to give extracted_line? 
+			n_argument_content += len;
 /*			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
 			{
 				printf("error_$\n");
@@ -136,6 +138,8 @@ t_command_line **command_line)
 //			special_treatment with $
 			if (definitive_content && !n_argument_content[0])
 				add_exp_arguments(&substring->exp_arguments, &definitive_content);
+			else
+				definitive_content = free_and_null(definitive_content);
 		}
 		else
 		{
