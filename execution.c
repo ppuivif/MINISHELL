@@ -327,6 +327,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 			exec_builtin(*exec_struct, substring, envp_arr);	//! J'ai mis ca
 		}
 	}
+
 	free_envp_struct(&(*exec_struct)->envp_struct);//! J'ai mis ca
 	free_all_command_line(&(*exec_struct)->command_line);//! J'ai mis ca
 	free_all_exec_struct(exec_struct);//! J'ai mis ca

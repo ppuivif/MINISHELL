@@ -25,7 +25,6 @@ extern int	g_sign;
 
 
 
-
 void			print_arr(char **arr);
 //!t_command_line 	*parse_command_line(char *str);
 
@@ -126,6 +125,9 @@ void	env(t_exec_struct *exec_struct);
 void	unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void	export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 
-void	signals(int sign);
+//Signals
+void signals(int sign);
+
+
 
 #endif

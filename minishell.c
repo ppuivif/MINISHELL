@@ -11,8 +11,8 @@ int main(int argc, char **argv, char **envp)
 	int				previous_exit_code;
 	int				exit_code;
 
-//	(void)argc;
-//	(void)argv;
+//	(void)argc;//for tests
+//	(void)argv;//for tests
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;
@@ -28,11 +28,11 @@ int main(int argc, char **argv, char **envp)
 		exit(0);
 	}*/
 
-	if (argc == 2)//for tests
+/*	if (argc == 2)//for tests
 	{
 	 	int fd = ft_atoi(argv[1]);
 		line = get_next_line(fd);
-	}
+	}*/
 
 	get_envp(envp, &envp_struct, line);
 
@@ -45,6 +45,12 @@ int main(int argc, char **argv, char **envp)
 		signals(0);
 		if (argc != 2)
 			line = readline("minishell : ");
+		if (!line)
+		{
+			free_envp_struct(&envp_struct);
+			clear_history();
+			break;
+		}
 		if (g_sign == 2)	
 			exit_code = 130;
 		else if (g_sign == 3)
@@ -52,13 +58,6 @@ int main(int argc, char **argv, char **envp)
 		g_sign = 0;
 		if (exit_code != 0)
 			previous_exit_code = exit_code;
-		/*if (!line[0])
-		{
-			printf("OUI\n");
-			free_envp_struct(&envp_struct);
-			clear_history();
-			break;
-		} */
 		if (line[0])//no history on empty lines
 		{
 			add_history(line);//here?

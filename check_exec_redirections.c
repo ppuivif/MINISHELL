@@ -61,6 +61,12 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 	while (1)
 	{
 		line = readline("heredoc : ");
+		if (!line)
+		{
+			clear_history();
+			close(fd);
+			break;
+		}
 		if (ft_strcmp(line, limiter) == 0)
 		{
 			line = free_and_null(line);
