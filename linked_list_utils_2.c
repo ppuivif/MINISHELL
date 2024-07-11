@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list_utils_2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:09:04 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/05/05 18:09:05 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/11 07:08:52 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../includes/linked_list_utils.h"
 #include "includes/linked_list_utils.h"
-
 
 /*static void	free_build_list_element(t_element *element_to_del)
 {
@@ -66,4 +64,3 @@ void	ft_lst_delone(t_element **head, t_element *element_to_del)
 	element_to_search->next = element_to_search->next->next;
 //	free_build_list_element(element_to_del);
 }*/
-

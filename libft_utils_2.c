@@ -6,11 +6,10 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:58:37 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/11 05:29:33 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 06:35:13 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../includes/libft_utils.h"
 #include "includes/libft_utils.h"
 
 char	*ft_strdup(const char *s)
@@ -54,7 +53,6 @@ char	*ft_strdup_freed(char *s)
 		i++;
 	}
 	free(s);
-//	*s = NULL; inefficace a priori
 	str[i] = '\0';
 	return (str);
 }

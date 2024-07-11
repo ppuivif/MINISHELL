@@ -6,44 +6,11 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 05:28:56 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 06:29:41 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-/* static int	is_range(char *s1, char *s2)
-{
-	char	*str;
-	int		i;
-	int		j;
-	int		k;
-	
-	str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_abcdefghijklmnopqrstvuwxyz";
-	i = 0;
-	j = 0;
-	k = 0;
-	while(s1[i] && s2[i])
-	{
-		if (s1[i] != s2[i])
-		{
-			while(s1[i] != str[j])
-				j++;
-			while(s2[i] != str[k])
-				k++;
-			if (j > k)
-				return (0);
-			else
-				return (1);
-		}
-		i++;
-	}
-	if (!s1[j])
-				return (0);
-			else
-				return (1);
-} */
-
 
 static void	ft_lstdelone(t_envp_struct *element_to_del)
 {
@@ -53,21 +20,6 @@ static void	ft_lstdelone(t_envp_struct *element_to_del)
 	element_to_del->value = free_and_null(element_to_del->value);
 	free(element_to_del);
 }
-
-/*void add_node_back(t_envp_struct **head, t_envp_struct *node_to_add)
-{
-	t_envp_struct *temp;
-
-    if (*head == NULL)
-    {
-        *head = node_to_add;
-    }
-    else
-    {
-        temp = *head;
-        temp->next = node_to_add;
-    }
-}*/
 
 static t_envp_struct	*ft_lstnew(char *name, char *value, bool equal)
 {
@@ -86,17 +38,12 @@ static t_envp_struct	*ft_lstnew(char *name, char *value, bool equal)
 	return (lst);
 }
 
-t_envp_struct *copy_envp_struct(t_envp_struct *envp_struct)
+t_envp_struct	*copy_envp_struct(t_envp_struct *envp_struct)
 {
 	t_envp_struct	*copy;
 	t_envp_struct	*new_element;
 	t_envp_struct	*cursor;
-//	size_t 			mnmemb;
 
-//	nmemb = ft_lst_size6(envp_struct);
-//	copy = ft_calloc(nmemb, sizeof(t_envp_struct));
-//	if (!copy)
-//		return (NULL);
 	copy = NULL;
 	new_element = NULL;
 	cursor = envp_struct;
@@ -109,20 +56,9 @@ t_envp_struct *copy_envp_struct(t_envp_struct *envp_struct)
 	return (copy);
 }
 
-/*void copy_node(t_envp_struct **tmp_envp, t_envp_struct **previous_node)
-{
-	t_envp_struct	*copied_node;
-	
-	copied_node = ft_lstnew((*tmp_envp)->name, (*tmp_envp)->value, (*tmp_envp)->equal);
-	if (*previous_node)
-		(*previous_node)->next = copied_node;
-	copied_node->next = (*tmp_envp)->next;
-	(*tmp_envp) = copied_node;
-}*/
-
 static void	ft_lst_print(t_envp_struct *envp_struct, int fd)
 {
-	size_t	i;
+	size_t			i;
 	t_envp_struct	*tmp;
 
 	i = 0;
@@ -147,13 +83,13 @@ static void	print_export(t_envp_struct *envp_struct)
 	t_envp_struct	*previous_node;
 	t_envp_struct	*node_to_free;
 	int				i;
-	int				hits;;
+	int				hits;
 
 	sorted_envp = copy_envp_struct(envp_struct);
 	hits = 1;
 	while (hits != 0)
 	{
-		hits = 0;;
+		hits = 0;
 		i = 0;
 		tmp_envp = sorted_envp;
 		previous_node = NULL;
@@ -161,7 +97,8 @@ static void	print_export(t_envp_struct *envp_struct)
 		{
 			if (ft_strcmp(tmp_envp->name, tmp_envp->next->name) > 0)
 			{
-				node_to_move = ft_lstnew(tmp_envp->next->name, tmp_envp->next->value, tmp_envp->next->equal);
+				node_to_move = ft_lstnew(tmp_envp->next->name, \
+				tmp_envp->next->value, tmp_envp->next->equal);
 				node_to_move->next = tmp_envp;
 				node_to_free = tmp_envp->next;
 				tmp_envp->next = tmp_envp->next->next;
@@ -180,7 +117,6 @@ static void	print_export(t_envp_struct *envp_struct)
 	}
 	ft_lst_print(sorted_envp, 1);
 	free_envp_struct(&sorted_envp);
-	
 }
 
 static void	add_export(t_exec_struct *exec_struct, \
@@ -240,7 +176,8 @@ static void	add2_export(t_exec_struct *exec_struct, \
 		if (!ft_strncmp(env->name, argument, len_name - 1))
 		{
 			temp = ft_strdup_freed(env->value);
-			env->value = ft_strjoin_freed(temp, ft_substr(argument, len_name + 1, ft_strlen(argument)));
+			env->value = ft_strjoin_freed(temp, \
+			ft_substr(argument, len_name + 1, ft_strlen(argument)));
 			env->equal = 1;
 			return ;
 		}
@@ -283,7 +220,7 @@ void	export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 	arguments = exec_arguments->next;
 	if (!arguments)
 	{
-	    print_export(exec_struct->envp_struct);
+		print_export(exec_struct->envp_struct);
 		return ;
 	}
 	while (arguments)

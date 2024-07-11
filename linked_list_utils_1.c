@@ -6,11 +6,10 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/11 00:08:35 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 07:17:31 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../includes/linked_list_utils.h"
 #include "includes/linked_list_utils.h"
 
 void	ft_lst_add_back1(t_substring **head, t_substring *new_element)
@@ -339,7 +338,7 @@ t_exec_argument	*ft_lst_last9(t_exec_argument *head)
 
 void	ft_envp_struct_lst_print(t_envp_struct *envp_struct, int fd)
 {
-	size_t	i;
+	size_t			i;
 	t_envp_struct	*tmp;
 
 	i = 0;
@@ -362,11 +361,11 @@ void	ft_envp_struct_lst_print(t_envp_struct *envp_struct, int fd)
 
 void	ft_native_lst_print(t_command_line *command_line, int fd)
 {
-	size_t	i;
-	size_t	j;
-	t_substring	*tmp1;
-	t_native_redirection *tmp2;
-	t_native_argument *tmp3;
+	size_t					i;
+	size_t					j;
+	t_substring				*tmp1;
+	t_native_redirection	*tmp2;
+	t_native_argument		*tmp3;
 
 	i = 0;
 	tmp1 = command_line->substrings;
@@ -412,11 +411,11 @@ void	ft_native_lst_print(t_command_line *command_line, int fd)
 
 void	ft_expanded_lst_print(t_command_line *command_line, int fd)
 {
-	size_t	i;
-	size_t	j;
-	t_substring	*tmp1;
-	t_expanded_redirection *tmp2;
-	t_expanded_argument *tmp3;
+	size_t					i;
+	size_t					j;
+	t_substring				*tmp1;
+	t_expanded_redirection	*tmp2;
+	t_expanded_argument		*tmp3;
 
 	i = 0;
 	tmp1 = command_line->substrings;
@@ -462,9 +461,9 @@ void	ft_expanded_lst_print(t_command_line *command_line, int fd)
 
 void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd)
 {
-	size_t	i;
-	size_t	j;
-	t_exec_substring		*tmp1;
+	size_t				i;
+	size_t				j;
+	t_exec_substring	*tmp1;
 	t_exec_redirection	*tmp2;
 	t_exec_argument		*tmp3;
 
@@ -520,7 +519,7 @@ void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd)
 	}
 }
 
-void	print_e_redirection (int e_redirection, int fd)
+void	print_e_redirection(int e_redirection, int fd)
 {
 	if (e_redirection == 0)
 		ft_putstr_fd("REDIRECTION_OUTFILE", fd);
@@ -534,7 +533,7 @@ void	print_e_redirection (int e_redirection, int fd)
 		ft_putstr_fd("REDIRECTION_HEREDOC", fd);
 	if (e_redirection == 5)
 		ft_putstr_fd("REDIRECTION_TEXT", fd);
-	}
+}
 
 size_t	ft_lst_size1(t_substring *head)
 {
@@ -557,7 +556,7 @@ size_t	ft_lst_size1(t_substring *head)
 
 size_t	ft_lst_size2(t_native_redirection *head)
 {
-	size_t		len;
+	size_t					len;
 	t_native_redirection	*last_element;
 
 	len = 1;
@@ -576,7 +575,7 @@ size_t	ft_lst_size2(t_native_redirection *head)
 
 size_t	ft_lst_size3(t_native_argument *head)
 {
-	size_t		len;
+	size_t				len;
 	t_native_argument	*last_element;
 
 	len = 1;
@@ -595,7 +594,7 @@ size_t	ft_lst_size3(t_native_argument *head)
 
 size_t	ft_lst_size4(t_expanded_redirection *head)
 {
-	size_t		len;
+	size_t					len;
 	t_expanded_redirection	*last_element;
 
 	len = 1;
@@ -614,7 +613,7 @@ size_t	ft_lst_size4(t_expanded_redirection *head)
 
 size_t	ft_lst_size5(t_expanded_argument *head)
 {
-	size_t		len;
+	size_t				len;
 	t_expanded_argument	*last_element;
 
 	len = 1;
@@ -631,10 +630,9 @@ size_t	ft_lst_size5(t_expanded_argument *head)
 	return (len);
 }
 
-
 size_t	ft_lst_size6(t_envp_struct *head)
 {
-	size_t		len;
+	size_t			len;
 	t_envp_struct	*last_element;
 
 	len = 1;
@@ -653,7 +651,7 @@ size_t	ft_lst_size6(t_envp_struct *head)
 
 size_t	ft_lst_size7(t_exec_substring *head)
 {
-	size_t		len;
+	size_t				len;
 	t_exec_substring	*last_element;
 
 	len = 1;
@@ -672,7 +670,7 @@ size_t	ft_lst_size7(t_exec_substring *head)
 
 size_t	ft_lst_size8(t_exec_redirection *head)
 {
-	size_t		len;
+	size_t				len;
 	t_exec_redirection	*last_element;
 
 	len = 1;
@@ -691,7 +689,7 @@ size_t	ft_lst_size8(t_exec_redirection *head)
 
 size_t	ft_lst_size9(t_exec_argument *head)
 {
-	size_t		len;
+	size_t			len;
 	t_exec_argument	*last_element;
 
 	len = 1;
@@ -707,4 +705,3 @@ size_t	ft_lst_size9(t_exec_argument *head)
 	}
 	return (len);
 }
-

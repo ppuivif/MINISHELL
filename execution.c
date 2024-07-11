@@ -1,4 +1,16 @@
-# include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execution.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 06:38:54 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
 
 /*static void	unique_substring_execution(t_exec_substring *substring, t_exec_struct **exec_struct)
 {
@@ -243,7 +255,7 @@ void	execution(t_exec_struct **exec_struct)
 	(*exec_struct)->command_line->current_exit_code = WEXITSTATUS(status);
 	i-=2;
 
-	while ( i >= 0)
+	while (i >= 0)
 	{
 //		printf("i : %d\n", i);
 //		print_int_arr(pid_arr, i);

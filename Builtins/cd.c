@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:16 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 02:13:03 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 06:30:01 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,8 @@ void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 		exec_struct->command_line->current_exit_code = 1;
 		return ;
 	}
-	if (size == 1 || !ft_strcmp(exec_arguments->next->argument, "--") || !ft_strcmp(exec_arguments->next->argument, "~"))
+	if (size == 1 || !ft_strcmp(exec_arguments->next->argument, "--")
+		|| !ft_strcmp(exec_arguments->next->argument, "~"))
 	{
 		home = strdup(search_home(exec_struct));
 		if (!home)

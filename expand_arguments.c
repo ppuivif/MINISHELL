@@ -1,10 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_arguments.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:33:12 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 06:51:16 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
-
-
-
-
-
-
 
 /*static int cut_content_on_whitespaces(t_expanded_argument **exp_arguments, char **content, char **extracted_line)
 {
@@ -51,7 +57,6 @@ void	add_exp_arguments(t_expanded_argument **exp_arguments, char **definitive_co
 	exp_argument = NULL;
 	if (init_expanded_argument_struct(&exp_argument) == -1)
 		exp_argument->alloc_succeed = false;//return error alloc ?
-
 	exp_argument->content = ft_strdup_freed(*definitive_content);
 	*definitive_content = NULL;
 	ft_lst_add_back5(exp_arguments, exp_argument);
@@ -73,20 +78,13 @@ int	add_to_definitive_content(char **definitive_content, char *extracted_line)
 	return (0);
 }
 
-
-/*static int	extract_and_expand_content_of_arguments(char *n_argument_content, \
-t_expanded_argument **exp_arguments, t_command_line **command_line)*/
-
-
-
-
 int	expand_arguments(t_substring *substring, t_native_argument *n_argument, \
 t_command_line **command_line)
 {
 	size_t	len;
-	char *extracted_line;
-	char *definitive_content;
-	char *n_argument_content;
+	char	*extracted_line;
+	char	*definitive_content;
+	char	*n_argument_content;
 
 	definitive_content = NULL;
 	extracted_line = NULL;
@@ -159,8 +157,6 @@ t_command_line **command_line)
 	}
 	return (0);
 }
-
-
 
 /*static size_t	extract_and_expand_content_of_arguments(char *content, \
 char **definitive_content, t_expanded_argument **exp_arguments, \

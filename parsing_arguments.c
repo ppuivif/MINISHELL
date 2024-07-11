@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_arguments.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:36:19 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 07:05:24 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	get_arguments(char **remaining_line, t_substring *substring, \
@@ -11,7 +23,7 @@ t_command_line **command_line)
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	len = count_len_to_cut(*remaining_line);
 	if (len == -1)
-		return (2);//syntax_error
+		return (2);
 	if (init_native_argument_struct(&n_argument) == -1)
 		error_allocation_command_line_and_exit(command_line);
 	n_argument->content = ft_substr(*remaining_line, 0, len);

@@ -6,18 +6,17 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/20 12:27:17 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/11 04:12:54 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 07:20:31 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../includes/libft_utils.h"
 #include "includes/libft_utils.h"
 
 void	*free_arr(char **arr)
 {
 	int	i;
-	
-	i = 0;	
+
+	i = 0;
 	if (arr)
 	{
 		while (arr[i])

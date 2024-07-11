@@ -6,11 +6,11 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:54:36 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 02:19:57 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 06:39:14 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include "minishell.h"
+#include "minishell.h"
 
 void	exec_builtin(t_exec_struct *exec_struct, t_exec_substring *substring, char **envp_arr)
 {

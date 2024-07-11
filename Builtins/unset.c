@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:11 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 02:49:31 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/11 06:31:32 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,7 @@
 
 void	unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
-	(void) exec_struct;
-	(void) exec_arguments;
-	t_exec_argument *arguments;
+	t_exec_argument	*arguments;
 	t_envp_struct	*current;
 	t_envp_struct	*previous;
 
@@ -39,7 +37,7 @@ void	unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 				if (current->value)
 					free(current->value);
 				free(current);
-				break;
+				break ;
 			}
 			if (current != previous)
 				previous = previous->next;

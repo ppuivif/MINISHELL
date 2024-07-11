@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils_2.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:33:46 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 06:33:50 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 size_t	get_len_and_extract_until_next_quote_or_dollar(char *str, \
@@ -58,4 +70,3 @@ size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line)
 	len = len_to_next_separator + 1;
 	return (len);
 }
-

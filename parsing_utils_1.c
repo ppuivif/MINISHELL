@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils_1.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:36:37 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 06:58:31 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	is_pipe_latest_character(char **remaining_line)
@@ -24,28 +36,28 @@ int	is_pipe_first_character(char *remaining_line)
 
 int	check_char_validity(char *remaining_line, int len_to_quote, int flag, int j)
 {
-	int len_to_end;
+	int	len_to_end;
 
 	len_to_end = (int)ft_strlen(&remaining_line[1]);
-	if (!remaining_line[len_to_quote + flag + j] || (len_to_quote + flag + j) > (len_to_end + 1))
+	if (!remaining_line[len_to_quote + flag + j] ||
+		(len_to_quote + flag + j) > (len_to_end + 1))
 		return (-1);
 	if (remaining_line[len_to_quote + flag + j] == '>' || \
 	remaining_line[len_to_quote + flag + j] == '|' || \
 	ft_isspace(remaining_line[len_to_quote + flag + j]) == true)
 		return (-1);
-	else
-		return(0);
+	return (0);
 }
 
-unsigned int count_angled_bracket(char *str)
+unsigned int	count_angled_bracket(char *str)
 {
-	unsigned int nmemb;
+	unsigned int	nmemb;
 
-	nmemb = 0; 
-	while(str && (*str == '<' || *str == '>' || ft_isspace(*str) == true))
+	nmemb = 0;
+	while (str && (*str == '<' || *str == '>' || ft_isspace(*str) == true))
 	{
 		if (*str == '<' || *str == '>')
-		nmemb++;
+			nmemb++;
 		str++;
 	}
 	return (nmemb);

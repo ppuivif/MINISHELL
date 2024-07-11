@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_utils_2.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:36:43 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 07:01:58 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	is_content_empty(char *remaining_line)
@@ -10,9 +22,9 @@ static int	is_content_empty(char *remaining_line)
 
 static int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
 {
-	int j;
-	int len_to_quote;
-	int len_to_end;
+	int	j;
+	int	len_to_quote;
+	int	len_to_end;
 	int	status_code;
 
 	j = 1;
@@ -24,21 +36,19 @@ static int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
 		return (-1);//syntax_error : no second quote after first one
 	while (check_char_validity(remaining_line, len_to_quote, flag, j) == 0)
 	{
- 		if ((len_to_quote + flag + j) <= (len_to_end + 1) && \
-        (remaining_line[len_to_quote + flag + j] == '\'' || \
+		if ((len_to_quote + flag + j) <= (len_to_end + 1) &&
+			(remaining_line[len_to_quote + flag + j] == '\'' || \
 		remaining_line[len_to_quote + flag + j] == '\"'))
-            status_code = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], \
+			status_code = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], \
 			(char []){remaining_line[len_to_quote + flag + j], '\0'}, 0);
-
 /*		if (((len_to_quote + flag + j) <= (len_to_end + 1)) && \
 		(remaining_line[len_to_quote + flag + j] == '\''))
 			status_code = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\'", 0);
 		else if ((len_to_quote + flag + j) <= (len_to_end + 1) && \
 		remaining_line[len_to_quote + flag + j] == '\"')
 			status_code = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);*/
-
 		if (status_code == -1)
-				return (-1);//syntax_error : no second quote after first one
+			return (-1);//syntax_error : no second quote after first one
 		len_to_quote += status_code;
 		if (check_char_validity(remaining_line, len_to_quote, flag, j) == 0)
 			j++;
@@ -88,7 +98,7 @@ int	count_len_to_cut(char *remaining_line)
 		len_to_quote = count_len_to_next_quotes(remaining_line, "\"", 0);
 	else
 		len = count_len_to_reach_second_quote_or_ifs(remaining_line);
-	if (len_to_quote == - 1 || len == -1)
+	if (len_to_quote == -1 || len == -1)
 		return (-1);//syntax_error
 	len += len_to_quote;
 	return (len);

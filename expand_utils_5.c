@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils_5.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 08:16:37 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-static int is_non_valid_characters(char *str)
+static int	is_non_valid_characters(char *str)
 {
 	if (str[0] && !str[1] && (str[0] == '{' || str[0] == '[' || \
 	str[0] == '(' || str[0] == ')'))
@@ -15,7 +27,7 @@ static int is_non_valid_characters(char *str)
 static size_t	handle_special_characters_after_dollar(char *str, char **extracted_line, \
 t_command_line **command_line)
 {
-	int	len;
+	int		len;
 	char	*argv_index;
 
 	len = 0;
@@ -73,13 +85,11 @@ size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t
 	return (len);
 }
 
-
 size_t	simple_expand_content_of_arguments(char *str, \
 t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line)
 {
 	int		len;
-	char 	*extracted_line;
-
+	char	*extracted_line;
 
 	extracted_line = NULL;
 	len = handle_special_characters_after_dollar(str, &extracted_line, \
@@ -143,4 +153,3 @@ void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct)
 	free(*str);
 	*str = ft_strdup_freed(result);
 }
-
