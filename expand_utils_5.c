@@ -79,15 +79,19 @@ t_expanded_argument **exp_arguments, char **definitive_content, t_command_line *
 {
 	int		len;
 	char 	*extracted_line;
+	char    *tmp;
 
-
+    tmp = NULL;
 	extracted_line = NULL;
 	len = handle_special_characters_after_dollar(str, &extracted_line, \
 	command_line);
 	if (len != 0)
 	{
-		*definitive_content = ft_strdup_freed(extracted_line);
+		tmp = ft_strdup_freed(extracted_line);
 		extracted_line = NULL;
+		if (*definitive_content)
+		    free(*definitive_content);
+		*definitive_content = tmp;
 		return (len);
 	}
 	else

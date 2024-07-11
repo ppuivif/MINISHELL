@@ -14,6 +14,7 @@
 # include <fcntl.h>
 # include <sys/wait.h>
 #include <dirent.h>//for opendir in check_exec_arguments.c
+#include <sys/stat.h>//for stat
 
 #include <errno.h>//to delete
 #include <signal.h>

@@ -123,8 +123,8 @@ t_command_line **command_line)
 //				no special_treatment with $
 			if (definitive_content && !n_argument_content[0])
 				add_exp_arguments(&substring->exp_arguments, &definitive_content);
-			else
-				definitive_content = free_and_null(definitive_content);
+//			else
+//				definitive_content = free_and_null(definitive_content);
 		}
 		else if (n_argument_content[0] == '$')
 		{
@@ -138,8 +138,8 @@ t_command_line **command_line)
 //			special_treatment with $
 			if (definitive_content && !n_argument_content[0])
 				add_exp_arguments(&substring->exp_arguments, &definitive_content);
-			else
-				definitive_content = free_and_null(definitive_content);
+//			else
+//			definitive_content = free_and_null(definitive_content);
 		}
 		else
 		{
@@ -151,6 +151,7 @@ t_command_line **command_line)
 				printf("error_other\n");
 				return (1);
 			}
+//			printf("%s\n", definitive_content);
 			if (definitive_content && !n_argument_content[0])//to verify
 //			if (definitive_content)
 			{

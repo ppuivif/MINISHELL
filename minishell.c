@@ -11,8 +11,8 @@ int main(int argc, char **argv, char **envp)
 	int				previous_exit_code;
 	int				exit_code;
 
-//	(void)argc;//for tests
-//	(void)argv;//for tests
+	(void)argc;//for tests
+	(void)argv;//for tests
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;
@@ -28,11 +28,11 @@ int main(int argc, char **argv, char **envp)
 		exit(0);
 	}*/
 
-/*	if (argc == 2)//for tests
+	if (argc == 2)//for tests
 	{
 	 	int fd = ft_atoi(argv[1]);
 		line = get_next_line(fd);
-	}*/
+	}
 
 	get_envp(envp, &envp_struct, line);
 

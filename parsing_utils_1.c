@@ -45,7 +45,7 @@ unsigned int count_angled_bracket(char *str)
 	while(str && (*str == '<' || *str == '>' || ft_isspace(*str) == true))
 	{
 		if (*str == '<' || *str == '>')
-		nmemb++;
+			nmemb++;
 		str++;
 	}
 	return (nmemb);

@@ -270,6 +270,13 @@ void	execution(t_exec_struct **exec_struct)
 	free(pid_arr);
 }
 
+/*static bool is_input_empty(int fd)
+{
+    struct stat	st;
+    if (fstat(fd, &st) != 0)
+	    return (false);
+	return (true);
+}*/
 
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct)
 void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd, int i)
@@ -289,6 +296,11 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	//(void)fd;
 	(void)i;
 
+/*	if (fd_in > 0 && is_input_empty(fd_in) == true)
+	{
+		fd_in = open("empty_file.txt", O_WRONLY | O_TRUNC | O_CREAT, 0644);
+		printf("%d\n", fd_in);
+	}*/
 
 /*	printf("status fd[0] in child%d value : %d - open : %s\n", i, fd[0], is_fd_open(fd[0]) ? "true" : "false");	
 	printf("status fd[1] in child%d value : %d - open : %s\n", i, fd[1], is_fd_open(fd[1]) ? "true" : "false");
@@ -307,6 +319,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 //		printf("status fd_out in child%d after dup value : %d - open : %s\n\n", i, fd_out, is_fd_open(fd_out) ? "true" : "false");
 		close_fd(fd_out);
 	}
+	
 	if (fd[0] != 0 && fd[1] != 1)
 	{
 		close_fd(fd[0]);
@@ -337,6 +350,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 
 //		if (execve(path_with_cmd, cmd_arr, envp_arr) == -1)
 //		printf("%s\n", cmd_arr[0]);
+
 		execve(path_with_cmd, cmd_arr, envp_arr);
 //		perror("error\nexecve of a cmd failed");//to verify
 			//exit_code = -1 ?
