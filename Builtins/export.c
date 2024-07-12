@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 11:51:41 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/12 08:07:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,10 +135,7 @@ static void	add_export(t_exec_struct *exec_struct, \
 		ft_lst_add_back6(&exec_struct->envp_struct, ft_lstnew \
 			(tmp1, NULL, 0));
 		free(tmp1);
-<<<<<<< HEAD
 		tmp1 = NULL;
-=======
->>>>>>> 24cd44d48d355f3e02838354b2ec1c58521ccec9
 		return ;
 	}
 	while (env)
@@ -155,18 +152,12 @@ static void	add_export(t_exec_struct *exec_struct, \
 	env = exec_struct->envp_struct;
 	tmp1 = ft_substr(argument, 0, len_name);
 	tmp2 = ft_substr(argument, len_name + 1, ft_strlen(argument));
-<<<<<<< HEAD
 	ft_lst_add_back6(&exec_struct->envp_struct, \
 	ft_lstnew(tmp1, tmp2, 1));
 	free(tmp1);
 	tmp1 = NULL;
 	free(tmp2);
 	tmp2 = NULL;
-=======
-	ft_lst_add_back6(&exec_struct->envp_struct, ft_lstnew(tmp1, tmp2, 1));
-	free(tmp1);
-	free(tmp2);
->>>>>>> 24cd44d48d355f3e02838354b2ec1c58521ccec9
 }
 
 static void	add2_export(t_exec_struct *exec_struct, \

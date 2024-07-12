@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_contents.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:25 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:33:26 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/12 17:30:32 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,9 @@ void	expand_contents(t_command_line **command_line)
 		while (tmp3 && (*command_line)->current_exit_code != 2)
 //		while (tmp3)
 		{
-			expand_arguments(tmp1, tmp3, command_line);
+			if (expand_arguments(tmp1, tmp3, command_line))
 //			exit_code to check ?
+//			add action on error
 			check_alloc_exp_arguments(tmp1->exp_arguments, command_line);
 			tmp3 = tmp3->next;
 		}

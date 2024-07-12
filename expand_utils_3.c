@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:33:52 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:27:27 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,14 @@
 
 static char	*get_variable_content_in_envp(char *variable, t_envp_struct *envp_struct)
 {
-	int				n;
 	t_envp_struct	*cursor;
 	char			*result;
 
-	n = ft_strlen (variable);
 	cursor = envp_struct;
 	result = NULL;
 	while (cursor)
 	{
-		if (ft_strncmp(variable, cursor->name, n) == 0)
+		if (ft_strcmp(variable, cursor->name) == 0)
 		{
 			result = ft_strdup(cursor->value);
 			return (result);

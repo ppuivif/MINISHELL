@@ -44,6 +44,7 @@ typedef struct s_expanded_redirection
 	bool					alloc_succeed;
 	char					*content;
 	e_redirection			e_redirection;
+	bool					flag_for_expand;
 	t_expanded_redirection	*next;
 }	t_expanded_redirection;
 

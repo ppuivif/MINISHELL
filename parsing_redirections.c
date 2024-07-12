@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_redirections.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:23 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 07:05:05 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/12 16:54:28 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ t_command_line **command_line)
 	}
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	len = count_len_to_cut(*remaining_line);
-	if (len == -1)
+	if (len == -1 || len == 0)
 	{
 		n_redirection = free_and_null(n_redirection);
 		return (2);

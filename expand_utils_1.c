@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:41 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:33:42 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/12 20:14:56 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,17 @@ size_t	get_len_and_extract_until_next_dollar(char *str, char **extracted_line)
 	len_to_next_dollar = strcspn(str, "$");
 	*extracted_line = ft_substr(str, 0, len_to_next_dollar);//malloc à protéger
 	len = len_to_next_dollar;
+	return (len);
+}
+
+size_t	get_len_and_extract_until_next_dollar_first_dollar_excluded\
+(char *str, char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_dollar;
+
+	len_to_next_dollar = strcspn(&str[1], "$");
+	*extracted_line = ft_substr(str, 0, len_to_next_dollar + 1);//malloc à protéger
+	len = len_to_next_dollar + 1;
 	return (len);
 }

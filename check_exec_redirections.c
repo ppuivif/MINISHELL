@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 11:59:13 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/12 21:11:24 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,7 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 	filename = ft_strjoin("heredoc_tmp_", index);
 	free (index);
 	index = NULL;
+
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 		return (-1);
@@ -94,16 +95,19 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
             unlink(filename); // Optionally delete the temporary file
             free(filename);
             return (-1);
-        }		if (ft_strcmp(line, limiter) == 0)
+        }
+		if (ft_strcmp(line, limiter) == 0)
 		{
+//			ft_putstr_fd("\n", fd);
 			line = free_and_null(line);
 			close(fd);
 			break ;
 		}
 		if (line[0])
 			add_history(line);
-		expand_content_when_heredoc(&line, envp_struct);
+		expand_content_when_heredoc(&line, envp_struct, exp_redirection->flag_for_expand);
 		ft_putstr_fd(line, fd);
+		ft_putstr_fd("\n", fd);
 		line = free_and_null(line);
 	}
 //	free(limiter);

@@ -197,4 +197,9 @@ ls | < in
 ls | < in (exit code 0)
 
 echo titi >>./temp/outfile hi > ./temp/invalid_permission
- 
+
+
+
+
+ls > out | cat : cat ne s'exécute pas
+créer des noms aléatoires pour les fichiers de heredoc

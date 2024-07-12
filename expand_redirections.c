@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:44:50 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/12 20:54:35 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ char **extracted_line, t_command_line **command_line)
 }
 
 static size_t	heredoc_extract_and_expand_content_of_redirections(char *content, \
-char **extracted_line)
+char **extracted_line, bool *flag_for_expand)
 {
 	size_t	len;
 
@@ -61,12 +61,16 @@ char **extracted_line)
 		len = 1;
 	}
 	else if (content[0] == '\'')
+	{
 		len = get_len_and_extract_between_single_quotes \
 		(&content[1], extracted_line);
+		*flag_for_expand = false;
+	}
 	else if (content[0] == '\"')
 	{
 		len = get_len_and_extract_between_double_quotes \
 		(&content[1], extracted_line);
+		*flag_for_expand = false;
 	}
 	else
 		len = get_len_and_extract_until_next_quote \
@@ -75,7 +79,7 @@ char **extracted_line)
 }
 
 static int	get_definitive_content_of_redirections(char *content, char **definitive_content, \
-int e_redirection, t_command_line **command_line)
+int e_redirection, t_command_line **command_line, bool *flag_for_expand)
 {
 	int		len;
 	char	*extracted_line;
@@ -93,7 +97,7 @@ int e_redirection, t_command_line **command_line)
 	}
 	else
 		len = (int)heredoc_extract_and_expand_content_of_redirections \
-		(content, &extracted_line);
+		(content, &extracted_line, flag_for_expand);
 	if (!extracted_line)
 		return (-1);
 	if (!(*definitive_content))
@@ -124,7 +128,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 	while (n_redirection && n_redirection->content[i])
 	{
 		len = get_definitive_content_of_redirections(&n_redirection->content[i], \
-		&definitive_content, n_redirection->e_redirection, command_line);
+		&definitive_content, n_redirection->e_redirection, command_line, &exp_redirection->flag_for_expand);
 		if (len == -2)
 		{
 			ft_putstr_fd(n_redirection->content, 2);
