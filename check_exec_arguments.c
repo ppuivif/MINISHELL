@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:35 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/12 19:21:06 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/13 11:54:28 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ static void	check_dir(char *cmd_arr_0, t_exec_substring **exec_substring, t_exec
 		}
 		else
 		{
-			ft_putstr_fd(": No such file or directory here\n", 2);
+			ft_putstr_fd(": No such file or directory\n", 2);
 			(*exec_struct)->command_line->current_exit_code = 127;
 		}
 		(*exec_substring)->exec_arguments->is_argument_valid = false;
@@ -174,7 +174,10 @@ t_exec_struct **exec_struct)
 	else if (errno == EACCES)
 	{
 		ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-		ft_putstr_fd(": Is a directory\n", 2);
+		if (strcspn(&cmd_arr[0][1], "/") < ft_strlen(&cmd_arr[0][1]))
+			ft_putstr_fd(": Permission denied\n", 2);
+		else
+			ft_putstr_fd(": Is a directory\n", 2);
 		(*exec_substring)->exec_arguments->is_argument_valid = false;
 		(*exec_struct)->command_line->current_exit_code = 126;
 	}

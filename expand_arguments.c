@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/12 17:22:38 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/13 17:53:31 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ t_command_line **command_line)
 		if (n_argument_content[0] == '\'')
 		{
 			len = (int)get_len_and_extract_between_single_quotes \
-			(&n_argument_content[1], &extracted_line);
+				(&n_argument_content[1], &extracted_line);
 			n_argument_content += len;
 			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
 			{
@@ -111,7 +111,6 @@ t_command_line **command_line)
 			(&n_argument_content[1], &extracted_line);
 			n_argument_content += len;
 			if (strcspn(extracted_line, "$") < ft_strlen(extracted_line))
-//				complete_expand_content_of_arguments(&n_argument_content[0], &extracted_line, &substring->exp_arguments, &definitive_content, *command_line);// is it necessary to give extracted_line?
 				complete_expand_content_of_arguments(&extracted_line, *command_line);
 			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
 			{

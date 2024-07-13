@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/12 20:16:01 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/13 17:57:26 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static int	is_non_valid_characters(char *str)
 	return (false);
 }
 
-static size_t	handle_special_characters_after_dollar(char *str, char **extracted_line, \
-t_command_line **command_line)
+size_t	handle_special_characters_after_dollar(char *str, char **extracted_line, \
+t_command_line **command_line, bool *flag_keep_dollar)
 {
 	int		len;
 	char	*argv_index;
@@ -35,6 +35,7 @@ t_command_line **command_line)
 	if (str[1] == '\"' || str[1] == '\'')
 	{
 		*extracted_line = ft_strdup("");
+		*flag_keep_dollar = true;
 		len = 1;
 	}
 	else if (is_non_valid_characters(&str[1]) == true)
@@ -57,12 +58,19 @@ t_command_line **command_line)
 		*extracted_line = ft_itoa((*command_line)->previous_exit_code);
 		len = 2;
 	}
-//	else if (str[1] >= '0' && str[1] <= '9')
-	else if (str[1] == '0')
+	else if (str[1] == '=')
+	{
+		*extracted_line = ft_strdup("$=");
+		len = 2;
+	}
+
+	else if (str[1] >= '0' && str[1] <= '9')
 	{
 		argv_index = ft_substr(str, 1, 1);
-//		*extracted_line = ft_strdup((*command_line)->argv[atoi(argv_index)]);
-		*extracted_line = ft_strdup(&(*command_line)->argv[atoi(argv_index)][2]);
+		if ((*command_line)->argv[atoi(argv_index)])
+			*extracted_line = ft_strdup((*command_line)->argv[atoi(argv_index)]);
+		else
+			*extracted_line = ft_strdup("");
 		argv_index = free_and_null(argv_index);
 		len = 2;
 	}
@@ -74,7 +82,7 @@ size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t
 	int		len;
 
 	len = handle_special_characters_after_dollar(str, extracted_line, \
-	command_line);
+	command_line, false);
 	if (len != 0)
 		return (len);
 	else
@@ -90,20 +98,29 @@ t_expanded_argument **exp_arguments, char **definitive_content, t_command_line *
 {
     int        len;
     char     *extracted_line;
-    char    *tmp;
+//	char    *tmp;
 
-    tmp = NULL;
+//	tmp = NULL;
     extracted_line = NULL;
     len = handle_special_characters_after_dollar(str, &extracted_line, \
-    command_line);
+    command_line, false);
     if (len != 0)
     {
-        tmp = ft_strdup_freed(extracted_line);
+		if (*definitive_content)
+		{
+			*definitive_content = ft_strjoin_freed(*definitive_content, extracted_line);
+			extracted_line = free_and_null(extracted_line);
+		}
+		else
+			*definitive_content = ft_strdup_freed(extracted_line);
+		return (len);
+		
+/*		tmp = ft_strdup_freed(extracted_line);
         extracted_line = NULL;
         if (*definitive_content)
             free(*definitive_content);
         *definitive_content = tmp;
-        return (len);
+        return (len);*/
     }
     else
     {

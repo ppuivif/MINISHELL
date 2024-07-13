@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/12 21:11:24 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/13 11:03:11 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,6 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
         }
 		if (ft_strcmp(line, limiter) == 0)
 		{
-//			ft_putstr_fd("\n", fd);
 			line = free_and_null(line);
 			close(fd);
 			break ;

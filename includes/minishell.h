@@ -80,6 +80,8 @@ size_t	get_len_and_extract_until_next_separator_first_dollar_included\
 		(char *str, char **extracted_line);
 size_t	get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
 size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line);
+size_t	handle_special_characters_after_dollar(char *str, char **extracted_line, \
+t_command_line **command_line, bool *flag_keep_dollar);
 
 void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct);
 void	expand_string_after_dollar2(char *str, t_expanded_argument **exp_arguments,t_envp_struct *envp_struct, char **definitive_content);
@@ -216,7 +218,7 @@ int				expand_arguments(t_substring *substring,
 					t_command_line **command_line);
 void			add_exp_arguments(t_expanded_argument **exp_arguments,
 					char **definitive_content);
-size_t			get_len_and_extract_between_single_quotes(
+size_t			(
 					char *str, char **extracted_line);
 size_t			get_len_and_extract_with_single_quotes(
 					char *str, char **extracted_line);

@@ -1707,6 +1707,47 @@ then
 	fi
 fi
 
+
+
+run_test "simple" 4500 "ls|ls" 4500 0
+run_test "simple" 4501 "ls | ls" 4500 0
+run_test "simple" 4502 " ls | ls " 4500 0
+run_test "simple" 4503 "	ls | ls " 4500 0
+run_test "simple" 4504 "	ls	| ls " 4500 0
+run_test "simple" 4505 "	ls	|	ls " 4500 0
+run_test "simple" 4506 "	ls	|	ls	" 4500 0
+run_test "simple" 4507 "		ls | ls " 4500 0
+run_test "simple" 4508 "		ls		| ls " 4500 0
+run_test "simple" 4509 "		ls		|		ls" 4500 0
+run_test "simple" 4510 "		ls		|		ls		" 4500 0
+run_test "simple" 4511 " 		ls		|		ls		" 4500 0
+run_test "simple" 4512 " 		ls 		|		ls		" 4500 0
+run_test "simple" 4513 " 		ls 		| 		ls		" 4500 0
+run_test "simple" 4514 " 		ls 		| 		ls 		" 4500 0
+run_test "simple" 4515 "  		ls 		| 		ls 		" 4500 0
+run_test "simple" 4516 "  		ls  		| 		ls 		" 4500 0
+run_test "simple" 4517 "  		ls  		|  		ls 		" 4500 0
+run_test "simple" 4518 "  		ls  		|  		ls  		" 4500 0
+
+
+if (( "$start_index" >= 4500 && "$start_index" <= 4600 && "$end_index" >= 4500 && "$end_index" <= 4600 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo -e "end of test serie from 4500 to 4600\n"
+	else
+		echo -e "end of test serie from 4500 to 4600"
+	fi
+fi
+
+
+
+
+
+
+
+
+
 if (( "$start_index" >= 4800 && "$start_index" <= 4999 && "$end_index" >= 4800 && "$end_index" <= 4999 ))
 then
 	echo -e "lucas tests implementation, and more\n"
