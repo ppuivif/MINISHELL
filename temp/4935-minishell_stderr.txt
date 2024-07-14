@@ -1,0 +1,1 @@
+./temp/no_permission_dir: Permission denied

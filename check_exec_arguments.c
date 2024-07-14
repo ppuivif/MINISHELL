@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:35 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/13 11:54:28 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/14 17:38:07 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ t_exec_struct **exec_struct)
 	return (false);
 }*/
 
-static void	check_dir(char *cmd_arr_0, t_exec_substring **exec_substring, t_exec_struct **exec_struct)
+/*static void	check_dir(char *cmd_arr_0, t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
 	if (strcspn(cmd_arr_0, "/") < ft_strlen(cmd_arr_0))
 	{
@@ -116,7 +116,7 @@ static void	check_dir(char *cmd_arr_0, t_exec_substring **exec_substring, t_exec
 		}
 		(*exec_substring)->exec_arguments->is_argument_valid = false;
 	}
-}
+}*/
 
 /*		if (access(cmd_arr_0, X_OK) == 0)//F_OK to verify if file exists, X_OK to verify if the file is executable
 		{
@@ -144,20 +144,21 @@ void	check_command_with_options(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
 	char	**cmd_arr;
-	DIR		*dir;
+//	DIR		*dir;
 
-	dir = NULL;
+//	dir = NULL;
 	cmd_arr = (*exec_substring)->cmd_arr;
 
 
-	/*	struct stat st;
-		if (stat(cmd_arr[0], &st) == -1)
-		{
-			perror("st");
-			exit(EXIT_SUCCESS);
-		}
+	struct stat st;
+	if (strcspn(cmd_arr[0], "/") < ft_strlen(cmd_arr[0]) && \
+	stat(cmd_arr[0], &st) != -1)
+	{
+/*		perror("stt");
+		exit(EXIT_SUCCESS);
+		}*/
 		//printf("is a file %d\n", S_ISREG(st.st_mode));
-		printf("is a directory : %d\n", S_ISDIR(st.st_mode));
+/*		printf("is a directory : %d\n", S_ISDIR(st.st_mode));
 		if (st.st_mode & S_IXUSR)
 			printf("user has execute rights %d\n", S_IXUSR);
 		if (st.st_mode & S_IWUSR)
@@ -165,7 +166,37 @@ t_exec_struct **exec_struct)
 
 
 
-	dir = opendir(cmd_arr[0]);
+		if (S_ISDIR(st.st_mode))
+		{
+			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
+			ft_putstr_fd(": Is a directory\n", 2);
+			(*exec_substring)->exec_arguments->is_argument_valid = false;
+			(*exec_struct)->command_line->current_exit_code = 126;
+		}
+		else if (S_ISREG(st.st_mode))
+		{
+			if (!(st.st_mode & S_IXUSR))
+			{
+				ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
+				ft_putstr_fd(": Permission denied\n", 2);
+				(*exec_substring)->exec_arguments->is_argument_valid = false;
+				(*exec_struct)->command_line->current_exit_code = 126;
+			}
+			else
+				check_path_in_envp(exec_substring, exec_struct);
+		}
+	}
+	else if (ft_strcmp(cmd_arr[0], ".") == 0 && ft_strcmp(cmd_arr[0], "/") != 0)
+	{
+		ft_putstr_fd(cmd_arr[0], 2);
+		ft_putstr_fd(": filename argument required\n", 2);
+		(*exec_struct)->command_line->current_exit_code = 2;
+		(*exec_substring)->exec_arguments->is_argument_valid = false;
+	}
+	else
+		check_path_in_envp(exec_substring, exec_struct);
+	
+/*	dir = opendir(cmd_arr[0]);
 	if (dir)
 	{
 		check_dir(cmd_arr[0], exec_substring, exec_struct);
@@ -184,9 +215,6 @@ t_exec_struct **exec_struct)
 	else if (access(cmd_arr[0], X_OK) == 0 && strcspn(cmd_arr[0], "/") < ft_strlen(cmd_arr[0]))//F_OK to verify if file exists, X_OK to verify if the file is executable
 //	else if (access(cmd_arr[0], X_OK) == 0)//F_OK to verify if file exists, X_OK to verify if the file is executable
 	{
-/*		if ()
-			expand_file_content;
-		else*/
 		(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
 		if (!(*exec_substring)->path_with_cmd)
 			error_allocation_exec_struct_and_exit(exec_struct);
@@ -197,9 +225,8 @@ t_exec_struct **exec_struct)
 		ft_putstr_fd(": Permission denied\n", 2);
 		(*exec_substring)->exec_arguments->is_argument_valid = false;
 		(*exec_struct)->command_line->current_exit_code = 126;
-	}
-	else
-		check_path_in_envp(exec_substring, exec_struct);
+	}*/
+
 }
 
 char	**build_envp_arr(t_exec_struct **exec_struct)

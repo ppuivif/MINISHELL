@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/13 17:57:26 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/14 17:31:21 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static int	is_non_valid_characters(char *str)
 }
 
 size_t	handle_special_characters_after_dollar(char *str, char **extracted_line, \
-t_command_line **command_line, bool *flag_keep_dollar)
+t_command_line **command_line, bool flag_keep_dollar)
 {
 	int		len;
 	char	*argv_index;
@@ -34,8 +34,10 @@ t_command_line **command_line, bool *flag_keep_dollar)
 	argv_index = NULL;
 	if (str[1] == '\"' || str[1] == '\'')
 	{
-		*extracted_line = ft_strdup("");
-		*flag_keep_dollar = true;
+		if (flag_keep_dollar == true)
+			*extracted_line = ft_strdup("$");
+		else
+			*extracted_line = ft_strdup("");
 		len = 1;
 	}
 	else if (is_non_valid_characters(&str[1]) == true)
@@ -67,7 +69,7 @@ t_command_line **command_line, bool *flag_keep_dollar)
 	else if (str[1] >= '0' && str[1] <= '9')
 	{
 		argv_index = ft_substr(str, 1, 1);
-		if ((*command_line)->argv[atoi(argv_index)])
+		if (str[1] == '0' && (*command_line)->argv[atoi(argv_index)])
 			*extracted_line = ft_strdup((*command_line)->argv[atoi(argv_index)]);
 		else
 			*extracted_line = ft_strdup("");
@@ -99,6 +101,7 @@ t_expanded_argument **exp_arguments, char **definitive_content, t_command_line *
     int        len;
     char     *extracted_line;
 //	char    *tmp;
+
 
 //	tmp = NULL;
     extracted_line = NULL;

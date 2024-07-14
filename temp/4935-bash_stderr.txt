@@ -1,0 +1,1 @@
+./script_exec.sh: line 151: ./temp/no_permission_dir: Is a directory

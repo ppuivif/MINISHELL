@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/13 17:51:10 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/14 06:56:39 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ void	complete_expand_content_of_redirections(char **str, t_command_line *command
 	char	*tmp;
 	char	*result;
 	size_t	len;
-
+	
 	i = 0;
 	tmp = NULL;
 	result = NULL;
@@ -138,30 +138,25 @@ void	complete_expand_content_of_redirections(char **str, t_command_line *command
 	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
-void	complete_expand_content_of_arguments(char **extracted_line, t_command_line *command_line)
+void	complete_expand_content_of_arguments(char **extracted_line, t_command_line *command_line, bool flag_keep_dollar)
 {
 	int		i;
 	char	*tmp;
 	char	*result;
 	size_t	len;
-	bool	flag_keep_dollar;
 
 	i = 0;
 	tmp = NULL;
 	result = NULL;
 	len = 0;
-	flag_keep_dollar = false;
 	while (extracted_line[0][i])
 	{
 		if (extracted_line[0][i] == '$')
 		{
 			len = handle_special_characters_after_dollar(&extracted_line[0][i], &tmp, \
-			&command_line, &flag_keep_dollar);
+			&command_line, flag_keep_dollar);
 			if (len != 0)
-				if (flag_keep_dollar == false)
-					i += (int)len;
-				else
-					i += (int)len - 1;
+				i += (int)len;
 			else
 				i += expand_content_of_arguments_when_dollar_first(&extracted_line[0][i], &tmp, command_line->envp_struct);//to complete whith case of sapces in variable value
 		}

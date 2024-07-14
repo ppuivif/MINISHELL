@@ -81,12 +81,12 @@ size_t	get_len_and_extract_until_next_separator_first_dollar_included\
 size_t	get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
 size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line);
 size_t	handle_special_characters_after_dollar(char *str, char **extracted_line, \
-t_command_line **command_line, bool *flag_keep_dollar);
+t_command_line **command_line, bool flag_keep_dollar);
 
 void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct);
 void	expand_string_after_dollar2(char *str, t_expanded_argument **exp_arguments,t_envp_struct *envp_struct, char **definitive_content);
 void	complete_expand_content_of_redirections(char **str, t_command_line *command_line);
-void	complete_expand_content_of_arguments(char **extracted_line, t_command_line *command_line);
+void	complete_expand_content_of_arguments(char **extracted_line, t_command_line *command_line, bool flag_keep_dollar);
 size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t_command_line **command_line);
 size_t	simple_expand_content_of_arguments(char *str, t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line);
 void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, bool flag_for_expand);

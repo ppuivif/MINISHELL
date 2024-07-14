@@ -1,3 +1,5 @@
+"$OUTFILE"
+$OUTFILE
 arr_utils.c
 arr_utils.o
 build_execution.c
@@ -41,6 +43,7 @@ get_and_free_envp.c
 get_and_free_envp.o
 GNL
 includes
+infile.txt
 init.c
 init.o
 Lexique minishell __.pdf
@@ -60,15 +63,13 @@ linked_list_utils_1.c
 linked_list_utils_1.o
 linked_list_utils_2.c
 linked_list_utils_2.o
-ls
+ls_copy
 Makefile
 memo
 minishell
 minishell.c
 minishell.o
-minishell_tester
 minishell_tester_stephane
-outfile
 parsing_arguments.c
 parsing_arguments.o
 parsing_redirections.c
@@ -90,6 +91,7 @@ script_exec.sh
 signals.c
 signals.o
 temp
+tester_nathan
 Tests
 Tests1
 Tests2
