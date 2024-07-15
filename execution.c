@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/14 15:57:42 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/15 11:34:27 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -382,7 +382,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 //		printf("%s\n", cmd_arr[0]);
 //		printf("here\n");
 		execve(path_with_cmd, cmd_arr, envp_arr);
-//		perror("error\nexecve of a cmd failed");//to verify
+		perror("error\nexecve of a cmd failed");//to verify
 			//exit_code = -1 ?
 	}
 //	printf("exit_code : %d\n", exit_code);

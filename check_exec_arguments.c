@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:35 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/14 17:38:07 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/15 13:17:52 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -183,14 +183,33 @@ t_exec_struct **exec_struct)
 				(*exec_struct)->command_line->current_exit_code = 126;
 			}
 			else
-				check_path_in_envp(exec_substring, exec_struct);
+			{
+				(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
+				if (!(*exec_substring)->path_with_cmd)
+				error_allocation_exec_struct_and_exit(exec_struct);
+			}
 		}
 	}
-	else if (ft_strcmp(cmd_arr[0], ".") == 0 && ft_strcmp(cmd_arr[0], "/") != 0)
+	else if (errno == EACCES)
+	{
+		ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
+		ft_putstr_fd(": Permission denied\n", 2);
+		(*exec_substring)->exec_arguments->is_argument_valid = false;
+		(*exec_struct)->command_line->current_exit_code = 126;
+	}
+//	else if (ft_strcmp(cmd_arr[0], ".") == 0 && ft_strcmp(cmd_arr[0], "/") != 0)
+	else if (ft_strcmp(cmd_arr[0], ".") == 0)
 	{
 		ft_putstr_fd(cmd_arr[0], 2);
 		ft_putstr_fd(": filename argument required\n", 2);
 		(*exec_struct)->command_line->current_exit_code = 2;
+		(*exec_substring)->exec_arguments->is_argument_valid = false;
+	}
+	else if (ft_strcmp(cmd_arr[0], "..") == 0)
+	{
+		ft_putstr_fd(cmd_arr[0], 2);
+		ft_putstr_fd(": command not found\n", 2);
+		(*exec_struct)->command_line->current_exit_code = 127;
 		(*exec_substring)->exec_arguments->is_argument_valid = false;
 	}
 	else
@@ -243,7 +262,7 @@ char	**build_envp_arr(t_exec_struct **exec_struct)
 		error_allocation_exec_struct_and_exit(exec_struct);
 	tmp = (*exec_struct)->envp_struct;
 	i = 0;
-	while (i < envp_arr_size - 1)
+	while (tmp)
 	{
 		envp_arr[i] = ft_strjoin(tmp->name, "=");
 		envp_arr[i] = ft_strjoin_freed(envp_arr[i], tmp->value);
@@ -252,7 +271,6 @@ char	**build_envp_arr(t_exec_struct **exec_struct)
 	}
 	return (envp_arr);
 }
-
 /*char	**search_path(char **envp)
 {
 	int		i;
@@ -378,7 +396,7 @@ t_exec_struct **exec_struct)
 			return_value = check_path_cmd_validity(path_envp, exec_substring);
 		if (return_value == -1)
 			error_allocation_exec_struct_and_exit(exec_struct);
-		if (return_value == 1)
+		else if (return_value == 1)
 		{
 			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
 			if (strcspn((*exec_substring)->cmd_arr[0], "/") < ft_strlen((*exec_substring)->cmd_arr[0]))
@@ -386,6 +404,13 @@ t_exec_struct **exec_struct)
 			else
 				ft_putstr_fd(": command not found\n", 2);
 			(*exec_struct)->command_line->current_exit_code = 127;
+			(*exec_substring)->exec_arguments->is_argument_valid = false;
+		}
+		else if (return_value == 2)
+		{
+			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
+			ft_putstr_fd(": permission denied\n", 2);
+			(*exec_struct)->command_line->current_exit_code = 126;
 			(*exec_substring)->exec_arguments->is_argument_valid = false;
 		}
 		else
@@ -401,6 +426,7 @@ int	check_path_cmd_validity(char **path, t_exec_substring **exec_substring)
 	char	**cmd_arr;
 
 	cmd_arr = (*exec_substring)->cmd_arr;
+
 	while (*path)
 	{
 		path_with_cmd = NULL;
@@ -408,7 +434,7 @@ int	check_path_cmd_validity(char **path, t_exec_substring **exec_substring)
 		path_with_cmd = ft_strjoin_freed(path_with_cmd, cmd_arr[0]);
 		if (!path_with_cmd || !path_with_cmd[0])
 			return (1);
-		if (access(path_with_cmd, X_OK) == 0)
+		if (access(path_with_cmd, F_OK) == 0) // or (access(path_with_cmd, X_OK) == 0) ?
 		{
 			(*exec_substring)->path_with_cmd = ft_strdup(path_with_cmd);
 			if (!(*exec_substring)->path_with_cmd)
@@ -416,8 +442,38 @@ int	check_path_cmd_validity(char **path, t_exec_substring **exec_substring)
 			free (path_with_cmd);
 			return (0);
 		}
+		if (errno == EACCES)
+		{
+			free (path_with_cmd);
+			return (2);
+		}
 		free (path_with_cmd);
 		path ++;
 	}
 	return (1);
 }
+
+/*	while (*path)
+	{
+		path_with_cmd = NULL;
+		path_with_cmd = ft_strjoin(*path, "/");
+		path_with_cmd = ft_strjoin_freed(path_with_cmd, cmd_arr[0]);
+		if (!path_with_cmd || !path_with_cmd[0])
+			return (1);
+		if (access(path_with_cmd, F_OK) == 0)
+		{
+			if (access(path_with_cmd, X_OK) == 0)
+			{
+				(*exec_substring)->path_with_cmd = ft_strdup(path_with_cmd);
+				if (!(*exec_substring)->path_with_cmd)
+					return (-1);
+				free (path_with_cmd);
+				return (0);
+			}
+			free (path_with_cmd);
+			return (2);
+		}
+		free (path_with_cmd);
+		path ++;
+	}
+	return (1);*/
