@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/11 07:21:44 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/12 20:45:57 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	init_expanded_redirection_struct(t_expanded_redirection **exp_redirection)
 	(*exp_redirection)->alloc_succeed = true;
 	(*exp_redirection)->content = NULL;
 	(*exp_redirection)->e_redirection = 4;
+	(*exp_redirection)->flag_for_expand = true;
 	(*exp_redirection)->next = NULL;
 	return (0);
 }

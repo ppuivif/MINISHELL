@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 11:54:29 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/13 11:31:15 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	main(int argc, char **argv, char **envp)
 	int				previous_exit_code;
 	int				exit_code;
 
-	(void)argc;//for tests
-	(void)argv;//for tests
+//	(void)argc;//for tests
+//	(void)argv;//for tests
 	line = NULL;
 	envp_struct = NULL;
 	previous_exit_code = 0;
@@ -39,11 +39,11 @@ int	main(int argc, char **argv, char **envp)
 		exit(0);
 	}*/
 
-/*	if (argc == 2)//for tests
+	if (argc == 2)//for tests
 	{
 	 	int fd = ft_atoi(argv[1]);
 		line = get_next_line(fd);
-	}*/
+	}
 
 	get_envp(envp, &envp_struct, line);
 /*	if (envp_struct)

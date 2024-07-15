@@ -1707,6 +1707,47 @@ then
 	fi
 fi
 
+
+
+run_test "simple" 4500 "ls|ls" 4500 0
+run_test "simple" 4501 "ls | ls" 4500 0
+run_test "simple" 4502 " ls | ls " 4500 0
+run_test "simple" 4503 "	ls | ls " 4500 0
+run_test "simple" 4504 "	ls	| ls " 4500 0
+run_test "simple" 4505 "	ls	|	ls " 4500 0
+run_test "simple" 4506 "	ls	|	ls	" 4500 0
+run_test "simple" 4507 "		ls | ls " 4500 0
+run_test "simple" 4508 "		ls		| ls " 4500 0
+run_test "simple" 4509 "		ls		|		ls" 4500 0
+run_test "simple" 4510 "		ls		|		ls		" 4500 0
+run_test "simple" 4511 " 		ls		|		ls		" 4500 0
+run_test "simple" 4512 " 		ls 		|		ls		" 4500 0
+run_test "simple" 4513 " 		ls 		| 		ls		" 4500 0
+run_test "simple" 4514 " 		ls 		| 		ls 		" 4500 0
+run_test "simple" 4515 "  		ls 		| 		ls 		" 4500 0
+run_test "simple" 4516 "  		ls  		| 		ls 		" 4500 0
+run_test "simple" 4517 "  		ls  		|  		ls 		" 4500 0
+run_test "simple" 4518 "  		ls  		|  		ls  		" 4500 0
+
+
+if (( "$start_index" >= 4500 && "$start_index" <= 4600 && "$end_index" >= 4500 && "$end_index" <= 4600 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo -e "end of test serie from 4500 to 4600\n"
+	else
+		echo -e "end of test serie from 4500 to 4600"
+	fi
+fi
+
+
+
+
+
+
+
+
+
 if (( "$start_index" >= 4800 && "$start_index" <= 4999 && "$end_index" >= 4800 && "$end_index" <= 4999 ))
 then
 	echo -e "lucas tests implementation, and more\n"
@@ -1728,8 +1769,8 @@ run_test "simple" 4812 "echo 'aspas -> \" '" 4812 0
 run_test "simple" 4813 "echo \"> >> < * ? [ ] | ; [ ] || && ( ) & # $  <<\"" 4813 0
 
 
-run_test "simple" 4857 "grep est <./temp/infile1.txt" 4857 0 "" "grep leak"
-run_test "simple" 4858 "grep est \"<infile1.txt\" <         ./temp/infile1.txt" 4858 0 "" "grep leak"
+run_test "simple" 4857 "grep est <./temp/infile1.txt" 4857 0 "" "(consider leaks of grep)"
+run_test "simple" 4858 "grep est \"<infile1.txt\" <         ./temp/infile1.txt" 4858 0 "" "(consider leaks of grep)"
 
 
 run_test "simple" 4873 "cat <\"./temp/infile1.txt\" | echo hi" 4873 0
@@ -1827,7 +1868,7 @@ run_test "simple" 5055 "< temp/infile1.txt < temp/infile2.txt ls" 5055 0
 run_test "simple" 5056 "< temp/infile1.txt ls < temp/infile2.txt" 5055 0
 run_test "simple" 5057 "ls < temp/infile1.txt < temp/infile2.txt" 5055 0
 
-#run_test "simple" 5060 "> temp/outfile1.txt > temp/outfile2.txt cat" 5060 0
+run_test "simple" 5060 "> temp/outfile1.txt > temp/outfile2.txt cat" 5060 0
 #run_test "simple" 5061 "> temp/outfile1.txt cat > temp/outfile2.txt" 5060 0
 #run_test "simple" 5062 "cat > temp/outfile1.txt > temp/outfile2.txt" 5060 0
 
@@ -1909,7 +1950,7 @@ then
 	fi
 fi
 
-run_test "simple" 5200 "grep un < temp/infile1.txt" 5200 0 "" "grep leak"
+run_test "simple" 5200 "grep un < temp/infile1.txt" 5200 0 "" "(consider leaks of grep)"
 run_test "simple" 5201 "echo < temp/infile1.txt added_word" 5201 0
 run_test "simple" 5202 "echo < temp/infile1.txt added_word" 5202 0
 run_test "simple" 5203 "echo added_word1 < temp/infile1.txt added_word2" 5203 0
@@ -1990,24 +2031,5 @@ else
 	echo -e "${GREEN}no error detected${NC}"
 fi
 #delete_files
-
-: <<BLOCK_COMMENT
-
-for i in {1..27}; do
-    test_message="test$i\t< infile.txt cat | cat > outfile.txt\t"
-    if [ ${#test_message} -gt $max_length ]; then
-        max_length=${#test_message}
-    fi
-	done
-for i in {1..27}; dorun_test 606 "\"ls\"-l" 606 127
-
-    run_test $i "< infile.txt cat | cat > outfile.txt" $i
-    test_message="test$i\t< infile.txt cat | cat > outfile.txt\t"
-    padding=$((max_length - ${#test_message}))
-    printf "%s%*s\n" "$test_message" $padding "$status_message"
-done
-
-BLOCK_COMMENT
-
 
 exit

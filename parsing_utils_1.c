@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils_1.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:37 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:58:31 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/12 18:11:34 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	check_char_validity(char *remaining_line, int len_to_quote, int flag, int j)
 		(len_to_quote + flag + j) > (len_to_end + 1))
 		return (-1);
 	if (remaining_line[len_to_quote + flag + j] == '>' || \
+	remaining_line[len_to_quote + flag + j] == '<' || \
 	remaining_line[len_to_quote + flag + j] == '|' || \
 	ft_isspace(remaining_line[len_to_quote + flag + j]) == true)
 		return (-1);

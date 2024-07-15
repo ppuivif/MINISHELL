@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_arguments.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:51:16 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/14 06:52:51 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,16 +85,18 @@ t_command_line **command_line)
 	char	*extracted_line;
 	char	*definitive_content;
 	char	*n_argument_content;
+	bool	flag_keep_dollar;
 
 	definitive_content = NULL;
 	extracted_line = NULL;
 	n_argument_content = n_argument->content;
+	flag_keep_dollar = false;
 	while (n_argument_content && n_argument_content[0])
 	{
 		if (n_argument_content[0] == '\'')
 		{
 			len = (int)get_len_and_extract_between_single_quotes \
-			(&n_argument_content[1], &extracted_line);
+				(&n_argument_content[1], &extracted_line);
 			n_argument_content += len;
 			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
 			{
@@ -107,12 +109,12 @@ t_command_line **command_line)
 		}
 		else if (n_argument_content[0] == '\"')
 		{
+			flag_keep_dollar = true;
 			len = get_len_and_extract_between_double_quotes \
 			(&n_argument_content[1], &extracted_line);
 			n_argument_content += len;
 			if (strcspn(extracted_line, "$") < ft_strlen(extracted_line))
-//				complete_expand_content_of_arguments(&n_argument_content[0], &extracted_line, &substring->exp_arguments, &definitive_content, *command_line);// is it necessary to give extracted_line?
-				complete_expand_content_of_arguments(&extracted_line, *command_line);
+				complete_expand_content_of_arguments(&extracted_line, *command_line, flag_keep_dollar);
 			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
 			{
 				printf("error_double_quote\n");
