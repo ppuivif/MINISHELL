@@ -40,6 +40,7 @@ la fonction count_len_to_cut permet de determiner la len de l'argument à extrai
 	Si remaining_line est vide, -1 est renvoyé.
 	Si une première quote a été trouvée, mais pas de deuxième quote, -1 est renvoyé.	
 	
-NB : séparateurs (ifs) : "<>| \t\n\v\f\r\0"
+NB : séparateurs utilisés dans minishell : "<>| \t\n" et "\0"
+NB : séparateurs dans bash : "<>| \t\n" et "&;()"
 
 -----------------------------------------------------------------------------------------------
