@@ -44,3 +44,12 @@ NB : séparateurs utilisés dans minishell : "<>| \t\n" et "\0"
 NB : séparateurs dans bash : "<>| \t\n" et "&;()"
 
 -----------------------------------------------------------------------------------------------
+
+
+
+Si le premier caractère est une single quote, la single quote suivante est cherchée.
+Si le premier caractère est une double quote, la double quote suivante est cherchée.
+Si le premier caractère n'est ni une single, ni une double quote,
+une quote ou un séparateur ( '<' '>' '|' 'space' '\t' '\n') est cherché.
+NB : logiquement, il n'y a plus de pipe ni de chevrons, mais le vérifier
+Le contenu est modifié en supprimant les quotes.

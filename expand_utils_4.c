@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/14 06:56:39 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/16 09:52:45 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ static int	expand_content_of_redirections_when_dollar_first(char *str, char **tm
 	return (len);
 }
 
-static int	expand_content_of_arguments_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
+/*static int	expand_content_of_arguments_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
 {
 	int	len;
 
@@ -79,7 +79,7 @@ static int	expand_content_of_arguments_when_dollar_first(char *str, char **tmp, 
 		expand_string_after_dollar1(tmp, envp_struct);
 	}
 	return (len);
-}
+}*/
 
 static int	expand_content_when_dollar_not_first(char *str, char **tmp, t_envp_struct *envp_struct)
 {
@@ -158,7 +158,11 @@ void	complete_expand_content_of_arguments(char **extracted_line, t_command_line 
 			if (len != 0)
 				i += (int)len;
 			else
-				i += expand_content_of_arguments_when_dollar_first(&extracted_line[0][i], &tmp, command_line->envp_struct);//to complete whith case of sapces in variable value
+			{
+//				i += expand_content_of_arguments_when_dollar_first(&extracted_line[0][i], &tmp, command_line->envp_struct);//to complete whith case of sapces in variable value
+				i += get_len_and_extract_after_first_dollar(&extracted_line[0][i], &tmp);
+				expand_string_after_dollar1(&tmp, command_line->envp_struct);
+			}
 		}
 		else
 			i += expand_content_when_dollar_not_first(&extracted_line[0][i], &tmp, command_line->envp_struct);

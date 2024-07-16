@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/13 11:03:11 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/16 17:41:09 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,20 +82,22 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 	while (1)
 	{
 		line = readline("heredoc : ");
-		if (!line)
-		{
-			clear_history();
-			close(fd);
-			break;
-		}
+		signals(1);
 		if (g_sign)
         {
-            clear_history();
+//          clear_history();
+			printf("voici le sign : %d\n", g_sign);
             close(fd);
             unlink(filename); // Optionally delete the temporary file
             free(filename);
             return (-1);
         }
+		if (!line)
+		{
+//			clear_history();
+			close(fd);
+			break;
+		}
 		if (ft_strcmp(line, limiter) == 0)
 		{
 			line = free_and_null(line);

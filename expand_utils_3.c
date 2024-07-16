@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/12 18:27:27 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/16 09:10:26 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ static char	*expand_variables(char **remaining_line, t_envp_struct *envp_struct)
 	}
 	else
 	{
-		len_to_cut = (int)strcspn(remaining_line[0], "$\0");
+		len_to_cut = ft_strcspn(remaining_line[0], "$\0");
 		result = ft_substr(remaining_line[0], 0, len_to_cut);//malloc à protéger
 		*remaining_line += len_to_cut;
 	}

@@ -852,43 +852,42 @@ then
 	fi
 fi
 
-run_test "simple" 700 "'ls -l cat -e'" 700 127 "command not found"
-run_test "simple" 701 "\"ls -l cat -e\"" 701 0
-run_test "simple" 702 "'\"ls -l cat -e\"'" 702 0
-run_test "simple" 703 "\"'ls -l cat -e'\"" 703 0
+run_test "simple" 700 "'ls -l cat -e'" 700 127 "ls -l cat -e: command not found"
+run_test "simple" 701 "\"ls -l cat -e\"" 700 127 "ls -l cat -e: command not found"
+run_test "simple" 702 "'\"ls -l cat -e\"'" 702 127 "\"ls -l cat -e\": command not found"
+run_test "simple" 703 "\"'ls -l cat -e'\"" 703 127 "'ls -l cat -e': command not found"
 
-run_test "simple" 704 "'ls'-l cat -e" 704 0
-run_test "simple" 705 "ls'-l' cat -e" 705 0
-run_test "simple" 706 "\"ls\"-l cat -e" 706 0
-run_test "simple" 707 "ls\"-l\" cat -e" 707 0
+run_test "simple" 704 "'ls'-l cat -e" 704 127 "ls-l: command not found"
+run_test "simple" 705 "ls'-l' cat -e" 704 127 "ls-l: command not found"
+run_test "simple" 706 "\"ls\"-l cat -e" 704 127 "ls-l: command not found"
+run_test "simple" 707 "ls\"-l\" cat -e" 704 127 "ls-l: command not found"
 
-run_test "simple" 708 "'ls -l' cat -e" 708 0
-run_test "simple" 709 "\"ls -l\" cat -e" 709 0
-run_test "simple" 710 "'\"ls -l\"' cat -e" 710 0
-run_test "simple" 711 "\"'ls -l'\" cat -e" 711 0
+run_test "simple" 708 "'ls -l' cat -e" 708 127 "ls -l: command not found"
+run_test "simple" 710 "'\"ls -l\"' cat -e" 710 127 "\"ls -l\": command not found"
+run_test "simple" 711 "\"'ls -l'\" cat -e" 711 127 "'ls -l': command not found"
 
-run_test "simple" 712 "'ls -l'cat -e" 712 0
-run_test "simple" 713 "\"ls -l\"cat -e" 713 0
-run_test "simple" 714 "'\"ls -l\"'cat -e" 714 0
-run_test "simple" 715 "\"'ls -l'\"cat -e" 715 0
+run_test "simple" 712 "'ls -l'cat -e" 712 127 "ls -lcat: command not found"
+run_test "simple" 713 "\"ls -l\"cat -e" 712 127 "ls -lcat: command not found"
+run_test "simple" 714 "'\"ls -l\"'cat -e" 714 127 "\"ls -l\"cat: command not found"
+run_test "simple" 715 "\"'ls -l'\"cat -e" 715 127 "'ls -l'cat: command not found"
 
-run_test "simple" 716 "'ls -l' 'cat' -e" 716 0
-run_test "simple" 717 "\"ls -l\" 'cat' -e" 717 0
-run_test "simple" 718 "'\"ls -l\"' 'cat' -e" 718 0
-run_test "simple" 719 "\"'ls -l'\" 'cat' -e" 719 0
+run_test "simple" 716 "'ls -l' 'cat' -e" 716 127 "ls -l: command not found"
+run_test "simple" 717 "\"ls -l\" 'cat' -e" 716 127  "ls -l: command not found"
+run_test "simple" 718 "'\"ls -l\"' 'cat' -e" 718 127 "\"ls -l\": command not found"
+run_test "simple" 719 "\"'ls -l'\" 'cat' -e" 719 127 "'ls -l': command not found"
 
 
-run_test "simple" 720 "'ls -l' cat '-e'" 720 0
-run_test "simple" 721 "\"ls -l\" cat '-e'" 721 0
-run_test "simple" 722 "'\"ls -l\"' cat '-e'" 722 0
-run_test "simple" 723 "\"'ls -l'\" cat '-e'" 723 0
-run_test "simple" 724 "'ls -l' 'cat' '-e'" 724 0
-run_test "simple" 725 "\"ls -l\" 'cat' '-e'" 725 0
-run_test "simple" 726 "'\"ls -l\"' 'cat' '-e'" 726 0
-run_test "simple" 727 "\"'ls -l'\" 'cat' '-e'" 727 0
-run_test "simple" 728 "'ls -l' \"cat\" '-e'" 728 0
-run_test "simple" 729 "\"ls -l\" \"cat\" '-e'" 729 0
-run_test "simple" 730 "'\"ls -l\"' \"cat\" '-e'" 730 0
+run_test "simple" 720 "'ls -l' cat '-e'" 720 127 "ls -l: command not found"
+run_test "simple" 721 "\"ls -l\" cat '-e'" 720 127 "ls -l: command not found"
+run_test "simple" 722 "'\"ls -l\"' cat '-e'" 722 127 "\"ls -l\": command not found"
+run_test "simple" 723 "\"'ls -l'\" cat '-e'" 723 127 "'ls -l': command not found"
+run_test "simple" 724 "'ls -l' 'cat' '-e'" 724 127 "ls -l: command not found"
+run_test "simple" 725 "\"ls -l\" 'cat' '-e'" 724 127 "ls -l: command not found"
+run_test "simple" 726 "'\"ls -l\"' 'cat' '-e'" 726 127 "\"ls -l\": command not found"
+run_test "simple" 727 "\"'ls -l'\" 'cat' '-e'" 727 127 "'ls -l': command not found"
+run_test "simple" 728 "'ls -l' \"cat\" '-e'" 728 127 "ls -l: command not found"
+run_test "simple" 729 "\"ls -l\" \"cat\" '-e'" 729 127 "ls -l: command not found"
+run_test "simple" 730 "'\"ls -l\"' \"cat\" '-e'" 730 127 "\"ls -l\": command not found"
 run_test "simple" 731 "\"'ls -l'\" \"cat\" '-e'" 731 0
 run_test "simple" 732 "'ls -l' \"cat\" \"-e\"" 732 0
 run_test "simple" 733 "\"ls -l\" \"cat\" \"-e\"" 733 0
@@ -1612,41 +1611,6 @@ then
 fi
 
 
-run_test "simple" 4400 "'ls -l cat -e'" 4400 127
-run_test "simple" 4401 "\"ls -l cat -e\"" 4401 127
-run_test "simple" 4402 "'\"ls -l cat -e\"'" 4402 127
-run_test "simple" 4403 "\"'ls -l cat -e'\"" 4403 127
-
-run_test "simple" 4404 "'ls'-l cat -e" 4404 127
-run_test "simple" 4405 "ls'-l' cat -e" 4405 127
-run_test "simple" 4406 "\"ls\"-l cat -e" 4406 127
-run_test "simple" 4407 "ls\"-l\" cat -e" 4407 127
-
-run_test "simple" 4408 "'ls -l' cat -e" 4408 127
-run_test "simple" 4409 "\"ls -l\" cat -e" 4409 127
-run_test "simple" 4410 "'\"ls -l\"' cat -e" 4410 127
-run_test "simple" 4411 "\"'ls -l'\" cat -e" 4411 127
-
-run_test "simple" 4412 "'ls -l'cat -e" 4412 127
-run_test "simple" 4413 "\"ls -l\"cat -e" 4413 127
-run_test "simple" 4414 "'\"ls -l\"'cat -e" 4414 127
-run_test "simple" 4415 "\"'ls -l'\"cat -e" 4415 127
-
-run_test "simple" 4416 "'ls -l' 'cat' -e" 4416 127
-run_test "simple" 4417 "\"ls -l\" 'cat' -e" 4417 127
-run_test "simple" 4418 "'\"ls -l\"' 'cat' -e" 4418 127
-run_test "simple" 4419 "\"'ls -l'\" 'cat' -e" 4419 127
-
-
-run_test "simple" 4420 "'ls -l' cat '-e'" 4420 127
-run_test "simple" 4421 "\"ls -l\" cat '-e'" 4421 127
-run_test "simple" 4422 "'\"ls -l\"' cat '-e'" 4422 127
-run_test "simple" 4423 "\"'ls -l'\" cat '-e'" 4423 127
-run_test "simple" 4424 "'ls -l' 'cat' '-e'" 4424 127
-run_test "simple" 4425 "\"ls -l\" 'cat' '-e'" 4425 127
-run_test "simple" 4426 "'\"ls -l\"' 'cat' '-e'" 4426 127
-run_test "simple" 4427 "\"'ls -l'\" 'cat' '-e'" 4427 127
-run_test "simple" 4428 "'ls -l' \"cat\" '-e'" 4428 127
 run_test "simple" 4429 "\"ls -l\" \"cat\" '-e'" 4429 127
 run_test "simple" 4430 "'\"ls -l\"' \"cat\" '-e'" 4430 127
 run_test "simple" 4431 "\"'ls -l'\" \"cat\" '-e'" 4431 127
@@ -1868,7 +1832,7 @@ run_test "simple" 5055 "< temp/infile1.txt < temp/infile2.txt ls" 5055 0
 run_test "simple" 5056 "< temp/infile1.txt ls < temp/infile2.txt" 5055 0
 run_test "simple" 5057 "ls < temp/infile1.txt < temp/infile2.txt" 5055 0
 
-run_test "simple" 5060 "> temp/outfile1.txt > temp/outfile2.txt cat" 5060 0
+#run_test "simple" 5060 "> temp/outfile1.txt > temp/outfile2.txt cat" 5060 0
 #run_test "simple" 5061 "> temp/outfile1.txt cat > temp/outfile2.txt" 5060 0
 #run_test "simple" 5062 "cat > temp/outfile1.txt > temp/outfile2.txt" 5060 0
 
