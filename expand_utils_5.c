@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/14 17:31:21 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/17 09:43:38 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t
 	else
 	{
 		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-		expand_string_after_dollar1(extracted_line, (*command_line)->envp_struct);
+		expand_string_after_dollar1(extracted_line, (*command_line)->envp_struct, command_line);
 	}
 	return (len);
 }
@@ -134,7 +134,7 @@ t_expanded_argument **exp_arguments, char **definitive_content, t_command_line *
     return (len);
 }
 
-static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
+static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
 {
 	int	len;
 
@@ -142,7 +142,7 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_env
 	if (str[1] != '\"' && str[1] != '\'' && (str[1]) != 0)
 	{
 		len += get_len_and_extract_after_first_dollar(str, tmp);
-		expand_string_after_dollar1(tmp, envp_struct);
+		expand_string_after_dollar1(tmp, envp_struct, command_line);
 	}
 	else
 		len += get_len_and_extract_until_next_separator_dollar_excluded \
@@ -150,7 +150,7 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_env
 	return (len);
 }
 
-void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, bool flag_for_expand)
+void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, t_command_line **command_line, bool flag_for_expand)
 {
 	int		i;
 	char	*tmp;
@@ -163,7 +163,7 @@ void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, bool fl
 		if (str[0][i] == '$')
 		{ 
 			if (flag_for_expand == true)
-				i += expand_content_heredoc_when_dollar_first(&str[0][i], &tmp, envp_struct);
+				i += expand_content_heredoc_when_dollar_first(&str[0][i], &tmp, envp_struct, command_line);
 			else
 				i += get_len_and_extract_until_next_dollar_first_dollar_excluded\
 				(&str[0][i], &tmp);

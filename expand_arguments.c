@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/14 06:52:51 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/17 14:08:54 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,7 +114,7 @@ t_command_line **command_line)
 			(&n_argument_content[1], &extracted_line);
 			n_argument_content += len;
 			if (strcspn(extracted_line, "$") < ft_strlen(extracted_line))
-				complete_expand_content_of_arguments(&extracted_line, *command_line, flag_keep_dollar);
+				complete_expand_content_of_arguments(&extracted_line, command_line, flag_keep_dollar);
 			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
 			{
 				printf("error_double_quote\n");

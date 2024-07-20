@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/13 16:51:35 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/17 14:08:12 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ char **extracted_line, t_command_line **command_line)
 		len = get_len_and_extract_between_double_quotes \
 		(&content[1], extracted_line);
 		if (strcspn(*extracted_line, "$") < ft_strlen(*extracted_line))
-			complete_expand_content_of_redirections(extracted_line, *command_line);
+			complete_expand_content_of_redirections(extracted_line, command_line);
 	}
 	else if (content[0] == '$')
 	{

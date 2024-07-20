@@ -1,2 +1,3 @@
 error
 execve of a cmd failed: Exec format error
+exit

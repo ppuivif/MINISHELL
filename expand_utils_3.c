@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/16 09:10:26 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/17 09:33:14 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,17 +167,23 @@ void	cut_variable_on_whitespaces(t_expanded_argument **exp_arguments, char **var
 }
 
 
-void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct)
+void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct, t_command_line **command_line)
 {
 	char	*remaining_line;
 	char	*variable;
 	char	*result;
+	int		len;
 
 	result = NULL;
 	remaining_line = *str;
+	len = 0;
 	while (remaining_line && remaining_line[0])
 	{
-		variable = expand_variables(&remaining_line, envp_struct);
+		len = handle_special_characters_after_dollar(remaining_line, &variable, command_line, 1);
+		if (len == 0)	
+			variable = expand_variables(&remaining_line, envp_struct);
+		else
+			remaining_line += len;
 		if (!result)
 			result = ft_strdup(variable);//malloc à protéger
 		else
