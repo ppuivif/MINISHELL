@@ -139,6 +139,9 @@ typedef struct s_exec_struct
 
 void	ft_envp_struct_lst_print(t_envp_struct *envp_struct, int fd);
 void	ft_native_lst_print(t_command_line *command_line, int fd);
+
+void	ft_native_lst_print_for_tests(t_command_line *command_line, int fd);
+
 void	ft_expanded_lst_print(t_command_line *command_line, int fd);
 void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd);
 void	print_e_redirection (int e_redirection, int fd);

@@ -1,6 +1,10 @@
 substring 0 : 
 	-redirection 0 : 	infile.txt
 	-redirection_type 0 : 	REDIRECTION_INFILE
+	-fd_input 0 : 		3
+	-fd_output 0 : 		-1
 	-redirection 1 : 	infile.txt
 	-redirection_type 1 : 	REDIRECTION_INFILE
+	-fd_input 1 : 		4
+	-fd_output 1 : 		-1
 

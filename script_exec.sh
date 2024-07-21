@@ -18,6 +18,19 @@ function create_temp_directory() {
 
 function create_files_and_set_permissions() {
 	test_index=$1
+	test_type=$2
+	if [ "$test_type" == "execution" ]
+	then
+		echo > "temp/$test_index-bash_stdout.txt"
+		chmod 644 "temp/$test_index-bash_stdout.txt"
+#		exec 200> "temp/bash_stdout$test_index.txt"
+		echo > "temp/$test_index-bash_stderr.txt"
+		chmod 644 "temp/$test_index-bash_stderr.txt"
+#		exec 201> "temp/bash_stderr$test_index.txt"
+		echo > "temp/tmp_to_execute_valgrind.txt"
+    	chmod 644 "temp/tmp_to_execute_valgrind.txt"
+		exec 101< "temp/tmp_to_execute_valgrind.txt"
+	fi
 	echo -e "ceci est\nun test1\n" > temp/infile1.txt
 	echo -e "ceci est\nun test2\n" > temp/infile2.txt
 	echo -e "ceci est\nun test3\n" > temp/infile3.txt
@@ -33,18 +46,9 @@ function create_files_and_set_permissions() {
 	echo > "temp/$test_index-minishell_stderr.txt"
     chmod 644 "temp/$test_index-minishell_stderr.txt"
 #	exec 101> "temp/minishell_stderr$test_index.txt"
-	echo > "temp/$test_index-bash_stdout.txt"
-    chmod 644 "temp/$test_index-bash_stdout.txt"
-#	exec 200> "temp/bash_stdout$test_index.txt"
-	echo > "temp/$test_index-bash_stderr.txt"
-    chmod 644 "temp/$test_index-bash_stderr.txt"
-#	exec 201> "temp/bash_stderr$test_index.txt"
 	echo > "temp/tmp_to_read_command.txt"
     chmod 644 "temp/tmp_to_read_command.txt"
 	exec 100< "temp/tmp_to_read_command.txt"
-	echo > "temp/tmp_to_execute_valgrind.txt"
-    chmod 644 "temp/tmp_to_execute_valgrind.txt"
-	exec 101< "temp/tmp_to_execute_valgrind.txt"
 }
 
 function delete_infiles() {
@@ -106,6 +110,92 @@ function delete_file() {
 	fi
 }
 
+execute_parsing_test() {
+    test_index=$2
+    command=$3
+	file_test=$4
+    exit_code_expected=$5
+    test="test$test_index\t$command\t"
+    message=$test
+ 	substring=$6
+
+	create_files_and_set_permissions $test_index "parsing"
+	echo "$command" >"temp/tmp_to_read_command.txt"
+
+#	echo "$command" | ./minishell 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/stderr_minishell$test_index.txt"
+	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/stderr_minishell$test_index.txt"
+	exit_code_minishell=$?
+
+	delete_file "temp/tmp_to_read_command.txt"
+	exec 100>&-
+
+	diff_stdout=$(diff "temp/$test_index-minishell_stdout.txt" "Tests/test$file_test.txt" > /dev/null)
+	diff_exit_stdout=$?
+
+	empty_substring=""
+	if [ "$substring" = "$empty_substring" ] && [ ! -s "temp/$test_index-minishell_stderr.txt" ]
+	then
+		diff_empty_substring=0
+	else
+		diff_empty_substring=1
+	fi
+ 	diff_stderr=$(grep "$substring" temp/$test_index-minishell_stderr.txt >/dev/null)
+	diff_exit_stderr=$?
+
+	if [ $diff_exit_stdout -eq 1 ]
+	then
+		status3="KO"
+		error_detail3="${RED}std_output ${NC}"
+		flag=$((flag + 1))
+	else
+		status3="OK"
+		delete_file "temp/$test_index-minishell_stdout.txt"
+		delete_file "temp/$test_index-bash_stdout.txt"
+	fi
+	
+	if [ $diff_exit_stderr -eq 0 ] || [ $diff_empty_substring -eq 0 ]
+#	if	grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null
+	then
+		status4="OK"
+		delete_file "temp/$test_index-minishell_stderr.txt"
+		delete_file "temp/$test_index-bash_stderr.txt"
+	else	
+#		echo "$substring"
+		status4="KO"
+		error_detail4="${RED}stderr_output ${NC}"
+		flag=$((flag + 1))
+    fi
+
+	if [ "$exit_code_minishell" -ne "$exit_code_expected" ]
+	then
+		status5="KO"
+		error_detail5="${RED}exit_code ${NC}"
+		flag=$((flag + 1))
+	else
+		status5="OK"
+		status_message="${GREEN} OK${NC}"
+    fi
+
+	if [ "$display" == "wrong_only" ]
+	then
+		if [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ]
+		then
+			status_message="${RED} KO : ${NC}"
+			echo -e "${message}${spaces}${test_index}${status_message}${error_detail3}${error_detail4}${error_detail5}"
+		fi
+	else
+		if [ "$status3" == "KO" ] || [ "$status4" == "KO" ] || [ "$status5" == "KO" ]
+		then
+			status_message="${RED} KO : ${NC}"
+			echo -e "${message}${spaces}${test_index}${status_message}${error_detail3}${error_detail4}${error_detail5}"
+		else
+			status_message="${GREEN} OK${NC}"
+			echo -e "${message}${spaces}${status_message}"
+		fi
+	fi
+	substring=""
+}
+
 
 execute_test() {
 	test_type=$1
@@ -118,7 +208,7 @@ execute_test() {
 	test="test$test_index\t$command\t"
     message=$test
     
-	create_files_and_set_permissions $test_index
+	create_files_and_set_permissions $test_index "execution"
 
 #: << BLOCK_COMMENT
 
@@ -309,7 +399,12 @@ run_test() {
 	index=$2
 	if (( index >= "$start_index" && index <= "$end_index" ))
 	then
-		execute_test "$@"
+		if (execute="parsing")
+		then
+			execute_parsing_test "$@"
+		else
+			execute_test "$@"
+		fi		
 	fi
 }
 
