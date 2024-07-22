@@ -1,0 +1,8 @@
+substring 0 : 
+	-redirection 0 : 	temp/infile1.txt
+	-redirection_type 0 : 	REDIRECTION_INFILE
+	-redirection 1 : 	temp/infile2.txt
+	-redirection_type 1 : 	REDIRECTION_INFILE
+	-redirection 2 : 	temp/infile3.txt
+	-redirection_type 2 : 	REDIRECTION_INFILE
+
