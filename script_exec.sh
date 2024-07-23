@@ -839,9 +839,10 @@ run_test "simple" 257 "< temp/'i'\"\"n\"\"'f'\"\"i\"\"'l'e'1'.txt" 257 0
 run_test "simple" 258 "< temp/'i'\"\"n\"\"'f'\"\"i\"\"'l'\"\"e'1'.txt" 258 0
 run_test "simple" 259 "< temp/'i'\"\"n\"\"'f'\"\"i\"\"'l'\"\"e\"\"'1'.txt" 259 0
 run_test "simple" 260 "< temp/\"i\"\"\"\"n\"\"\"\"f\"\"\"\"i\"\"\"\"l\"\"\"\"e\"\"\"\"1\".txt" 260 0
-run_test "simple" 261 "< temp/\"i\"'\"'n'\"'\"f\"'\"'i'\"'\"l\"'\"'e'\"'\"1\".txt" 261 127 "temp/i"n"f"i"l"e"1.txt: No such file or directory"
-run_test "simple" 262 "< temp/'i''\"'n'\"''f''\"'i'\"''l''\"'e'\"''1'.txt" 262 127 "temp/i"n"f"i"l"e"1.txt: No such file or directory"
-run_test "simple" 263 "< temp/'i'\"'\"n\"'\"'f'\"'\"i\"'\"'l'\"'\"e\"'\"'1'.txt" 263 127 "temp/i'n'f'i'l'e'1.txt: No such file or directory"
+run_test "simple" 261 "< temp/\"i\"\" \"\"n\"\" \"\"f\"\" \"\"i\"\" \"\"l\"\" \"\"e\"\" \"\"1\".txt" 261 127 "temp/i n f i l e 1.txt: No such file or directory"
+run_test "simple" 262 "< temp/\"i\"'\"'n'\"'\"f\"'\"'i'\"'\"l\"'\"'e'\"'\"1\".txt" 262 127 "temp/i"n"f"i"l"e"1.txt: No such file or directory"
+run_test "simple" 263 "< temp/'i''\"'n'\"''f''\"'i'\"''l''\"'e'\"''1'.txt" 263 127 "temp/i"n"f"i"l"e"1.txt: No such file or directory"
+run_test "simple" 264 "< temp/'i'\"'\"n\"'\"'f'\"'\"i\"'\"'l'\"'\"e\"'\"'1'.txt" 264 127 "temp/i'n'f'i'l'e'1.txt: No such file or directory"
 
 if (( "$start_index" >= 200 && "$start_index" <= 300 && "$end_index" >= 200 && "$end_index" <= 300 ))
 then
@@ -1203,11 +1204,21 @@ run_test "simple" 1105 "(" 1105 127 "" "invalid test because bash has a special 
 run_test "simple" 1106 ")" 1106 127 "" "invalid test because bash has a special behaviour"
 run_test "simple" 1107 "()" 1107 127 "" "invalid test because bash has a special behaviour"
 run_test "simple" 1108 ";" 1108 127 "" "invalid test because bash has a special behaviour"
-run_test "simple" 1109 "\"'\"" 1109 0
-run_test "simple" 1110 "@" 1110 0
-run_test "simple" 1111 "\"@\"" 1110 0
-run_test "simple" 1112 "*" 1112 0
-run_test "simple" 1113 "\"*\"" 1112 0
+run_test "simple" 1109 ":" 1109 127 "" "invalid test because bash has a special behaviour"
+run_test "simple" 1110 "!" 1110 127 "" "invalid test because bash has a special behaviour"
+run_test "simple" 1111 "-" 1111 127 "-: command not found"
+
+run_test "simple" 1120 "\"'\"" 1111 127 "': command not found"
+run_test "simple" 1121 "@" 1112 127 "@: command not found"
+run_test "simple" 1122 "\"@\"" 1113 127 "@: command not found"
+run_test "simple" 1123 "*" 1114 127
+run_test "simple" 1124 "\"*\"" 1115 127
+
+run_test "simple" 1130 "&" 1130 2 "syntax error" "invalid test because bash has a special behaviour"
+run_test "simple" 1131 "&&" 1131 2 "syntax error" "invalid test because bash has a special behaviour"
+run_test "simple" 1132 "&&&" 1132 2 "syntax error" "invalid test because bash has a special behaviour"
+run_test "simple" 1133 "&&&&" 1133 2 "syntax error" "invalid test because bash has a special behaviour"
+run_test "simple" 1134 "&&&&&" 1134 2 "syntax error" "invalid test because bash has a special behaviour"
 
 if (( "$start_index" >= 1100 && "$start_index" <= 1200 && "$end_index" >= 1100 && "$end_index" <= 1200 ))
 then
@@ -1536,98 +1547,140 @@ then
 fi
 
 run_test "simple" 2000 "<" 2000 2 "syntax error"
-run_test "simple" 2001 "<<" 2001 2 "syntax error"
-run_test "simple" 2002 "<<<" 2002 2 "syntax error"
-run_test "simple" 2003 "<<<<" 2003 2 "syntax error"
-run_test "simple" 2004 "<" 2004 2 "syntax error"
+run_test "simple" 2001 "< <" 2001 2 "syntax error"
+run_test "simple" 2002 "< < <" 2002 2 "syntax error"
+run_test "simple" 2003 "< < < <" 2003 2 "syntax error"
+
 run_test "simple" 2005 "<<" 2005 2 "syntax error"
-run_test "simple" 2006 "<<<" 2006 2 "syntax error"
-run_test "simple" 2007 "<<<<" 2007 2 "syntax error"
-run_test "simple" 2008 "<>" 2008 2 "syntax error"
-run_test "simple" 2009 "><" 2009 2 "syntax error"
-run_test "simple" 2010 "<><>" 2010 2 "syntax error"
-run_test "simple" 2011 "><><" 2011 2 "syntax error"
-run_test "simple" 2012 "<<>" 2012 2 "syntax error"
-run_test "simple" 2013 "<<>>" 2013 2 "syntax error"
-run_test "simple" 2014 "<<<>>>" 2014 2 "syntax error"
-run_test "simple" 2015 "<<<<>>>>" 2015 2 "syntax error"
-run_test "simple" 2016 ">><" 2016 2 "syntax error"
-run_test "simple" 2017 ">><<" 2017 2 "syntax error"
-run_test "simple" 2018 ">>><<<" 2018 2 "syntax error"
-run_test "simple" 2019 ">>>><<<<" 2019 2 "syntax error"
+run_test "simple" 2006 "<< <<" 2006 2 "syntax error"
+run_test "simple" 2007 "<< << <<" 2007 2 "syntax error"
+run_test "simple" 2007 "<< << << <<" 2007 2 "syntax error"
 
-run_test "simple" 2020 "ls <" 2020 2 "syntax error"
-run_test "simple" 2021 "ls <<" 2021 2 "syntax error"
-run_test "simple" 2022 "ls >" 2022 2 "syntax error"
-run_test "simple" 2023 "ls >>" 2023 2 "syntax error"
-run_test "simple" 2024 "ls<" 2024 2 "syntax error"
-run_test "simple" 2025 "ls<<" 2025 2 "syntax error"
-run_test "simple" 2026 "ls>" 2026 2 "syntax error"
-run_test "simple" 2027 "ls>>" 2027 2 "syntax error"
+run_test "simple" 2010 "<<<" 2010 2 "syntax error"
+run_test "simple" 2011 "<<< <<<" 2011 2 "syntax error"
+run_test "simple" 2012 "<<< <<< <<<" 2012 2 "syntax error"
+run_test "simple" 2013 "<<< <<< <<< <<<" 2013 2 "syntax error"
 
-run_test "simple" 2030 "|" 2030 2 "syntax error"
-run_test "simple" 2031 " |" 2031 2 "syntax error"
-run_test "simple" 2032 "  |" 2032 2 "syntax error"
-run_test "simple" 2033 "| " 2033 2 "syntax error"
-run_test "simple" 2034 "|  " 2034 2 "syntax error"
-run_test "simple" 2035 " | " 2035 2 "syntax error"
-run_test "simple" 2036 "  | " 2036 2 "syntax error"
-run_test "simple" 2037 "  |  " 2037 2 "syntax error"
-run_test "simple" 2038 "	|" 2038 2 "syntax error"
-run_test "simple" 2039 "		|" 2039 2 "syntax error"
-run_test "simple" 2040 "|	" 2040 2 "syntax error"
-run_test "simple" 2041 "|		" 2041 2 "syntax error"
-run_test "simple" 2042 "	|	" 2042 2 "syntax error"
-run_test "simple" 2043 "		|		" 2043 2 "syntax error"
+run_test "simple" 2015 "<<<<" 2015 2 "syntax error"
+run_test "simple" 2016 "<<<< <<<<" 2016 2 "syntax error"
+run_test "simple" 2017 "<<<< <<<< <<<<" 2017 2 "syntax error"
+run_test "simple" 2018 "<<<< <<<< <<<< <<<<" 2018 2 "syntax error"
+run_test "simple" 2019 "<<<<<<<<<<<<<<<<" 2019 2 "syntax error"
 
-run_test "simple" 2050 "| ls" 2050 2 "syntax error"
-run_test "simple" 2051 "|ls" 2051 2 "syntax error"
-run_test "simple" 2052 " |ls" 2052 2 "syntax error"
-run_test "simple" 2053 "ls |" 2053 2 "syntax error"
-run_test "simple" 2054 "ls|" 2054 2 "syntax error"
-run_test "simple" 2055 "ls| " 2055 2 "syntax error"
+run_test "simple" 2020 ">" 2020 2 "syntax error"
+run_test "simple" 2021 "> >" 2021 2 "syntax error"
+run_test "simple" 2022 "> > >" 2022 2 "syntax error"
+run_test "simple" 2023 "> > > >" 2023 2 "syntax error"
 
-run_test "simple" 2060 "||" 2060 2 "syntax error"
-run_test "simple" 2061 "| |" 2061 2 "syntax error"
-run_test "simple" 2062 "|	|" 2062 2 "syntax error"
-run_test "simple" 2063 "|||" 2063 2 "syntax error"
-run_test "simple" 2064 "| | |" 2064 2 "syntax error"
-run_test "simple" 2065 "|	|	|" 2065 2 "syntax error"
-run_test "simple" 2066 "||||" 2066 2 "syntax error"
-run_test "simple" 2067 "| | | |" 2067 2 "syntax error"
-run_test "simple" 2068 "|	|	|	|" 2068 2 "syntax error"
+run_test "simple" 2025 ">>" 2025 2 "syntax error"
+run_test "simple" 2026 ">> >>" 2026 2 "syntax error"
+run_test "simple" 2027 ">> >> >>" 2027 2 "syntax error"
+run_test "simple" 2028 ">> >> >> >>" 2028 2 "syntax error"
 
-run_test "simple" 2070 ">|" 2070 2 "syntax error"
-run_test "simple" 2071 "<|" 2071 2 "syntax error"
-run_test "simple" 2072 "|>" 2072 2 "syntax error"
-run_test "simple" 2073 "|<" 2073 2 "syntax error"
-run_test "simple" 2074 ">>|" 2074 2 "syntax error"
-run_test "simple" 2075 "<<|" 2075 2 "syntax error"
-run_test "simple" 2076 "|>>" 2076 2 "syntax error"
-run_test "simple" 2077 "|<<" 2077 2 "syntax error"
+run_test "simple" 2030 ">>>" 2030 2 "syntax error"
+run_test "simple" 2031 ">>> >>>" 2031 2 "syntax error"
+run_test "simple" 2032 ">>> >>> >>>" 2032 2 "syntax error"
+run_test "simple" 2033 ">>> >>> >>> >>>" 2033 2 "syntax error"
 
-run_test "simple" 2090 ">|>" 2090 2 "syntax error"
-run_test "simple" 2091 "<|<" 2091 2 "syntax error"
-run_test "simple" 2092 "<|>" 2092 2 "syntax error"
-run_test "simple" 2093 ">|<" 2093 2 "syntax error"
-run_test "simple" 2094 ">>|<<" 2094 2 "syntax error"
-run_test "simple" 2095 "<<|>>" 2095 2 "syntax error"
-run_test "simple" 2096 "<<|>>" 2096 2 "syntax error"
-run_test "simple" 2097 ">>|<<" 2097 2 "syntax error"
+run_test "simple" 2035 ">>>>" 2035 2 "syntax error"
+run_test "simple" 2036 ">>>> >>>>" 2036 2 "syntax error"
+run_test "simple" 2037 ">>>> >>>> >>>>" 2037 2 "syntax error"
+run_test "simple" 2038 ">>>> >>>> >>>> >>>>" 2038 2 "syntax error"
+run_test "simple" 2039 ">>>>>>>>>>>>>>>>" 2039 2 "syntax error"
 
-run_test "simple" 2100 "|| ls" 2100 2 "syntax error"
-run_test "simple" 2101 "||ls" 2101 2 "syntax error"
-run_test "simple" 2102 "ls ||" 2102 2 "syntax error"
-run_test "simple" 2103 "ls||" 2103 2 "syntax error"
-run_test "simple" 2104 "||| ls" 2104 2 "syntax error"
-run_test "simple" 2105 "|||ls" 2105 2 "syntax error"
-run_test "simple" 2106 "ls |||" 2106 2 "syntax error"
-run_test "simple" 2107 "ls|||" 2107 2 "syntax error"
+run_test "simple" 2040 "< << <<< <<<<" 2040 2 "syntax error"
+run_test "simple" 2041 "<<<< <<< << <" 2041 2 "syntax error"
+run_test "simple" 2042 "> >> >>> >>>>" 2042 2 "syntax error"
+run_test "simple" 2043 ">>>> >>> >> >" 2043 2 "syntax error"
 
-#run_test "simple" 2110 "ls || cat" 2110 2 "syntax error"//invalid test because bash has a special behaviour
-run_test "simple" 2111 "ls | | cat" 2111 2 "syntax error"
-run_test "simple" 2112 "ls | cat |" 2112 2 "syntax error"
-run_test "simple" 2113 "ls || cat |" 2113 2 "syntax error"
+run_test "simple" 2050 "<>" 2050 2 "syntax error"
+run_test "simple" 2051 "><" 2051 2 "syntax error"
+run_test "simple" 2052 "<><>" 2052 2 "syntax error"
+run_test "simple" 2053 "><><" 2053 2 "syntax error"
+run_test "simple" 2054 "<<>" 2054 2 "syntax error"
+run_test "simple" 2055 "<<>>" 2055 2 "syntax error"
+run_test "simple" 2056 "<<<>>>" 2056 2 "syntax error"
+run_test "simple" 2057 "<<<<>>>>" 2057 2 "syntax error"
+run_test "simple" 2058 ">><" 2058 2 "syntax error"
+run_test "simple" 2059 ">><<" 2059 2 "syntax error"
+run_test "simple" 2060 ">>><<<" 2060 2 "syntax error"
+run_test "simple" 2061 ">>>><<<<" 2061 2 "syntax error"
+
+run_test "simple" 2070 "ls <" 2070 2 "syntax error"
+run_test "simple" 2071 "ls <<" 2071 2 "syntax error"
+run_test "simple" 2072 "ls >" 2072 2 "syntax error"
+run_test "simple" 2073 "ls >>" 2073 2 "syntax error"
+run_test "simple" 2074 "ls<" 2074 2 "syntax error"
+run_test "simple" 2075 "ls<<" 2075 2 "syntax error"
+run_test "simple" 2076 "ls>" 2076 2 "syntax error"
+run_test "simple" 2077 "ls>>" 2077 2 "syntax error"
+
+run_test "simple" 2080 "|" 2080 2 "syntax error"
+run_test "simple" 2081 " |" 2081 2 "syntax error"
+run_test "simple" 2082 "  |" 2082 2 "syntax error"
+run_test "simple" 2083 "| " 2083 2 "syntax error"
+run_test "simple" 2084 "|  " 2084 2 "syntax error"
+run_test "simple" 2085 " | " 2085 2 "syntax error"
+run_test "simple" 2086 "  | " 2086 2 "syntax error"
+run_test "simple" 2087 "  |  " 2087 2 "syntax error"
+run_test "simple" 2088 "	|" 2088 2 "syntax error"
+run_test "simple" 2089 "		|" 2089 2 "syntax error"
+run_test "simple" 2090 "|	" 2090 2 "syntax error"
+run_test "simple" 2091 "|		" 2091 2 "syntax error"
+run_test "simple" 2092 "	|	" 2092 2 "syntax error"
+run_test "simple" 2093 "		|		" 2093 2 "syntax error"
+
+run_test "simple" 2100 "| ls" 2100 2 "syntax error"
+run_test "simple" 2101 "|ls" 2101 2 "syntax error"
+run_test "simple" 2102 " |ls" 2102 2 "syntax error"
+run_test "simple" 2103 "ls |" 2103 2 "syntax error"
+run_test "simple" 2104 "ls|" 2104 2 "syntax error"
+run_test "simple" 2105 "ls| " 2105 2 "syntax error"
+
+run_test "simple" 2110 "||" 2110 2 "syntax error"
+run_test "simple" 2111 "| |" 2111 2 "syntax error"
+run_test "simple" 2112 "|	|" 2112 2 "syntax error"
+run_test "simple" 2113 "|||" 2113 2 "syntax error"
+run_test "simple" 2114 "| | |" 2114 2 "syntax error"
+run_test "simple" 2115 "|	|	|" 2115 2 "syntax error"
+run_test "simple" 2116 "||||" 2116 2 "syntax error"
+run_test "simple" 2117 "|||||" 2117 2 "syntax error"
+run_test "simple" 2118 "| | | |" 2118 2 "syntax error"
+run_test "simple" 2119 "| | | | |" 2119 2 "syntax error"
+run_test "simple" 2120 "|	|	|	|" 2120 2 "syntax error"
+run_test "simple" 2121 "|	|	|	|	|" 2121 2 "syntax error"
+
+run_test "simple" 2130 ">|" 2130 2 "syntax error"
+run_test "simple" 2131 "<|" 2131 2 "syntax error"
+run_test "simple" 2132 "|>" 2132 2 "syntax error"
+run_test "simple" 2133 "|<" 2133 2 "syntax error"
+run_test "simple" 2134 ">>|" 2134 2 "syntax error"
+run_test "simple" 2135 "<<|" 2135 2 "syntax error"
+run_test "simple" 2136 "|>>" 2136 2 "syntax error"
+run_test "simple" 2137 "|<<" 2137 2 "syntax error"
+
+run_test "simple" 2150 ">|>" 2150 2 "syntax error"
+run_test "simple" 2151 "<|<" 2151 2 "syntax error"
+run_test "simple" 2152 "<|>" 2152 2 "syntax error"
+run_test "simple" 2153 ">|<" 2153 2 "syntax error"
+run_test "simple" 2154 ">>|<<" 2154 2 "syntax error"
+run_test "simple" 2155 "<<|>>" 2155 2 "syntax error"
+run_test "simple" 2156 "<<|>>" 2156 2 "syntax error"
+run_test "simple" 2157 ">>|<<" 2157 2 "syntax error"
+
+run_test "simple" 2170 "|| ls" 2170 2 "syntax error"
+run_test "simple" 2171 "||ls" 2171 2 "syntax error"
+run_test "simple" 2172 "ls ||" 2172 2 "syntax error"
+run_test "simple" 2173 "ls||" 2173 2 "syntax error"
+run_test "simple" 2174 "||| ls" 2174 2 "syntax error"
+run_test "simple" 2175 "|||ls" 2175 2 "syntax error"
+run_test "simple" 2176 "ls |||" 2176 2 "syntax error"
+run_test "simple" 2177 "ls|||" 2177 2 "syntax error"
+
+#run_test "simple" 2200 "ls || cat" 2200 2 "syntax error"//invalid test because bash has a special behaviour
+run_test "simple" 2201 "ls | | cat" 2201 2 "syntax error"
+run_test "simple" 2202 "ls | cat |" 2202 2 "syntax error"
+run_test "simple" 2203 "ls || cat |" 2203 2 "syntax error"
 
 
 if (( "$start_index" >= 2000 && "$start_index" <= 2150 && "$end_index" >= 2000 && "$end_index" <= 2150 ))
@@ -1639,6 +1692,44 @@ then
 		echo -e "end of test serie from 2000 to 2150"
 	fi
 fi
+
+
+run_test "simple" 2300 "/" 2300 126 "/: Is a directory"
+run_test "simple" 2301 "//" 2301 126 "//: Is a directory"
+run_test "simple" 2302 "///" 2302 126 "///: Is a directory"
+run_test "simple" 2303 "////" 2303 126 "////: Is a directory"
+
+run_test "simple" 2305 "/." 2305 126 "/.: Is a directory"
+run_test "simple" 2306 "/./." 2306 126 "/./.: Is a directory"
+run_test "simple" 2307 "/././." 2307 126 "/././.: Is a directory"
+run_test "simple" 2308 "/./././." 2308 126 "/./././.: Is a directory"
+
+run_test "simple" 2310 "/.." 2310 126 "/./..: Is a directory"
+run_test "simple" 2311 "/../.." 2311 126 "/./../..: Is a directory"
+run_test "simple" 2312 "/../../.." 2312 126 "/./../../..: Is a directory"
+run_test "simple" 2313 "/../../../.." 2313 126 "/./../../../..: Is a directory"
+
+run_test "simple" 2315 "./" 2315 126 "./: Is a directory"
+run_test "simple" 2316 "././" 2316 126 "././: Is a directory"
+run_test "simple" 2317 "./././" 2317 126 "./././: Is a directory"
+run_test "simple" 2318 "././././" 2318 126 "././././: Is a directory"
+
+run_test "simple" 2320 ".//" 2320 126 ".//: Is a directory"
+run_test "simple" 2321 ".//." 2321 126 ".//.: Is a directory"
+run_test "simple" 2322 ".//.." 2322 126 ".//..: Is a directory"
+run_test "simple" 2323 "/./" 2323 126 "/./: Is a directory"
+run_test "simple" 2324 "./../" 2324 126 "./../: Is a directory"
+run_test "simple" 2325 "/./.." 2325 126 "/./..: Is a directory"
+run_test "simple" 2326 "/./../" 2326 126 "/./../: Is a directory"
+run_test "simple" 2327 "/../." 2327 126 "/../.: Is a directory"
+run_test "simple" 2328 "/.././" 2328 126 "/.././: Is a directory"
+run_test "simple" 2329 "././.." 2329 126 "././..: Is a directory"
+run_test "simple" 2330 "./../." 2330 126 "./../.: Is a directory"
+run_test "simple" 2331 ".././.." 2331 126 ".././..: Is a directory"
+run_test "simple" 2332 "/./../../../../../.." 2332 126 "/./../../../../../..: Is a directory"
+run_test "simple" 2333 "././../../../../../.." 2333 126 "././../../../../../..: Is a directory"
+
+
 
 
 run_test "simple" 3000 "<<< infile.txt" 3000 2 "syntax error" "invalid test because bash has a special behaviour"
@@ -1918,11 +2009,103 @@ then
 fi
 
 
+run_test "simple" 4700 "echo" 4700 0
+run_test "simple" 4701 "echo -n" 4701 0
+run_test "simple" 4702 "echo hello" 4702 0
+run_test "simple" 4703 "echo -hello" 4702 0
 
+run_test "simple" 4705 "echohello" 4705 127 "echohello: command not found"
+run_test "simple" 4706 "echo -n hello" 4706 0
+run_test "simple" 4707 "echo-n hello" 4707 127 "echo-n: command not found"
+run_test "simple" 4708 "echo -nhello" 4708 0
+run_test "simple" 4709 "echo-nhello" 4709 127 "echo-nhello: command not found"
+run_test "simple" 4710 "echo "-n" hello" 4710 0
+run_test "simple" 4711 "echo hello -n" 4711 0
+run_test "simple" 4712 "echo \n hello" 4712 0
 
+run_test "simple" 4715 "echo | cat -e" 4715 0
+run_test "simple" 4716 "echo \"     \" | cat -e" 4716 0
 
+run_test "simple" 4720 "echo -n -n" 4720 0
+run_test "simple" 4721 "echo -n -n -n" 4721 0
+run_test "simple" 4722 "echo -n -n -n -n" 4722 0
+run_test "simple" 4723 "echo -n -n -n -n -n" 4723 0
+run_test "simple" 4724 "echo -n -n Hello" 4724 0
+run_test "simple" 4725 "echo -n -n -n Hello" 4725 0
+run_test "simple" 4726 "echo -n -n -n -n Hello" 4726 0
+run_test "simple" 4727 "echo -n -n -n -n -n Hello" 4727 0
 
+run_test "simple" 4730 "echo -nn -nn" 4730 0
+run_test "simple" 4731 "echo -nn -nn -nn" 4731 0
+run_test "simple" 4732 "echo -nn -nn -nn -nn" 4732 0
+run_test "simple" 4733 "echo -nn -nn -nn -nn -nn" 4733 0
+run_test "simple" 4734 "echo -nn -nn Hello" 4734 0
+run_test "simple" 4735 "echo -nn -nn -nn Hello" 4735 0
+run_test "simple" 4736 "echo -nn -nn -nn -nn Hello" 4736 0
+run_test "simple" 4737 "echo -nn -nn -nn -nn -nn Hello" 4737 0
 
+run_test "simple" 4740 "echo -nnn -nnn" 4720 0
+run_test "simple" 4741 "echo -nnn -nnn -nnn" 4741 0
+run_test "simple" 4742 "echo -nnn -nnn -nnn -nnn" 4742 0
+run_test "simple" 4743 "echo -nnn -nnn -nnn -nnn -nnn" 4743 0
+run_test "simple" 4744 "echo -nnn -nnn Hello" 4744 0
+run_test "simple" 4745 "echo -nnn -nnn -nnn Hello" 4745 0
+run_test "simple" 4746 "echo -nnn -nnn -nnn -nnn Hello" 4746 0
+run_test "simple" 4747 "echo -nnn -nnn -nnn -nnn -nnn Hello" 4747 0
+
+run_test "simple" 4750 "echo -nn" 4750 0
+run_test "simple" 4751 "echo -nnn" 4751 0
+run_test "simple" 4752 "echo -nnnn" 4752 0
+run_test "simple" 4753 "echo -nnnnn" 4753 0
+run_test "simple" 4754 "echo -nnnnnn" 4754 0
+run_test "simple" 4755 "echo -nnnnnnn" 4755 0
+run_test "simple" 4756 "echo -nnnnnnnn" 4756 0
+run_test "simple" 4757 "echo -nn Hello" 4757 0
+run_test "simple" 4758 "echo -nnn Hello" 4758 0
+run_test "simple" 4759 "echo -nnnn Hello" 4759 0
+run_test "simple" 4760 "echo -nnnnn Hello" 4760 0
+run_test "simple" 4761 "echo -nnnnnn Hello" 4761 0
+run_test "simple" 4762 "echo -nnnnnnn Hello" 4762 0
+run_test "simple" 4763 "echo -nnnnnnnn Hello" 4763 0
+
+run_test "simple" 4770 "echo -n -nn" 4770 0
+run_test "simple" 4771 "echo -n -nn -nnn" 4771 0
+run_test "simple" 4772 "echo -n -nn -nnn -nnnn" 4772 0
+run_test "simple" 4773 "echo -n -nn -nnn -nnnn -nnnnn" 4773 0
+run_test "simple" 4774 "echo -n -nn Hello" 4774 0
+run_test "simple" 4775 "echo -n -nn -nnn Hello" 4775 0
+run_test "simple" 4776 "echo -n -nn -nnn -nnnn Hello" 4776 0
+run_test "simple" 4777 "echo -n -nn -nnn -nnnn -nnnn Hello" 4777 0
+
+run_test "simple" 4780 "echo -n Hello-nn" 4780 0
+run_test "simple" 4781 "echo -n -nn Hello -nnn" 4781 0
+run_test "simple" 4782 "echo -n -nn -nnn Hello -nnnn" 4782 0
+run_test "simple" 4783 "echo -n -nn -nnn -nnnn Hello -nnnnn" 4783 0
+
+run_test "simple" 4785 "echo -n -nn-nnn" 4785 0
+run_test "simple" 4786 "echo -n -nn -nnn-nnnn" 4786 0
+run_test "simple" 4787 "echo -n -nn -nnn -nnnn-nnnnn" 4787 0
+
+run_test "simple" 4790 "echo --n" 4790 0
+run_test "simple" 4791 "echo ---n" 4791 0
+run_test "simple" 4792 "echo ----n" 4792 0
+run_test "simple" 4793 "echo -----n" 4793 0
+run_test "simple" 4794 "echo -n --n" 4794 0
+run_test "simple" 4795 "echo -n ---n" 4795 0
+run_test "simple" 4796 "echo -n ----n" 4796 0
+run_test "simple" 4797 "echo -n --nn" 4797 0
+run_test "simple" 4798 "echo -n ---nn" 4798 0
+run_test "simple" 4799 "echo -n ----nn" 4799 0
+
+if (( "$start_index" >= 4700 && "$start_index" <= 4800 && "$end_index" >= 4700 && "$end_index" <= 4800 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo -e "end of test serie from 4700 to 4800\n"
+	else
+		echo -e "end of test serie from 4700 to 4800"
+	fi
+fi
 
 
 if (( "$start_index" >= 4800 && "$start_index" <= 4999 && "$end_index" >= 4800 && "$end_index" <= 4999 ))

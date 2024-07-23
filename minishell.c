@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/22 22:00:09 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/23 07:03:35 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,9 @@ int	main(int argc, char **argv, char **envp)
 			break ;
 		}
 		if (g_sign == 2)
-			exit_code = 130;
+			exit_code = 130;//or 128+2=130
 		else if (g_sign == 3)
-			exit_code = 131;
+			exit_code = 131;//or 128+3=131
 		g_sign = 0;
 		if (exit_code != 0)
 			previous_exit_code = exit_code;
