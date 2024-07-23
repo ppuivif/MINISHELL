@@ -1,5 +1,5 @@
 substring 0 : 
-	-redirection 0 : 	limiter
+	-redirection 0 : 	limiter1
 	-redirection_type 0 : 	REDIRECTION_HEREDOC
 	-argument 0 : cat
 

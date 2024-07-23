@@ -154,6 +154,7 @@ execute_parsing_test() {
 		flag=$((flag + 1))
 	else
 		status3="OK"
+		error_detail3=""
 		delete_file "temp/$test_index-minishell_stdout.txt"
 	fi
 	
@@ -161,6 +162,7 @@ execute_parsing_test() {
 #	if	grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null
 	then
 		status4="OK"
+		error_detail4=""
 		delete_file "temp/$test_index-minishell_stderr.txt"
 	else	
 #		echo "$substring"
@@ -176,6 +178,7 @@ execute_parsing_test() {
 		flag=$((flag + 1))
 	else
 		status5="OK"
+		error_detail5=""
 		status_message="${GREEN} OK${NC}"
     fi
 
@@ -304,6 +307,7 @@ then
 		flag=$((flag + 1))
 	else
 		status1="OK"
+		error_detail1=""
 		delete_file "temp/$test_index-minishell_outfile1.txt"
 		delete_file "temp/$test_index-bash_outfile1.txt"
 	fi
@@ -315,6 +319,7 @@ then
 		flag=$((flag + 1))
 	else
 		status2="OK"
+		error_detail2=""
 		delete_file "temp/$test_index-minishell_outfile2.txt"
 		delete_file "temp/$test_index-bash_outfile2.txt"
 	fi
@@ -326,6 +331,7 @@ then
 		flag=$((flag + 1))
 	else
 		status3="OK"
+		error_detail3=""
 		delete_file "temp/$test_index-minishell_stdout.txt"
 		delete_file "temp/$test_index-bash_stdout.txt"
 	fi
@@ -334,6 +340,7 @@ then
 #	if	grep "$substring" temp/minishell_stderr$test_index.txt >/dev/null
 	then
 		status4="OK"
+		error_detail4=""
 		delete_file "temp/$test_index-minishell_stderr.txt"
 		delete_file "temp/$test_index-bash_stderr.txt"
 	else	
@@ -350,6 +357,7 @@ then
 		flag=$((flag + 1))
 	else
 		status5="OK"
+		error_detail5=""
 		status_message="${GREEN} OK${NC}"
     fi
 
@@ -360,6 +368,7 @@ then
 		flag=$((flag + 1))
 	else
 		status6="OK"
+		error_detail6=""
 		status_message="${GREEN} OK${NC}"
     fi
 
@@ -567,13 +576,13 @@ run_test "simple" 19 "< temp/infile1.txt cat | cat > temp/outfile1.txt	" 1 0
 run_test "simple" 20 "< temp/infile1.txt cat | cat > temp/outfile1.txt		" 1 0
 
 
-#run_test "oneheredoc" 21 "<< limiter1 cat | cat > outfile1.txt" 21 0
-#run_test "oneheredoc" 22 "<<limiter1 cat | cat > outfile1.txt" 21 0
-#run_test "oneheredoc" 36 "<< limiter1 cat | cat		> outfile1.txt" 21 0
-#run_test "oneheredoc" 37 "<< limiter1 cat | cat >	outfile1.txt" 21 0
-#run_test "oneheredoc" 38 "<< limiter1 cat | cat >		outfile1.txt" 21 0
-#run_test "oneheredoc" 39 "<< limiter1 cat | cat > outfile1.txt	" 21 0
-#run_test "oneheredoc" 40 "<< limiter1 cat | cat > outfile1.txt		" 21 0
+run_test "oneheredoc" 21 "<< limiter1 cat | cat > temp/outfile1.txt" 21 0
+run_test "oneheredoc" 22 "<<limiter1 cat | cat > temp/outfile1.txt" 21 0
+run_test "oneheredoc" 36 "<< limiter1 cat | cat		> temp/outfile1.txt" 21 0
+run_test "oneheredoc" 37 "<< limiter1 cat | cat >	temp/outfile1.txt" 21 0
+run_test "oneheredoc" 38 "<< limiter1 cat | cat >		temp/outfile1.txt" 21 0
+run_test "oneheredoc" 39 "<< limiter1 cat | cat > temp/outfile1.txt	" 21 0
+run_test "oneheredoc" 40 "<< limiter1 cat | cat > temp/outfile1.txt		" 21 0
 
 run_test "simple" 41 "< temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
 run_test "simple" 42 "<temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
@@ -606,29 +615,29 @@ then
 	fi
 fi
 
-: <<BLOCK_COMMENT
+#: <<BLOCK_COMMENT
 
 
-#run_test "oneheredoc" 61 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 62 "<<limiter1 cat | cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 63 "<< limiter1 cat| cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 64 "<< limiter1 cat |cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 65 "<< limiter1 cat | cat>> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 66 "<< limiter1 cat | cat >>temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 67 "<<limiter1 cat|cat >>temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 68 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 69 "<<	limiter1 cat | cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 70 "<<		limiter1 cat | cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 71 "<< limiter1 cat	| cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 72 "<< limiter1 cat		| cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 73 "<< limiter1 cat |	cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 74 "<< limiter1 cat |		cat >> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 75 "<< limiter1 cat | cat	>> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 76 "<< limiter1 cat | cat		>> temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 77 "<< limiter1 cat | cat >>	temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 78 "<< limiter1 cat | cat >>		temp/outfile1.txt" 61 0
-#run_test "oneheredoc" 79 "<< limiter1 cat | cat >> temp/outfile1.txt	" 61 0
-#run_test "oneheredoc" 80 "<< limiter1 cat | cat >> temp/outfile1.txt		" 61 0
+run_test "oneheredoc" 61 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 62 "<<limiter1 cat | cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 63 "<< limiter1 cat| cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 64 "<< limiter1 cat |cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 65 "<< limiter1 cat | cat>> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 66 "<< limiter1 cat | cat >>temp/outfile1.txt" 61 0
+run_test "oneheredoc" 67 "<<limiter1 cat|cat >>temp/outfile1.txt" 61 0
+run_test "oneheredoc" 68 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 69 "<<	limiter1 cat | cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 70 "<<		limiter1 cat | cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 71 "<< limiter1 cat	| cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 72 "<< limiter1 cat		| cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 73 "<< limiter1 cat |	cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 74 "<< limiter1 cat |		cat >> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 75 "<< limiter1 cat | cat	>> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 76 "<< limiter1 cat | cat		>> temp/outfile1.txt" 61 0
+run_test "oneheredoc" 77 "<< limiter1 cat | cat >>	temp/outfile1.txt" 61 0
+run_test "oneheredoc" 78 "<< limiter1 cat | cat >>		temp/outfile1.txt" 61 0
+run_test "oneheredoc" 79 "<< limiter1 cat | cat >> temp/outfile1.txt	" 61 0
+run_test "oneheredoc" 80 "<< limiter1 cat | cat >> temp/outfile1.txt		" 61 0
 
 if (( "$start_index" >= 61 ))
 then
@@ -640,7 +649,7 @@ then
 	fi
 fi
 
-BLOCK_COMMENT
+#BLOCK_COMMENT
 
 run_test "simple" 81 "< temp/infile1.txt < temp/infile2.txt" 81 0
 run_test "simple" 82 "<temp/infile1.txt < temp/infile2.txt" 81 0
@@ -704,25 +713,25 @@ then
 fi
 
 
-#run_test "twoheredoc" 120 "<< limiter1 << limiter2" 120 0
-#run_test "twoheredoc" 121 "<<limiter1 << limiter2" 120 0
-#run_test "twoheredoc" 122 "<< limiter1 <<limiter2" 120 0
-#run_test "twoheredoc" 123 "<<limiter1 <<limiter2" 120 0
-#run_test "twoheredoc" 124 "<<limiter1<<limiter2" 120 0
-#run_test "twoheredoc" 125 "<<limiter1<<limiter2" 120 0
-#run_test "twoheredoc" 126 " <<	limiter1 << limiter2" 120 0
-#run_test "twoheredoc" 127 " << limiter1	<< limiter2" 120 0
-#run_test "twoheredoc" 128 " << limiter1 <<	limiter2" 120 0
-#run_test "twoheredoc" 129 " << limiter1 << limiter2	" 120 0
-#run_test "threeheredoc" 130 "<< limiter1 << limiter2 << limiter3" 130 0
-#run_test "threeheredoc" 131 "<<limiter1 << limiter2 << limiter3" 130 0
-#run_test "threeheredoc" 132 "<< limiter1 <<limiter2 << limiter3" 130 0
-#run_test "threeheredoc" 133 "<< limiter1 << limiter2 <<limiter3" 130 0
-#run_test "threeheredoc" 134 "<< limiter1 << limiter2 << limiter3" 130 0
-#run_test "threeheredoc" 135 "<<limiter1 <<limiter2 << limiter3" 130 0
-#run_test "threeheredoc" 136 "<<limiter1 <<limiter2 <<limiter3" 130 0
-#run_test "threeheredoc" 137 "<<limiter1<<limiter2 <<limiter3" 130 0
-#run_test "threeheredoc" 138 "<<limiter1<<limiter2<<limiter3" 130 0
+run_test "twoheredoc" 120 "<< limiter1 << limiter2" 120 0
+run_test "twoheredoc" 121 "<<limiter1 << limiter2" 120 0
+run_test "twoheredoc" 122 "<< limiter1 <<limiter2" 120 0
+run_test "twoheredoc" 123 "<<limiter1 <<limiter2" 120 0
+run_test "twoheredoc" 124 "<<limiter1<<limiter2" 120 0
+run_test "twoheredoc" 125 "<<limiter1<<limiter2" 120 0
+run_test "twoheredoc" 126 " <<	limiter1 << limiter2" 120 0
+run_test "twoheredoc" 127 " << limiter1	<< limiter2" 120 0
+run_test "twoheredoc" 128 " << limiter1 <<	limiter2" 120 0
+run_test "twoheredoc" 129 " << limiter1 << limiter2	" 120 0
+run_test "threeheredoc" 130 "<< limiter1 << limiter2 << limiter3" 130 0
+run_test "threeheredoc" 131 "<<limiter1 << limiter2 << limiter3" 130 0
+run_test "threeheredoc" 132 "<< limiter1 <<limiter2 << limiter3" 130 0
+run_test "threeheredoc" 133 "<< limiter1 << limiter2 <<limiter3" 130 0
+run_test "threeheredoc" 134 "<< limiter1 << limiter2 << limiter3" 130 0
+run_test "threeheredoc" 135 "<<limiter1 <<limiter2 << limiter3" 130 0
+run_test "threeheredoc" 136 "<<limiter1 <<limiter2 <<limiter3" 130 0
+run_test "threeheredoc" 137 "<<limiter1<<limiter2 <<limiter3" 130 0
+run_test "threeheredoc" 138 "<<limiter1<<limiter2<<limiter3" 130 0
 
 if (( "$start_index" >= 120 && "$start_index" <= 138 && "$end_index" >= 120 && "$end_index" <= 138 ))
 then
@@ -777,14 +786,14 @@ run_test "simple" 168 "> '\"temp/outfile1.txt\"'" 168 1 "\"temp/outfile1.txt\": 
 run_test "simple" 169 "> \"'temp/outfile1.txt'\"" 169 1 "'temp/outfile1.txt': No such file or directory"
 run_test "simple" 170 "> '\"'temp/outfile1.txt'\"'" 170 1 "\"temp/outfile1.txt\": No such file or directory"
 run_test "simple" 171 "> \"'\"temp/outfile1.txt\"'\"" 171 1 "'temp/outfile1.txt': No such file or directory"
-#run_test "oneheredoc" 172 "<< 'limiter'" 172 0
-#run_test "oneheredoc" 173 "<< \"limiter\"" 173 0
-#run_test "oneheredoc" 174 "<< '\"limiter\"'" 174 0
-#run_test "oneheredoc" 175 "<< \"'limiter'\"" 175 0
-#run_test "oneheredoc" 176 "<< '\"'limiter'\"'" 176 0
-#run_test "oneheredoc" 177 "<< \"'\"limiter\"'\"" 177 0
-#run_test "oneheredoc" 178 "<< '<limiter'" 178 0
-#run_test "oneheredoc" 179 "<< \"<limiter\"" 179 0
+run_test "oneheredoc" 172 "<< 'limiter'" 172 0
+run_test "oneheredoc" 173 "<< \"limiter\"" 173 0
+run_test "oneheredoc" 174 "<< '\"limiter\"'" 174 0
+run_test "oneheredoc" 175 "<< \"'limiter'\"" 175 0
+run_test "oneheredoc" 176 "<< '\"'limiter'\"'" 176 0
+run_test "oneheredoc" 177 "<< \"'\"limiter\"'\"" 177 0
+run_test "oneheredoc" 178 "<< '<limiter'" 178 0
+run_test "oneheredoc" 179 "<< \"<limiter\"" 179 0
 
 run_test "simple" 190 ">> 'temp/outfile1.txt'" 190 0
 run_test "simple" 191 ">> \"temp/outfile1.txt\"" 191 0
@@ -805,17 +814,42 @@ fi
 
 
 run_test "simple" 200 "\"< temp/infile1.txt\"" 200 127 "< temp/infile1.txt: No such file or directory"
-#run_test "simple" 210 "\"<< limiter\"" 210 127 "<< temp/infile1.txt: No such file or directory"
+run_test "oneheredoc" 210 "\"<< limiter\"" 210 127 "<< temp/infile1.txt: No such file or directory"
 run_test "simple" 220 "\"> temp/outfile1.txt\"" 220 127 "> temp/infile1.txt: No such file or directory"
 run_test "simple" 230 "\">> temp/outfile1.txt\"" 230 127 ">> temp/infile1.txt: No such file or directory"
 
-if (( "$start_index" >= 200 && "$start_index" <= 250 && "$end_index" >= 200 && "$end_index" <= 250 ))
+run_test "simple" 240 "< temp/\"i\"nfile1.txt" 240 0
+run_test "simple" 241 "< temp/\"i\"n\"f\"ile1.txt" 241 0
+run_test "simple" 242 "< temp/\"i\"n\"f\"i\"l\"e1.txt" 242 0
+run_test "simple" 243 "< temp/\"i\"n\"f\"i\"l\"e\"1\".txt" 243 0
+run_test "simple" 244 "< temp/'i'nfile1.txt" 244 0
+run_test "simple" 245 "< temp/'i'n'f'ile1.txt" 245 0
+run_test "simple" 246 "< temp/'i'n'f'i'l'e1.txt" 246 0
+run_test "simple" 247 "< temp/'i'n'f'i'l'e'1'.txt" 247 0
+run_test "simple" 248 "< temp/\"i\"''n\"f\"i\"l\"e\"1\".txt" 248 0
+run_test "simple" 249 "< temp/\"i\"''n''\"f\"i\"l\"e\"1\".txt" 249 0
+run_test "simple" 250 "< temp/\"i\"''n''\"f\"''i\"l\"e\"1\".txt" 250 0
+run_test "simple" 251 "< temp/\"i\"''n''\"f\"''i''\"l\"e\"1\".txt" 251 0
+run_test "simple" 252 "< temp/\"i\"''n''\"f\"''i''\"l\"''e\"1\".txt" 252 0
+run_test "simple" 253 "< temp/\"i\"''n''\"f\"''i''\"l\"''e''\"1\".txt" 253 0
+run_test "simple" 254 "< temp/'i'\"\"n'f'i'l'e'1'.txt" 254 0
+run_test "simple" 255 "< temp/'i'\"\"n\"\"'f'i'l'e'1'.txt" 255 0
+run_test "simple" 256 "< temp/'i'\"\"n\"\"'f'\"\"i'l'e'1'.txt" 256 0
+run_test "simple" 257 "< temp/'i'\"\"n\"\"'f'\"\"i\"\"'l'e'1'.txt" 257 0
+run_test "simple" 258 "< temp/'i'\"\"n\"\"'f'\"\"i\"\"'l'\"\"e'1'.txt" 258 0
+run_test "simple" 259 "< temp/'i'\"\"n\"\"'f'\"\"i\"\"'l'\"\"e\"\"'1'.txt" 259 0
+run_test "simple" 260 "< temp/\"i\"\"\"\"n\"\"\"\"f\"\"\"\"i\"\"\"\"l\"\"\"\"e\"\"\"\"1\".txt" 260 0
+run_test "simple" 261 "< temp/\"i\"'\"'n'\"'\"f\"'\"'i'\"'\"l\"'\"'e'\"'\"1\".txt" 261 127 "temp/i"n"f"i"l"e"1.txt: No such file or directory"
+run_test "simple" 262 "< temp/'i''\"'n'\"''f''\"'i'\"''l''\"'e'\"''1'.txt" 262 127 "temp/i"n"f"i"l"e"1.txt: No such file or directory"
+run_test "simple" 263 "< temp/'i'\"'\"n\"'\"'f'\"'\"i\"'\"'l'\"'\"e\"'\"'1'.txt" 263 127 "temp/i'n'f'i'l'e'1.txt: No such file or directory"
+
+if (( "$start_index" >= 200 && "$start_index" <= 300 && "$end_index" >= 200 && "$end_index" <= 300 ))
 then
 	if [ "$display" == "all" ]
 	then
-		echo -e "end of test serie from 200 to 250\n"
+		echo -e "end of test serie from 200 to 300\n"
 	else
-		echo -e "end of test serie from 200 to 250"
+		echo -e "end of test serie from 200 to 300"
 	fi
 fi
 
@@ -834,19 +868,19 @@ run_test "simple" 504 "\"ls\" '-l'" 504 0
 run_test "simple" 505 "'ls' \"-l\"" 505 0
 
 run_test "simple" 550 "ls -l | cat -e" 550 0
-run_test "simple" 551 "ls '-l' | cat -e" 550 0
-run_test "simple" 552 "ls -l | 'cat' -e" 550 0
-run_test "simple" 553 "ls -l | cat '-e'" 550 0
-run_test "simple" 554 "'ls' '-l' | cat -e" 550 0
-run_test "simple" 555 "'ls' '-l' | 'cat' -e" 550 0
-run_test "simple" 556 "'ls' '-l' | cat '-e'" 550 0
-run_test "simple" 557 "'ls' '-l' | 'cat' '-e'" 550 0
-run_test "simple" 558 "ls -l | 'cat' '-e'" 550 0
-run_test "simple" 559 "ls -l | cat '-e'" 550 0
-run_test "simple" 560 "ls '-l' | 'cat' -e" 550 0
-run_test "simple" 561 "ls '-l' | cat '-e'" 550 0
-run_test "simple" 562 "ls '-l' | 'cat' '-e'" 550 0
-run_test "simple" 563 "ls -l | 'cat' '-e'" 550 0
+run_test "simple" 551 "ls '-l' | cat -e" 551 0
+run_test "simple" 552 "ls -l | 'cat' -e" 552 0
+run_test "simple" 553 "ls -l | cat '-e'" 553 0
+run_test "simple" 554 "'ls' '-l' | cat -e" 554 0
+run_test "simple" 555 "'ls' '-l' | 'cat' -e" 555 0
+run_test "simple" 556 "'ls' '-l' | cat '-e'" 556 0
+run_test "simple" 557 "'ls' '-l' | 'cat' '-e'" 557 0
+run_test "simple" 558 "ls -l | 'cat' '-e'" 558 0
+run_test "simple" 559 "ls -l | cat '-e'" 559 0
+run_test "simple" 560 "ls '-l' | 'cat' -e" 560 0
+run_test "simple" 561 "ls '-l' | cat '-e'" 561 0
+run_test "simple" 562 "ls '-l' | 'cat' '-e'" 562 0
+run_test "simple" 563 "ls -l | 'cat' '-e'" 563 0 
 
 run_test "simple" 564 "\"ls\" -l | cat -e" 550 0
 run_test "simple" 565 "ls \"-l\" | cat -e" 550 0
@@ -940,14 +974,35 @@ then
 	fi
 fi
 
-run_test "simple" 650 "'ls -l'" 650 127 "command not found"
-run_test "simple" 651 "\"ls -l\"" 651 127 "command not found"
-run_test "simple" 652 "'\"ls -l\"'" 652 127 "command not found"
-run_test "simple" 653 "\"'ls -l'\"" 653 127 "command not found"
-run_test "simple" 654 "'ls'-l" 654 127 "command not found"
-run_test "simple" 655 "ls'-l'" 655 127 "command not found"
-run_test "simple" 656 "\"ls\"-l" 656 127 "command not found"
-run_test "simple" 657 "ls\"-l\"" 657 127 "command not found"
+run_test "simple" 650 "'ls -l'" 650 127 "ls -l: command not found"
+run_test "simple" 651 "\"ls -l\"" 651 127 "ls -l: command not found"
+run_test "simple" 652 "'\"ls -l\"'" 652 127 "\"ls -l\": command not found"
+run_test "simple" 653 "\"'ls -l'\"" 653 127 "'ls -l': command not found"
+
+run_test "simple" 654 "'ls'-l" 654 127 "ls-l: command not found"
+run_test "simple" 655 "ls'-l'" 655 127 "ls-l: command not found"
+run_test "simple" 656 "\"ls\"-l" 656 127 "ls-l: command not found"
+run_test "simple" 657 "ls\"-l\"" 657 127 "ls-l: command not found"
+
+run_test "simple" 658 "\"ls\"''-l" 658 127 "ls-l: command not found"
+run_test "simple" 659 "\"ls\"''\"-l\"" 659 127 "ls-l: command not found"
+run_test "simple" 660 "\"ls\"\"\"-l" 660 127 "ls-l: command not found"
+run_test "simple" 661 "\"ls\"\"\"\"-l\"" 661 127 "ls-l: command not found"
+
+run_test "simple" 662 "'ls'\"\"-l" 662 127 "ls-l: command not found"
+run_test "simple" 663 "'ls'\"\"'-l'" 663 127 "ls-l: command not found"
+run_test "simple" 664 "'ls'''-l" 664 127 "ls-l: command not found"
+run_test "simple" 665 "'ls''''-l'" 665 127 "ls-l: command not found"
+
+run_test "simple" 666 "\"ls\"'\"'-l" 666 127 "ls\"-l: command not found"
+run_test "simple" 667 "\"ls\"'\"'\"-l\"" 667 127 "ls\"-l: command not found"
+run_test "simple" 668 "\"ls\"\"'\"-l" 668 127 "ls'-l: command not found"
+run_test "simple" 669 "\"ls\"\"'\"\"-l\"" 669 127 "ls'-l: command not found"
+
+run_test "simple" 670 "'ls'\"'\"-l" 670 127 "ls'-l: command not found"
+run_test "simple" 671 "'ls'\"'\"'-l'" 671 127 "ls'-l: command not found"
+run_test "simple" 672 "'ls''\"'-l" 672 127 "ls\"-l: command not found"
+run_test "simple" 673 "'ls''\"''-l'" 673 127 "ls\"-l: command not found"
 
 if (( "$start_index" >= 650 && "$start_index" <= 657 && "$end_index" >= 650 && "$end_index" <= 657 ))
 then
@@ -983,7 +1038,6 @@ run_test "simple" 717 "\"ls -l\" 'cat' -e" 716 127  "ls -l: command not found"
 run_test "simple" 718 "'\"ls -l\"' 'cat' -e" 718 127 "\"ls -l\": command not found"
 run_test "simple" 719 "\"'ls -l'\" 'cat' -e" 719 127 "'ls -l': command not found"
 
-
 run_test "simple" 720 "'ls -l' cat '-e'" 720 127 "ls -l: command not found"
 run_test "simple" 721 "\"ls -l\" cat '-e'" 720 127 "ls -l: command not found"
 run_test "simple" 722 "'\"ls -l\"' cat '-e'" 722 127 "\"ls -l\": command not found"
@@ -995,11 +1049,12 @@ run_test "simple" 727 "\"'ls -l'\" 'cat' '-e'" 727 127 "'ls -l': command not fou
 run_test "simple" 728 "'ls -l' \"cat\" '-e'" 728 127 "ls -l: command not found"
 run_test "simple" 729 "\"ls -l\" \"cat\" '-e'" 729 127 "ls -l: command not found"
 run_test "simple" 730 "'\"ls -l\"' \"cat\" '-e'" 730 127 "\"ls -l\": command not found"
-run_test "simple" 731 "\"'ls -l'\" \"cat\" '-e'" 731 0
-run_test "simple" 732 "'ls -l' \"cat\" \"-e\"" 732 0
-run_test "simple" 733 "\"ls -l\" \"cat\" \"-e\"" 733 0
-run_test "simple" 734 "'\"ls -l\"' \"cat\" \"-e\"" 734 0
-run_test "simple" 735 "\"'ls -l'\" \"cat\" \"-e\"" 735 0
+
+run_test "simple" 731 "\"'ls -l'\" \"cat\" '-e'" 731 127 "'ls -l': command not found"
+run_test "simple" 732 "'ls -l' \"cat\" \"-e\"" 732 127 "ls -l: command not found"
+run_test "simple" 733 "\"ls -l\" \"cat\" \"-e\"" 733 127 "ls -l: command not found"
+run_test "simple" 734 "'\"ls -l\"' \"cat\" \"-e\"" 734 127 "\"ls -l\": command not found"
+run_test "simple" 735 "\"'ls -l'\" \"cat\" \"-e\"" 735 127 "'ls -l': command not found"
 
 if (( "$start_index" >= 700 && "$start_index" <= 735 && "$end_index" >= 700 && "$end_index" <= 735 ))
 then
@@ -1011,30 +1066,30 @@ then
 	fi
 fi
 
-run_test "simple" 736 "'ls -l'cat '-e'" 736 0
-run_test "simple" 737 "\"ls -l\"cat '-e'" 737 0
-run_test "simple" 738 "'\"ls -l\"'cat '-e'" 738 0
-run_test "simple" 739 "\"'ls -l'\"cat '-e'" 739 0
-run_test "simple" 740 "'ls -l'cat \"-e\"" 740 0
-run_test "simple" 741 "\"ls -l\"cat \"-e\"" 741 0
-run_test "simple" 742 "'\"ls -l\"'cat \"-e\"" 742 0
-run_test "simple" 743 "\"'ls -l'\"cat \"-e\"" 743 0
-run_test "simple" 744 "'ls -l''cat' '-e'" 744 0
-run_test "simple" 745 "\"ls -l\"'cat' '-e'" 745 0
-run_test "simple" 746 "'\"ls -l\"''cat' '-e'" 746 0
-run_test "simple" 747 "\"'ls -l'\"'cat' '-e'" 747 0
-run_test "simple" 748 "'ls -l''cat' \"-e\"" 748 0
-run_test "simple" 749 "\"ls -l\"'cat' \"-e\"" 749 0
-run_test "simple" 750 "'\"ls -l\"''cat' \"-e\"" 750 0
-run_test "simple" 751 "\"'ls -l'\"'cat' \"-e\"" 751 0
-run_test "simple" 752 "'ls -l'\"cat\" '-e'" 752 0
-run_test "simple" 753 "\"ls -l\"\"cat\" '-e'" 753 0
-run_test "simple" 754 "'\"ls -l\"'\"cat\" '-e'" 754 0
-run_test "simple" 755 "\"'ls -l'\"\"cat\" '-e'" 755 0
-run_test "simple" 756 "'ls -l'\"cat\" \"-e\"" 756 0
-run_test "simple" 757 "\"ls -l\"\"cat\" \"-e\"" 757 0
-run_test "simple" 758 "'\"ls -l\"'\"cat\" \"-e\"" 758 0
-run_test "simple" 759 "\"'ls -l'\"\"cat\" \"-e\"" 759 0
+run_test "simple" 736 "'ls -l'cat '-e'" 736 127 "ls -lcat: command not found"
+run_test "simple" 737 "\"ls -l\"cat '-e'" 737 127 "ls -lcat: command not found"
+run_test "simple" 738 "'\"ls -l\"'cat '-e'" 738 127 "\"ls -l\"cat: command not found"
+run_test "simple" 739 "\"'ls -l'\"cat '-e'" 739 127 "'ls -l'cat: command not found"
+run_test "simple" 740 "'ls -l'cat \"-e\"" 740 127 "ls -lcat: command not found"
+run_test "simple" 741 "\"ls -l\"cat \"-e\"" 741 127 "ls -lcat: command not found"
+run_test "simple" 742 "'\"ls -l\"'cat \"-e\"" 742 127 "\"ls -l\"cat: command not found"
+run_test "simple" 743 "\"'ls -l'\"cat \"-e\"" 743 127 "'ls -l'cat: command not found"
+run_test "simple" 744 "'ls -l''cat' '-e'" 744 127 "ls -lcat: command not found"
+run_test "simple" 745 "\"ls -l\"'cat' '-e'" 745 127 "ls -lcat: command not found"
+run_test "simple" 746 "'\"ls -l\"''cat' '-e'" 746 127 "\"ls -l\"cat: command not found"
+run_test "simple" 747 "\"'ls -l'\"'cat' '-e'" 747 127 "'ls -l'cat: command not found"
+run_test "simple" 748 "'ls -l''cat' \"-e\"" 748 127 "ls -lcat: command not found"
+run_test "simple" 749 "\"ls -l\"'cat' \"-e\"" 749 127 "ls -lcat: command not found"
+run_test "simple" 750 "'\"ls -l\"''cat' \"-e\"" 750 127 "\"ls -l\"cat: command not found"
+run_test "simple" 751 "\"'ls -l'\"'cat' \"-e\"" 751 127 "'ls -l'cat: command not found"
+run_test "simple" 752 "'ls -l'\"cat\" '-e'" 752 127 "ls -lcat: command not found"
+run_test "simple" 753 "\"ls -l\"\"cat\" '-e'" 753 127 "ls -lcat: command not found"
+run_test "simple" 754 "'\"ls -l\"'\"cat\" '-e'" 754 127 "\"ls -l\"cat: command not found"
+run_test "simple" 755 "\"'ls -l'\"\"cat\" '-e'" 755 127 "'ls -l'cat: command not found"
+run_test "simple" 756 "'ls -l'\"cat\" \"-e\"" 756 127 "ls -lcat: command not found"
+run_test "simple" 757 "\"ls -l\"\"cat\" \"-e\"" 757 127 "ls -lcat: command not found"
+run_test "simple" 758 "'\"ls -l\"'\"cat\" \"-e\"" 758 127 "\"ls -l\"cat: command not found"
+run_test "simple" 759 "\"'ls -l'\"\"cat\" \"-e\"" 759 127 "'ls -l'cat: command not found"
 
 if (( "$start_index" >= 735 && "$start_index" <= 759 && "$end_index" >= 735 && "$end_index" <= 759 ))
 then
@@ -1046,36 +1101,87 @@ then
 	fi
 fi
 
-run_test "simple" 760 "'ls -l' cat'-e'" 760 0
-run_test "simple" 761 "\"ls -l\" cat'-e'" 761 0
-run_test "simple" 762 "'\"ls -l\"' cat'-e'" 762 0
-run_test "simple" 763 "\"'ls -l'\" cat'-e'" 763 0
-run_test "simple" 764 "'ls -l' 'cat''-e'" 764 0
-run_test "simple" 765 "\"ls -l\" 'cat''-e'" 765 0
-run_test "simple" 766 "'\"ls -l\"' 'cat''-e'" 766 0
-run_test "simple" 767 "\"'ls -l'\" 'cat''-e'" 767 0
-run_test "simple" 768 "'ls -l' \"cat\"'-e'" 768 0
-run_test "simple" 769 "\"ls -l\" \"cat\"'-e'" 769 0
-run_test "simple" 770 "'\"ls -l\"' \"cat\"'-e'" 770 0
-run_test "simple" 771 "\"'ls -l'\" \"cat\"'-e'" 771 0
-run_test "simple" 772 "'ls -l' \"cat\"\"-e\"" 772 0
-run_test "simple" 773 "\"ls -l\" \"cat\"\"-e\"" 773 0
-run_test "simple" 774 "'\"ls -l\"' \"cat\"\"-e\"" 774 0
-run_test "simple" 775 "\"'ls -l'\" \"cat\"\"-e\"" 775 0
-run_test "simple" 776 "\"ls\"'-l'cat\"-e\"" 776 0
+run_test "simple" 760 "'ls -l' cat'-e'" 760 127 "ls -l: command not found"
+run_test "simple" 761 "\"ls -l\" cat'-e'" 761 127 "ls -l: command not found"
+run_test "simple" 762 "'\"ls -l\"' cat'-e'" 762 127 "\"ls -l\": command not found"
+run_test "simple" 763 "\"'ls -l'\" cat'-e'" 763 127 "'ls -l': command not found"
+run_test "simple" 764 "'ls -l' 'cat''-e'" 764 127 "ls -l: command not found"
+run_test "simple" 765 "\"ls -l\" 'cat''-e'" 765 127 "ls -l: command not found"
+run_test "simple" 766 "'\"ls -l\"' 'cat''-e'" 766 127 "\"ls -l\": command not found"
+run_test "simple" 767 "\"'ls -l'\" 'cat''-e'" 767 127 "'ls -l': command not found"
+run_test "simple" 768 "'ls -l' \"cat\"'-e'" 768 127 "ls -l: command not found"
+run_test "simple" 769 "\"ls -l\" \"cat\"'-e'" 769 127 "ls -l: command not found"
+run_test "simple" 770 "'\"ls -l\"' \"cat\"'-e'" 770 127 "\"ls -l\": command not found"
+run_test "simple" 771 "\"'ls -l'\" \"cat\"'-e'" 771 127 "'ls -l': command not found"
+run_test "simple" 772 "'ls -l' \"cat\"\"-e\"" 772 127 "ls -l: command not found"
+run_test "simple" 773 "\"ls -l\" \"cat\"\"-e\"" 773 127 "ls -l: command not found"
+run_test "simple" 774 "'\"ls -l\"' \"cat\"\"-e\"" 774 127 "\"ls -l\": command not found"
+run_test "simple" 775 "\"'ls -l'\" \"cat\"\"-e\"" 775 127 "'ls -l': command not found"
 
-if (( "$start_index" >= 760 && "$start_index" <= 776 && "$end_index" >= 760 && "$end_index" <= 776 ))
+if (( "$start_index" >= 760 && "$start_index" <= 775 && "$end_index" >= 760 && "$end_index" <= 775 ))
 then
 	if [ "$display" == "all" ]
 	then
-		echo -e "end of test serie from 760 to 776\n"
+		echo -e "end of test serie from 760 to 775\n"
 	else
-		echo -e "end of test serie from 760 to 776"
+		echo -e "end of test serie from 760 to 775"
 	fi
 fi
 
-run_test "simple" 1000 "'ls'-l'cat -e'" 1000 0
-run_test "simple" 1001 "'ls'-l'cat  -e'" 1001 0
+run_test "simple" 800 "\"ls\"\" \"-l | cat -e" 800 0
+run_test "simple" 801 "\"ls\"\" \"\"-l\" | cat -e" 801 0
+run_test "simple" 802 "\"ls\"\" \"\"-l\"\" \"| cat -e" 802 0
+run_test "simple" 803 "\"ls\"\" \"\"-l\"\" \"|\" \"cat -e" 803 0
+run_test "simple" 804 "\"ls\"\" \"\"-l\"\" \"|\" \"\"cat\" -e" 804 0
+run_test "simple" 805 "\"ls\"\" \"\"-l\"\" \"|\" \"\"cat\"\" \"-e" 805 0
+run_test "simple" 806 "\"ls\"\" \"\"-l\"\" \"|\" \"\"cat\"\" \"\"-e\"" 806 0
+
+run_test "simple" 810 "'ls'' '-l | cat -e" 810 0
+run_test "simple" 811 "'ls'' ''-l' | cat -e" 811 0
+run_test "simple" 812 "'ls'' ''-l'' '| cat -e" 812 0
+run_test "simple" 813 "'ls'' ''-l'' '|' 'cat -e" 813 0
+run_test "simple" 814 "'ls'' ''-l'' '|' ''cat' -e" 814 0
+run_test "simple" 815 "'ls'' ''-l'' '|' ''cat'' '-e" 815 0
+run_test "simple" 816 "'ls'' ''-l'' '|' ''cat'' ''-e'" 816 0
+
+run_test "simple" 820 "\"ls\"' '-l | cat -e" 820 0
+run_test "simple" 821 "\"ls\"' '\"-l\" | cat -e" 821 0
+run_test "simple" 822 "\"ls\"' '\"-l\"' '| cat -e" 822 0
+run_test "simple" 823 "\"ls\"' '\"-l\"' '|' 'cat -e" 823 0
+run_test "simple" 824 "\"ls\"' '\"-l\"' '|' '\"cat\" -e" 824 0
+run_test "simple" 825 "\"ls\"' '\"-l\"' '|' '\"cat\"' '-e" 825 0
+run_test "simple" 826 "\"ls\"' '\"-l\"' '|' '\"cat\"' '\"-e\"" 826 0
+
+run_test "simple" 830 "'ls'\" \"-l | cat -e" 830 0
+run_test "simple" 831 "'ls'\" \"'-l' | cat -e" 831 0
+run_test "simple" 832 "'ls'\" \"'-l'\" \"| cat -e" 832 0
+run_test "simple" 833 "'ls'\" \"'-l'\" \"|\" \"cat -e" 833 0
+run_test "simple" 834 "'ls'\" \"'-l'\" \"|\" \"'cat' -e" 834 0
+run_test "simple" 835 "'ls'\" \"'-l'\" \"|\" \"'cat'\" \"-e" 835 0
+run_test "simple" 836 "'ls'\" \"'-l'\" \"|\" \"'cat'\" \"'-e'" 836 0
+
+
+run_test "simple" 840 "\"ls\"\"'\"-l | cat -e" 840 127 "ls'-l: command not found"
+run_test "simple" 841 "'ls''\"'-l | cat -e" 841 127 "ls\"-l: command not found"
+run_test "simple" 842 "ls -l | \"cat\"\"'\"-e" 842 127 "cat'-e: command not found"
+run_test "simple" 843 "ls -l | 'cat''\"'-e" 843 127 "cat\"-e: command not found"
+
+if (( "$start_index" >= 800 && "$start_index" <= 850 && "$end_index" >= 800 && "$end_index" <= 850 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo -e "end of test serie from 800 to 850\n"
+	else
+		echo -e "end of test serie from 800 to 850"
+	fi
+fi
+
+
+
+
+run_test "simple" 1000 "'ls'-l'cat -e'" 1000 127 "ls-lcat -e: command not found"
+run_test "simple" 1001 "'ls'-l'cat  -e'" 1001 127 "ls-lcat  -e: command not found"
+run_test "simple" 1010 "\"ls\"'-l'cat\"-e\"" 1010 127 "ls -l: command not found"
 
 if (( "$start_index" >= 1000 && "$start_index" <= 1001 && "$end_index" >= 1000 && "$end_index" <= 1001 ))
 then

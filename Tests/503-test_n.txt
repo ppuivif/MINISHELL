@@ -1,4 +1,4 @@
 substring 0 : 
-	-argument 0 : ls
+	-argument 0 : "ls"
 	-argument 1 : "-l"
 
