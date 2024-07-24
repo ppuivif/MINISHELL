@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 16:38:04 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/16 17:42:28 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/23 12:39:25 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ static void	ctrl_backslash(int sign)
 {
 	g_sign = sign;
 	ft_putstr_fd("Quit\n", 1);
-	(void)sign;
+	(void)sign;//see if void necessary
 }
 
 void	signals(int sign)
@@ -41,11 +41,13 @@ void	signals(int sign)
 	if (sign == 0)
 	{
 		signal(SIGQUIT, SIG_IGN);
-		signal(SIGINT, ctrl_c);
+		signal(SIGINT, ctrl_c);//CTRL C dans readline
 	}
 	else
 	{
 		signal(SIGQUIT, ctrl_backslash);
-		signal(SIGINT, ctrl_c2);
+		signal(SIGINT, ctrl_c2);//CTRL C apres readline
 	}
 }
+
+// see IOCTL for heredoc with EOF

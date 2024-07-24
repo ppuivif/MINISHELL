@@ -1182,7 +1182,7 @@ fi
 
 run_test "simple" 1000 "'ls'-l'cat -e'" 1000 127 "ls-lcat -e: command not found"
 run_test "simple" 1001 "'ls'-l'cat  -e'" 1001 127 "ls-lcat  -e: command not found"
-run_test "simple" 1010 "\"ls\"'-l'cat\"-e\"" 1010 127 "ls -l: command not found"
+run_test "simple" 1010 "\"ls\"'-l'cat\"-e\"" 1010 127 "ls-lcat-e: command not found"
 
 if (( "$start_index" >= 1000 && "$start_index" <= 1001 && "$end_index" >= 1000 && "$end_index" <= 1001 ))
 then
