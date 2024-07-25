@@ -1366,7 +1366,7 @@ run_test "simple" 1613 "echo '\$TEST3''text'" 1613 0
 run_test "simple" 1614 "echo \"\$TEST3\"" 1614 0
 run_test "simple" 1615 "echo \"\$TEST3\"'text'" 1615 0
 run_test "simple" 1616 "\$TEST4" 1616 0
-#run_test "simple" 1617 "\$TEST4" 1617 0
+run_test "simple" 1617 "\$TEST4" 1617 0
 
 unset TEST1
 unset TEST2
