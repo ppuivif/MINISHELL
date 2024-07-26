@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/23 12:32:58 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/26 08:01:14 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct, t_command_lin
 		signals(1);
 		if (g_sign)
         {
-//          clear_history();
+//          rl_clear_history();
 //			printf("voici le sign : %d\n", g_sign);//to delete
             close(fd);
             unlink(filename); // Optionally delete the temporary file
@@ -94,7 +94,7 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct, t_command_lin
         }
 		if (!line)
 		{
-//			clear_history();
+//			rl_clear_history();
 			close(fd);
 			break;
 		}

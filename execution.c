@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/15 11:34:27 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/26 08:02:01 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -356,7 +356,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	//free_envp_struct(&(*exec_struct)->envp_struct); //! J'ai commenté ca
 	//free_all_command_line(&(*exec_struct)->command_line);//! J'ai commenté ca
 	//free_all_exec_struct(exec_struct);//! J'ai commenté ca
-	clear_history();
+	rl_clear_history();
 
 //	printf("fd_out: %d\n", fd_out);
 
@@ -391,7 +391,7 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 //	free_all_command_line(&(*exec_struct)->command_line);
 //	free_all_exec_struct(exec_struct);
 
-//	clear_history();
+//	rl_clear_history();
 	free(path_with_cmd);
 	free_arr(cmd_arr);
 	free_arr(envp_arr);

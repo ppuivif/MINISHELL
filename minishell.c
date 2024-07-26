@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/23 12:25:24 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/26 08:02:10 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ int	main(int argc, char **argv, char **envp)
 		if (!line)
 		{
 			free_envp_struct(&envp_struct);
-			clear_history();
+			rl_clear_history();
 			ft_putstr_fd("exit\n", 2);
 			break ;
 		}
