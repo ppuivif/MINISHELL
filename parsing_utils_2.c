@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:43 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/15 17:33:09 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/11 19:52:04 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@
 	return (len_to_quote + (flag + 1) + (j - 1));
 }*/
 
-static bool		is_there_a_second_quote(char *str, char *c)
+/*static bool		is_there_a_second_quote(char *str, char *c)
 {
 	int	len_to_quote;
 	int	len_to_end;
@@ -81,9 +81,9 @@ static bool		is_there_a_second_quote(char *str, char *c)
 	if (len_to_quote == len_to_end)
 		return (false);
 	return (true);
-}
+}*/
 
-static int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
+/*static int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
 {
 	int	j;
 	int	len_to_quote;
@@ -112,16 +112,20 @@ static int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
 			j++;
 	}
 	return (len_to_quote + (flag + 1) + (j - 1));
-}
+}*/
 
-static int	count_len_to_reach_quote_or_separator(char *remaining_line)
+
+
+
+
+/*static int	count_len_to_reach_quote_or_separator(char *remaining_line)
 {
 	int	len;
 	int	len_to_separator;
 	int	len_to_quote;
 
-/*	if (is_content_empty(remaining_line) == true)
-		return (-1);//syntax_error*/
+//	if (is_content_empty(remaining_line) == true)
+//		return (-1);//syntax_error
 	len = ft_strcspn(remaining_line, "\'\"");
 	len_to_separator = ft_strcspn(remaining_line, "<>| \t\n\0");
 	len_to_quote = 0;
@@ -131,9 +135,9 @@ static int	count_len_to_reach_quote_or_separator(char *remaining_line)
 		remaining_line[0] != '\"')
 			remaining_line++;
 		if (remaining_line[0] == '\'')
-			len_to_quote = count_len_to_next_quotes(remaining_line, "\'", 0);
+			len_to_quote = count_len_to_next_quote(remaining_line, '\'');
 		if (remaining_line[0] == '\"')
-			len_to_quote = count_len_to_next_quotes(remaining_line, "\"", 0);
+			len_to_quote = count_len_to_next_quote(remaining_line, '\"');
 		if (len_to_quote == -1)
 			return (-1);//syntax_error : no second quote after first one
 		len += len_to_quote;
@@ -142,7 +146,6 @@ static int	count_len_to_reach_quote_or_separator(char *remaining_line)
 		len = len_to_separator;
 	return (len);
 }
-
 int	count_len_to_cut(char *remaining_line)
 {
 	int	len_to_quote;
@@ -160,4 +163,49 @@ int	count_len_to_cut(char *remaining_line)
 		return (-1);//syntax_error
 	len += len_to_quote;
 	return (len);
+}*/
+
+//check_char_validity to verify
+
+static int	count_len_to_next_quote(char **remaining_line, char quote)
+{
+	int len_to_next_quote;
+	
+	len_to_next_quote = 1;
+	while (*remaining_line[0] && *remaining_line[0] != quote)
+	{
+		len_to_next_quote++;
+		(*remaining_line)++;
+	}
+	if (*remaining_line[0] != quote)
+		return (-1);
+	return (len_to_next_quote);
+}
+
+int	count_len_to_cut(char *remaining_line)
+{
+	int		len_to_cut;
+	int		len_to_next_quote;
+	char	quote_type;
+	char	*remaining_line_copy;
+
+	len_to_cut = 0;
+	len_to_next_quote = 0;
+	remaining_line_copy = remaining_line;
+	while (ft_strcspn(remaining_line_copy, "<>| \t\n\0") != 0)
+	{
+		if (remaining_line_copy[0] == '\'' || remaining_line_copy[0] == '\"')
+		{
+			quote_type = remaining_line_copy[0];
+			remaining_line_copy++;
+			len_to_next_quote = count_len_to_next_quote(&remaining_line_copy, quote_type);
+			if (len_to_next_quote == -1)
+				return (-1);//syntax_error (only one quote)
+			else
+				len_to_cut += len_to_next_quote;
+		}
+		remaining_line_copy++;
+		len_to_cut++;
+	}
+	return (len_to_cut);
 }
