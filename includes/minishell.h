@@ -29,22 +29,18 @@ extern int	g_sign;
 
 
 void			print_arr(char **arr);
-//!t_command_line 	*parse_command_line(char *str);
 
-void get_envp(char **envp, t_envp_struct **envp_struct, char *line);
+
+void			get_envp(char **envp, t_envp_struct **envp_struct, char *line);
 
 t_command_line 	*parse_command_line(char **argv, char *str, t_envp_struct **envp_struct, int exit_code);
-int		cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line);
-int		parse_substrings(char **remaining_line, t_command_line **command_line);
-int		get_arguments_and_redirections(t_substring **substring, char **remaining_line, t_command_line **command_line);
-int		get_redirections(char **remaining_line, t_substring *substring, t_command_line **command_line);
-int		get_arguments(char **remaining_line, t_substring *substring, t_command_line **command_line);
+int				get_redirections(char **remaining_line, t_substring *substring, t_command_line **command_line);
+int				get_arguments(char **remaining_line, t_substring *substring, t_command_line **command_line);
 
 
 int				is_pipe_latest_character(char **remaining_line);
 int				is_pipe_first_character(char *remaining_line);
 int				count_len_to_cut(char *remaining_line);
-int				check_char_validity(char *remaining_line, int len_to_quote, int flag, int j);
 unsigned int	count_angled_bracket(char *str);
 
 
@@ -119,7 +115,6 @@ void	error_allocation_exec_struct_and_exit(t_exec_struct **exec_struct);
 void	error_pipe_creation_and_exit(t_exec_struct **exec_struct);
 void	error_fork_creation_and_exit(t_exec_struct **exec_struct);
 void	error_execve_and_exit(t_exec_struct **exec_struct);
-void	error_handling(t_command_line *command_line);
 
 //Builtin
 void	exec_builtin(t_exec_struct *exec_struct, t_exec_substring *substring, char **envp_arr);
