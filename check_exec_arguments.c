@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_exec_arguments.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:35 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/15 13:17:52 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/16 17:12:44 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,18 +139,14 @@ t_exec_struct **exec_struct)
 			(*exec_struct)->command_line->current_exit_code = 127;
 		}*/
 
-
 void	check_command_with_options(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
-	char	**cmd_arr;
+	char		**cmd_arr;
+	struct stat	st;
 //	DIR		*dir;
-
 //	dir = NULL;
 	cmd_arr = (*exec_substring)->cmd_arr;
-
-
-	struct stat st;
 	if (strcspn(cmd_arr[0], "/") < ft_strlen(cmd_arr[0]) && \
 	stat(cmd_arr[0], &st) != -1)
 	{
@@ -163,9 +159,6 @@ t_exec_struct **exec_struct)
 			printf("user has execute rights %d\n", S_IXUSR);
 		if (st.st_mode & S_IWUSR)
 			printf("user has write rights %o\n", S_IWUSR);*/
-
-
-
 		if (S_ISDIR(st.st_mode))
 		{
 			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
@@ -186,7 +179,7 @@ t_exec_struct **exec_struct)
 			{
 				(*exec_substring)->path_with_cmd = ft_strdup(cmd_arr[0]);
 				if (!(*exec_substring)->path_with_cmd)
-				error_allocation_exec_struct_and_exit(exec_struct);
+					error_allocation_exec_struct_and_exit(exec_struct);
 			}
 		}
 	}
@@ -214,7 +207,6 @@ t_exec_struct **exec_struct)
 	}
 	else
 		check_path_in_envp(exec_substring, exec_struct);
-	
 /*	dir = opendir(cmd_arr[0]);
 	if (dir)
 	{
@@ -245,7 +237,6 @@ t_exec_struct **exec_struct)
 		(*exec_substring)->exec_arguments->is_argument_valid = false;
 		(*exec_struct)->command_line->current_exit_code = 126;
 	}*/
-
 }
 
 char	**build_envp_arr(t_exec_struct **exec_struct)
@@ -360,10 +351,9 @@ void	check_path_in_envp(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
 	int		return_value;
-//	char	**envp_arr;
 	char	**path_envp;
 	char	*tmp;
-
+//	char	**envp_arr;
 	return_value = 0;
 	tmp = NULL;
 //	envp_arr = build_envp_arr(exec_struct);
@@ -426,7 +416,6 @@ int	check_path_cmd_validity(char **path, t_exec_substring **exec_substring)
 	char	**cmd_arr;
 
 	cmd_arr = (*exec_substring)->cmd_arr;
-
 	while (*path)
 	{
 		path_with_cmd = NULL;

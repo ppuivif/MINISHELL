@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/26 08:02:10 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/16 16:16:27 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 		exit(0);
 	}*/
-
 	if (argc == 2)//for tests
 	{
 	 	int fd = ft_atoi(argv[1]);

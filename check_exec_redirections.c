@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   check_exec_redirections.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/26 08:01:14 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/16 16:22:12 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void sigint_handler(int sig)
+void	sigint_handler(int sig)
 {
-    (void)sig;
-    g_sign = 1;
-    
-    ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	(void)sig;
+	g_sign = 1;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 
 static int	check_outfile(t_expanded_redirection *exp_redirection, \
@@ -48,7 +47,7 @@ t_exec_redirection **exec_redirection)
 	(*exec_redirection)->fd_input = open(exp_redirection->content, O_RDONLY);
 	if ((*exec_redirection)->fd_input == -1)
 	{
-		if (access(exp_redirection->content, F_OK) == -1)//voir plutot stat
+		if (access(exp_redirection->content, F_OK) == -1) //voir plutot stat
 			perror(exp_redirection->content);
 		else
 			perror(exp_redirection->content);
@@ -73,7 +72,6 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct, t_command_lin
 	filename = ft_strjoin("heredoc_tmp_", index);
 	free (index);
 	index = NULL;
-
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 		return (-1);
@@ -84,19 +82,19 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct, t_command_lin
 		line = readline("heredoc : ");
 		signals(1);
 		if (g_sign)
-        {
+		{
 //          rl_clear_history();
 //			printf("voici le sign : %d\n", g_sign);//to delete
-            close(fd);
-            unlink(filename); // Optionally delete the temporary file
-            free(filename);
-            return (-1);
-        }
+			close(fd);
+			unlink(filename); // Optionally delete the temporary file
+			free(filename);
+			return (-1);
+		}
 		if (!line)
 		{
 //			rl_clear_history();
 			close(fd);
-			break;
+			break ;
 		}
 		if (ft_strcmp(line, limiter) == 0)
 		{

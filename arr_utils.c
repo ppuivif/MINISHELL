@@ -6,13 +6,13 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:14 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:32:18 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/16 16:22:46 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void 	print_arr(char **arr)
+void	print_arr(char **arr)
 {
 	while (arr && *arr)
 	{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_3.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/17 09:33:14 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/16 16:19:06 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static int	expand_variables_when_dollar_first(char *remaining_line, char **resul
 		{
 			len_to_cut = (int)strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
 			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);//malloc à protéger
-			*result = get_variable_content_in_envp(tmp, envp_struct); 
+			*result = get_variable_content_in_envp(tmp, envp_struct);
 			tmp = free_and_null(tmp);
 			if (!*result)
 				*result = ft_strdup("");
@@ -76,7 +76,6 @@ static char	*expand_variables(char **remaining_line, t_envp_struct *envp_struct)
 	}
 	return (result);
 }
-
 
 static int	get_content(t_expanded_argument **exp_arguments, char *extracted_argument)
 {
@@ -165,7 +164,6 @@ void	cut_variable_on_whitespaces(t_expanded_argument **exp_arguments, char **var
 		}
 	}
 }
-
 
 void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct, t_command_line **command_line)
 {
