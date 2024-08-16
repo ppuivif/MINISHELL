@@ -1,17 +1,27 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils_3.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/17 09:33:14 by ppuivif          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static char	*get_variable_content_in_envp(char *variable, t_envp_struct *envp_struct)
 {
-	int				n;
 	t_envp_struct	*cursor;
 	char			*result;
 
-	n = ft_strlen (variable);
 	cursor = envp_struct;
 	result = NULL;
 	while (cursor)
 	{
-		if (ft_strncmp(variable, cursor->name, n) == 0)
+		if (ft_strcmp(variable, cursor->name) == 0)
 		{
 			result = ft_strdup(cursor->value);
 			return (result);
@@ -60,7 +70,7 @@ static char	*expand_variables(char **remaining_line, t_envp_struct *envp_struct)
 	}
 	else
 	{
-		len_to_cut = (int)strcspn(remaining_line[0], "$\0");
+		len_to_cut = ft_strcspn(remaining_line[0], "$\0");
 		result = ft_substr(remaining_line[0], 0, len_to_cut);//malloc à protéger
 		*remaining_line += len_to_cut;
 	}
@@ -157,17 +167,23 @@ void	cut_variable_on_whitespaces(t_expanded_argument **exp_arguments, char **var
 }
 
 
-void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct)
+void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct, t_command_line **command_line)
 {
 	char	*remaining_line;
 	char	*variable;
 	char	*result;
+	int		len;
 
 	result = NULL;
 	remaining_line = *str;
+	len = 0;
 	while (remaining_line && remaining_line[0])
 	{
-		variable = expand_variables(&remaining_line, envp_struct);
+		len = handle_special_characters_after_dollar(remaining_line, &variable, command_line, 1);
+		if (len == 0)	
+			variable = expand_variables(&remaining_line, envp_struct);
+		else
+			remaining_line += len;
 		if (!result)
 			result = ft_strdup(variable);//malloc à protéger
 		else

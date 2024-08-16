@@ -1,14 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_redirections.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/17 14:08:12 by ppuivif          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	is_ambiguous_redirection(char *extracted_line)
 {
 	if (ft_strlen(extracted_line) == 0)
-			return (true);
+		return (true);
 	if (strcspn(extracted_line, " \t\n\v\f\r\0") < ft_strlen(extracted_line))
-			return (true);
+		return (true);
 	return (false);
 }
-
 
 static size_t	common_extract_and_expand_content_of_redirections(char *content, \
 char **extracted_line, t_command_line **command_line)
@@ -24,7 +35,7 @@ char **extracted_line, t_command_line **command_line)
 		len = get_len_and_extract_between_double_quotes \
 		(&content[1], extracted_line);
 		if (strcspn(*extracted_line, "$") < ft_strlen(*extracted_line))
-			complete_expand_content_of_redirections(extracted_line, *command_line);
+			complete_expand_content_of_redirections(extracted_line, command_line);
 	}
 	else if (content[0] == '$')
 	{
@@ -39,7 +50,7 @@ char **extracted_line, t_command_line **command_line)
 }
 
 static size_t	heredoc_extract_and_expand_content_of_redirections(char *content, \
-char **extracted_line)
+char **extracted_line, bool *flag_for_expand)
 {
 	size_t	len;
 
@@ -50,12 +61,16 @@ char **extracted_line)
 		len = 1;
 	}
 	else if (content[0] == '\'')
+	{
 		len = get_len_and_extract_between_single_quotes \
 		(&content[1], extracted_line);
+		*flag_for_expand = false;
+	}
 	else if (content[0] == '\"')
 	{
 		len = get_len_and_extract_between_double_quotes \
 		(&content[1], extracted_line);
+		*flag_for_expand = false;
 	}
 	else
 		len = get_len_and_extract_until_next_quote \
@@ -64,7 +79,7 @@ char **extracted_line)
 }
 
 static int	get_definitive_content_of_redirections(char *content, char **definitive_content, \
-int e_redirection, t_command_line **command_line)
+int e_redirection, t_command_line **command_line, bool *flag_for_expand)
 {
 	int		len;
 	char	*extracted_line;
@@ -82,7 +97,7 @@ int e_redirection, t_command_line **command_line)
 	}
 	else
 		len = (int)heredoc_extract_and_expand_content_of_redirections \
-		(content, &extracted_line);
+		(content, &extracted_line, flag_for_expand);
 	if (!extracted_line)
 		return (-1);
 	if (!(*definitive_content))
@@ -113,11 +128,11 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 	while (n_redirection && n_redirection->content[i])
 	{
 		len = get_definitive_content_of_redirections(&n_redirection->content[i], \
-		&definitive_content, n_redirection->e_redirection, command_line);
+		&definitive_content, n_redirection->e_redirection, command_line, &exp_redirection->flag_for_expand);
 		if (len == -2)
 		{
-			ft_putstr_fd(n_redirection->content, 2);			
-			ft_putstr_fd(": ambiguous redirect\n", 2);			
+			ft_putstr_fd(n_redirection->content, 2);
+			ft_putstr_fd(": ambiguous redirect\n", 2);
 			exp_redirection = free_and_null(exp_redirection);
 			(*command_line)->current_exit_code = 1;
 			return ;

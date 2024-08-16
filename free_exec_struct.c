@@ -1,39 +1,16 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free_exec_struct.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:34:27 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/11 08:11:27 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "includes/linked_list_utils.h"
-
-/*static void	free_cmd(t_cmd *cmd)
-{
-	if((cmd)->cmd_arr)
-		free_arr((cmd)->cmd_arr);
-	if((cmd)->path)
-	{
-		free((cmd)->path);
-		(cmd)->path = NULL;
-	}
-	free(cmd);	
-}*/
-
-/*static void	close_fd(int fd)
-{
-	if (fd && fd != -1 && fd != STDIN_FILENO && fd != STDOUT_FILENO)
-		close(fd);
-}*/
-
-
-
-/*void	free_arr(char **str_arr)
-{
-	int	i;
-
-	i = 0;
-	while ((str_arr)[i])
-	{
-		free(str_arr[i]);
-		i++;
-	}
-	if (str_arr)
-		free(str_arr);
-	str_arr = NULL;
-}*/
 
 static void	free_exec_argument_struct(t_exec_argument **exec_arguments)
 {
@@ -91,5 +68,3 @@ void	free_all_exec_struct(t_exec_struct **exec_struct)
 		*exec_struct = free_and_null(*exec_struct);
 	}
 }
-
-

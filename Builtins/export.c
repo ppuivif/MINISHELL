@@ -6,44 +6,11 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/10 21:01:50 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/16 14:19:10 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
-
-/* static int	is_range(char *s1, char *s2)
-{
-	char	*str;
-	int		i;
-	int		j;
-	int		k;
-	
-	str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_abcdefghijklmnopqrstvuwxyz";
-	i = 0;
-	j = 0;
-	k = 0;
-	while(s1[i] && s2[i])
-	{
-		if (s1[i] != s2[i])
-		{
-			while(s1[i] != str[j])
-				j++;
-			while(s2[i] != str[k])
-				k++;
-			if (j > k)
-				return (0);
-			else
-				return (1);
-		}
-		i++;
-	}
-	if (!s1[j])
-				return (0);
-			else
-				return (1);
-} */
-
 
 static void	ft_lstdelone(t_envp_struct *element_to_del)
 {
@@ -53,21 +20,6 @@ static void	ft_lstdelone(t_envp_struct *element_to_del)
 	element_to_del->value = free_and_null(element_to_del->value);
 	free(element_to_del);
 }
-
-/*void add_node_back(t_envp_struct **head, t_envp_struct *node_to_add)
-{
-	t_envp_struct *temp;
-
-    if (*head == NULL)
-    {
-        *head = node_to_add;
-    }
-    else
-    {
-        temp = *head;
-        temp->next = node_to_add;
-    }
-}*/
 
 static t_envp_struct	*ft_lstnew(char *name, char *value, bool equal)
 {
@@ -86,17 +38,12 @@ static t_envp_struct	*ft_lstnew(char *name, char *value, bool equal)
 	return (lst);
 }
 
-t_envp_struct *copy_envp_struct(t_envp_struct *envp_struct)
+t_envp_struct	*copy_envp_struct(t_envp_struct *envp_struct)
 {
 	t_envp_struct	*copy;
 	t_envp_struct	*new_element;
 	t_envp_struct	*cursor;
-//	size_t 			mnmemb;
 
-//	nmemb = ft_lst_size6(envp_struct);
-//	copy = ft_calloc(nmemb, sizeof(t_envp_struct));
-//	if (!copy)
-//		return (NULL);
 	copy = NULL;
 	new_element = NULL;
 	cursor = envp_struct;
@@ -109,20 +56,9 @@ t_envp_struct *copy_envp_struct(t_envp_struct *envp_struct)
 	return (copy);
 }
 
-/*void copy_node(t_envp_struct **tmp_envp, t_envp_struct **previous_node)
-{
-	t_envp_struct	*copied_node;
-	
-	copied_node = ft_lstnew((*tmp_envp)->name, (*tmp_envp)->value, (*tmp_envp)->equal);
-	if (*previous_node)
-		(*previous_node)->next = copied_node;
-	copied_node->next = (*tmp_envp)->next;
-	(*tmp_envp) = copied_node;
-}*/
-
 static void	ft_lst_print(t_envp_struct *envp_struct, int fd)
 {
-	size_t	i;
+	size_t			i;
 	t_envp_struct	*tmp;
 
 	i = 0;
@@ -131,47 +67,61 @@ static void	ft_lst_print(t_envp_struct *envp_struct, int fd)
 	{
 		ft_putstr_fd("declare -x ", fd);
 		ft_putstr_fd(tmp->name, fd);
-		ft_putstr_fd("=\"", fd);
-		ft_putstr_fd(tmp->value, fd);
-		ft_putstr_fd("\"\n", fd);
+		if (tmp->value)
+		{
+			ft_putstr_fd("=\"", fd);
+			ft_putstr_fd(tmp->value, fd);
+			ft_putstr_fd("\"", fd);
+		}
+		ft_putstr_fd("\n", fd);
 		tmp = tmp->next;
 		i++;
 	}
+}
+
+static int	sort_envp(t_envp_struct **tmp_envp, \
+t_envp_struct **previous_node, int *i)
+{
+	t_envp_struct	*node_to_move;
+	t_envp_struct	*node_to_free;
+
+	if (ft_strcmp((*tmp_envp)->name, (*tmp_envp)->next->name) > 0)
+	{
+		node_to_move = ft_lstnew((*tmp_envp)->next->name, \
+		(*tmp_envp)->next->value, (*tmp_envp)->next->equal);
+		node_to_move->next = *tmp_envp;
+		node_to_free = (*tmp_envp)->next;
+		(*tmp_envp)->next = (*tmp_envp)->next->next;
+		ft_lstdelone(node_to_free);
+		if (*i)
+			(*previous_node)->next = node_to_move;
+		*tmp_envp = node_to_move;
+		(*i)++;
+		return (1);
+	}
+	(*i)++;
+	return (0);
 }
 
 static void	print_export(t_envp_struct *envp_struct)
 {
 	t_envp_struct	*sorted_envp;
 	t_envp_struct	*tmp_envp;
-	t_envp_struct	*node_to_move;
 	t_envp_struct	*previous_node;
-	t_envp_struct	*node_to_free;
 	int				i;
-	int				hits;;
+	int				hits;
 
 	sorted_envp = copy_envp_struct(envp_struct);
 	hits = 1;
 	while (hits != 0)
 	{
-		hits = 0;;
+		hits = 0;
 		i = 0;
 		tmp_envp = sorted_envp;
 		previous_node = NULL;
 		while (tmp_envp != NULL && tmp_envp->next != NULL )
 		{
-			if (ft_strcmp(tmp_envp->name, tmp_envp->next->name) > 0)
-			{
-				node_to_move = ft_lstnew(tmp_envp->next->name, tmp_envp->next->value, tmp_envp->next->equal);
-				node_to_move->next = tmp_envp;
-				node_to_free = tmp_envp->next;
-				tmp_envp->next = tmp_envp->next->next;
-				ft_lstdelone(node_to_free);
-				if (i)
-					previous_node->next = node_to_move;
-				tmp_envp = node_to_move;
-				hits++;
-			}
-			i++;
+			hits += sort_envp(&tmp_envp, &previous_node, &i);
 			if (i == 1)
 				sorted_envp = tmp_envp;
 			previous_node = tmp_envp;
@@ -180,7 +130,20 @@ static void	print_export(t_envp_struct *envp_struct)
 	}
 	ft_lst_print(sorted_envp, 1);
 	free_envp_struct(&sorted_envp);
-	
+}
+
+static int	search_var(t_exec_struct *exec_struct, char *str)
+{
+	t_envp_struct	*env;
+
+	env = exec_struct->envp_struct;
+	while (env)
+	{
+		if (!strcmp(env->name, str))
+			return (1);
+		env = env->next;
+	}
+	return (0);
 }
 
 static void	add_export(t_exec_struct *exec_struct, \
@@ -188,13 +151,20 @@ static void	add_export(t_exec_struct *exec_struct, \
 {
 	t_envp_struct	*env;	
 	int				len_name;
+	char			*tmp1;
+	char			*tmp2;
 
 	env = exec_struct->envp_struct;
 	len_name = search_first_occurence(argument, '=');
 	if (len_name == 0)
 	{
+		if (search_var(exec_struct, argument))
+			return ;
+		tmp1 = ft_substr(argument, 0, ft_strlen(argument));
 		ft_lst_add_back6(&exec_struct->envp_struct, ft_lstnew \
-			(ft_substr(argument, 0, ft_strlen(argument)), NULL, 0));
+			(tmp1, NULL, 0));
+		free(tmp1);
+		tmp1 = NULL;
 		return ;
 	}
 	while (env)
@@ -209,9 +179,14 @@ static void	add_export(t_exec_struct *exec_struct, \
 		env = env->next;
 	}
 	env = exec_struct->envp_struct;
+	tmp1 = ft_substr(argument, 0, len_name);
+	tmp2 = ft_substr(argument, len_name + 1, ft_strlen(argument));
 	ft_lst_add_back6(&exec_struct->envp_struct, \
-	ft_lstnew(ft_substr(argument, 0, len_name), \
-	ft_substr(argument, len_name + 1, ft_strlen(argument)), 1));
+	ft_lstnew(tmp1, tmp2, 1));
+	free(tmp1);
+	tmp1 = NULL;
+	free(tmp2);
+	tmp2 = NULL;
 }
 
 static void	add2_export(t_exec_struct *exec_struct, \
@@ -225,6 +200,8 @@ static void	add2_export(t_exec_struct *exec_struct, \
 	len_name = search_first_occurence(argument, '=');
 	if (len_name == 0)
 	{
+		if (search_var(exec_struct, argument))
+			return ;
 		ft_lst_add_back6(&exec_struct->envp_struct, ft_lstnew \
 			(ft_substr(argument, 0, ft_strlen(argument)), NULL, 0));
 		return ;
@@ -234,7 +211,8 @@ static void	add2_export(t_exec_struct *exec_struct, \
 		if (!ft_strncmp(env->name, argument, len_name - 1))
 		{
 			temp = ft_strdup_freed(env->value);
-			env->value = ft_strjoin_freed(temp, ft_substr(argument, len_name + 1, ft_strlen(argument)));
+			env->value = ft_strjoin_freed(temp, \
+			ft_substr(argument, len_name + 1, ft_strlen(argument)));
 			env->equal = 1;
 			return ;
 		}
@@ -277,27 +255,22 @@ void	export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 	arguments = exec_arguments->next;
 	if (!arguments)
 	{
-	    print_export(exec_struct->envp_struct);
+		print_export(exec_struct->envp_struct);
 		return ;
 	}
 	while (arguments)
 	{
-		if (!strcmp(arguments->argument, "_"))
-		{
+		if (!strcmp(arguments->argument, "_") || !strncmp(arguments->argument, "_=", 2) || !strncmp(arguments->argument, "_+=", 3))
 			return ;
-		}
 		if (is_alpha(arguments->argument) == 1)
 		{
 			ft_putstr_fd("export: `", 2);
 			ft_putstr_fd(arguments->argument, 2);
 			ft_putstr_fd("': not a valid identifier\n", 2);
 			exec_struct->command_line->current_exit_code = 1;
-			return ;
 		}
 		else if (is_alpha(arguments->argument) == 2)
-		{
 			add2_export(exec_struct, arguments->argument);
-		}
 		else
 			add_export(exec_struct, arguments->argument);
 		arguments = arguments->next;

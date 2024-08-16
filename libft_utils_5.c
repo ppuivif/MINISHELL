@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils_5.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42angouleme.fr    +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/06/06 14:07:54 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/11 06:35:38 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../includes/libft_utils.h"
 #include "includes/libft_utils.h"
 
 static int	ft_lenght_param(long int n)

@@ -40,6 +40,16 @@ la fonction count_len_to_cut permet de determiner la len de l'argument à extrai
 	Si remaining_line est vide, -1 est renvoyé.
 	Si une première quote a été trouvée, mais pas de deuxième quote, -1 est renvoyé.	
 	
-NB : séparateurs (ifs) : "<>| \t\n\v\f\r\0"
+NB : séparateurs utilisés dans minishell : "<>| \t\n" et "\0"
+NB : séparateurs dans bash : "<>| \t\n" et "&;()"
 
 -----------------------------------------------------------------------------------------------
+
+
+
+Si le premier caractère est une single quote, la single quote suivante est cherchée.
+Si le premier caractère est une double quote, la double quote suivante est cherchée.
+Si le premier caractère n'est ni une single, ni une double quote,
+une quote ou un séparateur ( '<' '>' '|' 'space' '\t' '\n') est cherché.
+NB : logiquement, il n'y a plus de pipe ni de chevrons, mais le vérifier
+Le contenu est modifié en supprimant les quotes.

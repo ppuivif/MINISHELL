@@ -1,0 +1,6 @@
+substring 0 : 
+	-redirection 0 : 	temp/outfile1.txt
+	-redirection_type 0 : 	REDIRECTION_APPEND
+	-redirection 1 : 	temp/outfile2.txt
+	-redirection_type 1 : 	REDIRECTION_APPEND
+

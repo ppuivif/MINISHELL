@@ -3,14 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   libft_utils_1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/15 15:59:46 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/03 07:39:06 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/07/11 08:11:55 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../includes/libft_utils.h"
 #include "libft_utils.h"
 
 size_t	ft_strlen(const char *s)

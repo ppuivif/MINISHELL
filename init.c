@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/10 18:50:43 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/07/12 20:45:57 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ int	init_envp_struct(t_envp_struct **envp_struct)
 	*envp_struct = ft_calloc(1, sizeof(t_envp_struct));
 	if (!*envp_struct)
 		return (-1);
-//	(*envp_struct)->content = NULL;
 	(*envp_struct)->name = NULL;
 	(*envp_struct)->equal = 0;
 	(*envp_struct)->value = NULL;
@@ -44,6 +43,7 @@ int	init_expanded_redirection_struct(t_expanded_redirection **exp_redirection)
 	(*exp_redirection)->alloc_succeed = true;
 	(*exp_redirection)->content = NULL;
 	(*exp_redirection)->e_redirection = 4;
+	(*exp_redirection)->flag_for_expand = true;
 	(*exp_redirection)->next = NULL;
 	return (0);
 }
@@ -73,7 +73,7 @@ int	init_substring_struct(t_substring **substring)
 {
 	*substring = ft_calloc(1, sizeof(t_substring));
 	if (!*substring)
-		return (-1);	
+		return (-1);
 	(*substring)->remaining_line = NULL;
 	(*substring)->n_redirections = NULL;
 	(*substring)->n_arguments = NULL;
@@ -95,13 +95,11 @@ int	init_command_line_struct(t_command_line **command_line)
 	return (0);
 }
 
-
-
 int	init_exec_argument_struct(t_exec_argument **exec_argument)
 {
 	*exec_argument = ft_calloc(1, sizeof(t_exec_argument));
 	if (!*exec_argument)
-		return (-1);	
+		return (-1);
 	(*exec_argument)->argument = NULL;
 	(*exec_argument)->is_argument_valid = true;
 	(*exec_argument)->is_builtin = 0;
@@ -113,7 +111,7 @@ int	init_exec_redirection_struct(t_exec_redirection **exec_redirection)
 {
 	*exec_redirection = ft_calloc(1, sizeof(t_exec_redirection));
 	if (!*exec_redirection)
-		return (-1);	
+		return (-1);
 	(*exec_redirection)->substring_index = 0;
 	(*exec_redirection)->file = NULL;
 	(*exec_redirection)->e_redirection = 2;

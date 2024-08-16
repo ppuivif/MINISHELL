@@ -1,11 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   libft_utils.h                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/16 15:19:13 by drabarza          #+#    #+#             */
+/*   Updated: 2024/08/16 15:20:14 by drabarza         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef LIBFT_UTILS_H
 # define LIBFT_UTILS_H	t_command.line = NULL;
-
 
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdbool.h>//is permitted ?
-
 
 size_t			ft_strlen(const char *s);
 int				ft_strcmp(char *s1, char *s2);
@@ -24,13 +34,12 @@ char			**ft_split(char const *s, char c);
 void			ft_putnbr_fd(int n, int fd);
 char			*skip_first_whitespaces(char *str);
 void			*free_arr(char **arr);
-bool				ft_isspace(int c);
+bool			ft_isspace(int c);
 char			*ft_itoa(int n);
 int				ft_atoi(const char *nptr);
 void			close_fd(int fd);
 void			*free_and_null(void *ptr);
-char        	**arr_copy(char **arr);
-int             ft_strcspn(char *remaining_line, char *str);
-
+char			**arr_copy(char **arr);
+int				ft_strcspn(char *remaining_line, char *str);
 
 #endif

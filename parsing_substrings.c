@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parsing_substrings.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:36:27 by drabarza          #+#    #+#             */
+/*   Updated: 2024/07/22 21:56:13 by ppuivif          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 t_command_line	*parse_command_line(char **argv, char *str, t_envp_struct **envp_struct, \
@@ -24,7 +36,7 @@ int previous_exit_code)
 	status_code = cut_remaining_line_on_pipes(&command_line, remaining_line);
 	if (status_code != 0)
 		return (command_line);
-//	ft_native_lst_print(command_line, 1);
+//	ft_native_lst_print_for_tests(command_line, 1);
 //	ft_native_lst_print(command_line, fd);//to use bash script test parsing
 	expand_contents(&command_line);
 //	ft_expanded_lst_print(command_line, 1);
@@ -88,7 +100,7 @@ t_command_line **command_line)
 {
 	int	status_code_redirections;
 	int	status_code_arguments;
-	
+
 	status_code_redirections = 0;
 	status_code_arguments = 0;
 	while (*remaining_line[0] && *remaining_line[0] != '|')
@@ -101,7 +113,7 @@ t_command_line **command_line)
 		}
 		else
 		{
-			status_code_arguments =  get_arguments(remaining_line, *substring, command_line);
+			status_code_arguments = get_arguments(remaining_line, *substring, command_line);
 			if (status_code_arguments != 0)
 				return (status_code_arguments);
 		}
