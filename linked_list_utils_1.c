@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list_utils_1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/07/21 18:47:56 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/17 19:59:22 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,8 @@ void	ft_lst_add_back1(t_substring **head, t_substring *new_element)
 	}
 }
 
-void	ft_lst_add_back2(t_native_redirection **head, t_native_redirection *new_element)
+void	ft_lst_add_back2(t_native_redirection **head, \
+t_native_redirection *new_element)
 {
 	t_native_redirection	*last_element;
 
@@ -50,7 +51,8 @@ void	ft_lst_add_back2(t_native_redirection **head, t_native_redirection *new_ele
 	}
 }
 
-void	ft_lst_add_back3(t_native_argument **head, t_native_argument *new_element)
+void	ft_lst_add_back3(t_native_argument **head, \
+t_native_argument *new_element)
 {
 	t_native_argument	*last_element;
 
@@ -69,7 +71,8 @@ void	ft_lst_add_back3(t_native_argument **head, t_native_argument *new_element)
 	}
 }
 
-void	ft_lst_add_back4(t_expanded_redirection **head, t_expanded_redirection *new_element)
+void	ft_lst_add_back4(t_expanded_redirection **head, \
+t_expanded_redirection *new_element)
 {
 	t_expanded_redirection	*last_element;
 
@@ -88,7 +91,8 @@ void	ft_lst_add_back4(t_expanded_redirection **head, t_expanded_redirection *new
 	}
 }
 
-void	ft_lst_add_back5(t_expanded_argument **head, t_expanded_argument *new_element)
+void	ft_lst_add_back5(t_expanded_argument **head, \
+t_expanded_argument *new_element)
 {
 	t_expanded_argument	*last_element;
 
@@ -145,7 +149,8 @@ void	ft_lst_add_back7(t_exec_substring **head, t_exec_substring *new_element)
 	}
 }
 
-void	ft_lst_add_back8(t_exec_redirection **head, t_exec_redirection *new_element)
+void	ft_lst_add_back8(t_exec_redirection **head, \
+t_exec_redirection *new_element)
 {
 	t_exec_redirection	*last_element;
 
@@ -369,7 +374,8 @@ void	ft_native_lst_print(t_command_line *command_line, int fd)
 
 	i = 0;
 	tmp1 = command_line->substrings;
-	while (command_line->substrings && i < ft_lst_size1(command_line->substrings))
+	while (command_line->substrings && i < ft_lst_size1 \
+	(command_line->substrings))
 	{
 		ft_putstr_fd("substring ", fd);
 		ft_putnbr_fd(i, fd);
@@ -419,7 +425,8 @@ void	ft_native_lst_print_for_tests(t_command_line *command_line, int fd)
 
 	i = 0;
 	tmp1 = command_line->substrings;
-	while (command_line->substrings && i < ft_lst_size1(command_line->substrings))
+	while (command_line->substrings && i < ft_lst_size1 \
+	(command_line->substrings))
 	{
 		ft_putstr_fd("substring ", fd);
 		ft_putnbr_fd(i, fd);
@@ -469,14 +476,16 @@ void	ft_expanded_lst_print(t_command_line *command_line, int fd)
 
 	i = 0;
 	tmp1 = command_line->substrings;
-	while (command_line->substrings && i < ft_lst_size1(command_line->substrings))
+	while (command_line->substrings && i < ft_lst_size1 \
+	(command_line->substrings))
 	{
 		ft_putstr_fd("substring ", fd);
 		ft_putnbr_fd(i, fd);
 		ft_putstr_fd(" : \n", fd);
 		j = 0;
 		tmp2 = tmp1->exp_redirections;
-		while (tmp1->exp_redirections && j < ft_lst_size4(tmp1->exp_redirections))
+		while (tmp1->exp_redirections && j < ft_lst_size4 \
+		(tmp1->exp_redirections))
 		{
 			ft_putstr_fd("\t-exp_redirection ", fd);
 			ft_putnbr_fd(j, fd);
@@ -519,14 +528,16 @@ void	ft_execution_lst_print(t_exec_struct *exec_struct, int fd)
 
 	i = 0;
 	tmp1 = exec_struct->exec_substrings;
-	while (exec_struct->exec_substrings && i < ft_lst_size7(exec_struct->exec_substrings))
+	while (exec_struct->exec_substrings && i < ft_lst_size7 \
+	(exec_struct->exec_substrings))
 	{
 		ft_putstr_fd("exec_substring ", fd);
 		ft_putnbr_fd(i, fd);
 		ft_putstr_fd(" : \n", fd);
 		j = 0;
 		tmp2 = tmp1->exec_redirections;
-		while (tmp1->exec_redirections && j < ft_lst_size8(tmp1->exec_redirections))
+		while (tmp1->exec_redirections && j < ft_lst_size8 \
+		(tmp1->exec_redirections))
 		{
 			ft_putstr_fd("\t-redirection ", fd);
 			ft_putnbr_fd(j, fd);

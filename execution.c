@@ -6,18 +6,20 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/16 17:38:09 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:55:38 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*static void	unique_substring_execution(t_exec_substring *substring, t_exec_struct **exec_struct)
+/*static void	unique_substring_execution(t_exec_substring *substring, \
+t_exec_struct **exec_struct)
 {
 	char	**envp_arr;
 
 	envp_arr = build_envp_arr(exec_struct);
-	if (execve((*exec_struct)->exec_substrings->path_with_cmd, substring->cmd_arr, envp_arr) == -1)
+	if (execve((*exec_struct)->exec_substrings->path_with_cmd, \
+	substring->cmd_arr, envp_arr) == -1)
 		perror("error\nexecve of a cmd failed");//to verify
 	error_execve_and_exit(exec_struct);//to verify
 }*/
@@ -42,7 +44,9 @@ static int	search_last_input(t_exec_redirection *redirection, int fd_in)
 	}
 	return (fd_in);
 }
-static int	search_last_output(t_exec_redirection *redirection)// recevoir en parametre fd_out par defaut a 1, idem search_last_input
+
+static int	search_last_output(t_exec_redirection *redirection)
+// recevoir en parametre fd_out par defaut a 1, idem search_last_input
 {
 	int					fd_out;
 	t_exec_redirection	*cursor;
@@ -117,7 +121,7 @@ void	execution(t_exec_struct **exec_struct)
 	int					i;
 	int					fd[2];
 	pid_t				pid_1;
-	int 				fd_in;
+	int					fd_in;
 	int					fd_out;
 	int					substrings_nmemb;
 	char				**envp_arr;
@@ -142,11 +146,13 @@ void	execution(t_exec_struct **exec_struct)
 		fd_out = STDOUT_FILENO;//builtins don't use fd_in : to verify 
 		if (cursor->exec_redirections)
 			fd_out = search_last_output(cursor->exec_redirections);
-		if ((*exec_struct)->exec_substrings->exec_arguments->is_builtin == 2 && substrings_nmemb == 1)
+		if ((*exec_struct)->exec_substrings->exec_arguments-> \
+		is_builtin == 2 && substrings_nmemb == 1)
 		{
 //			printf("fd_out: %d\n", fd_out);
 			if (fd_out > 0)
-				exec_builtin(*exec_struct, (*exec_struct)->exec_substrings, NULL); //! J'ai mis ca
+				exec_builtin(*exec_struct, \
+				(*exec_struct)->exec_substrings, NULL);
 			return ;
 		}
 	}
@@ -189,7 +195,8 @@ void	execution(t_exec_struct **exec_struct)
 //		printf("pid_arr[%d] : %d\n", i, pid_arr[i]);
 		if (pid_1 == 0)
 		{
-			exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct, pid_arr, fd, i);
+			exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct, \
+			pid_arr, fd, i);
 		}
 	/*	if (cursor == ft_lst_last7((*exec_struct)->exec_substrings))
 		{
@@ -227,7 +234,7 @@ void	execution(t_exec_struct **exec_struct)
 		cursor->exec_redirections = cursor->exec_redirections->next;
 	}*/
 	while (waitpid(pid_last_process, &status, 0) != -1)
-		continue;
+		continue ;
 //	printf("wexitstatus : %d\n", WEXITSTATUS(status));
 	(*exec_struct)->command_line->current_exit_code = WEXITSTATUS(status);
 	i-=2;

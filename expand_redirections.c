@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_redirections.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/17 14:08:12 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/17 19:17:51 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ static int	is_ambiguous_redirection(char *extracted_line)
 	return (false);
 }
 
-static size_t	common_extract_and_expand_content_of_redirections(char *content, \
-char **extracted_line, t_command_line **command_line)
+static size_t	common_extract_and_expand_content_of_redirections(char *content, char **extracted_line, t_command_line **command_line)
 {
 	size_t	len;
 
@@ -49,8 +48,7 @@ char **extracted_line, t_command_line **command_line)
 	return (len);
 }
 
-static size_t	heredoc_extract_and_expand_content_of_redirections(char *content, \
-char **extracted_line, bool *flag_for_expand)
+static size_t	heredoc_extract_and_expand_content_of_redirections(char *content, char **extracted_line, bool *flag_for_expand)
 {
 	size_t	len;
 
@@ -101,7 +99,7 @@ int e_redirection, t_command_line **command_line, bool *flag_for_expand)
 	if (!extracted_line)
 		return (-1);
 	if (!(*definitive_content))
-		*definitive_content = ft_strdup(extracted_line);//protection sur malloc à prévoir
+		*definitive_content = ft_strdup(extracted_line);//protection malloc
 	else
 		*definitive_content = ft_strjoin_freed(*definitive_content, \
 		extracted_line);//protection sur malloc à prévoir
@@ -127,8 +125,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 		exp_redirection->alloc_succeed = false;//to complete
 	while (n_redirection && n_redirection->content[i])
 	{
-		len = get_definitive_content_of_redirections(&n_redirection->content[i], \
-		&definitive_content, n_redirection->e_redirection, command_line, &exp_redirection->flag_for_expand);
+		len = get_definitive_content_of_redirections(&n_redirection->content[i], &definitive_content, n_redirection->e_redirection, command_line, &exp_redirection->flag_for_expand);
 		if (len == -2)
 		{
 			ft_putstr_fd(n_redirection->content, 2);

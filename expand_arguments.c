@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expand_arguments.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/17 14:08:54 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/17 19:01:32 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*static int cut_content_on_whitespaces(t_expanded_argument **exp_arguments, char **content, char **extracted_line)
+/*static int cut_content_on_whitespaces(t_expanded_argument \
+**exp_arguments, char **content, char **extracted_line)
 {
 //	int		i;
 //	int		start;
@@ -34,12 +35,14 @@
 			*content = skip_first_whitespaces(*content);
 			if (ft_strlen(*content) == 0)
 				break;
-			len = get_len_and_extract_until_next_whitespace_or_dollar(*content, extracted_line);
+			len = get_len_and_extract_until_next_whitespace_or_dollar\
+			(*content, extracted_line);
 			get_content(exp_arguments, extracted_line);
 		}
 		else
 		{
-			len = get_len_and_extract_until_next_whitespace_or_dollar(*content, extracted_line);
+			len = get_len_and_extract_until_next_whitespace_or_dollar\
+			(*content, extracted_line);
 	//		printf("content : %s\n", *content);
 		}
 //		content += len;
@@ -50,7 +53,8 @@
 	return (len);
 }*/
 
-void	add_exp_arguments(t_expanded_argument **exp_arguments, char **definitive_content)
+void	add_exp_arguments(t_expanded_argument **exp_arguments, \
+char **definitive_content)
 {
 	t_expanded_argument	*exp_argument;
 
@@ -98,14 +102,16 @@ t_command_line **command_line)
 			len = (int)get_len_and_extract_between_single_quotes \
 				(&n_argument_content[1], &extracted_line);
 			n_argument_content += len;
-			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
+			if (add_to_definitive_content(&definitive_content, \
+			extracted_line) == -1)
 			{
 				printf("error_single_quote\n");
 				return (1);
 			}
-			if (definitive_content && !n_argument_content[0])//to verify
+			if (definitive_content && !n_argument_content[0]) //verify
 //			if (definitive_content)
-				add_exp_arguments(&substring->exp_arguments, &definitive_content);
+				add_exp_arguments(&substring->exp_arguments, \
+				&definitive_content);
 		}
 		else if (n_argument_content[0] == '\"')
 		{
@@ -114,30 +120,36 @@ t_command_line **command_line)
 			(&n_argument_content[1], &extracted_line);
 			n_argument_content += len;
 			if (strcspn(extracted_line, "$") < ft_strlen(extracted_line))
-				complete_expand_content_of_arguments(&extracted_line, command_line, flag_keep_dollar);
-			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
+				complete_expand_content_of_arguments(&extracted_line, \
+				command_line, flag_keep_dollar);
+			if (add_to_definitive_content(&definitive_content, \
+			extracted_line) == -1)
 			{
 				printf("error_double_quote\n");
 				return (1);
 			}
 //				no special_treatment with $
 			if (definitive_content && !n_argument_content[0])
-				add_exp_arguments(&substring->exp_arguments, &definitive_content);
+				add_exp_arguments(&substring->exp_arguments, \
+				&definitive_content);
 //			else
 //				definitive_content = free_and_null(definitive_content);
 		}
 		else if (n_argument_content[0] == '$')
 		{
-			len = simple_expand_content_of_arguments(&n_argument_content[0], &substring->exp_arguments, &definitive_content, command_line);
+			len = simple_expand_content_of_arguments(&n_argument_content[0], \
+			&substring->exp_arguments, &definitive_content, command_line);
 			n_argument_content += len;
-/*			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
+/*			if (add_to_definitive_content(&definitive_content, \
+			extracted_line) == -1)
 			{
 				printf("error_$\n");
 				return (1);
 			}*/
 //			special_treatment with $
 			if (definitive_content && !n_argument_content[0])
-				add_exp_arguments(&substring->exp_arguments, &definitive_content);
+				add_exp_arguments(&substring->exp_arguments, \
+				&definitive_content);
 //			else
 //			definitive_content = free_and_null(definitive_content);
 		}
@@ -146,19 +158,20 @@ t_command_line **command_line)
 			len = get_len_and_extract_until_next_quote_or_dollar \
 			(&n_argument_content[0], &extracted_line);
 			n_argument_content += len;
-			if (add_to_definitive_content(&definitive_content, extracted_line) == -1)
+			if (add_to_definitive_content(&definitive_content, \
+			extracted_line) == -1)
 			{
 				printf("error_other\n");
 				return (1);
 			}
 //			printf("%s\n", definitive_content);
-			if (definitive_content && !n_argument_content[0])//to verify
+			if (definitive_content && !n_argument_content[0]) //to verify
 //			if (definitive_content)
 			{
 //				printf("n_argument_content : %s\n", n_argument_content);
-				add_exp_arguments(&substring->exp_arguments, &definitive_content);
+				add_exp_arguments(&substring->exp_arguments, \
+				&definitive_content);
 			}
-
 //			special_treatment with $
 		}
 	}
@@ -191,7 +204,8 @@ t_command_line **command_line)
 	}
 	else if (content[0] == '$')
 	{
-		len = simple_expand_content(&content[0], &extracted_line, exp_arguments, command_line, 1);
+		len = simple_expand_content(&content[0], &extracted_line, \
+		exp_arguments, command_line, 1);
 		if (add_to_definitive_content(definitive_content, extracted_line) == -1)
 			printf("error\n");
 //		special_treatment with $
@@ -207,24 +221,21 @@ t_command_line **command_line)
 	return (len);
 }*/
 
-/*static int	get_definitive_content_of_arguments(char *content, char **definitive_content, \
+/*static int	get_definitive_content_of_arguments(char *content, \
+char **definitive_content, \
 t_expanded_argument **exp_arguments, t_command_line **command_line)
 {
 //	char	*extracted_line;
 	int		len;
 
-	len = (int)extract_and_expand_content_of_arguments(content, definitive_content, \
-	exp_arguments, command_line);
+	len = (int)extract_and_expand_content_of_arguments(content, \
+	definitive_content, exp_arguments, command_line);
 
 	return (len);
 }*/
 
-
-
-
-
-/*void	expand_arguments(t_substring *substring, t_native_argument *n_argument, \
-t_command_line **command_line)
+/*void	expand_arguments(t_substring *substring, \
+t_native_argument *n_argument, t_command_line **command_line)
 {
 	int					i;
 	int					len;

@@ -6,14 +6,15 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/16 16:25:03 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:40:12 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	build_exec_redirection_struct(t_expanded_redirection *exp_redirection, \
-t_exec_substring **exec_substring, t_exec_struct **exec_struct)
+static void	build_exec_redirection_struct(t_expanded_redirection \
+*exp_redirection, t_exec_substring **exec_substring, \
+t_exec_struct **exec_struct)
 {
 	int					status_code;
 	t_exec_redirection	*exec_redirection;

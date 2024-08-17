@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_substrings.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/22 21:56:13 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/17 20:10:26 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_command_line	*parse_command_line(char **argv, char *str, t_envp_struct **envp_struct, \
-int previous_exit_code)
+t_command_line	*parse_command_line(char **argv, char *str, \
+t_envp_struct **envp_struct, int previous_exit_code)
 {
 	t_command_line	*command_line;
 	char			*remaining_line;
@@ -44,7 +44,8 @@ int previous_exit_code)
 	return (command_line);
 }
 
-int	cut_remaining_line_on_pipes(t_command_line **command_line, char *remaining_line)
+int	cut_remaining_line_on_pipes(t_command_line **command_line, \
+char *remaining_line)
 {
 	int	status_code;
 
@@ -95,8 +96,8 @@ int	parse_substrings(char **remaining_line, t_command_line **command_line)
 	return (0);
 }
 
-int	get_arguments_and_redirections(t_substring **substring, char **remaining_line, \
-t_command_line **command_line)
+int	get_arguments_and_redirections(t_substring **substring, \
+char **remaining_line, t_command_line **command_line)
 {
 	int	status_code_redirections;
 	int	status_code_arguments;
@@ -107,13 +108,15 @@ t_command_line **command_line)
 	{
 		if (*remaining_line[0] == '<' || *remaining_line[0] == '>')
 		{
-			status_code_redirections = get_redirections(remaining_line, *substring, command_line);
+			status_code_redirections = get_redirections \
+			(remaining_line, *substring, command_line);
 			if (status_code_redirections != 0)
 				return (status_code_redirections);
 		}
 		else
 		{
-			status_code_arguments = get_arguments(remaining_line, *substring, command_line);
+			status_code_arguments = get_arguments \
+			(remaining_line, *substring, command_line);
 			if (status_code_arguments != 0)
 				return (status_code_arguments);
 		}

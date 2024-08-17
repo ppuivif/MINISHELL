@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:35 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/16 17:12:44 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:46:09 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,14 @@ t_exec_struct **exec_struct)
 	return (false);
 }*/
 
-/*static void	check_dir(char *cmd_arr_0, t_exec_substring **exec_substring, t_exec_struct **exec_struct)
+/*static void	check_dir(char *cmd_arr_0, \
+t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
 	if (strcspn(cmd_arr_0, "/") < ft_strlen(cmd_arr_0))
 	{
 		ft_putstr_fd(cmd_arr_0, 2);
-		if (access(cmd_arr_0, X_OK) == 0)//F_OK to verify if file exists, X_OK to verify if the file is executable
+		if (access(cmd_arr_0, X_OK) == 0)
+		//F_OK to verify if file exists, X_OK to verify if the file is executable
 		{
 			ft_putstr_fd(": Is a directory\n", 2);
 			(*exec_struct)->command_line->current_exit_code = 126;
@@ -118,7 +120,8 @@ t_exec_struct **exec_struct)
 	}
 }*/
 
-/*		if (access(cmd_arr_0, X_OK) == 0)//F_OK to verify if file exists, X_OK to verify if the file is executable
+/*		if (access(cmd_arr_0, X_OK) == 0)
+//F_OK to verify if file exists, X_OK to verify if the file is executable
 		{
 			if ((cmd_arr_0[0]  == '.' && cmd_arr_0[1] == '/') || \
 			strcspn(cmd_arr_0, "/") == ft_strlen(cmd_arr_0) - 1 || \
@@ -389,7 +392,8 @@ t_exec_struct **exec_struct)
 		else if (return_value == 1)
 		{
 			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-			if (strcspn((*exec_substring)->cmd_arr[0], "/") < ft_strlen((*exec_substring)->cmd_arr[0]))
+			if (strcspn((*exec_substring)->cmd_arr[0], "/") < \
+			ft_strlen((*exec_substring)->cmd_arr[0]))
 				ft_putstr_fd(": No such file or directory\n", 2);
 			else
 				ft_putstr_fd(": command not found\n", 2);
@@ -423,7 +427,7 @@ int	check_path_cmd_validity(char **path, t_exec_substring **exec_substring)
 		path_with_cmd = ft_strjoin_freed(path_with_cmd, cmd_arr[0]);
 		if (!path_with_cmd || !path_with_cmd[0])
 			return (1);
-		if (access(path_with_cmd, F_OK) == 0) // or (access(path_with_cmd, X_OK) == 0) ?
+		if (access(path_with_cmd, F_OK) == 0) //(access(path_with_cmd, X_OK)==0)
 		{
 			(*exec_substring)->path_with_cmd = ft_strdup(path_with_cmd);
 			if (!(*exec_substring)->path_with_cmd)

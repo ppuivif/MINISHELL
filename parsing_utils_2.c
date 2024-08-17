@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:43 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/16 15:17:50 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 20:12:30 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@
 		return (false);
 }*/
 
-/*static int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
+/*static int	count_len_to_next_quotes(char *remaining_line, \
+char *c, int flag)
 {
 	int	j;
 	int	len_to_quote;
@@ -53,14 +54,17 @@
 		if ((len_to_quote + flag + j) <= (len_to_end + 1) &&
 			(remaining_line[len_to_quote + flag + j] == '\'' || \
 		remaining_line[len_to_quote + flag + j] == '\"'))
-			status_code = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], \
+			status_code = count_len_to_next_quotes \
+			(&remaining_line[len_to_quote + flag + j], \
 			(char []){remaining_line[len_to_quote + flag + j], '\0'}, 0);
 //		if (((len_to_quote + flag + j) <= (len_to_end + 1)) && \
 //		(remaining_line[len_to_quote + flag + j] == '\''))
-//			status_code = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\'", 0);
+//			status_code = count_len_to_next_quotes\
+			(&remaining_line[len_to_quote + flag + j], "\'", 0);
 //		else if ((len_to_quote + flag + j) <= (len_to_end + 1) && \
 //		remaining_line[len_to_quote + flag + j] == '\"')
-//			status_code = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);
+//			status_code = count_len_to_next_quotes\
+			(&remaining_line[len_to_quote + flag + j], "\"", 0);
 		if (status_code == -1)
 			return (-1);//syntax_error : no second quote after first one
 		len_to_quote += status_code;
@@ -83,7 +87,8 @@
 	return (true);
 }*/
 
-/*static int	count_len_to_next_quotes(char *remaining_line, char *c, int flag)
+/*static int	count_len_to_next_quotes(char *remaining_line, \
+char *c, int flag)
 {
 	int	j;
 	int	len_to_quote;
@@ -101,10 +106,12 @@
 	{
 		if (((len_to_quote + flag + j) <= (len_to_end + 1)) && \
 		(remaining_line[len_to_quote + flag + j] == '\''))
-			status_code = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\'", 0);
+			status_code = count_len_to_next_quotes \
+			(&remaining_line[len_to_quote + flag + j], "\'", 0);
 		else if ((len_to_quote + flag + j) <= (len_to_end + 1) && \
 		remaining_line[len_to_quote + flag + j] == '\"')
-			status_code = count_len_to_next_quotes(&remaining_line[len_to_quote + flag + j], "\"", 0);
+			status_code = count_len_to_next_quotes\
+			(&remaining_line[len_to_quote + flag + j], "\"", 0);
 		if (status_code == -1)
 			return (-1);//syntax_error : no second quote after first one
 		len_to_quote += status_code;
@@ -194,7 +201,8 @@ int	count_len_to_cut(char *remaining_line)
 		{
 			quote_type = remaining_line_copy[0];
 			remaining_line_copy++;
-			len_to_next_quote = count_len_to_next_quote(&remaining_line_copy, quote_type);
+			len_to_next_quote = count_len_to_next_quote \
+			(&remaining_line_copy, quote_type);
 			if (len_to_next_quote == -1)
 				return (-1);//syntax_error (only one quote)
 			else

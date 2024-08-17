@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/16 17:46:43 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:48:06 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ static int	is_non_valid_characters(char *str)
 	return (false);
 }
 
-size_t	handle_special_characters_after_dollar(char *str, char **extracted_line, \
-t_command_line **command_line, bool flag_keep_dollar)
+size_t	handle_special_characters_after_dollar(char *str, \
+char **extracted_line, t_command_line **command_line, bool flag_keep_dollar)
 {
 	int		len;
 	char	*argv_index;
@@ -69,7 +69,8 @@ t_command_line **command_line, bool flag_keep_dollar)
 	{
 		argv_index = ft_substr(str, 1, 1);
 		if (str[1] == '0' && (*command_line)->argv[atoi(argv_index)])
-			*extracted_line = ft_strdup((*command_line)->argv[atoi(argv_index)]);
+			*extracted_line = ft_strdup \
+			((*command_line)->argv[atoi(argv_index)]);
 		else
 			*extracted_line = ft_strdup("");
 		argv_index = free_and_null(argv_index);
@@ -78,7 +79,8 @@ t_command_line **command_line, bool flag_keep_dollar)
 	return (len);
 }
 
-size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t_command_line **command_line)
+size_t	simple_expand_content_of_redirections(char *str, \
+char **extracted_line, t_command_line **command_line)
 {
 	int		len;
 
@@ -89,13 +91,15 @@ size_t	simple_expand_content_of_redirections(char *str, char **extracted_line, t
 	else
 	{
 		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-		expand_string_after_dollar1(extracted_line, (*command_line)->envp_struct, command_line);
+		expand_string_after_dollar1(extracted_line, \
+		(*command_line)->envp_struct, command_line);
 	}
 	return (len);
 }
 
 size_t	simple_expand_content_of_arguments(char *str, \
-t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line)
+t_expanded_argument **exp_arguments, char **definitive_content, \
+t_command_line **command_line)
 {
 	int		len;
 	char	*extracted_line;
@@ -108,7 +112,8 @@ t_expanded_argument **exp_arguments, char **definitive_content, t_command_line *
 	{
 		if (*definitive_content)
 		{
-			*definitive_content = ft_strjoin_freed(*definitive_content, extracted_line);
+			*definitive_content = ft_strjoin_freed \
+			(*definitive_content, extracted_line);
 			extracted_line = free_and_null(extracted_line);
 		}
 		else
@@ -124,13 +129,15 @@ t_expanded_argument **exp_arguments, char **definitive_content, t_command_line *
 	else
 	{
 		len = get_len_and_extract_after_first_dollar(&str[0], &extracted_line);
-		expand_string_after_dollar2(extracted_line, exp_arguments, (*command_line)->envp_struct, definitive_content);
+		expand_string_after_dollar2(extracted_line, exp_arguments, \
+		(*command_line)->envp_struct, definitive_content);
 		extracted_line = free_and_null(extracted_line);
 	}
 	return (len);
 }
 
-static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
+static int	expand_content_heredoc_when_dollar_first(char *str, \
+char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
 {
 	int	len;
 
@@ -146,7 +153,8 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_env
 	return (len);
 }
 
-void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, t_command_line **command_line, bool flag_for_expand)
+void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, \
+t_command_line **command_line, bool flag_for_expand)
 {
 	int		i;
 	char	*tmp;
@@ -159,11 +167,11 @@ void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, t_comma
 		if (str[0][i] == '$')
 		{
 			if (flag_for_expand == true)
-				i += expand_content_heredoc_when_dollar_first(&str[0][i], &tmp, envp_struct, command_line);
+				i += expand_content_heredoc_when_dollar_first \
+				(&str[0][i], &tmp, envp_struct, command_line);
 			else
 			{
-				i += get_len_and_extract_until_next_dollar_first_dollar_excluded \
-				(&str[0][i], &tmp);
+				i += get_len_and_extract_until_next_dollar_first_dollar_excluded(&str[0][i], &tmp);
 			}
 		}
 		else

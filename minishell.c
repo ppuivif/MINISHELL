@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/16 16:16:27 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 20:05:38 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	main(int argc, char **argv, char **envp)
 	t_exec_struct	*exec_struct;
 	int				previous_exit_code;
 	int				exit_code;
+	int				fd;
 
 //	(void)argc;//for tests
 //	(void)argv;//for tests
@@ -38,12 +39,11 @@ int	main(int argc, char **argv, char **envp)
 		free(line);
 		exit(0);
 	}*/
-	if (argc == 2)//for tests
+	if (argc == 2) //for tests
 	{
-	 	int fd = ft_atoi(argv[1]);
+		fd = ft_atoi(argv[1]);
 		line = get_next_line(fd);
 	}
-
 	get_envp(envp, &envp_struct, line);
 /*	if (envp_struct)
 		ft_envp_struct_lst_print(envp_struct, 1);*/
@@ -70,12 +70,14 @@ int	main(int argc, char **argv, char **envp)
 		if (line[0]) //no history on empty lines
 		{
 			add_history(line);//here?
-			command_line = parse_command_line(argv, line, &envp_struct, previous_exit_code);
+			command_line = parse_command_line(argv, line, \
+			&envp_struct, previous_exit_code);
 			if (init_exec_struct(&exec_struct) == -1)
 				error_allocation_exec_struct_and_exit(&exec_struct);
 			exec_struct->envp_struct = envp_struct;
 			exec_struct->command_line = command_line;
-			if (command_line->substrings && command_line->current_exit_code == 0)
+			if (command_line->substrings && \
+			command_line->current_exit_code == 0)
 			{
 				build_exec_struct(&exec_struct);
 				signals(1);

@@ -6,13 +6,14 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/16 16:19:06 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:37:46 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static char	*get_variable_content_in_envp(char *variable, t_envp_struct *envp_struct)
+static char	*get_variable_content_in_envp(char *variable, \
+t_envp_struct *envp_struct)
 {
 	t_envp_struct	*cursor;
 	char			*result;
@@ -31,7 +32,8 @@ static char	*get_variable_content_in_envp(char *variable, t_envp_struct *envp_st
 	return (result);
 }
 
-static int	expand_variables_when_dollar_first(char *remaining_line, char **result, t_envp_struct *envp_struct)
+static int	expand_variables_when_dollar_first(char \
+*remaining_line, char **result, t_envp_struct *envp_struct)
 {
 	int		len_to_cut;
 	char	*tmp;
@@ -44,7 +46,7 @@ static int	expand_variables_when_dollar_first(char *remaining_line, char **resul
 		else
 		{
 			len_to_cut = (int)strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
-			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);//malloc à protéger
+			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);//protect
 			*result = get_variable_content_in_envp(tmp, envp_struct);
 			tmp = free_and_null(tmp);
 			if (!*result)
@@ -65,7 +67,8 @@ static char	*expand_variables(char **remaining_line, t_envp_struct *envp_struct)
 	result = NULL;
 	if (remaining_line[0][0] == '$')
 	{
-		len_to_cut = expand_variables_when_dollar_first(remaining_line[0], &result, envp_struct);
+		len_to_cut = expand_variables_when_dollar_first(remaining_line[0], \
+		&result, envp_struct);
 		*remaining_line += len_to_cut + 1;
 	}
 	else
@@ -77,7 +80,8 @@ static char	*expand_variables(char **remaining_line, t_envp_struct *envp_struct)
 	return (result);
 }
 
-static int	get_content(t_expanded_argument **exp_arguments, char *extracted_argument)
+static int	get_content(t_expanded_argument **exp_arguments, \
+char *extracted_argument)
 {
 	t_expanded_argument	*exp_argument;
 
@@ -104,7 +108,8 @@ char **extracted_argument)
 		len_to_next_separator = strcspn(*str, "$ \t\n\v\f\r\0");
 //	printf("len : %ld\n", len_to_next_separator);
 //	printf("str : %s\n", *str);
-	*extracted_argument = ft_substr(*str, 0, len_to_next_separator);//malloc à protéger
+	*extracted_argument = ft_substr(*str, 0, \
+	len_to_next_separator);//malloc à protéger
 //	printf("str : %s\n", (*extracted_argument));
 	(*str) += len_to_next_separator;
 //	printf("str : %s\n", *str);
@@ -124,7 +129,6 @@ static bool	is_last_argument(char *str)
 	return (false);
 }
 
-
 static bool	is_last_argument_followed_by_whitespaces(char *str)
 {
 	size_t	len_to_end;
@@ -135,9 +139,8 @@ static bool	is_last_argument_followed_by_whitespaces(char *str)
 	return (false);
 }
 
-
-
-void	cut_variable_on_whitespaces(t_expanded_argument **exp_arguments, char **variable, bool *last_arg_with_wspaces)
+void	cut_variable_on_whitespaces(t_expanded_argument **exp_arguments, \
+char **variable, bool *last_arg_with_wspaces)
 {
 	char	*extracted_argument;
 
@@ -149,23 +152,24 @@ void	cut_variable_on_whitespaces(t_expanded_argument **exp_arguments, char **var
 		{
 			if (is_last_argument_followed_by_whitespaces(*variable) == true)
 			{
-				extract_argument_until_next_whitespace_or_dollar(variable, &extracted_argument);
+				extract_argument_until_next_whitespace_or_dollar \
+				(variable, &extracted_argument);
 				get_content(exp_arguments, extracted_argument);
 				*last_arg_with_wspaces = true;
 			}
 			else
 				*last_arg_with_wspaces = false;
-		}				
-		else
-		{
-			extract_argument_until_next_whitespace_or_dollar(variable, &extracted_argument);
-			get_content(exp_arguments, extracted_argument);
-			*last_arg_with_wspaces = true;
+			return ;
 		}
+		extract_argument_until_next_whitespace_or_dollar \
+		(variable, &extracted_argument);
+		get_content(exp_arguments, extracted_argument);
+		*last_arg_with_wspaces = true;
 	}
 }
 
-void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct, t_command_line **command_line)
+void	expand_string_after_dollar1(char **str, \
+t_envp_struct *envp_struct, t_command_line **command_line)
 {
 	char	*remaining_line;
 	char	*variable;
@@ -177,8 +181,9 @@ void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct, t_comma
 	len = 0;
 	while (remaining_line && remaining_line[0])
 	{
-		len = handle_special_characters_after_dollar(remaining_line, &variable, command_line, 1);
-		if (len == 0)	
+		len = handle_special_characters_after_dollar(remaining_line, \
+		&variable, command_line, 1);
+		if (len == 0)
 			variable = expand_variables(&remaining_line, envp_struct);
 		else
 			remaining_line += len;
@@ -192,9 +197,9 @@ void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct, t_comma
 	variable = free_and_null(variable);
 }
 
-
-void	expand_string_after_dollar2(char *str, t_expanded_argument **exp_arguments,\
-t_envp_struct *envp_struct, char **definitive_content)
+void	expand_string_after_dollar2(char *str, \
+t_expanded_argument **exp_arguments, t_envp_struct *envp_struct, \
+char **definitive_content)
 {
 	char	*variable;
 	char	*extracted_argument;
@@ -215,18 +220,21 @@ t_envp_struct *envp_struct, char **definitive_content)
 				add_exp_arguments(exp_arguments, definitive_content);
 			while (tmp && tmp[0] && last_arg_with_wspaces == true)
 			{
-				cut_variable_on_whitespaces(exp_arguments, &tmp, &last_arg_with_wspaces);
+				cut_variable_on_whitespaces(exp_arguments, &tmp, \
+				&last_arg_with_wspaces);
 //				printf ("tmp : %s\n", tmp);
 			}
 		}
 		else
 		{
-			extract_argument_until_next_whitespace_or_dollar(&tmp, &extracted_argument);
-			if (add_to_definitive_content(definitive_content, extracted_argument) == -1)
+			extract_argument_until_next_whitespace_or_dollar(&tmp, \
+			&extracted_argument);
+			if (add_to_definitive_content(definitive_content, \
+			extracted_argument) == -1)
 //				add_exp_arguments(exp_arguments, definitive_content);
 //			else
 				printf("error\n");
-		}				
+		}
 	}
 	variable = free_and_null(variable);
 }

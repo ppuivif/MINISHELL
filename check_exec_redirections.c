@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/16 16:22:12 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:48:40 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ t_exec_redirection **exec_redirection)
 }
 
 static int	check_heredoc(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection, t_envp_struct *envp_struct, t_command_line **command_line)
+t_exec_redirection **exec_redirection, t_envp_struct *envp_struct, \
+t_command_line **command_line)
 {
 	char	*line;
 	int		fd;
@@ -104,7 +105,8 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct, t_command_lin
 		}
 		if (line[0])
 			add_history(line);
-		expand_content_when_heredoc(&line, envp_struct, command_line, exp_redirection->flag_for_expand);
+		expand_content_when_heredoc(&line, envp_struct, command_line, \
+		exp_redirection->flag_for_expand);
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);
 		line = free_and_null(line);
@@ -130,7 +132,6 @@ t_exec_struct *exec_struct)
 
 	return_value = 0;
 //	printf("fd_input : %d\n", (*exec_redirection)->fd_input);
-//	printf("fd_output : %d\n", (*exec_redirection)->fd_output);
 	if ((exp_redirection->e_redirection == REDIRECTION_OUTFILE || \
 	exp_redirection->e_redirection == REDIRECTION_APPEND) && \
 	(*exec_substring)->is_previous_file_opened == true)
@@ -146,7 +147,8 @@ t_exec_struct *exec_struct)
 	}
 	if (exp_redirection->e_redirection == REDIRECTION_HEREDOC)
 	{
-		return_value = check_heredoc(exp_redirection, exec_redirection, exec_struct->envp_struct, &exec_struct->command_line);
+		return_value = check_heredoc(exp_redirection, exec_redirection, \
+		exec_struct->envp_struct, &exec_struct->command_line);
 		return (return_value);
 	}
 	else

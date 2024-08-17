@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/16 09:06:10 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/17 19:27:06 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char **extracted_line)
 	size_t	len_to_next_quote_or_dollar;
 
 	len_to_next_quote_or_dollar = ft_strcspn(str, "$\"\'\0");
-	*extracted_line = ft_substr(str, 0, len_to_next_quote_or_dollar);//malloc à protéger
+	*extracted_line = ft_substr(str, 0, len_to_next_quote_or_dollar);//protect
 	len = len_to_next_quote_or_dollar;
 	return (len);
 }
@@ -31,7 +31,7 @@ char **extracted_line)
 	size_t	len_to_next_separator;
 
 	len_to_next_separator = ft_strcspn(str, "$\"\' \t\n\v\f\r\0");
-	*extracted_line = ft_substr(str, 0, len_to_next_separator);//malloc à protéger
+	*extracted_line = ft_substr(str, 0, len_to_next_separator);//protect
 	len = len_to_next_separator;
 	return (len);
 }

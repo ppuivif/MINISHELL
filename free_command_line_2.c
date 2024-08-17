@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:34:21 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:50:40 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ static void	free_exp_redirection(t_expanded_redirection **exp_redirections)
 	while (ft_lst_size4(*exp_redirections))
 	{
 		tmp = (*exp_redirections)->next;
-		(*exp_redirections)->content = free_and_null((*exp_redirections)->content);
+		(*exp_redirections)->content = free_and_null \
+		((*exp_redirections)->content);
 		free(*exp_redirections);
 		*exp_redirections = tmp;
 	}
@@ -81,10 +82,12 @@ void	free_substring(t_substring **substrings)
 			free_n_argument(&(*substrings)->n_arguments);
 			free_exp_argument(&(*substrings)->exp_arguments);
 		}
-		(*substrings)->remaining_line = free_and_null((*substrings)->remaining_line);
+		(*substrings)->remaining_line = free_and_null \
+		((*substrings)->remaining_line);
 		(*substrings)->n_redirections = free_and_null((*substrings)->n_redirections);
 		(*substrings)->n_arguments = free_and_null((*substrings)->n_arguments);
-		(*substrings)->exp_redirections = free_and_null((*substrings)->exp_redirections);
+		(*substrings)->exp_redirections = free_and_null \
+		((*substrings)->exp_redirections);
 		(*substrings)->exp_arguments = free_and_null((*substrings)->exp_arguments);
 		free((*substrings));
 		*substrings = tmp;

@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 08:11:27 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 19:51:29 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static void	free_exec_argument_struct(t_exec_argument **exec_arguments)
 	while (ft_lst_size9(*exec_arguments))
 	{
 		tmp = (*exec_arguments)->next;
-			free(*exec_arguments);
+		free(*exec_arguments);
 		*exec_arguments = tmp;
 	}
 }
@@ -47,13 +47,18 @@ static void	free_exec_substring_struct(t_exec_substring **exec_substrings)
 	{
 		tmp = (*exec_substrings)->next;
 		if ((*exec_substrings)->exec_redirections)
-			free_exec_redirection_struct(&(*exec_substrings)->exec_redirections);
+			free_exec_redirection_struct \
+			(&(*exec_substrings)->exec_redirections);
 		if ((*exec_substrings)->exec_arguments)
 			free_exec_argument_struct(&(*exec_substrings)->exec_arguments);
-		(*exec_substrings)->exec_redirections = free_and_null((*exec_substrings)->exec_redirections);
-		(*exec_substrings)->exec_arguments = free_and_null((*exec_substrings)->exec_arguments);
-		(*exec_substrings)->cmd_arr = free_and_null((*exec_substrings)->cmd_arr);
-		(*exec_substrings)->path_with_cmd = free_and_null((*exec_substrings)->path_with_cmd);
+		(*exec_substrings)->exec_redirections = free_and_null \
+		((*exec_substrings)->exec_redirections);
+		(*exec_substrings)->exec_arguments = free_and_null \
+		((*exec_substrings)->exec_arguments);
+		(*exec_substrings)->cmd_arr = free_and_null \
+		((*exec_substrings)->cmd_arr);
+		(*exec_substrings)->path_with_cmd = free_and_null \
+		((*exec_substrings)->path_with_cmd);
 		free((*exec_substrings));
 		*exec_substrings = tmp;
 	}

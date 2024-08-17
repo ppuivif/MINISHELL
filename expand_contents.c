@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expand_contents.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:25 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/15 13:57:12 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/17 19:10:42 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void check_alloc_exp_arguments(t_expanded_argument *expand_arguments, t_command_line **command_line)
+static void	check_alloc_exp_arguments(t_expanded_argument \
+*expand_arguments, t_command_line **command_line)
 {
 	t_expanded_argument	*cursor;
 
@@ -25,7 +26,8 @@ static void check_alloc_exp_arguments(t_expanded_argument *expand_arguments, t_c
 	}
 }
 
-static void check_alloc_exp_redirections(t_expanded_redirection *expand_redirections, t_command_line **command_line)
+static void	check_alloc_exp_redirections(t_expanded_redirection \
+*expand_redirections, t_command_line **command_line)
 {
 	t_expanded_redirection	*cursor;
 
@@ -53,9 +55,10 @@ void	expand_contents(t_command_line **command_line)
 //		while (cursor2)
 		{
 			expand_redirections(cursor1, cursor2, command_line);
-			if ((*command_line)->current_exit_code == 1)//ambiguous redirection
+			if ((*command_line)->current_exit_code == 1) //ambiguous redirection
 				break ;
-			check_alloc_exp_redirections(cursor1->exp_redirections, command_line);
+			check_alloc_exp_redirections(cursor1->exp_redirections, \
+			command_line);
 			cursor2 = cursor2->next;
 		}
 		cursor3 = cursor1->n_arguments;
@@ -66,7 +69,7 @@ void	expand_contents(t_command_line **command_line)
 			if (expand_arguments(cursor1, cursor3, command_line))
 //			exit_code to check ?
 //			add action on error
-			check_alloc_exp_arguments(cursor1->exp_arguments, command_line);
+				check_alloc_exp_arguments(cursor1->exp_arguments, command_line);
 			cursor3 = cursor3->next;
 		}
 		cursor1 = cursor1->next;
