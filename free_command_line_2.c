@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   free_command_line_2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:34:21 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "linked_list_utils.h"
 
-static void	free_n_redirection(t_native_redirection **n_redirections)
+static void	free_n_redirection(t_nativt_redirection **n_redirections)
 {
-	t_native_redirection	*tmp;
+	t_nativt_redirection	*tmp;
 
 	while (ft_lst_size2(*n_redirections))
 	{

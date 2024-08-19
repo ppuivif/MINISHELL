@@ -6,17 +6,11 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:53 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/12 16:11:29 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/19 14:43:47 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	error_allocation_envp_struct_and_exit(void)
-{
-	ft_putstr_fd("error : an allocation failed\n", 2);
-	exit(EXIT_FAILURE);
-}
 
 void	error_allocation_exec_struct_and_exit(t_exec_struct **exec_struct)
 {
@@ -49,16 +43,6 @@ void	error_fork_creation_and_exit(t_exec_struct **exec_struct)
 	free_envp_struct(&(*exec_struct)->envp_struct);
 	free_all_command_line(&(*exec_struct)->command_line);
 	ft_putstr_fd("error : a fork creation failed\n", 2);
-	rl_clear_history();
-	exit(EXIT_FAILURE);
-}
-
-void	error_execve_and_exit(t_exec_struct **exec_struct)
-{
-	free_all_exec_struct(exec_struct);
-	free_envp_struct(&(*exec_struct)->envp_struct);
-	free_all_command_line(&(*exec_struct)->command_line);
-	ft_putstr_fd("error\nexecve of a cmd failed", 2);
 	rl_clear_history();
 	exit(EXIT_FAILURE);
 }

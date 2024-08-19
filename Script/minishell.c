@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/26 08:02:51 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/19 10:28:26 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int	main(int argc, char **argv, char **envp)
 /*	if (envp_struct)
 		ft_envp_struct_lst_print(envp_struct, 1);*/
 	while (1)
-	{
+	{																																																																																				
 //		if (isatty(STDIN_FILENO))
 		signals(0);
 		if (argc != 2)

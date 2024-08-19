@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free_exec_struct.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 08:11:27 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/19 17:21:20 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/linked_list_utils.h"
+#include "linked_list_utils.h"
 
 static void	free_exec_argument_struct(t_exec_argument **exec_arguments)
 {

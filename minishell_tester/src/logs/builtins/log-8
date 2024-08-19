@@ -1,0 +1,25 @@
+==3977232== Memcheck, a memory error detector
+==3977232== Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.
+==3977232== Using Valgrind-3.18.1 and LibVEX; rerun with -h for copyright info
+==3977232== Command: ../../minishell -c exit\ -100
+==3977232== Parent PID: 3975615
+==3977232== 
+==3977232== 
+==3977232== FILE DESCRIPTORS: 4 open (3 std) at exit.
+==3977232== Open file descriptor 3: /nfs/homes/ppuivif/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL/minishell_tester/src/logs/builtins/log-8
+==3977232==    <inherited from parent>
+==3977232== 
+==3977232== 
+==3977232== HEAP SUMMARY:
+==3977232==     in use at exit: 208,207 bytes in 223 blocks
+==3977232==   total heap usage: 629 allocs, 406 frees, 235,071 bytes allocated
+==3977232== 
+==3977232== LEAK SUMMARY:
+==3977232==    definitely lost: 0 bytes in 0 blocks
+==3977232==    indirectly lost: 0 bytes in 0 blocks
+==3977232==      possibly lost: 0 bytes in 0 blocks
+==3977232==    still reachable: 0 bytes in 0 blocks
+==3977232==         suppressed: 208,207 bytes in 223 blocks
+==3977232== 
+==3977232== For lists of detected and suppressed errors, rerun with: -s
+==3977232== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

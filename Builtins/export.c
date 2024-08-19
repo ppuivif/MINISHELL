@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/12 08:07:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/19 11:54:32 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ static void	add_export(t_exec_struct *exec_struct, \
 	char			*tmp2;
 
 	env = exec_struct->envp_struct;
-	len_name = search_first_occurence(argument, '=');
+	len_name = ft_strcspn(argument, "=");
 	if (len_name == 0)
 	{
 		tmp1 = ft_substr(argument, 0, ft_strlen(argument));
@@ -168,7 +168,7 @@ static void	add2_export(t_exec_struct *exec_struct, \
 	char			*temp;
 
 	env = exec_struct->envp_struct;
-	len_name = search_first_occurence(argument, '=');
+	len_name = ft_strcspn(argument, "=");
 	if (len_name == 0)
 	{
 		ft_lst_add_back6(&exec_struct->envp_struct, ft_lstnew \

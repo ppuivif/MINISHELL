@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:25 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/15 13:57:12 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static void check_alloc_exp_redirections(t_expanded_redirection *expand_redirect
 void	expand_contents(t_command_line **command_line)
 {
 	t_substring				*cursor1;
-	t_native_redirection	*cursor2;
+	t_nativt_redirection	*cursor2;
 	t_native_argument		*cursor3;
 
 	cursor1 = (*command_line)->substrings;

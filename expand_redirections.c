@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/17 14:08:12 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,13 +79,13 @@ char **extracted_line, bool *flag_for_expand)
 }
 
 static int	get_definitive_content_of_redirections(char *content, char **definitive_content, \
-int e_redirection, t_command_line **command_line, bool *flag_for_expand)
+int t_redirection, t_command_line **command_line, bool *flag_for_expand)
 {
 	int		len;
 	char	*extracted_line;
 
 	len = 0;
-	if (e_redirection != 4)
+	if (t_redirection != 4)
 	{
 		len = (int)common_extract_and_expand_content_of_redirections \
 		(content, &extracted_line, command_line);
@@ -112,7 +112,7 @@ int e_redirection, t_command_line **command_line, bool *flag_for_expand)
 }
 
 void	expand_redirections(t_substring *substring, \
-t_native_redirection *n_redirection, t_command_line **command_line)
+t_nativt_redirection *n_redirection, t_command_line **command_line)
 {
 	int						i;
 	int						len;
@@ -128,7 +128,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 	while (n_redirection && n_redirection->content[i])
 	{
 		len = get_definitive_content_of_redirections(&n_redirection->content[i], \
-		&definitive_content, n_redirection->e_redirection, command_line, &exp_redirection->flag_for_expand);
+		&definitive_content, n_redirection->t_redirection, command_line, &exp_redirection->flag_for_expand);
 		if (len == -2)
 		{
 			ft_putstr_fd(n_redirection->content, 2);
@@ -145,7 +145,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 		}
 		i += len;
 	}
-	exp_redirection->e_redirection = n_redirection->e_redirection;
+	exp_redirection->t_redirection = n_redirection->t_redirection;
 	exp_redirection->content = definitive_content;
 	ft_lst_add_back4(&substring->exp_redirections, exp_redirection);
 }

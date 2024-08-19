@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:35 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/15 13:17:52 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/19 11:57:36 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -271,25 +271,6 @@ char	**build_envp_arr(t_exec_struct **exec_struct)
 	}
 	return (envp_arr);
 }
-/*char	**search_path(char **envp)
-{
-	int		i;
-	char	**path;
-
-	path = NULL;
-	i = 0;
-	while (envp[i])
-	{
-		if (ft_strncmp(envp[i], "PATH=", 5) == 0)
-		{
-			path = ft_split(&envp[i][5], ':');
-			return (path);
-		}
-		else
-			i++;
-	}
-	return (path);
-}*/
 
 char	**search_path(t_envp_struct *envp_struct)
 {
@@ -309,52 +290,6 @@ char	**search_path(t_envp_struct *envp_struct)
 	}
 	return (path);
 }
-
-/*int	check_path_in_envp(t_exec_substring **exec_substring, \
-t_exec_struct **exec_struct)
-{
-	int		return_value;
-//	char	**envp_arr;
-	char	**path_envp;
-
-	return_value = 0;
-//	envp_arr = build_envp_arr(exec_struct);
-//	path_envp = search_path(envp_arr);
-	path_envp = search_path((*exec_struct)->envp_struct);
-	if (!path_envp || !path_envp[0])
-	{
-		ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-		ft_putstr_fd(": command not found\n", 2);
-		(*exec_substring)->exec_arguments->is_argument_valid = false;
-		(*exec_struct)->command_line->current_exit_code = 127;
-		return (1);
-	}
-	else
-	{
-		if ((*exec_substring)->cmd_arr[0][0] == 0)
-			return_value = 1;
-		else
-			return_value = check_path_cmd_validity(path_envp, exec_substring);
-		if (return_value == -1)
-			error_allocation_exec_struct_and_exit(exec_struct);
-		if (return_value == 1)
-		{
-			ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-			if (strcspn((*exec_substring)->cmd_arr[0], "/") < ft_strlen((*exec_substring)->cmd_arr[0]))
-				ft_putstr_fd(": No such file or directory\n", 2);
-			else
-				ft_putstr_fd(": command not found\n", 2);
-			(*exec_struct)->command_line->current_exit_code = 127;
-			(*exec_substring)->exec_arguments->is_argument_valid = false;
-			return (1);
-		}
-//		else
-			(*exec_struct)->command_line->current_exit_code = 0;
-		return (0);
-	}
-//	envp_arr = free_arr(envp_arr);
-	path_envp = free_arr(path_envp);
-}*/
 
 void	check_path_in_envp(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
