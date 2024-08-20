@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 11:07:39 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,18 +15,18 @@
 static int	get_arguments_and_redirections(t_substring **substring, char **remaining_line, \
 t_command_line **command_line)
 {
-	int	status_codt_redirections;
+	int	status_code_redirections;
 	int	status_code_arguments;
 
-	status_codt_redirections = 0;
+	status_code_redirections = 0;
 	status_code_arguments = 0;
 	while (*remaining_line[0] && *remaining_line[0] != '|')
 	{
 		if (*remaining_line[0] == '<' || *remaining_line[0] == '>')
 		{
-			status_codt_redirections = get_redirections(remaining_line, *substring, command_line);
-			if (status_codt_redirections != 0)
-				return (status_codt_redirections);
+			status_code_redirections = get_redirections(remaining_line, *substring, command_line);
+			if (status_code_redirections != 0)
+				return (status_code_redirections);
 		}
 		else
 		{
@@ -69,7 +69,6 @@ static int	cut_remaining_line_on_pipes(t_command_line **command_line, char *rema
 	int	status_code;
 
 	status_code = 0;
-//	while (ft_strlen(remaining_line))
 	while (remaining_line[0])
 	{
 		status_code = parse_substrings(&remaining_line, command_line);

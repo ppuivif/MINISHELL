@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:37:41 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,13 @@ typedef struct s_nativt_redirection
 	char						*content;
 	t_redirection				t_redirection;
 	struct s_nativt_redirection	*next;
-}	t_nativt_redirection;
+}	t_native_redirection;
 
 typedef struct s_substring
 {
 	char					*remaining_line;
 	t_native_argument		*n_arguments;
-	t_nativt_redirection	*n_redirections;
+	t_native_redirection	*n_redirections;
 	t_expanded_argument		*exp_arguments;
 	t_expanded_redirection	*exp_redirections;
 	struct s_substring		*next;
@@ -147,9 +147,9 @@ void				ft_lst_add_back1(t_substring **head, \
 * linked_list_utils2.c for native edirection
 */
 
-size_t				ft_lst_size2(t_nativt_redirection *head);
-void				ft_lst_add_back2(t_nativt_redirection **head, \
-					t_nativt_redirection *new_element);
+size_t				ft_lst_size2(t_native_redirection *head);
+void				ft_lst_add_back2(t_native_redirection **head, \
+					t_native_redirection *new_element);
 
 /*
 * linked_list_utils3.c for native argument
@@ -207,10 +207,5 @@ void				ft_lst_add_back8(t_exec_redirection **head, \
 size_t				ft_lst_size9(t_exec_argument *head);
 void				ft_lst_add_back9(t_exec_argument **head, \
 					t_exec_argument *new_element);
-
-void				free_envp_struct(t_envp_struct **envp_struct);
-void				free_all_command_line(t_command_line **command_line);
-void				free_all_exec_struct(t_exec_struct **exec_struct);
-void				free_substring(t_substring **substrings);
 
 #endif

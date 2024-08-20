@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:24:28 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,7 @@ int t_redirection, t_command_line **command_line, bool *flag_for_expand)
 }
 
 void	expand_redirections(t_substring *substring, \
-t_nativt_redirection *n_redirection, t_command_line **command_line)
+t_native_redirection *n_redirection, t_command_line **command_line)
 {
 	int						i;
 	int						len;

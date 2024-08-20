@@ -6,15 +6,15 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 10:06:30 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linked_list_utils.h"
+#include "minishell.h"
 
-static void	free_n_redirection(t_nativt_redirection **n_redirections)
+static void	free_n_redirection(t_native_redirection **n_redirections)
 {
-	t_nativt_redirection	*tmp;
+	t_native_redirection	*tmp;
 
 	while (ft_lst_size2(*n_redirections))
 	{
@@ -45,7 +45,8 @@ static void	free_exp_redirection(t_expanded_redirection **exp_redirections)
 	while (ft_lst_size4(*exp_redirections))
 	{
 		tmp = (*exp_redirections)->next;
-		(*exp_redirections)->content = free_and_null((*exp_redirections)->content);
+		(*exp_redirections)->content = \
+		free_and_null((*exp_redirections)->content);
 		free(*exp_redirections);
 		*exp_redirections = tmp;
 	}
@@ -72,20 +73,22 @@ void	free_substring(t_substring **substrings)
 	{
 		tmp = (*substrings)->next;
 		if ((*substrings)->n_redirections)
-		{
 			free_n_redirection(&(*substrings)->n_redirections);
+		if ((*substrings)->exp_redirections)
 			free_exp_redirection(&(*substrings)->exp_redirections);
-		}
 		if ((*substrings)->n_arguments)
-		{
 			free_n_argument(&(*substrings)->n_arguments);
+		if ((*substrings)->exp_arguments)
 			free_exp_argument(&(*substrings)->exp_arguments);
-		}
-		(*substrings)->remaining_line = free_and_null((*substrings)->remaining_line);
-		(*substrings)->n_redirections = free_and_null((*substrings)->n_redirections);
+		(*substrings)->remaining_line = \
+		free_and_null((*substrings)->remaining_line);
+		(*substrings)->n_redirections = \
+		free_and_null((*substrings)->n_redirections);
 		(*substrings)->n_arguments = free_and_null((*substrings)->n_arguments);
-		(*substrings)->exp_redirections = free_and_null((*substrings)->exp_redirections);
-		(*substrings)->exp_arguments = free_and_null((*substrings)->exp_arguments);
+		(*substrings)->exp_redirections = \
+		free_and_null((*substrings)->exp_redirections);
+		(*substrings)->exp_arguments = \
+		free_and_null((*substrings)->exp_arguments);
 		free((*substrings));
 		*substrings = tmp;
 	}

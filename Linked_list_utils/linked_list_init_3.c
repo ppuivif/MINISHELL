@@ -6,11 +6,22 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:25:52 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "linked_list_utils.h"
+
+int	init_exec_struct(t_exec_struct **exec_struct)
+{
+	*exec_struct = ft_calloc(1, sizeof(t_exec_struct));
+	if (!*exec_struct)
+		return (-1);
+	(*exec_struct)->exit_code = 0;
+	(*exec_struct)->exec_substrings = 0;
+	(*exec_struct)->envp_struct = NULL;
+	return (0);
+}
 
 int	init_exec_argument_struct(t_exec_argument **exec_argument)
 {
@@ -50,16 +61,5 @@ int	init_exec_substring_struct(t_exec_substring **exec_substring)
 	(*exec_substring)->cmd_arr = NULL;
 	(*exec_substring)->path_with_cmd = NULL;
 	(*exec_substring)->next = NULL;
-	return (0);
-}
-
-int	init_exec_struct(t_exec_struct **exec_struct)
-{
-	*exec_struct = ft_calloc(1, sizeof(t_exec_struct));
-	if (!*exec_struct)
-		return (-1);
-	(*exec_struct)->exit_code = 0;
-	(*exec_struct)->exec_substrings = 0;
-	(*exec_struct)->envp_struct = NULL;
 	return (0);
 }

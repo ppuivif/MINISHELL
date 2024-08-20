@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:19 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/11 19:24:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:56:11 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_command_line **command_line)
 	n_argument = NULL;
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	len = count_len_to_cut(*remaining_line);
-	if (len == -1)
+	if (len == -1 || len == 0)
 		return (2);
 	if (init_native_argument_struct(&n_argument) == -1)
 		error_allocation_command_line_and_exit(command_line);

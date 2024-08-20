@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:24:28 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	init_native_argument_struct(t_native_argument **n_argument)
 	return (0);
 }
 
-int	init_nativt_redirection_struct(t_nativt_redirection **n_redirection)
+int	init_native_redirection_struct(t_native_redirection **n_redirection)
 {
-	*n_redirection = ft_calloc(1, sizeof(t_nativt_redirection));
+	*n_redirection = ft_calloc(1, sizeof(t_native_redirection));
 	if (!*n_redirection)
 		return (-1);
 	(*n_redirection)->content = NULL;

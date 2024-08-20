@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:24:28 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	ft_native_lst_print(t_command_line *command_line, int fd)
 	size_t					i;
 	size_t					j;
 	t_substring				*tmp1;
-	t_nativt_redirection	*tmp2;
+	t_native_redirection	*tmp2;
 	t_native_argument		*tmp3;
 
 	i = 0;
@@ -90,7 +90,7 @@ void	ft_native_lst_print_for_tests(t_command_line *command_line, int fd)
 	size_t					i;
 	size_t					j;
 	t_substring				*tmp1;
-	t_nativt_redirection	*tmp2;
+	t_native_redirection	*tmp2;
 	t_native_argument		*tmp3;
 
 	i = 0;

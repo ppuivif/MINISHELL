@@ -6,15 +6,15 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:27:56 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "linked_list_utils.h"
 
-static t_nativt_redirection	*ft_lst_last2(t_nativt_redirection *head)
+static t_native_redirection	*ft_lst_last2(t_native_redirection *head)
 {
-	t_nativt_redirection	*last_element;
+	t_native_redirection	*last_element;
 
 	if (!head)
 		return (NULL);
@@ -29,9 +29,10 @@ static t_nativt_redirection	*ft_lst_last2(t_nativt_redirection *head)
 	return (last_element);
 }
 
-void	ft_lst_add_back2(t_nativt_redirection **head, t_nativt_redirection *new_element)
+void	ft_lst_add_back2(t_native_redirection **head, \
+		t_native_redirection *new_element)
 {
-	t_nativt_redirection	*last_element;
+	t_native_redirection	*last_element;
 
 	if (!head || !new_element)
 		return ;
@@ -48,10 +49,10 @@ void	ft_lst_add_back2(t_nativt_redirection **head, t_nativt_redirection *new_ele
 	}
 }
 
-size_t	ft_lst_size2(t_nativt_redirection *head)
+size_t	ft_lst_size2(t_native_redirection *head)
 {
 	size_t					len;
-	t_nativt_redirection	*last_element;
+	t_native_redirection	*last_element;
 
 	len = 1;
 	if (!head)

@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:36 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/19 16:04:06 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:28:07 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ static t_native_argument	*ft_lst_last3(t_native_argument *head)
 	return (last_element);
 }
 
-void	ft_lst_add_back3(t_native_argument **head, t_native_argument *new_element)
+void	ft_lst_add_back3(t_native_argument **head, \
+		t_native_argument *new_element)
 {
 	t_native_argument	*last_element;
 

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free_command_line_1.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:14 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:34:17 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/20 10:06:04 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linked_list_utils.h"
+#include "minishell.h"
 
 void	free_all_command_line(t_command_line **command_line)
 {

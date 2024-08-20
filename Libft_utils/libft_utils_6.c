@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:08:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/19 16:01:42 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:32:39 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	*free_arr(char **arr)
 	return (arr);
 }
 
-void 	print_arr(char **arr)//to delete
+void	print_arr(char **arr)//to delete
 {
 	while (arr && *arr)
 	{
@@ -74,4 +74,3 @@ void 	print_arr(char **arr)//to delete
 		arr++;
 	}
 }
-

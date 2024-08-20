@@ -6,14 +6,14 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:23 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/19 17:10:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 11:09:47 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int	get_redirection_type(char **str, \
-t_nativt_redirection *n_redirection)
+t_native_redirection *n_redirection)
 {
 	if (count_angled_bracket(*str) > 2)
 		(*n_redirection).t_redirection = REDIRECTION_INDEFINED;
@@ -40,15 +40,26 @@ t_nativt_redirection *n_redirection)
 	return ((*n_redirection).t_redirection);
 }
 
+static void	check_and_add_redirection(t_substring **substring, \
+t_command_line **command_line, t_native_redirection **n_redirection)
+{
+	if (!(*n_redirection)->content)
+	{
+		(*n_redirection) = free_and_null(*n_redirection);
+		error_allocation_command_line_and_exit(command_line);
+	}
+	ft_lst_add_back2(&(*substring)->n_redirections, *n_redirection);
+}
+
 int	get_redirections(char **remaining_line, t_substring *substring, \
 t_command_line **command_line)
 {
 	int						len;
-	t_nativt_redirection	*n_redirection;
+	t_native_redirection	*n_redirection;
 
 	len = 0;
 	n_redirection = NULL;
-	if (init_nativt_redirection_struct(&n_redirection) == -1)
+	if (init_native_redirection_struct(&n_redirection) == -1)
 		error_allocation_command_line_and_exit(command_line);
 	if (get_redirection_type(remaining_line, n_redirection) == 2)
 	{
@@ -63,12 +74,7 @@ t_command_line **command_line)
 		return (2);
 	}
 	n_redirection->content = ft_substr(*remaining_line, 0, len);
-	if (!n_redirection->content)
-	{
-		n_redirection = free_and_null(n_redirection);
-		error_allocation_command_line_and_exit(command_line);
-	}
+	check_and_add_redirection(&substring, command_line, &n_redirection);
 	*remaining_line += len;
-	ft_lst_add_back2(&substring->n_redirections, n_redirection);
 	return (0);
 }
