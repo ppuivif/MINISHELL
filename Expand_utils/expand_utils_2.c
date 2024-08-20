@@ -1,0 +1,84 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils_2.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:33:46 by drabarza          #+#    #+#             */
+<<<<<<< HEAD:expand_utils_2.c
+/*   Updated: 2024/08/17 19:27:06 by drabarza         ###   ########.fr       */
+=======
+/*   Updated: 2024/07/16 09:06:10 by ppuivif          ###   ########.fr       */
+>>>>>>> PAP:Expand_utils/expand_utils_2.c
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+size_t	get_len_and_extract_until_next_quote_or_dollar(char *str, \
+char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_quote_or_dollar;
+
+	len_to_next_quote_or_dollar = ft_strcspn(str, "$\"\'\0");
+<<<<<<< HEAD:expand_utils_2.c
+	*extracted_line = ft_substr(str, 0, len_to_next_quote_or_dollar);//protect
+=======
+	*extracted_line = ft_substr(str, 0, len_to_next_quote_or_dollar);//malloc à protéger
+>>>>>>> PAP:Expand_utils/expand_utils_2.c
+	len = len_to_next_quote_or_dollar;
+	return (len);
+}
+
+size_t	get_len_and_extract_until_next_separator(char *str, \
+char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_separator;
+
+	len_to_next_separator = ft_strcspn(str, "$\"\' \t\n\v\f\r\0");
+<<<<<<< HEAD:expand_utils_2.c
+	*extracted_line = ft_substr(str, 0, len_to_next_separator);//protect
+=======
+	*extracted_line = ft_substr(str, 0, len_to_next_separator);//malloc à protéger
+>>>>>>> PAP:Expand_utils/expand_utils_2.c
+	len = len_to_next_separator;
+	return (len);
+}
+
+size_t	get_len_and_extract_until_next_separator_first_dollar_included\
+(char *str, char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_separator;
+
+	len_to_next_separator = ft_strcspn(&str[1], "$\"\' \t\n\v\f\r\0");
+	*extracted_line = ft_substr(str, 0, len_to_next_separator + 1);//malloc à protéger
+	len = len_to_next_separator + 1;
+	return (len);
+}
+
+size_t	get_len_and_extract_until_next_separator_dollar_excluded(char *str, \
+char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_separator;
+
+	len_to_next_separator = ft_strcspn(str, "\"\' \t\n\v\f\r\0");
+	*extracted_line = ft_substr(str, 0, len_to_next_separator);//malloc à protéger
+	len = len_to_next_separator;
+	return (len);
+}
+
+size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line)
+{
+	size_t	len;
+	size_t	len_to_next_separator;
+
+	len_to_next_separator = ft_strcspn(&str[1], "$\"\' \t\n\v\f\r\0");
+	*extracted_line = ft_substr(str, 0, len_to_next_separator + 1);//malloc à protéger
+	len = len_to_next_separator + 1;
+	return (len);
+}

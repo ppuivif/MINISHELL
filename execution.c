@@ -6,23 +6,11 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/17 18:55:38 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:46:49 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*static void	unique_substring_execution(t_exec_substring *substring, \
-t_exec_struct **exec_struct)
-{
-	char	**envp_arr;
-
-	envp_arr = build_envp_arr(exec_struct);
-	if (execve((*exec_struct)->exec_substrings->path_with_cmd, \
-	substring->cmd_arr, envp_arr) == -1)
-		perror("error\nexecve of a cmd failed");//to verify
-	error_execve_and_exit(exec_struct);//to verify
-}*/
 
 static int	search_last_input(t_exec_redirection *redirection, int fd_in)
 {
@@ -359,5 +347,4 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	free_arr(cmd_arr);
 	free_arr(envp_arr);
 	exit(exit_code);
-//	error_execve_and_exit(exec_struct);//to verify
 }

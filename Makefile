@@ -1,26 +1,67 @@
 CC = gcc
-FLAGS = -Wall -Werror -Wextra -g -Iincludes
+FLAGS = -Wall -Werror -Wextra -g -IIncludes -ILinked_list_utils -ILibft_utils -IExpand_utils
 NAME  = minishell
 #SRCDIR = src
 #OBJDIR = obj
 SRCS = minishell.c \
-		get_and_free_envp.c arr_utils.c\
-		parsing_substrings.c parsing_redirections.c parsing_arguments.c\
-		parsing_utils_1.c parsing_utils_2.c\
-		expand_contents.c expand_redirections.c expand_arguments.c\
-		expand_utils_1.c expand_utils_2.c expand_utils_3.c expand_utils_4.c expand_utils_5.c\
-		build_execution.c check_exec_redirections.c check_exec_arguments.c error_handling.c\
+		get_and_free_envp.c\
+		parsing_substrings.c\
+		parsing_redirections.c\
+		parsing_arguments.c\
+		parsing_utils.c\
+		expand_contents.c\
+		expand_redirections.c\
+		expand_arguments.c\
+		build_execution.c\
+		check_exec_redirections.c\
+		check_exec_arguments.c\
+		error_handling.c\
 		execution.c\
-		builtin_utils.c Builtins/echo.c Builtins/pwd.c	Builtins/exit.c	Builtins/exit_utils.c	Builtins/cd.c	Builtins/env.c	Builtins/unset.c	Builtins/export.c	Builtins/export_utils.c\
-		signals.c
-
-#SRCS += libft/libft_utils_1.c libft/libft_utils_2.c libft/libft_utils_3.c libft/libft_utils_4.c\
-#		linked_list/linked_list_utils_1.c linked_list/linked_list_utils_2.c linked_list/init.c
-
-SRCS += libft_utils_1.c libft_utils_2.c libft_utils_3.c libft_utils_4.c libft_utils_5.c libft_utils_6.c\
-		linked_list_utils_1.c linked_list_utils_2.c init.c free_command_line_1.c free_command_line_2.c\
+		free_command_line_1.c\
+		free_command_line_2.c\
 		free_exec_struct.c\
-		GNL/get_next_line_utils.c GNL/get_next_line.c
+		signals.c\
+		
+SRCS += Builtins/echo.c\
+		Builtins/pwd.c\
+		Builtins/exit.c\
+		Builtins/exit_utils.c\
+		Builtins/cd.c\
+		Builtins/env.c\
+		Builtins/unset.c\
+		Builtins/export.c\
+		Builtins/builtin_utils.c\
+
+SRCS += Libft_utils/libft_utils_1.c\
+		Libft_utils/libft_utils_2.c\
+		Libft_utils/libft_utils_3.c\
+		Libft_utils/libft_utils_4.c\
+		Libft_utils/libft_utils_5.c\
+		Libft_utils/libft_utils_6.c\
+
+SRCS += Linked_list_utils/linked_list_init_1.c\
+		Linked_list_utils/linked_list_init_2.c\
+		Linked_list_utils/linked_list_init_3.c\
+		Linked_list_utils/linked_list_utils_1.c\
+		Linked_list_utils/linked_list_utils_2.c\
+		Linked_list_utils/linked_list_utils_3.c\
+		Linked_list_utils/linked_list_utils_4.c\
+		Linked_list_utils/linked_list_utils_5.c\
+		Linked_list_utils/linked_list_utils_6.c\
+		Linked_list_utils/linked_list_utils_7.c\
+		Linked_list_utils/linked_list_utils_8.c\
+		Linked_list_utils/linked_list_utils_9.c\
+
+SRCS += Expand_utils/expand_utils_1.c\
+		Expand_utils/expand_utils_2.c\
+		Expand_utils/expand_utils_3.c\
+		Expand_utils/expand_utils_4.c\
+		Expand_utils/expand_utils_5.c\
+
+SRCS += linked_list_utils_for_print.c\
+		GNL/get_next_line_utils.c\
+		GNL/get_next_line.c\
+#GNL to delete
 
 OBJECTS = $(SRCS:.c=.o)
 

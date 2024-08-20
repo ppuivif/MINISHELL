@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 12:45:31 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:57:28 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ static void	add_export(t_exec_struct *exec_struct, \
 	char			*tmp2;
 
 	env = exec_struct->envp_struct;
-	len_name = search_first_occurence(argument, '=');
+	len_name = ft_strcspn(argument, "=");
 	if (len_name == 0)
 	{
 		if (search_var(exec_struct, argument))
@@ -77,7 +77,7 @@ static void	add2_export(t_exec_struct *exec_struct, \
 	char			*temp;
 
 	env = exec_struct->envp_struct;
-	len_name = search_first_occurence(argument, '=');
+	len_name = ft_strcspn(argument, "=");
 	if (len_name == 0)
 	{
 		if (!search_var(exec_struct, argument))

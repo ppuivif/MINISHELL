@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/17 19:17:51 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:48:52 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,13 +77,13 @@ static size_t	heredoc_extract_and_expand_content_of_redirections(char *content, 
 }
 
 static int	get_definitive_content_of_redirections(char *content, char **definitive_content, \
-int e_redirection, t_command_line **command_line, bool *flag_for_expand)
+int t_redirection, t_command_line **command_line, bool *flag_for_expand)
 {
 	int		len;
 	char	*extracted_line;
 
 	len = 0;
-	if (e_redirection != 4)
+	if (t_redirection != 4)
 	{
 		len = (int)common_extract_and_expand_content_of_redirections \
 		(content, &extracted_line, command_line);
@@ -125,7 +125,9 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 		exp_redirection->alloc_succeed = false;//to complete
 	while (n_redirection && n_redirection->content[i])
 	{
-		len = get_definitive_content_of_redirections(&n_redirection->content[i], &definitive_content, n_redirection->e_redirection, command_line, &exp_redirection->flag_for_expand);
+		len = get_definitive_content_of_redirections(&n_redirection->content[i], \
+		&definitive_content, n_redirection->t_redirection, command_line, \
+		&exp_redirection->flag_for_expand);
 		if (len == -2)
 		{
 			ft_putstr_fd(n_redirection->content, 2);
@@ -142,7 +144,7 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 		}
 		i += len;
 	}
-	exp_redirection->e_redirection = n_redirection->e_redirection;
+	exp_redirection->t_redirection = n_redirection->t_redirection;
 	exp_redirection->content = definitive_content;
 	ft_lst_add_back4(&substring->exp_redirections, exp_redirection);
 }
