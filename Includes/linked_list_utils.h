@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/20 09:37:41 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 17:17:07 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ typedef struct s_expanded_argument
 
 typedef struct s_expanded_redirection
 {
-	bool							alloc_succeed;
 	char							*content;
 	t_redirection					t_redirection;
 	bool							flag_for_expand;

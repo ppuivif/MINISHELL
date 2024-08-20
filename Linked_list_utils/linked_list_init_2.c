@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/20 09:24:28 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 17:18:42 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ int	init_expanded_redirection_struct(t_expanded_redirection **exp_redirection)
 	*exp_redirection = ft_calloc(1, sizeof(t_expanded_redirection));
 	if (!*exp_redirection)
 		return (-1);
-	(*exp_redirection)->alloc_succeed = true;
 	(*exp_redirection)->content = NULL;
 	(*exp_redirection)->t_redirection = 4;
 	(*exp_redirection)->flag_for_expand = true;

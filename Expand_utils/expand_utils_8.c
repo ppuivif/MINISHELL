@@ -1,0 +1,160 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   expand_utils_8.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
+/*   Updated: 2024/08/20 18:13:19 by ppuivif          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "minishell.h"
+
+static int	is_non_valid_characters(char *str)
+{
+	if (str[0] && !str[1] && (str[0] == '{' || str[0] == '[' || \
+	str[0] == '(' || str[0] == ')'))
+		return (true);
+	else if (str[0] && str[1] && str[0] == '{' && str[1] != '}')
+		return (true);
+	else if (str[0] && str[1] && str[0] == '[' && str[1] != ']')
+		return (true);
+	return (false);
+}
+
+int	handle_special_characters_after_dollar(char *str, \
+char **extracted_line, t_command_line **command_line, bool flag_keep_dollar)
+{
+	int		len;
+	char	*argv_index;
+
+	len = 0;
+	argv_index = NULL;
+	if (str[1] == '\"' || str[1] == '\'')
+	{
+		if (flag_keep_dollar == true)
+			*extracted_line = ft_strdup("$");
+		else
+			*extracted_line = ft_strdup("");
+		if (!(*extracted_line))
+			len = -1;
+		else
+			len = 1;
+	}
+	else if (is_non_valid_characters(&str[1]) == true)
+	{
+		*extracted_line = ft_strdup("");
+		if (!(*extracted_line))
+			len = -1;
+		else
+		{
+			(*command_line)->current_exit_code = 2;
+			ft_putstr_fd("syntax error\n", 2);
+			len = ft_strlen(str);
+		}
+	}
+/*	else if (str[1] == '}' || str[1] == ']')
+		len = get_len_and_extract_until_next_separator_first_dollar_included \
+		(str, extracted_line);*/
+	else if (str[1] == '$')
+	{
+		*extracted_line = ft_itoa(getpid());
+		if (!(*extracted_line))
+			len = -1;
+		else
+			len = 2;
+	}
+	else if (str[1] == '?')
+	{
+		*extracted_line = ft_itoa((*command_line)->previous_exit_code);
+		if (!(*extracted_line))
+			len = -1;
+		else
+			len = 2;
+	}
+	else if (str[1] == '=')
+	{
+		*extracted_line = ft_strdup("$=");
+		if (!(*extracted_line))
+			len = -1;
+		else
+			len = 2;
+	}
+	else if (str[1] >= '0' && str[1] <= '9')
+	{
+		argv_index = ft_substr(str, 1, 1);
+		if (!argv_index)
+			len = -1;
+		else if (str[1] == '0' && (*command_line)->argv[atoi(argv_index)])
+			*extracted_line = \
+			ft_strdup((*command_line)->argv[atoi(argv_index)]);
+		else
+			*extracted_line = ft_strdup("");
+		if (!(*extracted_line))
+			len = -1;
+		else
+		{
+			argv_index = free_and_null(argv_index);
+			len = 2;
+		}
+	}
+	return (len);
+}
+
+int	simple_expand_content_of_redirections(char *str, \
+char **extracted_line, t_command_line **command_line)
+{
+	int		len;
+
+	len = handle_special_characters_after_dollar(str, extracted_line, \
+	command_line, false);
+	if (len != 0)
+		return (len);
+	len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
+	expand_string_after_dollar1(extracted_line, \
+	(*command_line)->envp_struct, command_line);
+	return (len);
+}
+
+int	simple_expand_content_of_arguments(char *str, \
+t_expanded_argument **exp_arguments, char **definitive_content, \
+t_command_line **command_line)
+{
+	int		len;
+	char	*extracted_line;
+//	char    *tmp;
+//	tmp = NULL;
+	extracted_line = NULL;
+	len = handle_special_characters_after_dollar(str, &extracted_line, \
+	command_line, false);
+	if (len == -1)
+		return (len);
+	else if (len == 0)
+	{
+		len = get_len_and_extract_after_first_dollar(&str[0], &extracted_line);
+		expand_string_after_dollar2(extracted_line, exp_arguments, \
+		(*command_line)->envp_struct, definitive_content);
+		extracted_line = free_and_null(extracted_line);
+	}
+	else if (len > 0)
+	{
+		if (*definitive_content)
+		{
+			*definitive_content = ft_strjoin_freed \
+			(*definitive_content, extracted_line);
+			extracted_line = free_and_null(extracted_line);
+		}
+		else
+			*definitive_content = ft_strdup_freed(extracted_line);
+		return (len);
+/*		tmp = ft_strdup_freed(extracted_line);
+		extracted_line = NULL;
+		if (*definitive_content)
+			free(*definitive_content);
+		*definitive_content = tmp;
+		return (len);*/
+	}
+	return (len);
+}
