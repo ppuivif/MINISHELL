@@ -30,6 +30,7 @@ SRCS += Builtins/echo.c\
 		Builtins/env.c\
 		Builtins/unset.c\
 		Builtins/export.c\
+		Builtins/export_utils.c\
 		Builtins/builtin_utils.c\
 
 SRCS += Libft_utils/libft_utils_1.c\
