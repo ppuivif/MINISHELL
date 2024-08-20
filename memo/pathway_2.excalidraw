@@ -2566,13 +2566,13 @@
       "updated": 1713859822924,
       "link": null,
       "locked": false,
-      "text": "parse_redirection",
+      "text": "parst_redirection",
       "fontSize": 20,
       "fontFamily": 1,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "parse_redirection",
+      "originalText": "parst_redirection",
       "lineHeight": 1.25
     },
     {

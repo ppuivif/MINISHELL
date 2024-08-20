@@ -1402,11 +1402,11 @@
       "locked": false,
       "fontSize": 20,
       "fontFamily": 1,
-      "text": "parse_redirection",
+      "text": "parst_redirection",
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "parse_redirection",
+      "originalText": "parst_redirection",
       "lineHeight": 1.25
     },
     {

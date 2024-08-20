@@ -6,11 +6,11 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/17 19:51:29 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/20 14:49:57 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "includes/linked_list_utils.h"
+#include "linked_list_utils.h"
 
 static void	free_exec_argument_struct(t_exec_argument **exec_arguments)
 {
