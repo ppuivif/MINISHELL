@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 14:44:50 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/20 15:01:47 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,8 @@ t_exec_struct *exec_struct)
 
 	return_value = 0;
 //	printf("fd_input : %d\n", (*exec_redirection)->fd_input);
-	if ((exp_redirection->e_redirection == REDIRECTION_OUTFILE || \
-	exp_redirection->e_redirection == REDIRECTION_APPEND) && \
+	if ((exp_redirection->t_redirection == REDIRECTION_OUTFILE || \
+	exp_redirection->t_redirection == REDIRECTION_APPEND) && \
 	(*exec_substring)->is_previous_file_opened == true)
 	{
 		return_value = check_outfile(exp_redirection, exec_redirection);

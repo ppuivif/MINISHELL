@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/20 11:08:10 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 15:07:10 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,9 @@ void			cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			env(t_exec_struct *exec_struct);
 void			unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
+void			print_export(t_envp_struct *envp_struct);
+t_envp_struct	*copy_envp_struct(t_envp_struct *envp_struct);
+t_envp_struct	*ft_lstnew(char *name, char *value, bool equal);
 int				ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr);
 void			message_error(char *str, t_exec_struct *exec_struct, char **envp_arr);
 
