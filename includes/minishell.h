@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/16 15:21:23 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 12:38:59 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/20 13:37:52 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ size_t			get_len_and_extract_with_single_quotes(char *str, char **extracted_line
 size_t			get_len_and_extract_between_double_quotes(char *str, char **extracted_line);
 size_t			get_len_and_extract_until_next_quote(char *str, char **extracted_line);
 size_t			get_len_and_extract_until_next_dollar(char *str, char **extracted_line);
-size_t			get_len_and_extract_until_next_dollar_first_dollar_excluded\
+size_t			get_len_and_extract_until_next_dollar_first_dollar_excluded \
 				(char *str, char **extracted_line);
 size_t			get_len_and_extract_until_next_quote_or_dollar(char *str, char **extracted_line);
 size_t			get_len_and_extract_until_next_separator(char *str, char **extracted_line);
@@ -115,8 +115,6 @@ void			execution(t_exec_struct **exec_struct);
 //void			exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct);
 void			exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd, int i);
 
-
-
 void			error_allocation_envp_struct_and_exit(void);
 void			error_allocation_command_line_and_exit(t_command_line **command_line);
 void			error_allocation_exec_struct_and_exit(t_exec_struct **exec_struct);
@@ -141,12 +139,9 @@ int				ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr);
 void			message_error(char *str, t_exec_struct *exec_struct, char **envp_arr);
 
 //Signals
-void 			signals(int sign);
-
-
+void			signals(int sign);
 
 #endif
-
 
 /*#ifndef MINISHELL_H
 # define MINISHELL_H
