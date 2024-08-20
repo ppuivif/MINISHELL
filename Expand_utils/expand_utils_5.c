@@ -6,11 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-<<<<<<< HEAD:expand_utils_5.c
-/*   Updated: 2024/08/17 19:48:06 by drabarza         ###   ########.fr       */
-=======
-/*   Updated: 2024/08/12 16:13:29 by ppuivif          ###   ########.fr       */
->>>>>>> PAP:Expand_utils/expand_utils_5.c
+/*   Updated: 2024/08/20 15:14:17 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,12 +91,8 @@ char **extracted_line, t_command_line **command_line)
 	else
 	{
 		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-<<<<<<< HEAD:expand_utils_5.c
 		expand_string_after_dollar1(extracted_line, \
 		(*command_line)->envp_struct, command_line);
-=======
-		expand_string_after_dollar1(extracted_line, (*command_line)->envp_struct, command_line);
->>>>>>> PAP:Expand_utils/expand_utils_5.c
 	}
 	return (len);
 }
@@ -144,12 +136,8 @@ t_command_line **command_line)
 	return (len);
 }
 
-<<<<<<< HEAD:expand_utils_5.c
 static int	expand_content_heredoc_when_dollar_first(char *str, \
 char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
-=======
-static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
->>>>>>> PAP:Expand_utils/expand_utils_5.c
 {
 	int	len;
 
@@ -165,12 +153,8 @@ static int	expand_content_heredoc_when_dollar_first(char *str, char **tmp, t_env
 	return (len);
 }
 
-<<<<<<< HEAD:expand_utils_5.c
 void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, \
 t_command_line **command_line, bool flag_for_expand)
-=======
-void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, t_command_line **command_line, bool flag_for_expand)
->>>>>>> PAP:Expand_utils/expand_utils_5.c
 {
 	int		i;
 	char	*tmp;
@@ -183,12 +167,8 @@ void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, t_comma
 		if (str[0][i] == '$')
 		{
 			if (flag_for_expand == true)
-<<<<<<< HEAD:expand_utils_5.c
 				i += expand_content_heredoc_when_dollar_first \
 				(&str[0][i], &tmp, envp_struct, command_line);
-=======
-				i += expand_content_heredoc_when_dollar_first(&str[0][i], &tmp, envp_struct, command_line);
->>>>>>> PAP:Expand_utils/expand_utils_5.c
 			else
 			{
 				i += get_len_and_extract_until_next_dollar_first_dollar_excluded(&str[0][i], &tmp);

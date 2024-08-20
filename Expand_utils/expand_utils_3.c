@@ -6,11 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-<<<<<<< HEAD:expand_utils_3.c
-/*   Updated: 2024/08/17 19:37:46 by drabarza         ###   ########.fr       */
-=======
-/*   Updated: 2024/07/17 09:33:14 by ppuivif          ###   ########.fr       */
->>>>>>> PAP:Expand_utils/expand_utils_3.c
+/*   Updated: 2024/08/20 15:12:59 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,13 +168,8 @@ char **variable, bool *last_arg_with_wspaces)
 	}
 }
 
-<<<<<<< HEAD:expand_utils_3.c
 void	expand_string_after_dollar1(char **str, \
 t_envp_struct *envp_struct, t_command_line **command_line)
-=======
-
-void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct, t_command_line **command_line)
->>>>>>> PAP:Expand_utils/expand_utils_3.c
 {
 	char	*remaining_line;
 	char	*variable;
@@ -190,14 +181,9 @@ void	expand_string_after_dollar1(char **str, t_envp_struct *envp_struct, t_comma
 	len = 0;
 	while (remaining_line && remaining_line[0])
 	{
-<<<<<<< HEAD:expand_utils_3.c
 		len = handle_special_characters_after_dollar(remaining_line, \
 		&variable, command_line, 1);
 		if (len == 0)
-=======
-		len = handle_special_characters_after_dollar(remaining_line, &variable, command_line, 1);
-		if (len == 0)	
->>>>>>> PAP:Expand_utils/expand_utils_3.c
 			variable = expand_variables(&remaining_line, envp_struct);
 		else
 			remaining_line += len;
