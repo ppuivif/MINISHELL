@@ -6,14 +6,15 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:32:21 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/17 18:40:12 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	build_exec_redirection_struct(t_expanded_redirection *exp_redirection, \
-t_exec_substring **exec_substring, t_exec_struct **exec_struct)
+static void	build_exec_redirection_struct(t_expanded_redirection \
+*exp_redirection, t_exec_substring **exec_substring, \
+t_exec_struct **exec_struct)
 {
 	int					status_code;
 	t_exec_redirection	*exec_redirection;
@@ -22,7 +23,8 @@ t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 	if (init_exec_redirection_struct(&exec_redirection) == -1)
 		error_allocation_exec_struct_and_exit(exec_struct);
 	exec_redirection->substring_index = (*exec_substring)->index;
-	status_code = open_and_check_file(exp_redirection, &exec_redirection, exec_substring, *exec_struct);
+	status_code = open_and_check_file(exp_redirection, &exec_redirection, \
+	exec_substring, *exec_struct);
 	if (status_code != 0)
 	{
 		(*exec_substring)->is_previous_file_opened = false;
@@ -47,7 +49,7 @@ t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 static void	build_exec_substring_struct(t_substring *substring, \
 t_exec_struct **exec_struct, int index)
 {
-	t_exec_substring			*exec_substring;
+	t_exec_substring		*exec_substring;
 	t_expanded_redirection	*tmp1;
 	t_expanded_argument		*tmp2;
 

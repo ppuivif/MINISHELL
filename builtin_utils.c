@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:54:36 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 11:53:31 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/17 18:41:15 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exec_builtin(t_exec_struct *exec_struct, t_exec_substring *substring, char **envp_arr)
+void	exec_builtin(t_exec_struct *exec_struct, \
+t_exec_substring *substring, char **envp_arr)
 {
 	if (!ft_strcmp(substring->exec_arguments->argument, "echo"))
 		echo(substring->exec_arguments);

@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_4.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/14 06:56:39 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/17 19:52:41 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	expand_string_between_single_quotes(char **str, t_envp_struct *envp_struct)
+static void	expand_string_between_single_quotes(char **str, \
+t_envp_struct *envp_struct, t_command_line **command_line)
 {
 	int		i;
 	char	*tmp;
@@ -26,7 +27,7 @@ static void	expand_string_between_single_quotes(char **str, t_envp_struct *envp_
 		if (str[0][i] == '$')
 		{
 			i += get_len_and_extract_after_first_dollar(&str[0][i], &tmp);
-			expand_string_after_dollar1(&tmp, envp_struct);
+			expand_string_after_dollar1(&tmp, envp_struct, command_line);
 		}
 		else
 			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp);
@@ -45,7 +46,27 @@ static void	expand_string_between_single_quotes(char **str, t_envp_struct *envp_
 	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
-static int	expand_content_of_redirections_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
+static int	expand_content_of_redirections_when_dollar_first(char *str, \
+char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
+{
+	int	len;
+
+	len = 0;
+	if (str[1] == '\"' || str[1] == '\'')
+	{
+		*tmp = ft_strdup("$");//malloc à protéger
+		len += 1;
+	}
+	else
+	{
+		len += get_len_and_extract_after_first_dollar(str, tmp);
+		expand_string_after_dollar1(tmp, envp_struct, command_line);
+	}
+	return (len);
+}
+
+/*static int	expand_content_of_arguments_when_dollar_first(char *str, \
+char **tmp, t_envp_struct *envp_struct)
 {
 	int	len;
 
@@ -61,27 +82,10 @@ static int	expand_content_of_redirections_when_dollar_first(char *str, char **tm
 		expand_string_after_dollar1(tmp, envp_struct);
 	}
 	return (len);
-}
+}*/
 
-static int	expand_content_of_arguments_when_dollar_first(char *str, char **tmp, t_envp_struct *envp_struct)
-{
-	int	len;
-
-	len = 0;
-	if (str[1] == '\"' || str[1] == '\'')
-	{
-		*tmp = ft_strdup("$");//malloc à protéger
-		len += 1;
-	}
-	else
-	{
-		len += get_len_and_extract_after_first_dollar(str, tmp);
-		expand_string_after_dollar1(tmp, envp_struct);
-	}
-	return (len);
-}
-
-static int	expand_content_when_dollar_not_first(char *str, char **tmp, t_envp_struct *envp_struct)
+static int	expand_content_when_dollar_not_first(char *str, \
+char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
 {
 	int	len;
 
@@ -92,7 +96,7 @@ static int	expand_content_when_dollar_not_first(char *str, char **tmp, t_envp_st
 	{
 		len += get_len_and_extract_with_single_quotes(str, tmp);
 		if (strcspn(*tmp, "$") < ft_strlen(*tmp))
-			expand_string_between_single_quotes(tmp, envp_struct);
+			expand_string_between_single_quotes(tmp, envp_struct, command_line);
 	}
 	else if (ft_isspace(str[0]) == true)
 		len += get_len_and_extract_until_next_quote_or_dollar(str, tmp);
@@ -100,13 +104,15 @@ static int	expand_content_when_dollar_not_first(char *str, char **tmp, t_envp_st
 		len += get_len_and_extract_until_next_separator(str, tmp);
 	return (len);
 }
-void	complete_expand_content_of_redirections(char **str, t_command_line *command_line)
+
+void	complete_expand_content_of_redirections(char **str, \
+t_command_line **command_line)
 {
 	int		i;
 	char	*tmp;
 	char	*result;
 	size_t	len;
-	
+
 	i = 0;
 	tmp = NULL;
 	result = NULL;
@@ -115,14 +121,17 @@ void	complete_expand_content_of_redirections(char **str, t_command_line *command
 	{
 		if (str[0][i] == '$')
 		{
-			len = handle_special_characters_after_dollar(&str[0][i], &tmp, &command_line, false);
+			len = handle_special_characters_after_dollar(&str[0][i], \
+			&tmp, command_line, false);
 			if (len != 0)
 				i += (int)len;
 			else
-				i += expand_content_of_redirections_when_dollar_first(&str[0][i], &tmp, command_line->envp_struct);
+				i += expand_content_of_redirections_when_dollar_first \
+				(&str[0][i], &tmp, (*command_line)->envp_struct, command_line);
 		}
 		else
-			i += expand_content_when_dollar_not_first(&str[0][i], &tmp, command_line->envp_struct);
+			i += expand_content_when_dollar_not_first \
+			(&str[0][i], &tmp, (*command_line)->envp_struct, command_line);
 		if (!result)
 		{
 			result = ft_strdup_freed(tmp);//malloc à protéger
@@ -138,7 +147,8 @@ void	complete_expand_content_of_redirections(char **str, t_command_line *command
 	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
-void	complete_expand_content_of_arguments(char **extracted_line, t_command_line *command_line, bool flag_keep_dollar)
+void	complete_expand_content_of_arguments(char **extracted_line, \
+t_command_line **command_line, bool flag_keep_dollar)
 {
 	int		i;
 	char	*tmp;
@@ -153,15 +163,24 @@ void	complete_expand_content_of_arguments(char **extracted_line, t_command_line 
 	{
 		if (extracted_line[0][i] == '$')
 		{
-			len = handle_special_characters_after_dollar(&extracted_line[0][i], &tmp, \
-			&command_line, flag_keep_dollar);
+			len = handle_special_characters_after_dollar(&extracted_line[0][i], \
+			&tmp, command_line, flag_keep_dollar);
 			if (len != 0)
 				i += (int)len;
 			else
-				i += expand_content_of_arguments_when_dollar_first(&extracted_line[0][i], &tmp, command_line->envp_struct);//to complete whith case of sapces in variable value
+			{
+/*				i += expand_content_of_arguments_when_dollar_first \
+				(&extracted_line[0][i], &tmp, command_line->envp_struct);*/
+				//to complete whith case of sapces in variable value
+				i += get_len_and_extract_after_first_dollar \
+				(&extracted_line[0][i], &tmp);
+				expand_string_after_dollar1(&tmp, \
+				(*command_line)->envp_struct, command_line);
+			}
 		}
 		else
-			i += expand_content_when_dollar_not_first(&extracted_line[0][i], &tmp, command_line->envp_struct);
+			i += expand_content_when_dollar_not_first (&extracted_line[0][i], \
+			&tmp, (*command_line)->envp_struct, command_line);
 		if (!result)
 		{
 			result = ft_strdup_freed(tmp);//malloc à protéger

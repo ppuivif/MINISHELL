@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   check_exec_redirections.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/13 11:03:11 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/17 18:48:40 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void sigint_handler(int sig)
+void	sigint_handler(int sig)
 {
-    (void)sig;
-    g_sign = 1;
-    
-    ioctl(STDIN_FILENO, TIOCSTI, "\n");
+	(void)sig;
+	g_sign = 1;
+	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 
 static int	check_outfile(t_expanded_redirection *exp_redirection, \
@@ -48,7 +47,7 @@ t_exec_redirection **exec_redirection)
 	(*exec_redirection)->fd_input = open(exp_redirection->content, O_RDONLY);
 	if ((*exec_redirection)->fd_input == -1)
 	{
-		if (access(exp_redirection->content, F_OK) == -1)
+		if (access(exp_redirection->content, F_OK) == -1) //voir plutot stat
 			perror(exp_redirection->content);
 		else
 			perror(exp_redirection->content);
@@ -60,7 +59,8 @@ t_exec_redirection **exec_redirection)
 }
 
 static int	check_heredoc(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
+t_exec_redirection **exec_redirection, t_envp_struct *envp_struct, \
+t_command_line **command_line)
 {
 	char	*line;
 	int		fd;
@@ -73,7 +73,6 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 	filename = ft_strjoin("heredoc_tmp_", index);
 	free (index);
 	index = NULL;
-
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 		return (-1);
@@ -82,20 +81,22 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 	while (1)
 	{
 		line = readline("heredoc : ");
+		signals(1);
+		if (g_sign)
+		{
+//          rl_clear_history();
+//			printf("voici le sign : %d\n", g_sign);//to delete
+			close(fd);
+			unlink(filename); // Optionally delete the temporary file
+			free(filename);
+			return (-1);
+		}
 		if (!line)
 		{
-			clear_history();
+//			rl_clear_history();
 			close(fd);
-			break;
+			break ;
 		}
-		if (g_sign)
-        {
-            clear_history();
-            close(fd);
-            unlink(filename); // Optionally delete the temporary file
-            free(filename);
-            return (-1);
-        }
 		if (ft_strcmp(line, limiter) == 0)
 		{
 			line = free_and_null(line);
@@ -104,7 +105,8 @@ t_exec_redirection **exec_redirection, t_envp_struct *envp_struct)
 		}
 		if (line[0])
 			add_history(line);
-		expand_content_when_heredoc(&line, envp_struct, exp_redirection->flag_for_expand);
+		expand_content_when_heredoc(&line, envp_struct, command_line, \
+		exp_redirection->flag_for_expand);
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);
 		line = free_and_null(line);
@@ -130,7 +132,6 @@ t_exec_struct *exec_struct)
 
 	return_value = 0;
 //	printf("fd_input : %d\n", (*exec_redirection)->fd_input);
-//	printf("fd_output : %d\n", (*exec_redirection)->fd_output);
 	if ((exp_redirection->e_redirection == REDIRECTION_OUTFILE || \
 	exp_redirection->e_redirection == REDIRECTION_APPEND) && \
 	(*exec_substring)->is_previous_file_opened == true)
@@ -146,7 +147,8 @@ t_exec_struct *exec_struct)
 	}
 	if (exp_redirection->e_redirection == REDIRECTION_HEREDOC)
 	{
-		return_value = check_heredoc(exp_redirection, exec_redirection, exec_struct->envp_struct);
+		return_value = check_heredoc(exp_redirection, exec_redirection, \
+		exec_struct->envp_struct, &exec_struct->command_line);
 		return (return_value);
 	}
 	else

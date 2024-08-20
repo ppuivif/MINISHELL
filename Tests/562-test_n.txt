@@ -1,0 +1,8 @@
+substring 0 : 
+	-argument 0 : ls
+	-argument 1 : '-l'
+
+substring 1 : 
+	-argument 0 : 'cat'
+	-argument 1 : '-e'
+
