@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:37 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 14:56:54 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/21 16:44:58 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,17 @@ unsigned int	count_angled_bracket(char *str)
 	return (nmemb);
 }
 
-static int	count_len_to_next_quote(char **remaining_line, char quote)
+static int	count_len_to_next_quote(char **remaining_line, char quote_type)
 {
 	int len_to_next_quote;
 	
 	len_to_next_quote = 1;
-	while (*remaining_line[0] && *remaining_line[0] != quote)
+	while (*remaining_line[0] && *remaining_line[0] != quote_type)
 	{
 		len_to_next_quote++;
 		(*remaining_line)++;
 	}
-	if (*remaining_line[0] != quote)
+	if (*remaining_line[0] != quote_type)
 		return (-1);
 	return (len_to_next_quote);
 }
@@ -79,7 +79,8 @@ int	count_len_to_cut(char *remaining_line)
 		{
 			quote_type = remaining_line_copy[0];
 			remaining_line_copy++;
-			len_to_next_quote = count_len_to_next_quote(&remaining_line_copy, quote_type);
+			len_to_next_quote = count_len_to_next_quote(&remaining_line_copy, \
+			quote_type);
 			if (len_to_next_quote == -1)
 				return (-1);
 			else

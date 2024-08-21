@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 14:39:06 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 17:14:37 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,8 +84,8 @@ char **tmp, t_command_line **command_line)
 
 	len = 0;
 	if (str[0] == '\"')
-		len += get_len_and_extract_between_double_quotes(str, tmp, \
-		command_line);
+		len += get_len_and_extract_between_quotes(str, tmp, \
+		command_line, '\"');
 	else if (str[0] == '\'')
 	{
 		len += get_len_and_extract_with_single_quotes(str, tmp, command_line);
@@ -93,7 +93,8 @@ char **tmp, t_command_line **command_line)
 			expand_string_between_single_quotes(tmp, command_line);
 	}
 	else if (ft_isspace(str[0]) == true)
-		len += get_len_and_extract_until_next_quote_or_dollar(str, tmp);
+		len += get_len_and_extract_until_next_quote_or_dollar(str, tmp, \
+		command_line);
 	else
 		len += get_len_and_extract_until_next_separator(str, tmp);
 	if (len == -1)

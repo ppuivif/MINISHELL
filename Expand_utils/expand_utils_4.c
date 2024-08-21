@@ -6,14 +6,14 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 14:37:26 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 17:36:40 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 static int	get_content(t_expanded_argument **exp_arguments, \
-char *extracted_argument, t_command_line **command_line)
+char *extracted_argument, t_command_line **command_line, char **variable)
 {
 	t_expanded_argument	*exp_argument;
 
@@ -21,7 +21,10 @@ char *extracted_argument, t_command_line **command_line)
 	init_expanded_argument_struct(&exp_argument, command_line);
 	exp_argument->content = ft_strdup(extracted_argument);
 	if (!exp_argument->content)
+	{
+		free(*variable);
 		error_allocation_command_line_and_exit(command_line);
+	}
 	extracted_argument = free_and_null(extracted_argument);
 	ft_lst_add_back5(exp_arguments, exp_argument);
 	return (0);
@@ -82,7 +85,7 @@ char **variable, bool *last_arg_with_wspaces, t_command_line **command_line)
 			{
 				extract_argument_until_next_whitespace_or_dollar \
 				(variable, &extracted_argument, command_line);
-				get_content(exp_arguments, extracted_argument, command_line);
+				get_content(exp_arguments, extracted_argument, command_line, variable);
 				*last_arg_with_wspaces = true;
 			}
 			else
@@ -91,7 +94,7 @@ char **variable, bool *last_arg_with_wspaces, t_command_line **command_line)
 		}
 		extract_argument_until_next_whitespace_or_dollar \
 		(variable, &extracted_argument, command_line);
-		get_content(exp_arguments, extracted_argument, command_line);
+		get_content(exp_arguments, extracted_argument, command_line, variable);
 		*last_arg_with_wspaces = true;
 	}
 }

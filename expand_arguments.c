@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 14:31:15 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 17:12:24 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ t_command_line **command_line)
 	{
 		if (n_argument_content[0] == '\'')
 		{
-			len = get_len_and_extract_between_single_quotes \
-				(&n_argument_content[1], &extracted_line, command_line);
+			len = get_len_and_extract_between_quotes \
+				(&n_argument_content[1], &extracted_line, command_line, '\'');
 			n_argument_content += len;
 			add_to_definitive_content(&definitive_content, \
 			extracted_line, command_line, NULL);
@@ -77,8 +77,8 @@ t_command_line **command_line)
 		else if (n_argument_content[0] == '\"')
 		{
 			flag_keep_dollar = true;
-			len = get_len_and_extract_between_double_quotes \
-			(&n_argument_content[1], &extracted_line, command_line);
+			len = get_len_and_extract_between_quotes \
+			(&n_argument_content[1], &extracted_line, command_line, '\"');
 			n_argument_content += len;
 			if (strcspn(extracted_line, "$") < ft_strlen(extracted_line))
 				complete_expand_content_of_arguments(&extracted_line, \
@@ -117,7 +117,7 @@ t_command_line **command_line)
 		else
 		{
 			len = get_len_and_extract_until_next_quote_or_dollar \
-			(&n_argument_content[0], &extracted_line);
+			(&n_argument_content[0], &extracted_line, command_line);
 			n_argument_content += len;
 			add_to_definitive_content(&definitive_content, \
 			extracted_line, command_line, NULL);

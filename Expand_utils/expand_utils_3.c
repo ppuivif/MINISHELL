@@ -6,25 +6,11 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 10:19:55 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 17:19:08 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	get_len_and_extract_after_first_dollar(char *str, char **extracted_line, \
-t_command_line **command_line)
-{
-	int	len;
-	int	len_to_next_separator;
-
-	len_to_next_separator = ft_strcspn(&str[1], "$\"\' \t\n\v\f\r\0");
-	*extracted_line = ft_substr(str, 0, len_to_next_separator + 1);
-	if (!(*extracted_line))
-		error_allocation_command_line_and_exit(command_line);
-	len = len_to_next_separator + 1;
-	return (len);
-}
 
 static char	*get_variable_content_in_envp(char *variable, \
 t_envp_struct *envp_struct)

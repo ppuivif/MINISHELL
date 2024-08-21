@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/21 13:08:29 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 17:19:23 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ int				get_arguments(char **remaining_line, t_substring *substring, \
 				t_command_line **command_line);
 
 /*
-* .c
+* parsing_utils.c
 */
 
 int				is_pipe_latest_character(char **remaining_line);
@@ -142,35 +142,33 @@ int				expand_arguments(t_substring *substring, \
 * expand_utils_1.c
 */
 
-int				get_len_and_extract_between_single_quotes(char *str, \
-				char **extracted_line, t_command_line **command_line);
+int				get_len_and_extract_between_quotes(char *str, \
+				char **extracted_line, t_command_line **command_line, char c);
 int				get_len_and_extract_with_single_quotes(char *str, \
-				char **extracted_line, t_command_line **command_line);
-int				get_len_and_extract_between_double_quotes(char *str, \
 				char **extracted_line, t_command_line **command_line);
 int				get_len_and_extract_until_next_quote(char *str, \
 				char **extracted_line, t_command_line **command_line);
 int				get_len_and_extract_until_next_dollar(char *str, \
 				char **extracted_line, t_command_line **command_line);
-
+int				get_len_and_extract_until_next_dollar_first_dollar_excluded( \
+				char *str, char **extracted_line);
 /*
 * expand_utils_2.c
 */
 
-int				get_len_and_extract_until_next_dollar_first_dollar_excluded( \
-				char *str, char **extracted_line);
-int				get_len_and_extract_until_next_quote_or_dollar(char *str, char **extracted_line);
+int				get_len_and_extract_until_next_quote_or_dollar(char *str, \
+				char **extracted_line, t_command_line **command_line);
 int				get_len_and_extract_until_next_separator(char *str, char **extracted_line);
 int				get_len_and_extract_until_next_separator_first_dollar_included( \
 				char *str, char **extracted_line);
 int				get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
+int				get_len_and_extract_after_first_dollar(char *str, \
+				char **extracted_line, t_command_line **command_line);
 
 /*
 * expand_utils_3.c
 */
 
-int				get_len_and_extract_after_first_dollar(char *str, \
-				char **extracted_line, t_command_line **command_line);
 char			*expand_variables(char **remaining_line, t_command_line **command_line);
 
 /*

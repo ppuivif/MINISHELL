@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 16:21:10 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 17:12:40 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,19 +34,18 @@ static int	common_extract_and_expand_content_of_redirections( \
 char *content, char **extracted_line, t_native_redirection **n_redirection, \
 t_command_line **command_line)
 {
-	int	len;
+	int		len;
+	char	quote_type;
 
 	len = 0;
-	if (content[0] == '\'')
-		len = get_len_and_extract_between_single_quotes \
-		(&content[1], extracted_line, command_line);
-	else if (content[0] == '\"')
+	if (content[0] == '\'' || content[0] == '\"')
 	{
-		len = get_len_and_extract_between_double_quotes \
-		(&content[1], extracted_line, command_line);
-		if (strcspn(*extracted_line, "$") < ft_strlen(*extracted_line))
+		quote_type = content[0];
+		len = get_len_and_extract_between_quotes (&content[1], \
+		extracted_line, command_line, quote_type);
+		if (content[0] == '\"' && (strcspn(*extracted_line, "$") < ft_strlen(*extracted_line)))
 			complete_expand_content_of_redirections(extracted_line, command_line);
-	}
+	}	
 	else if (content[0] == '$')
 	{
 		len = simple_expand_content_of_redirections(content, extracted_line, command_line);
@@ -55,7 +54,7 @@ t_command_line **command_line)
 	}
 	else
 		len = get_len_and_extract_until_next_quote_or_dollar \
-		(content, extracted_line);
+		(content, extracted_line, command_line);
 	return (len);
 }
 
@@ -63,7 +62,8 @@ static int	heredoc_extract_and_expand_content_of_redirections( \
 char *content, char **extracted_line, t_command_line **command_line, \
 bool *flag_for_expand)
 {
-	int	len;
+	int		len;
+	char	quote_type;
 
 	len = 0;
 	if (content[0] == '$' && (content[1] == '\'' || content[1] == '\"'))
@@ -73,16 +73,11 @@ bool *flag_for_expand)
 			error_allocation_command_line_and_exit(command_line);
 		len = 1;
 	}
-	else if (content[0] == '\'')
+	else if (content[0] == '\'' || content[0] == '\"')
 	{
-		len = get_len_and_extract_between_single_quotes \
-		(&content[1], extracted_line, command_line);
-		*flag_for_expand = false;
-	}
-	else if (content[0] == '\"')
-	{
-		len = get_len_and_extract_between_double_quotes \
-		(&content[1], extracted_line, command_line);
+		quote_type = content[0];
+		len = get_len_and_extract_between_quotes \
+		(&content[1], extracted_line, command_line, quote_type);
 		*flag_for_expand = false;
 	}
 	else
