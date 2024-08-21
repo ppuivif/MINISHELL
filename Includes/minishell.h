@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/21 17:48:11 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 18:44:18 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,7 +111,8 @@ int				init_expanded_redirection_struct( \
 
 int				init_exec_struct(t_exec_struct **exec_struct);
 int				init_exec_substring_struct(t_exec_substring **exec_substring);
-int				init_exec_redirection_struct(t_exec_redirection **exec_redirection);
+int				init_exec_redirection_struct(t_exec_redirection \
+				**exec_redirection);
 int				init_exec_argument_struct(t_exec_argument **exec_argument);
 
 /*
@@ -124,7 +125,8 @@ void			expand_contents(t_command_line **command_line);
 * expand_redirections.c
 */
 
-void			expand_redirections(t_substring *substring, t_native_redirection *n_redirection, t_command_line **command_line);
+void			expand_redirections(t_substring *substring, \
+	t_native_redirection *n_redirection, t_command_line **command_line);
 
 /*
 * expand_arguments.c
@@ -158,10 +160,12 @@ int				get_len_and_extract_until_next_dollar_first_dollar_excluded( \
 
 int				get_len_and_extract_until_next_quote_or_dollar(char *str, \
 				char **extracted_line, t_command_line **command_line);
-int				get_len_and_extract_until_next_separator(char *str, char **extracted_line);
+int				get_len_and_extract_until_next_separator(char *str, \
+				char **extracted_line);
 int				get_len_and_extract_until_next_separator_first_dollar_included( \
 				char *str, char **extracted_line);
-int				get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
+int				get_len_and_extract_until_next_separator_dollar_excluded(char \
+				*str, char **extracted_line);
 int				get_len_and_extract_after_first_dollar(char *str, \
 				char **extracted_line, t_command_line **command_line);
 
@@ -169,7 +173,8 @@ int				get_len_and_extract_after_first_dollar(char *str, \
 * expand_utils_3.c
 */
 
-char			*expand_variables(char **remaining_line, t_command_line **command_line);
+char			*expand_variables(char **remaining_line, \
+				t_command_line **command_line);
 
 /*
 * expand_utils_4.c
@@ -177,17 +182,18 @@ char			*expand_variables(char **remaining_line, t_command_line **command_line);
 
 void			extract_argument_until_next_whitespace_or_dollar(char **str, \
 				char **extracted_argument, t_command_line **command_line);
-void			cut_variable_on_whitespaces(t_expanded_argument **exp_arguments, \
-				char **variable, bool *last_arg_with_wspaces, \
+void			cut_variable_on_whitespaces(t_expanded_argument \
+				**exp_arguments, char **variable, bool *last_arg_with_wspaces, \
 				t_command_line **command_line);
 
 /*
 * expand_utils_5.c
 */
 
-void			expand_string_after_dollar1(char **str, t_command_line **command_line);
-void			expand_string_after_dollar2(char *str, t_expanded_argument **exp_arguments, \
-				char **definitive_content, t_command_line **command_line);
+void			expand_string_after_dollar1(char **str, \
+				t_command_line **command_line);
+void			expand_string_after_dollar2(char *str, t_expanded_argument \
+	**exp_arguments, char **definitive_content, t_command_line **command_line);
 
 /*
 * expand_utils_6.c
@@ -195,13 +201,15 @@ void			expand_string_after_dollar2(char *str, t_expanded_argument **exp_argument
 
 int				expand_content_when_dollar_not_first(char *str, \
 				char **tmp, t_command_line **command_line);
-void			complete_expand_content_of_redirections(char **str, t_command_line **command_line);
+void			complete_expand_content_of_redirections(char **str, \
+				t_command_line **command_line);
 
 /*
 * expand_utils_7.c
 */
 
-void			complete_expand_content_of_arguments(char **extracted_line, t_command_line **command_line, bool flag_keep_dollar);
+void			complete_expand_content_of_arguments(char **extracted_line, \
+				t_command_line **command_line, bool flag_keep_dollar);
 
 /*
 * expand_utils_8.c
@@ -238,7 +246,8 @@ int				simple_expand_content_of_arguments(char *str, \
 * expand_utils_10.c
 */
 
-void			expand_content_when_heredoc(char **str, t_command_line **command_line, bool flag_for_expand);
+void			expand_content_when_heredoc(char **str, \
+				t_command_line **command_line, bool flag_for_expand);
 
 /*
 * free_command_line_1.c
@@ -260,26 +269,36 @@ void			free_all_exec_struct(t_exec_struct **exec_struct);
 
 void			build_exec_struct(t_exec_struct **exec_struct);
 
-int				open_and_check_file(t_expanded_redirection *exp_redirections, t_exec_redirection **exec_redirection, t_exec_substring **exec_substring, t_exec_struct *exec_struct);
+int				open_and_check_file(t_expanded_redirection *exp_redirections, \
+	t_exec_redirection **exec_redirection, t_exec_substring **exec_substring, \
+	t_exec_struct *exec_struct);
 
-void			check_exec_arguments(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
+void			check_exec_arguments(t_exec_substring **exec_substring, \
+				t_exec_struct **exec_struct);
 char			**build_envp_arr(t_exec_struct **exec_struct);
 //char	**search_path(char **envp);
 char			**search_path(t_envp_struct *envp_struct);
-void			build_cmd_arr(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
-void			check_command_with_options(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
-void			check_path_in_envp(t_exec_substring **exec_substring, t_exec_struct **exec_struct);
-int				check_path_cmd_validity(char **path, t_exec_substring **exec_substring);
+void			build_cmd_arr(t_exec_substring **exec_substring, \
+				t_exec_struct **exec_struct);
+void			check_command_with_options(t_exec_substring **exec_substring, \
+				t_exec_struct **exec_struct);
+void			check_path_in_envp(t_exec_substring **exec_substring, \
+				t_exec_struct **exec_struct);
+int				check_path_cmd_validity(char **path, t_exec_substring \
+				**exec_substring);
 
 void			execution(t_exec_struct **exec_struct);
-void			exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd, int i);
+void			exec_child(t_exec_substring *substring, int fd_in, int fd_out, \
+	char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd, int i);
 
 /*
 * error_handling.c
 */
 
-void			error_allocation_exec_struct_and_exit(t_exec_struct **exec_struct);
-void			error_allocation_command_line_and_exit(t_command_line **command_line);
+void			error_allocation_exec_struct_and_exit(t_exec_struct \
+				**exec_struct);
+void			error_allocation_command_line_and_exit(t_command_line \
+				**command_line);
 void			error_pipe_creation_and_exit(t_exec_struct **exec_struct);
 void			error_fork_creation_and_exit(t_exec_struct **exec_struct);
 
@@ -287,21 +306,27 @@ void			error_fork_creation_and_exit(t_exec_struct **exec_struct);
 * .c
 */
 
-void			exec_builtin(t_exec_struct *exec_struct, t_exec_substring *substring, char **envp_arr);
+void			exec_builtin(t_exec_struct *exec_struct, \
+				t_exec_substring *substring, char **envp_arr);
 void			echo(t_exec_argument *exec_arguments);
 void			pwd(void);
-void			exit_builting(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, char **envp_arr);
+void			exit_builting(t_exec_struct *exec_struct, \
+				t_exec_argument *exec_arguments, char **envp_arr);
 int				check_is_builtin(t_exec_argument *exec_arguments);
 void			cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			env(t_exec_struct *exec_struct);
-void			unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
-void			export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
+void			unset(t_exec_struct *exec_struct, \
+				t_exec_argument *exec_arguments);
+void			export(t_exec_struct *exec_struct, \
+				t_exec_argument *exec_arguments);
 void			print_export(t_envp_struct *envp_struct);
 void			add_export(t_exec_struct *exec_struct, char *argument);
 void			add2_export(t_exec_struct *exec_struct, char *argument);
 t_envp_struct	*ft_lstnew(char *name, char *value, bool equal);
-int				ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr);
-void			message_error(char *str, t_exec_struct *exec_struct, char **envp_arr);
+int				ft_aatoi(char *nptr, t_exec_struct *exec_struct, \
+				char **envp_arr);
+void			message_error(char *str, t_exec_struct *exec_struct, \
+				char **envp_arr);
 
 /*
 * .c
