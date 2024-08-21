@@ -1,1 +1,0 @@
-./temp/full_permission_file.txt: line 1: ceci: command not found
