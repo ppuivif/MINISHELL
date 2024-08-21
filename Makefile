@@ -30,6 +30,7 @@ SRCS += Builtins/echo.c\
 		Builtins/env.c\
 		Builtins/unset.c\
 		Builtins/export.c\
+		Builtins/add_export.c\
 		Builtins/export_utils.c\
 		Builtins/builtin_utils.c\
 
@@ -58,11 +59,6 @@ SRCS += Expand_utils/expand_utils_1.c\
 		Expand_utils/expand_utils_3.c\
 		Expand_utils/expand_utils_4.c\
 		Expand_utils/expand_utils_5.c\
-		Expand_utils/expand_utils_6.c\
-		Expand_utils/expand_utils_7.c\
-		Expand_utils/expand_utils_8.c\
-		Expand_utils/expand_utils_9.c\
-		Expand_utils/expand_utils_10.c\
 
 SRCS += linked_list_utils_for_print.c\
 		GNL/get_next_line_utils.c\

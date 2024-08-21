@@ -3,96 +3,195 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_4.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 14:37:26 by ppuivif          ###   ########.fr       */
+/*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
+/*   Updated: 2024/08/20 15:13:51 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	get_content(t_expanded_argument **exp_arguments, \
-char *extracted_argument, t_command_line **command_line)
+static void	expand_string_between_single_quotes(char **str, \
+t_envp_struct *envp_struct, t_command_line **command_line)
 {
-	t_expanded_argument	*exp_argument;
+	int		i;
+	char	*tmp;
+	char	*result;
 
-	exp_argument = NULL;
-	init_expanded_argument_struct(&exp_argument, command_line);
-	exp_argument->content = ft_strdup(extracted_argument);
-	if (!exp_argument->content)
-		error_allocation_command_line_and_exit(command_line);
-	extracted_argument = free_and_null(extracted_argument);
-	ft_lst_add_back5(exp_arguments, exp_argument);
-	return (0);
-}
-
-void	extract_argument_until_next_whitespace_or_dollar(char **str, \
-char **extracted_argument, t_command_line **command_line)
-{
-	size_t	len_to_next_separator;
-
-	if (**str == '$')
-		len_to_next_separator = 1;
-	else
-		len_to_next_separator = strcspn(*str, "$ \t\n\v\f\r\0");
-	*extracted_argument = ft_substr(*str, 0, \
-	len_to_next_separator);
-	if (!(*extracted_argument))
-		error_allocation_command_line_and_exit(command_line);
-	(*str) += len_to_next_separator;
-}
-
-static bool	is_last_argument(char *str)
-{
-	size_t	len_to_end;
-	size_t	i;
-
-	len_to_end = ft_strlen(str);
 	i = 0;
-	while (str && str[i] && ft_isspace(str[i]) == false)
-		i++;
-	if (i == len_to_end)
-		return (true);
-	return (false);
-}
-
-static bool	is_last_argument_followed_by_whitespaces(char *str)
-{
-	size_t	len_to_end;
-
-	len_to_end = ft_strlen(str);
-	if (is_last_argument(str) == true && strcspn(str, " \t\n\v\f\r") < len_to_end)
-		return (true);
-	return (false);
-}
-
-void	cut_variable_on_whitespaces(t_expanded_argument **exp_arguments, \
-char **variable, bool *last_arg_with_wspaces, t_command_line **command_line)
-{
-	char	*extracted_argument;
-
-	extracted_argument = NULL;
-	*variable = skip_first_whitespaces(*variable);
-	if (*variable && *variable[0])
+	tmp = NULL;
+	result = NULL;
+	while (*str && str[0][i])
 	{
-		if (is_last_argument(*variable) == true)
+		if (str[0][i] == '$')
 		{
-			if (is_last_argument_followed_by_whitespaces(*variable) == true)
-			{
-				extract_argument_until_next_whitespace_or_dollar \
-				(variable, &extracted_argument, command_line);
-				get_content(exp_arguments, extracted_argument, command_line);
-				*last_arg_with_wspaces = true;
-			}
-			else
-				*last_arg_with_wspaces = false;
-			return ;
+			i += get_len_and_extract_after_first_dollar(&str[0][i], &tmp);
+			expand_string_after_dollar1(&tmp, envp_struct, command_line);
 		}
-		extract_argument_until_next_whitespace_or_dollar \
-		(variable, &extracted_argument, command_line);
-		get_content(exp_arguments, extracted_argument, command_line);
-		*last_arg_with_wspaces = true;
+		else
+			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp);
+		if (!result)
+		{
+			result = ft_strdup_freed(tmp);//malloc à protéger
+			tmp = NULL;
+		}
+		else
+		{
+			result = ft_strjoin_freed(result, tmp);//malloc à protéger
+			tmp = free_and_null(tmp);
+		}
 	}
+	free(*str);
+	*str = ft_strdup_freed(result);//malloc à protéger
 }
 
+static int	expand_content_of_redirections_when_dollar_first(char *str, \
+char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
+{
+	int	len;
+
+	len = 0;
+	if (str[1] == '\"' || str[1] == '\'')
+	{
+		*tmp = ft_strdup("$");//malloc à protéger
+		len += 1;
+	}
+	else
+	{
+		len += get_len_and_extract_after_first_dollar(str, tmp);
+		expand_string_after_dollar1(tmp, envp_struct, command_line);
+	}
+	return (len);
+}
+
+/*static int	expand_content_of_arguments_when_dollar_first(char *str, \
+char **tmp, t_envp_struct *envp_struct)
+{
+	int	len;
+
+	len = 0;
+	if (str[1] == '\"' || str[1] == '\'')
+	{
+		*tmp = ft_strdup("$");//malloc à protéger
+		len += 1;
+	}
+	else
+	{
+		len += get_len_and_extract_after_first_dollar(str, tmp);
+		expand_string_after_dollar1(tmp, envp_struct);
+	}
+	return (len);
+}*/
+
+static int	expand_content_when_dollar_not_first(char *str, \
+char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
+{
+	int	len;
+
+	len = 0;
+	if (str[0] == '\"')
+		len += get_len_and_extract_between_double_quotes(str, tmp);
+	else if (str[0] == '\'')
+	{
+		len += get_len_and_extract_with_single_quotes(str, tmp);
+		if (strcspn(*tmp, "$") < ft_strlen(*tmp))
+			expand_string_between_single_quotes(tmp, envp_struct, command_line);
+	}
+	else if (ft_isspace(str[0]) == true)
+		len += get_len_and_extract_until_next_quote_or_dollar(str, tmp);
+	else
+		len += get_len_and_extract_until_next_separator(str, tmp);
+	return (len);
+}
+
+void	complete_expand_content_of_redirections(char **str, \
+t_command_line **command_line)
+{
+	int		i;
+	char	*tmp;
+	char	*result;
+	size_t	len;
+
+	i = 0;
+	tmp = NULL;
+	result = NULL;
+	len = 0;
+	while (str[0][i])
+	{
+		if (str[0][i] == '$')
+		{
+			len = handle_special_characters_after_dollar(&str[0][i], \
+			&tmp, command_line, false);
+			if (len != 0)
+				i += (int)len;
+			else
+				i += expand_content_of_redirections_when_dollar_first \
+				(&str[0][i], &tmp, (*command_line)->envp_struct, command_line);
+		}
+		else
+			i += expand_content_when_dollar_not_first \
+			(&str[0][i], &tmp, (*command_line)->envp_struct, command_line);
+		if (!result)
+		{
+			result = ft_strdup_freed(tmp);//malloc à protéger
+			tmp = NULL;
+		}
+		else
+		{
+			result = ft_strjoin_freed(result, tmp);//malloc à protéger
+			tmp = free_and_null(tmp);
+		}
+	}
+	free(*str);
+	*str = ft_strdup_freed(result);//malloc à protéger
+}
+
+void	complete_expand_content_of_arguments(char **extracted_line, \
+t_command_line **command_line, bool flag_keep_dollar)
+{
+	int		i;
+	char	*tmp;
+	char	*result;
+	size_t	len;
+
+	i = 0;
+	tmp = NULL;
+	result = NULL;
+	len = 0;
+	while (extracted_line[0][i])
+	{
+		if (extracted_line[0][i] == '$')
+		{
+			len = handle_special_characters_after_dollar(&extracted_line[0][i], \
+			&tmp, command_line, flag_keep_dollar);
+			if (len != 0)
+				i += (int)len;
+			else
+			{
+/*				i += expand_content_of_arguments_when_dollar_first \
+				(&extracted_line[0][i], &tmp, command_line->envp_struct);*/
+				//to complete whith case of sapces in variable value
+				i += get_len_and_extract_after_first_dollar \
+				(&extracted_line[0][i], &tmp);
+				expand_string_after_dollar1(&tmp, \
+				(*command_line)->envp_struct, command_line);
+			}
+		}
+		else
+			i += expand_content_when_dollar_not_first (&extracted_line[0][i], \
+			&tmp, (*command_line)->envp_struct, command_line);
+		if (!result)
+		{
+			result = ft_strdup_freed(tmp);//malloc à protéger
+			tmp = NULL;
+		}
+		else
+		{
+			result = ft_strjoin_freed(result, tmp);//malloc à protéger
+			tmp = free_and_null(tmp);
+		}
+	}
+	free(*extracted_line);
+	*extracted_line = ft_strdup_freed(result);//malloc à protéger
+}

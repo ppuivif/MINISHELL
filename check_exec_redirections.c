@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_exec_redirections.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 10:09:47 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 19:15:22 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ t_exec_redirection **exec_redirection)
 }
 
 static int	check_heredoc(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection, t_command_line **command_line)
+t_exec_redirection **exec_redirection, t_envp_struct *envp_struct, \
+t_command_line **command_line)
 {
 	char	*line;
 	int		fd;
@@ -104,7 +105,7 @@ t_exec_redirection **exec_redirection, t_command_line **command_line)
 		}
 		if (line[0])
 			add_history(line);
-		expand_content_when_heredoc(&line, command_line, \
+		expand_content_when_heredoc(&line, envp_struct, command_line, \
 		exp_redirection->flag_for_expand);
 		ft_putstr_fd(line, fd);
 		ft_putstr_fd("\n", fd);
@@ -147,7 +148,7 @@ t_exec_struct *exec_struct)
 	if (exp_redirection->t_redirection == REDIRECTION_HEREDOC)
 	{
 		return_value = check_heredoc(exp_redirection, exec_redirection, \
-		&exec_struct->command_line);
+		exec_struct->envp_struct, &exec_struct->command_line);
 		return (return_value);
 	}
 	else

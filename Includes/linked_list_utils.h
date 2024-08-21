@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/21 14:26:10 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 09:37:41 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,13 +41,14 @@ typedef enum t_redirection_type
 
 typedef struct s_expanded_argument
 {
-	bool						alloc_succeed;//to delete
+	bool						alloc_succeed;
 	char						*content;
 	struct s_expanded_argument	*next;
 }	t_expanded_argument;
 
 typedef struct s_expanded_redirection
 {
+	bool							alloc_succeed;
 	char							*content;
 	t_redirection					t_redirection;
 	bool							flag_for_expand;
@@ -60,12 +61,11 @@ typedef struct s_native_argument
 	struct s_native_argument	*next;
 }	t_native_argument;
 
-typedef struct s_native_redirection
+typedef struct s_nativt_redirection
 {
 	char						*content;
 	t_redirection				t_redirection;
-	bool						flag_for_expand;
-	struct s_native_redirection	*next;
+	struct s_nativt_redirection	*next;
 }	t_native_redirection;
 
 typedef struct s_substring

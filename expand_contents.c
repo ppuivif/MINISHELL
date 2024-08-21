@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_contents.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:25 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 17:16:32 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/20 14:48:06 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,20 @@ static void	check_alloc_exp_arguments(t_expanded_argument \
 	}
 }
 
+static void	check_alloc_exp_redirections(t_expanded_redirection \
+*expand_redirections, t_command_line **command_line)
+{
+	t_expanded_redirection	*cursor;
+
+	cursor = expand_redirections;
+	while (cursor)
+	{
+		if (cursor->alloc_succeed == false)
+			error_allocation_command_line_and_exit(command_line);
+		cursor = cursor->next;
+	}
+}
+
 void	expand_contents(t_command_line **command_line)
 {
 	t_substring				*cursor1;
@@ -36,15 +50,21 @@ void	expand_contents(t_command_line **command_line)
 	while (cursor1)
 	{
 		cursor2 = cursor1->n_redirections;
+//		while (cursor2 && (*command_line)->current_exit_code == 0)
 		while (cursor2 && (*command_line)->current_exit_code != 2)
+//		while (cursor2)
 		{
 			expand_redirections(cursor1, cursor2, command_line);
 			if ((*command_line)->current_exit_code == 1) //ambiguous redirection
 				break ;
+			check_alloc_exp_redirections(cursor1->exp_redirections, \
+			command_line);
 			cursor2 = cursor2->next;
 		}
 		cursor3 = cursor1->n_arguments;
+//		while (cursor3 && (*command_line)->current_exit_code == 0)
 		while (cursor3 && (*command_line)->current_exit_code != 2)
+//		while (cursor3)
 		{
 			if (expand_arguments(cursor1, cursor3, command_line))
 //			exit_code to check ?

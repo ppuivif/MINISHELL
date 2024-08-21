@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/21 13:08:29 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 16:53:18 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,17 +93,13 @@ int				init_substring_struct(t_substring **substring);
 * linked_list_init_2.c
 */
 
-int				init_native_argument_struct(t_native_argument **n_argument, \
-				t_command_line **command_line);
+int				init_native_argument_struct(t_native_argument **n_argument);
 int				init_native_redirection_struct( \
-				t_native_redirection **n_redirection, \
-				t_command_line **command_line);
+				t_native_redirection **n_redirection);
 int				init_expanded_argument_struct( \
-				t_expanded_argument **exp_argument, \
-				t_command_line **command_line);
+				t_expanded_argument **exp_argument);
 int				init_expanded_redirection_struct( \
-				t_expanded_redirection **exp_redirection, \
-				t_command_line **command_line);
+				t_expanded_redirection **exp_redirection);
 
 /*
 * linked_list_init_3.c
@@ -114,133 +110,37 @@ int				init_exec_substring_struct(t_exec_substring **exec_substring);
 int				init_exec_redirection_struct(t_exec_redirection **exec_redirection);
 int				init_exec_argument_struct(t_exec_argument **exec_argument);
 
-/*
-* expand_contents.c
-*/
-
 void			expand_contents(t_command_line **command_line);
-
-/*
-* expand_redirections.c
-*/
-
 void			expand_redirections(t_substring *substring, t_native_redirection *n_redirection, t_command_line **command_line);
+int				expand_arguments(t_substring *substring, t_native_argument *n_argument, t_command_line **command_line);
+void			add_exp_arguments(t_expanded_argument **exp_arguments, char **definitive_content);
 
-/*
-* expand_arguments.c
-*/
-
-void			add_exp_arguments(t_expanded_argument **exp_arguments, \
-				char **definitive_content, t_command_line **command_line);
-int				add_to_definitive_content(char **definitive_content, \
-				char *extracted_line, t_command_line **command_line, \
-				char *str);
-int				expand_arguments(t_substring *substring, \
-				t_native_argument *n_argument, t_command_line **command_line);
-
-/*
-* expand_utils_1.c
-*/
-
-int				get_len_and_extract_between_single_quotes(char *str, \
-				char **extracted_line, t_command_line **command_line);
-int				get_len_and_extract_with_single_quotes(char *str, \
-				char **extracted_line, t_command_line **command_line);
-int				get_len_and_extract_between_double_quotes(char *str, \
-				char **extracted_line, t_command_line **command_line);
-int				get_len_and_extract_until_next_quote(char *str, \
-				char **extracted_line, t_command_line **command_line);
-int				get_len_and_extract_until_next_dollar(char *str, \
-				char **extracted_line, t_command_line **command_line);
-
-/*
-* expand_utils_2.c
-*/
-
-int				get_len_and_extract_until_next_dollar_first_dollar_excluded( \
+size_t			get_len_and_extract_between_single_quotes(char *str, char **extracted_line);
+size_t			get_len_and_extract_with_single_quotes(char *str, char **extracted_line);
+size_t			get_len_and_extract_between_double_quotes(char *str, char **extracted_line);
+size_t			get_len_and_extract_until_next_quote(char *str, char **extracted_line);
+size_t			get_len_and_extract_until_next_dollar(char *str, char **extracted_line);
+size_t			get_len_and_extract_until_next_dollar_first_dollar_excluded( \
 				char *str, char **extracted_line);
-int				get_len_and_extract_until_next_quote_or_dollar(char *str, char **extracted_line);
-int				get_len_and_extract_until_next_separator(char *str, char **extracted_line);
-int				get_len_and_extract_until_next_separator_first_dollar_included( \
+size_t			get_len_and_extract_until_next_quote_or_dollar(char *str, char **extracted_line);
+size_t			get_len_and_extract_until_next_separator(char *str, char **extracted_line);
+size_t			get_len_and_extract_until_next_separator_first_dollar_included( \
 				char *str, char **extracted_line);
-int				get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
-
-/*
-* expand_utils_3.c
-*/
-
-int				get_len_and_extract_after_first_dollar(char *str, \
-				char **extracted_line, t_command_line **command_line);
-char			*expand_variables(char **remaining_line, t_command_line **command_line);
-
-/*
-* expand_utils_4.c
-*/
-
-void			extract_argument_until_next_whitespace_or_dollar(char **str, \
-				char **extracted_argument, t_command_line **command_line);
-void			cut_variable_on_whitespaces(t_expanded_argument **exp_arguments, \
-				char **variable, bool *last_arg_with_wspaces, \
-				t_command_line **command_line);
-
-/*
-* expand_utils_5.c
-*/
-
-void			expand_string_after_dollar1(char **str, t_command_line **command_line);
-void			expand_string_after_dollar2(char *str, t_expanded_argument **exp_arguments, \
-				char **definitive_content, t_command_line **command_line);
-
-/*
-* expand_utils_6.c
-*/
-
-int				expand_content_when_dollar_not_first(char *str, \
-				char **tmp, t_command_line **command_line);
-void			complete_expand_content_of_redirections(char **str, t_command_line **command_line);
-
-/*
-* expand_utils_7.c
-*/
-
-void			complete_expand_content_of_arguments(char **extracted_line, t_command_line **command_line, bool flag_keep_dollar);
-
-/*
-* expand_utils_8.c
-*/
-
-int				is_non_valid_characters(char *str);
-int				handle_quotes(char **extracted_line, \
+size_t			get_len_and_extract_until_next_separator_dollar_excluded(char *str, char **extracted_line);
+size_t			get_len_and_extract_after_first_dollar(char *str, char **extracted_line);
+size_t			handle_special_characters_after_dollar(char *str, char **extracted_line, \
 				t_command_line **command_line, bool flag_keep_dollar);
-int				handle_non_valid_characters(char *str, char **extracted_line, \
-				t_command_line **command_line);
-int				handle_double_dollar(char **extracted_line, \
-				t_command_line **command_line);
-int				handle_question_mark(char **extracted_line, \
-				t_command_line **command_line);
 
-/*
-* expand_utils_9.c
-*/
-
-int				handle_equals_sign(char **extracted_line, \
+void			expand_string_after_dollar1(char **str, t_envp_struct *envp_struct, \
 				t_command_line **command_line);
-int				handle_digits(char *str, char **extracted_line, \
-				t_command_line **command_line);
-int				handle_special_characters_after_dollar(char *str, \
-				char **extracted_line, t_command_line **command_line, \
-				bool flag_keep_dollar);
-int				simple_expand_content_of_redirections(char *str, \
-				char **extracted_line, t_command_line **command_line);
-int				simple_expand_content_of_arguments(char *str, \
-				t_expanded_argument **exp_arguments, char **definitive_content, \
-				t_command_line **command_line);
-
-/*
-* expand_utils_10.c
-*/
-
-void			expand_content_when_heredoc(char **str, t_command_line **command_line, bool flag_for_expand);
+void			expand_string_after_dollar2(char *str, t_expanded_argument **exp_arguments, \
+				t_envp_struct *envp_struct, char **definitive_content);
+void			complete_expand_content_of_redirections(char **str, t_command_line **command_line);
+void			complete_expand_content_of_arguments(char **extracted_line, t_command_line **command_line, bool flag_keep_dollar);
+size_t			simple_expand_content_of_redirections(char *str, char **extracted_line, t_command_line **command_line);
+size_t			simple_expand_content_of_arguments(char *str, t_expanded_argument **exp_arguments, char **definitive_content, t_command_line **command_line);
+void			expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, t_command_line **command_line, bool flag_for_expand);
+int				add_to_definitive_content(char **definitive_content, char *extracted_line);
 
 /*
 * free_command_line_1.c
@@ -299,7 +199,8 @@ void			env(t_exec_struct *exec_struct);
 void			unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			print_export(t_envp_struct *envp_struct);
-t_envp_struct	*copy_envp_struct(t_envp_struct *envp_struct);
+void			add_export(t_exec_struct *exec_struct, char *argument);
+void			add2_export(t_exec_struct *exec_struct, char *argument);
 t_envp_struct	*ft_lstnew(char *name, char *value, bool equal);
 int				ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr);
 void			message_error(char *str, t_exec_struct *exec_struct, char **envp_arr);
