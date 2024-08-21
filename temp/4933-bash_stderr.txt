@@ -1,0 +1,1 @@
+./script_exec.sh: line 250: /nfs/homes/drabarza/Documents/Cursus: No such file or directory
