@@ -5,188 +5,84 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 15:14:17 by drabarza         ###   ########.fr       */
+/*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
+/*   Updated: 2024/08/21 17:14:01 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	is_non_valid_characters(char *str)
+void	expand_string_after_dollar1(char **str, t_command_line **command_line)
 {
-	if (str[0] && !str[1] && (str[0] == '{' || str[0] == '[' || \
-	str[0] == '(' || str[0] == ')'))
-		return (true);
-	else if (str[0] && str[1] && str[0] == '{' && str[1] != '}')
-		return (true);
-	else if (str[0] && str[1] && str[0] == '[' && str[1] != ']')
-		return (true);
-	return (false);
-}
-
-size_t	handle_special_characters_after_dollar(char *str, \
-char **extracted_line, t_command_line **command_line, bool flag_keep_dollar)
-{
+	char	*remaining_line;
+	char	*variable;
+	char	*result;
 	int		len;
-	char	*argv_index;
 
+	result = NULL;
+	remaining_line = *str;
 	len = 0;
-	argv_index = NULL;
-	if (str[1] == '\"' || str[1] == '\'')
+	while (remaining_line && remaining_line[0])
 	{
-		if (flag_keep_dollar == true)
-			*extracted_line = ft_strdup("$");
+		len = handle_special_characters_after_dollar(remaining_line, \
+		&variable, command_line, 1);
+		if (len == -1)
+			error_allocation_command_line_and_exit(command_line);
+		if (len == 0)
+			variable = expand_variables(&remaining_line, command_line);
 		else
-			*extracted_line = ft_strdup("");
-		len = 1;
-	}
-	else if (is_non_valid_characters(&str[1]) == true)
-	{
-		*extracted_line = ft_strdup("");
-		(*command_line)->current_exit_code = 2;
-		ft_putstr_fd("syntax error\n", 2);
-		len = ft_strlen(str);
-	}
-/*	else if (str[1] == '}' || str[1] == ']')
-		len = get_len_and_extract_until_next_separator_first_dollar_included \
-		(str, extracted_line);*/
-	else if (str[1] == '$')
-	{
-		*extracted_line = ft_itoa(getpid());
-		len = 2;
-	}
-	else if (str[1] == '?')
-	{
-		*extracted_line = ft_itoa((*command_line)->previous_exit_code);
-		len = 2;
-	}
-	else if (str[1] == '=')
-	{
-		*extracted_line = ft_strdup("$=");
-		len = 2;
-	}
-	else if (str[1] >= '0' && str[1] <= '9')
-	{
-		argv_index = ft_substr(str, 1, 1);
-		if (str[1] == '0' && (*command_line)->argv[atoi(argv_index)])
-			*extracted_line = ft_strdup \
-			((*command_line)->argv[atoi(argv_index)]);
+			remaining_line += len;
+		if (!result)
+			result = ft_strdup(variable);
 		else
-			*extracted_line = ft_strdup("");
-		argv_index = free_and_null(argv_index);
-		len = 2;
+			result = ft_strjoin_freed(result, variable);
+		if (!result)
+			error_allocation_command_line_and_exit(command_line);
 	}
-	return (len);
+	*str = free_and_null (*str);
+	*str = ft_strdup_freed(result);
+	if (!str)
+		error_allocation_command_line_and_exit(command_line);
+	variable = free_and_null(variable);
 }
 
-size_t	simple_expand_content_of_redirections(char *str, \
-char **extracted_line, t_command_line **command_line)
-{
-	int		len;
-
-	len = handle_special_characters_after_dollar(str, extracted_line, \
-	command_line, false);
-	if (len != 0)
-		return (len);
-	else
-	{
-		len = get_len_and_extract_after_first_dollar(&str[0], extracted_line);
-		expand_string_after_dollar1(extracted_line, \
-		(*command_line)->envp_struct, command_line);
-	}
-	return (len);
-}
-
-size_t	simple_expand_content_of_arguments(char *str, \
+void	expand_string_after_dollar2(char *str, 
 t_expanded_argument **exp_arguments, char **definitive_content, \
 t_command_line **command_line)
 {
-	int		len;
-	char	*extracted_line;
-//	char    *tmp;
-//	tmp = NULL;
-	extracted_line = NULL;
-	len = handle_special_characters_after_dollar(str, &extracted_line, \
-	command_line, false);
-	if (len != 0)
-	{
-		if (*definitive_content)
-		{
-			*definitive_content = ft_strjoin_freed \
-			(*definitive_content, extracted_line);
-			extracted_line = free_and_null(extracted_line);
-		}
-		else
-			*definitive_content = ft_strdup_freed(extracted_line);
-		return (len);
-/*		tmp = ft_strdup_freed(extracted_line);
-		extracted_line = NULL;
-		if (*definitive_content)
-			free(*definitive_content);
-		*definitive_content = tmp;
-		return (len);*/
-	}
-	else
-	{
-		len = get_len_and_extract_after_first_dollar(&str[0], &extracted_line);
-		expand_string_after_dollar2(extracted_line, exp_arguments, \
-		(*command_line)->envp_struct, definitive_content);
-		extracted_line = free_and_null(extracted_line);
-	}
-	return (len);
-}
-
-static int	expand_content_heredoc_when_dollar_first(char *str, \
-char **tmp, t_envp_struct *envp_struct, t_command_line **command_line)
-{
-	int	len;
-
-	len = 0;
-	if (str[1] != '\"' && str[1] != '\'' && (str[1]) != 0)
-	{
-		len += get_len_and_extract_after_first_dollar(str, tmp);
-		expand_string_after_dollar1(tmp, envp_struct, command_line);
-	}
-	else
-		len += get_len_and_extract_until_next_separator_dollar_excluded \
-		(str, tmp);
-	return (len);
-}
-
-void	expand_content_when_heredoc(char **str, t_envp_struct *envp_struct, \
-t_command_line **command_line, bool flag_for_expand)
-{
-	int		i;
+	char	*variable;
+	char	*extracted_argument;
+	bool	last_arg_with_wspaces;
 	char	*tmp;
-	char	*result;
 
-	i = 0;
-	result = NULL;
-	while (str[0][i])
+	extracted_argument = NULL;
+	last_arg_with_wspaces = true;
+	variable = expand_variables(&str, command_line);
+	tmp = variable;
+	while (tmp && tmp[0])
 	{
-		if (str[0][i] == '$')
+		if (ft_isspace(tmp[0]) == true)
 		{
-			if (flag_for_expand == true)
-				i += expand_content_heredoc_when_dollar_first \
-				(&str[0][i], &tmp, envp_struct, command_line);
-			else
+			if (*definitive_content)
+				add_exp_arguments(exp_arguments, definitive_content, \
+				command_line);
+			while (tmp && tmp[0] && last_arg_with_wspaces == true)
 			{
-				i += get_len_and_extract_until_next_dollar_first_dollar_excluded(&str[0][i], &tmp);
+				cut_variable_on_whitespaces(exp_arguments, &tmp, \
+				&last_arg_with_wspaces, command_line);
 			}
 		}
 		else
-			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp);
-		if (!result)
 		{
-			result = ft_strdup_freed(tmp);
-			tmp = NULL;
-		}
-		else
-		{
-			result = ft_strjoin_freed(result, tmp);
-			tmp = free_and_null(tmp);
+			extract_argument_until_next_whitespace_or_dollar(&tmp, \
+			&extracted_argument, command_line);
+//			if (!extracted_argument)
+//				printf("error\n");
+			add_to_definitive_content(definitive_content, \
+			extracted_argument, command_line, variable);
+//				add_exp_arguments(exp_arguments, definitive_content);
+//			else
 		}
 	}
-	free(*str);
-	*str = ft_strdup_freed(result);
+	variable = free_and_null(variable);
 }
