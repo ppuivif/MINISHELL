@@ -6,21 +6,22 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 17:31:59 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 10:19:55 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	get_len_and_extract_after_first_dollar(char *str, char **extracted_line)
+int	get_len_and_extract_after_first_dollar(char *str, char **extracted_line, \
+t_command_line **command_line)
 {
-	size_t	len;
-	size_t	len_to_next_separator;
+	int	len;
+	int	len_to_next_separator;
 
 	len_to_next_separator = ft_strcspn(&str[1], "$\"\' \t\n\v\f\r\0");
-	*extracted_line = ft_substr(str, 0, len_to_next_separator + 1);//malloc à protéger
+	*extracted_line = ft_substr(str, 0, len_to_next_separator + 1);
 	if (!(*extracted_line))
-		return (-1);
+		error_allocation_command_line_and_exit(command_line);
 	len = len_to_next_separator + 1;
 	return (len);
 }
@@ -59,7 +60,9 @@ static int	expand_variables_when_dollar_first(char \
 		else
 		{
 			len_to_cut = (int)strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
-			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);//protect
+			tmp = ft_substr(&remaining_line[1], 0, len_to_cut);
+			if (!tmp)
+				return (-1);
 			*result = get_variable_content_in_envp(tmp, envp_struct);
 			tmp = free_and_null(tmp);
 			if (!*result)
@@ -68,10 +71,12 @@ static int	expand_variables_when_dollar_first(char \
 	}
 	else
 		*result = ft_strdup("$");
+	if (!(*result))
+		len_to_cut = -1;
 	return (len_to_cut);
 }
 
-char	*expand_variables(char **remaining_line, t_envp_struct *envp_struct)
+char	*expand_variables(char **remaining_line, t_command_line **command_line)
 {
 	int		len_to_cut;
 	char	*result;
@@ -81,13 +86,17 @@ char	*expand_variables(char **remaining_line, t_envp_struct *envp_struct)
 	if (remaining_line[0][0] == '$')
 	{
 		len_to_cut = expand_variables_when_dollar_first(remaining_line[0], \
-		&result, envp_struct);
+		&result, (*command_line)->envp_struct);
+		if (len_to_cut == -1)
+			error_allocation_command_line_and_exit(command_line);
 		*remaining_line += len_to_cut + 1;
 	}
 	else
 	{
 		len_to_cut = ft_strcspn(remaining_line[0], "$\0");
-		result = ft_substr(remaining_line[0], 0, len_to_cut);//malloc à protéger
+		result = ft_substr(remaining_line[0], 0, len_to_cut);
+		if (!result)
+			error_allocation_command_line_and_exit(command_line);
 		*remaining_line += len_to_cut;
 	}
 	return (result);

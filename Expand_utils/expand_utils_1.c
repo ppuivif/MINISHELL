@@ -6,80 +6,81 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:41 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 17:25:50 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 13:09:32 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-size_t	get_len_and_extract_between_single_quotes(char *str, \
-char **extracted_line)
+int	get_len_and_extract_between_single_quotes(char *str, \
+char **extracted_line, t_command_line **command_line)
 {
-	size_t	len;
-	size_t	len_to_next_single_quote;
+	int	len;
+	int	len_to_next_single_quote;
 
 	len = 0;
 	len_to_next_single_quote = ft_strcspn(str, "\'");
 	*extracted_line = ft_substr(str, 0, len_to_next_single_quote);
 	if (!(*extracted_line))
-		return (-1);
+		error_allocation_command_line_and_exit(command_line);
 	len = len_to_next_single_quote + 2;
 	return (len);
 }
 
-size_t	get_len_and_extract_with_single_quotes(char *str, \
-char **extracted_line)
+int	get_len_and_extract_with_single_quotes(char *str, \
+char **extracted_line, t_command_line **command_line)
 {
-	size_t	len;
-	size_t	len_to_next_single_quote;
+	int	len;
+	int	len_to_next_single_quote;
 
 	len = 0;
 	len_to_next_single_quote = ft_strcspn(&str[1], "\'");
 	*extracted_line = ft_substr(str, 0, len_to_next_single_quote + 2);
 	if (!(*extracted_line))
-		return (-1);
+		error_allocation_command_line_and_exit(command_line);
 	len = len_to_next_single_quote + 2;
 	return (len);
 }
 
-size_t	get_len_and_extract_between_double_quotes(char *str, \
-char **extracted_line)
+int	get_len_and_extract_between_double_quotes(char *str, \
+char **extracted_line, t_command_line **command_line)
 {
-	size_t	len;
-	size_t	len_to_next_double_quote;
+	int	len;
+	int	len_to_next_double_quote;
 
 	len = 0;
 	len_to_next_double_quote = ft_strcspn(str, "\"");
 	*extracted_line = ft_substr(str, 0, len_to_next_double_quote);//protect
 	if (!(*extracted_line))
-		return (-1);
+		error_allocation_command_line_and_exit(command_line);
 	len = len_to_next_double_quote + 2;
 	return (len);
 }
 
-size_t	get_len_and_extract_until_next_quote(char *str, char **extracted_line)
+int	get_len_and_extract_until_next_quote(char *str, char **extracted_line, \
+t_command_line **command_line)
 {
-	size_t	len;
-	size_t	len_to_next_quote;
+	int	len;
+	int	len_to_next_quote;
 
 	len_to_next_quote = ft_strcspn(str, "\"\'");
 	*extracted_line = ft_substr(str, 0, len_to_next_quote);
 	if (!(*extracted_line))
-		return (-1);
+		error_allocation_command_line_and_exit(command_line);
 	len = len_to_next_quote;
 	return (len);
 }
 
-size_t	get_len_and_extract_until_next_dollar(char *str, char **extracted_line)
+int	get_len_and_extract_until_next_dollar(char *str, char **extracted_line, \
+t_command_line **command_line)
 {
-	size_t	len;
-	size_t	len_to_next_dollar;
+	int	len;
+	int	len_to_next_dollar;
 
 	len_to_next_dollar = ft_strcspn(str, "$");
 	*extracted_line = ft_substr(str, 0, len_to_next_dollar);
 	if (!(*extracted_line))
-		return (-1);
+		error_allocation_command_line_and_exit(command_line);
 	len = len_to_next_dollar;
 	return (len);
 }
-
