@@ -30,6 +30,7 @@ SRCS += Builtins/echo.c\
 		Builtins/env.c\
 		Builtins/unset.c\
 		Builtins/export.c\
+		Builtins/add_export.c\
 		Builtins/export_utils.c\
 		Builtins/builtin_utils.c\
 

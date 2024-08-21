@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/21 17:19:23 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/21 17:48:11 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,7 +297,8 @@ void			env(t_exec_struct *exec_struct);
 void			unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			print_export(t_envp_struct *envp_struct);
-t_envp_struct	*copy_envp_struct(t_envp_struct *envp_struct);
+void			add_export(t_exec_struct *exec_struct, char *argument);
+void			add2_export(t_exec_struct *exec_struct, char *argument);
 t_envp_struct	*ft_lstnew(char *name, char *value, bool equal);
 int				ft_aatoi(char *nptr, t_exec_struct *exec_struct, char **envp_arr);
 void			message_error(char *str, t_exec_struct *exec_struct, char **envp_arr);

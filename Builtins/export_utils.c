@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:33:32 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 12:42:38 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/21 17:14:57 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,23 +19,6 @@ static void	ft_lstdelone(t_envp_struct *element_to_del)
 	element_to_del->name = free_and_null(element_to_del->name);
 	element_to_del->value = free_and_null(element_to_del->value);
 	free(element_to_del);
-}
-
-t_envp_struct	*ft_lstnew(char *name, char *value, bool equal)
-{
-	t_envp_struct	*lst;
-
-	lst = malloc(sizeof(t_envp_struct));
-	if (!lst)
-		return (NULL);
-	lst->name = ft_strdup(name);
-	lst->equal = equal;
-	if (value)
-		lst->value = ft_strdup(value);
-	else
-		lst->value = NULL;
-	lst->next = NULL;
-	return (lst);
 }
 
 static int	sort_envp(t_envp_struct **tmp_envp, \
@@ -85,7 +68,7 @@ static void	ft_lst_print(t_envp_struct *envp_struct, int fd)
 	}
 }
 
-t_envp_struct	*copy_envp_struct(t_envp_struct *envp_struct)
+static t_envp_struct	*copy_envp_struct(t_envp_struct *envp_struct)
 {
 	t_envp_struct	*copy;
 	t_envp_struct	*new_element;
