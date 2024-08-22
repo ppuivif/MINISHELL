@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check_exec_redirections.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 17:12:15 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/22 19:43:15 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,18 @@ void	sigint_handler(int sig)
 	g_sign = 1;
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
+
+static void	assignment_ambiguous_redirection(t_expanded_redirection *exp_redirection, \
+t_exec_redirection **exec_redirection)
+{
+//	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
+	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
+	(*exec_redirection)->fd_output = -1;
+	(*exec_redirection)->fd_input = -1;
+	ft_putstr_fd(exp_redirection->content, 2);
+	ft_putstr_fd(": ambiguous redirect\n", 2);	
+}
+
 
 static int	check_outfile(t_expanded_redirection *exp_redirection, \
 t_exec_redirection **exec_redirection)
@@ -149,6 +161,12 @@ t_exec_struct *exec_struct)
 		return_value = check_heredoc(exp_redirection, exec_redirection, \
 		&exec_struct->command_line);
 		return (return_value);
+	}
+	if (exp_redirection->t_redirection == REDIRECTION_AMBIGUOUS && \
+	(*exec_substring)->is_previous_file_opened == true)
+	{
+		assignment_ambiguous_redirection(exp_redirection, exec_redirection);
+		return (-1);
 	}
 	else
 		return (-1);

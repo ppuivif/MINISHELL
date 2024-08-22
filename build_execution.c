@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/17 18:40:12 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/22 19:25:11 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@ t_exec_struct **exec_struct)
 	t_exec_redirection	*exec_redirection;
 
 	status_code = 0;
-	if (init_exec_redirection_struct(&exec_redirection) == -1)
-		error_allocation_exec_struct_and_exit(exec_struct);
+	init_exec_redirection_struct(&exec_redirection, exec_struct);
 	exec_redirection->substring_index = (*exec_substring)->index;
 	status_code = open_and_check_file(exp_redirection, &exec_redirection, \
 	exec_substring, *exec_struct);
@@ -40,8 +39,7 @@ t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
 	t_exec_argument	*exec_argument;
 
-	if (init_exec_argument_struct(&exec_argument) == -1)
-		error_allocation_exec_struct_and_exit(exec_struct);
+	init_exec_argument_struct(&exec_argument, exec_struct);
 	exec_argument->argument = exp_argument->content;
 	ft_lst_add_back9(&(*exec_substring)->exec_arguments, exec_argument);
 }
@@ -53,8 +51,7 @@ t_exec_struct **exec_struct, int index)
 	t_expanded_redirection	*tmp1;
 	t_expanded_argument		*tmp2;
 
-	if (init_exec_substring_struct(&exec_substring) == -1)
-		error_allocation_exec_struct_and_exit(exec_struct);
+	init_exec_substring_struct(&exec_substring, exec_struct);
 	exec_substring->index = index;
 	tmp1 = substring->exp_redirections;
 	tmp2 = substring->exp_arguments;

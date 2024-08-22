@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/21 17:48:11 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/22 18:52:10 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,12 @@ int				init_expanded_redirection_struct( \
 */
 
 int				init_exec_struct(t_exec_struct **exec_struct);
-int				init_exec_substring_struct(t_exec_substring **exec_substring);
-int				init_exec_redirection_struct(t_exec_redirection **exec_redirection);
-int				init_exec_argument_struct(t_exec_argument **exec_argument);
+int				init_exec_substring_struct(t_exec_substring **exec_substring, \
+				t_exec_struct **exec_struct);
+int				init_exec_redirection_struct(t_exec_redirection **exec_redirection, \
+				t_exec_struct **exec_struct);
+int				init_exec_argument_struct(t_exec_argument **exec_argument, \
+				t_exec_struct **exec_struct);
 
 /*
 * expand_contents.c

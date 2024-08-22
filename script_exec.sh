@@ -640,7 +640,7 @@ run_test "oneheredoc" 78 "<< limiter1 cat | cat >>		temp/outfile1.txt" 61 0
 run_test "oneheredoc" 79 "<< limiter1 cat | cat >> temp/outfile1.txt	" 61 0
 run_test "oneheredoc" 80 "<< limiter1 cat | cat >> temp/outfile1.txt		" 61 0
 
-if (( "$start_index" >= 61 ))
+if (( "$start_index" >= 61  && "$start_index" <= 80 && "$end_index" >= 61 && "$end_index" <= 80 ))
 then
 	if [ "$display" == "all" ]
 	then
@@ -1325,9 +1325,6 @@ then
 	fi
 fi
 
-
-
-
 export TEST1="test1"
 export TEST2="test2"
 export TEST3="salut     les     amis"
@@ -1384,7 +1381,7 @@ fi
 
 export INFILE="temp/infile1.txt"
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1700 && "$start_index" <= 1719 && "$end_index" >= 1700 && "$end_index" <= 1719 ))
 then
 	if [ "$display" == "all" ]
 	then
@@ -1418,7 +1415,7 @@ unset INFILE
 
 export OUTFILE="temp/outfile1.txt"
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1700 && "$start_index" <= 1759 && "$end_index" >= 1700 && "$end_index" <= 1759 ))
 then
 	if [ "$display" == "all" ]
 	then
@@ -1449,13 +1446,15 @@ run_test "simple" 1757 "> \"	\$OUTFILE	\"" 1757 0
 run_test "simple" 1758 "> \"		\$OUTFILE		\"" 1758 0
 run_test "simple" 1759 "> \"OUTFILE \$OUTFILE\"" 1759 0
 unset OUTFILE
+rm "\$OUTFILE"
+#rm \$OUTFILE
 
 : <<BLOCK_COMMENT
 
 export LIMITER="limiter"
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
-then
+if (( "$start_index" >= 1780 && "$start_index" <= 1799 && "$end_index" >= 1780 && "$end_index" <= 1799 ))
+then(*command_line)->current_exit_code
 	if [ "$display" == "all" ]
 	then
 		echo ""
@@ -1506,7 +1505,7 @@ BLOCK_COMMENT
 
 export OUTFILE="temp/outfile1.txt"
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1820 && "$start_index" <= 1838 && "$end_index" >= 1820 && "$end_index" <= 1838 ))
 then
 	if [ "$display" == "all" ]
 	then
@@ -1536,16 +1535,91 @@ run_test "simple" 1836 ">> \"\$OUTFILE		\"" 1836 0
 run_test "simple" 1837 ">> \"	\$OUTFILE	\"" 1837 0
 run_test "simple" 1838 ">> \"		\$OUTFILE		\"" 1838 0
 unset OUTFILE
+rm "\$OUTFILE"
+#rm \$OUTFILE
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1700 && "$start_index" <= 1850 && "$end_index" >= 1700 && "$end_index" <= 1850 ))
 then
 	if [ "$display" == "all" ]
 	then
-		echo -e "end of test serie from 1700 to 1900\n"
+		echo -e "end of test serie from 1700 to 1850\n"
 	else
-		echo -e "end of test serie from 1700 to 1900"
+		echo -e "end of test serie from 1700 to 1850"
 	fi
 fi
+
+export TEST1
+export TEST2=
+export TEST3=""
+export TEST4=" "
+export TEST5="	"
+
+if (( "$start_index" >= 1900 && "$start_index" <= 1950 && "$end_index" >= 1900 && "$end_index" <= 1950 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo ""
+		echo "\$TEST1"
+		echo "\$TEST2 ="
+		echo "\$TEST3 = \"\""
+		echo "\$TEST4 = \" \""
+		echo "\$TEST5 = \"	\""
+		echo ""
+	fi
+fi
+
+run_test "simple" 1900 "< \$TEST1 cat" 1900 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1901 "< \$TEST1 ls" 1901 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1902 "< \$TEST1 cat | cat" 1902 0 "\$TEST1: ambiguous redirect"
+run_test "simple" 1903 "< \$TEST1 cat | ls" 1903 0 "\$TEST1: ambiguous redirect"
+run_test "simple" 1904 "< \$TEST1 < infile1.txt cat" 1904 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1905 "< infile1.txt < \$TEST1 cat" 1905 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1906 "< \$TEST1 < do_not_exist cat" 1906 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1907 "< do_not_exist < \$TEST1 cat" 1907 1 "do_not_exist: No such file or directory"
+
+run_test "simple" 1910 "< \$TEST2 cat" 1910 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1911 "< \$TEST2 ls" 1911 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1912 "< \$TEST2 cat | cat" 1912 0 "\$TEST2: ambiguous redirect"
+run_test "simple" 1913 "< \$TEST2 cat | ls" 1913 0 "\$TEST2: ambiguous redirect"
+run_test "simple" 1914 "< \$TEST2 < infile1.txt cat" 1914 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1915 "< infile1.txt < \$TEST2 cat" 1915 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1916 "< \$TEST2 < do_not_exist cat" 1916 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1917 "< do_not_exist < \$TEST2 cat" 1917 1 "do_not_exist: No such file or directory"
+
+run_test "simple" 1920 "< \$TEST3 cat" 1920 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1921 "< \$TEST3 ls" 1921 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1922 "< \$TEST3 cat | cat" 1922 0 "\$TEST3: ambiguous redirect"
+run_test "simple" 1923 "< \$TEST3 cat | ls" 1923 0 "\$TEST3: ambiguous redirect"
+run_test "simple" 1924 "< \$TEST3 < infile1.txt cat" 1924 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1925 "< infile1.txt < \$TEST3 cat" 1925 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1926 "< \$TEST3 < do_not_exist cat" 1926 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1927 "< do_not_exist < \$TEST3 cat" 1927 1 "do_not_exist: No such file or directory"
+
+run_test "simple" 1930 "< \$TEST4 cat" 1930 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1931 "< \$TEST4 ls" 1931 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1932 "< \$TEST4 cat | cat" 1932 0 "\$TEST4: ambiguous redirect"
+run_test "simple" 1933 "< \$TEST4 cat | ls" 1933 0 "\$TEST4: ambiguous redirect"
+run_test "simple" 1934 "< \$TEST4 < infile1.txt cat" 1934 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1935 "< infile1.txt < \$TEST4 cat" 1935 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1936 "< \$TEST4 < do_not_exist cat" 1936 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1937 "< do_not_exist < \$TEST4 cat" 1937 1 "do_not_exist: No such file or directory"
+
+run_test "simple" 1940 "< \$TEST5 cat" 1940 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1941 "< \$TEST5 ls" 1941 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1942 "< \$TEST5 cat | cat" 1942 0 "\$TEST5: ambiguous redirect"
+run_test "simple" 1943 "< \$TEST5 cat | ls" 1943 0 "\$TEST5: ambiguous redirect"
+run_test "simple" 1944 "< \$TEST5 < infile1.txt cat" 1944 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1945 "< infile1.txt < \$TEST5 cat" 1945 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1946 "< \$TEST5 < do_not_exist cat" 1946 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1947 "< do_not_exist < \$TEST5 cat" 1947 1 "do_not_exist: No such file or directory"
+
+unset TEST1
+unset TEST2
+unset TEST3
+unset TEST4
+unset TEST5
+
+
 
 run_test "simple" 2000 "<" 2000 2 "syntax error"
 run_test "simple" 2001 "< <" 2001 2 "syntax error"

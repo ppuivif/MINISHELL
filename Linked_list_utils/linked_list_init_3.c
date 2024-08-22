@@ -6,11 +6,12 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/20 09:25:52 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/22 19:08:13 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "linked_list_utils.h"
+#include "minishell.h"
 
 int	init_exec_struct(t_exec_struct **exec_struct)
 {
@@ -23,11 +24,12 @@ int	init_exec_struct(t_exec_struct **exec_struct)
 	return (0);
 }
 
-int	init_exec_argument_struct(t_exec_argument **exec_argument)
+int	init_exec_argument_struct(t_exec_argument **exec_argument, \
+t_exec_struct **exec_struct)
 {
 	*exec_argument = ft_calloc(1, sizeof(t_exec_argument));
 	if (!*exec_argument)
-		return (-1);
+		error_allocation_exec_struct_and_exit(exec_struct);
 	(*exec_argument)->argument = NULL;
 	(*exec_argument)->is_argument_valid = true;
 	(*exec_argument)->is_builtin = 0;
@@ -35,11 +37,12 @@ int	init_exec_argument_struct(t_exec_argument **exec_argument)
 	return (0);
 }
 
-int	init_exec_redirection_struct(t_exec_redirection **exec_redirection)
+int	init_exec_redirection_struct(t_exec_redirection **exec_redirection, \
+t_exec_struct **exec_struct)
 {
 	*exec_redirection = ft_calloc(1, sizeof(t_exec_redirection));
 	if (!*exec_redirection)
-		return (-1);
+		error_allocation_exec_struct_and_exit(exec_struct);
 	(*exec_redirection)->substring_index = 0;
 	(*exec_redirection)->file = NULL;
 	(*exec_redirection)->t_redirection = 2;
@@ -49,11 +52,12 @@ int	init_exec_redirection_struct(t_exec_redirection **exec_redirection)
 	return (0);
 }
 
-int	init_exec_substring_struct(t_exec_substring **exec_substring)
+int	init_exec_substring_struct(t_exec_substring **exec_substring, \
+t_exec_struct **exec_struct)
 {
 	*exec_substring = ft_calloc(1, sizeof(t_exec_substring));
 	if (!*exec_substring)
-		return (-1);
+		error_allocation_exec_struct_and_exit(exec_struct);
 	(*exec_substring)->index = 0;
 	(*exec_substring)->exec_redirections = NULL;
 	(*exec_substring)->is_previous_file_opened = true;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_contents.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:25 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 17:12:37 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:27:21 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,8 @@ void	expand_contents(t_command_line **command_line)
 		while (cursor2 && (*command_line)->current_exit_code != 2)
 		{
 			expand_redirections(cursor1, cursor2, command_line);
-			if ((*command_line)->current_exit_code == 1) //ambiguous redirection
-				break ;
+			if (cursor2->t_redirection != REDIRECTION_AMBIGUOUS)
+				(*command_line)->current_exit_code = 0;
 			cursor2 = cursor2->next;
 		}
 		cursor3 = cursor1->n_arguments;
