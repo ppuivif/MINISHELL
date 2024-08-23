@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/22 18:52:10 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 10:55:04 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,9 +135,6 @@ void			expand_redirections(t_substring *substring, t_native_redirection *n_redir
 
 void			add_exp_arguments(t_expanded_argument **exp_arguments, \
 				char **definitive_content, t_command_line **command_line);
-int				add_to_definitive_content(char **definitive_content, \
-				char *extracted_line, t_command_line **command_line, \
-				char *str);
 int				expand_arguments(t_substring *substring, \
 				t_native_argument *n_argument, t_command_line **command_line);
 
@@ -242,7 +239,11 @@ int				simple_expand_content_of_arguments(char *str, \
 */
 
 void			expand_content_when_heredoc(char **str, t_command_line **command_line, bool flag_for_expand);
-
+void			add_to_definitive_content(char **definitive_content, \
+				char *extracted_line, t_command_line **command_line, \
+				char *str);
+void			check_ambiguous_redirection(char **extracted_line, \
+				t_native_redirection **n_redirection);
 /*
 * free_command_line_1.c
 */

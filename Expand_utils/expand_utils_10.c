@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 14:39:39 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 10:54:38 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,32 @@ bool flag_for_expand)
 	}
 	free(*str);
 	*str = ft_strdup_freed(result);
+}
+
+void	add_to_definitive_content(char **definitive_content, char *extracted_line, \
+t_command_line **command_line, char *str)
+{
+	if (!*definitive_content)
+		*definitive_content = ft_strdup(extracted_line);
+	else
+		*definitive_content = \
+		ft_strjoin_freed(*definitive_content, extracted_line);
+	extracted_line = free_and_null(extracted_line);
+	if (!*definitive_content)
+	{
+		free(str);
+		error_allocation_command_line_and_exit(command_line);
+	}
+}
+
+void	check_ambiguous_redirection(char **extracted_line, \
+t_native_redirection **n_redirection)
+{
+	size_t	len;
+	size_t	len_to_separator;
+
+	len = ft_strlen(*extracted_line);
+	len_to_separator = ft_strcspn(*extracted_line, " \t\n\v\f\r\0");
+	if (len == 0 || len_to_separator < len)
+		(*n_redirection)->t_redirection = REDIRECTION_AMBIGUOUS;
 }

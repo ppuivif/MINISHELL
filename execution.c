@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/20 14:46:49 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/23 10:26:21 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,7 @@ static int	search_last_output(t_exec_redirection *redirection)
 	return (fd_out);
 }
 
-void	print_int_arr(int *arr, int size)
+void	print_int_arr(int *arr, int size)// to delete
 {
 	int	i;
 

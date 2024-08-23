@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/22 19:43:15 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 10:34:25 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ void	sigint_handler(int sig)
 static void	assignment_ambiguous_redirection(t_expanded_redirection *exp_redirection, \
 t_exec_redirection **exec_redirection)
 {
-//	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
 	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
 	(*exec_redirection)->fd_output = -1;
 	(*exec_redirection)->fd_input = -1;

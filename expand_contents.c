@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:25 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/22 16:27:21 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 10:52:20 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,7 @@ void	expand_contents(t_command_line **command_line)
 		while (cursor2 && (*command_line)->current_exit_code != 2)
 		{
 			expand_redirections(cursor1, cursor2, command_line);
-			if (cursor2->t_redirection != REDIRECTION_AMBIGUOUS)
-				(*command_line)->current_exit_code = 0;
+//			(*command_line)->current_exit_code = 0;
 			cursor2 = cursor2->next;
 		}
 		cursor3 = cursor1->n_arguments;
