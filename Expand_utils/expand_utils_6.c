@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 17:14:37 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 16:28:51 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,24 +36,12 @@ t_command_line **command_line)
 		else
 			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp, \
 			command_line);
-		if (!result)
-		{
-			result = ft_strdup_freed(tmp);
-			tmp = NULL;
-		}
-		else
-		{
-			result = ft_strjoin_freed(result, tmp);
-			tmp = free_and_null(tmp);
-		}
-		if (!result)
-			error_allocation_command_line_and_exit(command_line);
+		add_to_definitive_content(&result, tmp, command_line, NULL);
 	}
 	free(*str);
 	*str = ft_strdup_freed(result);
 	if (!(*str))
 		error_allocation_command_line_and_exit(command_line);
-		
 }
 
 static int	expand_content_of_redirections_when_dollar_first(char *str, \
@@ -96,9 +84,8 @@ char **tmp, t_command_line **command_line)
 		len += get_len_and_extract_until_next_quote_or_dollar(str, tmp, \
 		command_line);
 	else
-		len += get_len_and_extract_until_next_separator(str, tmp);
-	if (len == -1)
-		error_allocation_command_line_and_exit(command_line);
+		len += get_len_and_extract_until_next_separator(str, tmp, \
+		command_line);
 	return (len);
 }
 
@@ -120,29 +107,17 @@ t_command_line **command_line)
 		{
 			len = handle_special_characters_after_dollar(&str[0][i], \
 			&tmp, command_line, false);
-			if (len == -1)
-				error_allocation_command_line_and_exit(command_line);
-			else if (len == 0)
+			if (len == 0)
 				i += expand_content_of_redirections_when_dollar_first \
 				(&str[0][i], &tmp, command_line);
 			else
-				i += (int)len;
+				i += len;
 		}
 		else
 			i += expand_content_when_dollar_not_first \
 			(&str[0][i], &tmp, command_line);
-		if (!result)
-		{
-			result = ft_strdup_freed(tmp);
-			tmp = NULL;
-		}
-		else
-		{
-			result = ft_strjoin_freed(result, tmp);
-			tmp = free_and_null(tmp);
-		}
-		if (!result)
-			error_allocation_command_line_and_exit(command_line);
+
+		add_to_definitive_content(&result, tmp, command_line, NULL);
 	}
 	free(*str);
 	*str = ft_strdup_freed(result);

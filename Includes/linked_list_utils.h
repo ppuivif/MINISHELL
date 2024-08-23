@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/22 16:25:16 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 14:41:07 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ typedef enum t_redirection_type
 
 typedef struct s_expanded_argument
 {
-	bool						alloc_succeed;//to delete
 	char						*content;
 	struct s_expanded_argument	*next;
 }	t_expanded_argument;

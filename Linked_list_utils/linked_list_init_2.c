@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/22 16:25:40 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 14:41:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ t_command_line **command_line)
 	*exp_argument = ft_calloc(1, sizeof(t_expanded_argument));
 	if (!*exp_argument)
 		error_allocation_command_line_and_exit(command_line);
-	(*exp_argument)->alloc_succeed = true;//to delete
 	(*exp_argument)->content = NULL;
 	(*exp_argument)->next = NULL;
 	return (0);

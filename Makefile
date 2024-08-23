@@ -64,6 +64,7 @@ SRCS += Expand_utils/expand_utils_1.c\
 		Expand_utils/expand_utils_8.c\
 		Expand_utils/expand_utils_9.c\
 		Expand_utils/expand_utils_10.c\
+		Expand_utils/expand_utils_11.c\
 
 SRCS += linked_list_utils_for_print.c\
 		GNL/get_next_line_utils.c\

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_5.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 17:14:01 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:13:01 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,27 +26,20 @@ void	expand_string_after_dollar1(char **str, t_command_line **command_line)
 	{
 		len = handle_special_characters_after_dollar(remaining_line, \
 		&variable, command_line, 1);
-		if (len == -1)
-			error_allocation_command_line_and_exit(command_line);
 		if (len == 0)
 			variable = expand_variables(&remaining_line, command_line);
 		else
 			remaining_line += len;
-		if (!result)
-			result = ft_strdup(variable);
-		else
-			result = ft_strjoin_freed(result, variable);
-		if (!result)
-			error_allocation_command_line_and_exit(command_line);
+
+		add_to_definitive_content(&result, variable, command_line, NULL);
 	}
 	*str = free_and_null (*str);
 	*str = ft_strdup_freed(result);
 	if (!str)
 		error_allocation_command_line_and_exit(command_line);
-	variable = free_and_null(variable);
 }
 
-void	expand_string_after_dollar2(char *str, 
+void	expand_string_after_dollar2(char *str, \
 t_expanded_argument **exp_arguments, char **definitive_content, \
 t_command_line **command_line)
 {
@@ -76,12 +69,8 @@ t_command_line **command_line)
 		{
 			extract_argument_until_next_whitespace_or_dollar(&tmp, \
 			&extracted_argument, command_line);
-//			if (!extracted_argument)
-//				printf("error\n");
 			add_to_definitive_content(definitive_content, \
 			extracted_argument, command_line, variable);
-//				add_exp_arguments(exp_arguments, definitive_content);
-//			else
 		}
 	}
 	variable = free_and_null(variable);

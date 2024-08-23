@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 10:34:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 16:55:32 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,14 +19,15 @@ void	sigint_handler(int sig)
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
 }
 
-static void	assignment_ambiguous_redirection(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection)
+static int	assignment_ambiguous_redirection( \
+t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection)
 {
 	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
 	(*exec_redirection)->fd_output = -1;
 	(*exec_redirection)->fd_input = -1;
 	ft_putstr_fd(exp_redirection->content, 2);
-	ft_putstr_fd(": ambiguous redirect\n", 2);	
+	ft_putstr_fd(": ambiguous redirect\n", 2);
+	return (-1);
 }
 
 
@@ -81,8 +82,7 @@ t_exec_redirection **exec_redirection, t_command_line **command_line)
 	line = NULL;
 	index = ft_itoa((*exec_redirection)->substring_index);
 	filename = ft_strjoin("heredoc_tmp_", index);
-	free (index);
-	index = NULL;
+	index = free_and_null(index);
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 		return (-1);
@@ -138,35 +138,24 @@ int	open_and_check_file(t_expanded_redirection *exp_redirection, \
 t_exec_redirection **exec_redirection, t_exec_substring **exec_substring, \
 t_exec_struct *exec_struct)
 {
-	int	return_value;
+	int	status_code;
 
-	return_value = 0;
-//	printf("fd_input : %d\n", (*exec_redirection)->fd_input);
+	status_code = 0;
 	if ((exp_redirection->t_redirection == REDIRECTION_OUTFILE || \
 	exp_redirection->t_redirection == REDIRECTION_APPEND) && \
 	(*exec_substring)->is_previous_file_opened == true)
-	{
-		return_value = check_outfile(exp_redirection, exec_redirection);
-		return (return_value);
-	}
+		status_code = check_outfile(exp_redirection, exec_redirection);
 	else if (exp_redirection->t_redirection == REDIRECTION_INFILE && \
 	(*exec_substring)->is_previous_file_opened == true)
-	{
-		return_value = check_infile(exp_redirection, exec_redirection);
-		return (return_value);
-	}
-	if (exp_redirection->t_redirection == REDIRECTION_HEREDOC)
-	{
-		return_value = check_heredoc(exp_redirection, exec_redirection, \
+		status_code = check_infile(exp_redirection, exec_redirection);
+	else if (exp_redirection->t_redirection == REDIRECTION_HEREDOC)
+		status_code = check_heredoc(exp_redirection, exec_redirection, \
 		&exec_struct->command_line);
-		return (return_value);
-	}
-	if (exp_redirection->t_redirection == REDIRECTION_AMBIGUOUS && \
+	else if (exp_redirection->t_redirection == REDIRECTION_AMBIGUOUS && \
 	(*exec_substring)->is_previous_file_opened == true)
-	{
-		assignment_ambiguous_redirection(exp_redirection, exec_redirection);
-		return (-1);
-	}
+		status_code = assignment_ambiguous_redirection(exp_redirection, \
+		exec_redirection);
 	else
-		return (-1);
+		status_code = -1;
+	return (status_code);
 }

@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 17:48:01 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 14:35:17 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,8 @@ static bool	is_last_argument_followed_by_whitespaces(char *str)
 	size_t	len_to_end;
 
 	len_to_end = ft_strlen(str);
-	if (is_last_argument(str) == true && strcspn(str, " \t\n\v\f\r") < len_to_end)
+	if (is_last_argument(str) == true && strcspn(str, " \t\n\v\f\r") \
+	< len_to_end)
 		return (true);
 	return (false);
 }
@@ -85,7 +86,8 @@ char **variable, bool *last_arg_with_wspaces, t_command_line **command_line)
 			{
 				extract_argument_until_next_whitespace_or_dollar \
 				(variable, &extracted_argument, command_line);
-				get_content(exp_arguments, extracted_argument, command_line, variable);
+				get_content(exp_arguments, extracted_argument, command_line, \
+				variable);
 				*last_arg_with_wspaces = true;
 			}
 			else
@@ -98,4 +100,3 @@ char **variable, bool *last_arg_with_wspaces, t_command_line **command_line)
 		*last_arg_with_wspaces = true;
 	}
 }
-
