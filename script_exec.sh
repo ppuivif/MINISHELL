@@ -1446,15 +1446,15 @@ run_test "simple" 1757 "> \"	\$OUTFILE	\"" 1757 0
 run_test "simple" 1758 "> \"		\$OUTFILE		\"" 1758 0
 run_test "simple" 1759 "> \"OUTFILE \$OUTFILE\"" 1759 0
 unset OUTFILE
-rm "\$OUTFILE"
-#rm \$OUTFILE
 
 : <<BLOCK_COMMENT
 
 export LIMITER="limiter"
 
 if (( "$start_index" >= 1780 && "$start_index" <= 1799 && "$end_index" >= 1780 && "$end_index" <= 1799 ))
-then(*command_line)->current_exit_code
+then(*command_line)->curre#444
+run_test "simple" 4934 "echo \$\"42\$'HOME'" 4934 0
+nt_exit_code
 	if [ "$display" == "all" ]
 	then
 		echo ""
@@ -1491,7 +1491,8 @@ TEST2="les"
 TEST3="amis"
 TEST4="     salut     les     amis     "
 \$TEST1
-\$TEST1 \$TEST2
+\$TEST1 \$TEST2rm "\$OUTFILE"
+
 \$TEST1\$TEST2
 \$TEST1 \$TEST2 \$TEST3
 \$TEST1\$TEST2\$TEST3
@@ -1535,8 +1536,6 @@ run_test "simple" 1836 ">> \"\$OUTFILE		\"" 1836 0
 run_test "simple" 1837 ">> \"	\$OUTFILE	\"" 1837 0
 run_test "simple" 1838 ">> \"		\$OUTFILE		\"" 1838 0
 unset OUTFILE
-rm "\$OUTFILE"
-#rm \$OUTFILE
 
 if (( "$start_index" >= 1700 && "$start_index" <= 1850 && "$end_index" >= 1700 && "$end_index" <= 1850 ))
 then
@@ -2213,7 +2212,7 @@ run_test "simple" 4874 "cat <\"./test_files/infile1\" | grep hello\" | echo hi" 
 run_test "simple" 4875 "cat <\"./temp/infile_big.txt\" | echo hi" 4875 0
 
 
-
+#366
 run_test "simple" 4933 "\$PWD" 4933 126 ": Is a directory"
 
 mkdir ./temp/no_permission_dir
@@ -2248,6 +2247,8 @@ run_test "simple" 4962 "/nix" 4962 126 "/nix: Is a directory"
 
 run_test "simple" 4970 "temp" 4970 127 "temp: command not found"
 
+#444
+run_test "simple" 4980 "echo \$\"42\$'HOME'" 4980 0
 
 
 if (( "$start_index" >= 4800 && "$start_index" <= 4999 && "$end_index" >= 4800 && "$end_index" <= 4999 ))
@@ -2465,6 +2466,19 @@ then
 else
 	echo -e "${GREEN}no error detected${NC}"
 fi
+
+if [ -f "\$OUTFILE" ]
+then
+	chmod 644 "\$OUTFILE"
+	rm "\$OUTFILE"
+fi
+
+if [ -f "\"\$OUTFILE\"" ]
+then
+	chmod 644 "\"\$OUTFILE\""
+	rm "\"\$OUTFILE\""
+fi
+
 #delete_files
 
 exit

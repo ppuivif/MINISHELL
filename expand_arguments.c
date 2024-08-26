@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 14:29:21 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/26 10:34:24 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ char **extracted_line, char **definitive_content, t_command_line **command_line)
 	int		len;
 	bool	flag_keep_dollar;
 
-	flag_keep_dollar = false;
+	flag_keep_dollar = true;
 	len = get_len_and_extract_between_quotes \
 	(&n_argument_content[0][1], extracted_line, command_line, '\"');
 	*n_argument_content += len;
