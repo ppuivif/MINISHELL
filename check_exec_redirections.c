@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 16:55:32 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/26 14:23:26 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,121 +17,6 @@ void	sigint_handler(int sig)
 	(void)sig;
 	g_sign = 1;
 	ioctl(STDIN_FILENO, TIOCSTI, "\n");
-}
-
-static int	assignment_ambiguous_redirection( \
-t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection)
-{
-	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
-	(*exec_redirection)->fd_output = -1;
-	(*exec_redirection)->fd_input = -1;
-	ft_putstr_fd(exp_redirection->content, 2);
-	ft_putstr_fd(": ambiguous redirect\n", 2);
-	return (-1);
-}
-
-
-static int	check_outfile(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection)
-{
-	if (exp_redirection->t_redirection == REDIRECTION_OUTFILE)
-		(*exec_redirection)->fd_output = \
-		open(exp_redirection->content, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	else if (exp_redirection->t_redirection == REDIRECTION_APPEND)
-		(*exec_redirection)->fd_output = \
-		open(exp_redirection->content, O_WRONLY | O_APPEND | O_CREAT, 0644);
-	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
-	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
-	if ((*exec_redirection)->fd_output == -1)
-	{
-		perror(exp_redirection->content);
-		return (1);
-	}
-	return (0);
-}
-
-static int	check_infile(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection)
-{
-	int	return_value;
-
-	return_value = 0;
-	(*exec_redirection)->fd_input = open(exp_redirection->content, O_RDONLY);
-	if ((*exec_redirection)->fd_input == -1)
-	{
-		if (access(exp_redirection->content, F_OK) == -1) //voir plutot stat
-			perror(exp_redirection->content);
-		else
-			perror(exp_redirection->content);
-		return_value = -2;
-	}
-	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
-	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
-	return (return_value);
-}
-
-static int	check_heredoc(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection, t_command_line **command_line)
-{
-	char	*line;
-	int		fd;
-	char	*limiter;
-	char	*filename;
-	char	*index;
-
-	line = NULL;
-	index = ft_itoa((*exec_redirection)->substring_index);
-	filename = ft_strjoin("heredoc_tmp_", index);
-	index = free_and_null(index);
-	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	if (fd == -1)
-		return (-1);
-	limiter = exp_redirection->content;
-//	limiter = ft_strjoin(exp_redirection->content, "\n");
-	while (1)
-	{
-		line = readline("heredoc : ");
-		signals(1);
-		if (g_sign)
-		{
-//          rl_clear_history();
-//			printf("voici le sign : %d\n", g_sign);//to delete
-			close(fd);
-			unlink(filename); // Optionally delete the temporary file
-			free(filename);
-			return (-1);
-		}
-		if (!line)
-		{
-//			rl_clear_history();
-			close(fd);
-			break ;
-		}
-		if (ft_strcmp(line, limiter) == 0)
-		{
-			line = free_and_null(line);
-			close(fd);
-			break ;
-		}
-		if (line[0])
-			add_history(line);
-		expand_content_when_heredoc(&line, command_line, \
-		exp_redirection->flag_for_expand);
-		ft_putstr_fd(line, fd);
-		ft_putstr_fd("\n", fd);
-		line = free_and_null(line);
-	}
-//	free(limiter);
-//	limiter = NULL;
-	(*exec_redirection)->file = filename;
-	(*exec_redirection)->t_redirection = REDIRECTION_INFILE;
-	(*exec_redirection)->fd_input = open((*exec_redirection)->file, O_RDONLY);
-	if ((*exec_redirection)->fd_input == -1)
-	{
-		perror((*exec_redirection)->file);
-		return (-1);
-	}
-	return (0);
 }
 
 int	open_and_check_file(t_expanded_redirection *exp_redirection, \
@@ -156,6 +41,6 @@ t_exec_struct *exec_struct)
 		status_code = assignment_ambiguous_redirection(exp_redirection, \
 		exec_redirection);
 	else
-		status_code = -1;
+		status_code = 1;
 	return (status_code);
 }

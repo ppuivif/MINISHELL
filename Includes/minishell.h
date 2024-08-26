@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/23 15:06:09 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/26 14:28:10 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -238,7 +238,6 @@ int				simple_expand_content_of_redirections(char *str, \
 * expand_utils_10.c
 */
 
-void			expand_content_when_heredoc(char **str, t_command_line **command_line, bool flag_for_expand);
 void			add_to_definitive_content(char **definitive_content, \
 				char *extracted_line, t_command_line **command_line, \
 				char *str);
@@ -246,6 +245,27 @@ void			check_ambiguous_redirection(char **extracted_line, \
 				t_native_redirection **n_redirection);
 void			add_exp_arguments(t_expanded_argument **exp_arguments, \
 				char **definitive_content, t_command_line **command_line);
+
+/*
+* expand_utils_11.c
+*/
+
+void			expand_content_when_heredoc(char **str, t_command_line **command_line, bool flag_for_expand);
+
+/*
+* expand_utils_12.c
+*/
+
+int				assignment_ambiguous_redirection( \
+				t_expanded_redirection *exp_redirection, \
+				t_exec_redirection **exec_redirection);
+int				check_outfile(t_expanded_redirection *exp_redirection, \
+				t_exec_redirection **exec_redirection);
+int				check_infile(t_expanded_redirection *exp_redirection, \
+				t_exec_redirection **exec_redirection);
+int				check_heredoc(t_expanded_redirection *exp_redirection, \
+				t_exec_redirection **exec_redirection, \
+				t_command_line **command_line);
 
 /*
 * free_command_line_1.c
