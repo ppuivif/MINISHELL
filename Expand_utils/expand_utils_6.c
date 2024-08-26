@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 16:28:51 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/26 17:44:47 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,6 @@ t_command_line **command_line)
 		else
 			i += expand_content_when_dollar_not_first \
 			(&str[0][i], &tmp, command_line);
-
 		add_to_definitive_content(&result, tmp, command_line, NULL);
 	}
 	free(*str);

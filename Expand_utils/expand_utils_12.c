@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/26 14:24:12 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/26 17:45:14 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ static int	read_and_expand_heredoc(t_expanded_redirection *exp_redirection, \
 char **filename, int fd, t_command_line **command_line)
 {
 	char	*line;
-	
+
 	line = NULL;
 	while (1)
 	{
@@ -122,4 +122,3 @@ t_exec_redirection **exec_redirection, t_command_line **command_line)
 	}
 	return (0);
 }
-

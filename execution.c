@@ -6,11 +6,35 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 10:26:21 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/26 17:08:14 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	**build_envp_arr(t_exec_struct **exec_struct)
+{
+	char			**envp_arr;
+	size_t			envp_arr_size;
+	t_envp_struct	*tmp;
+	size_t			i;
+
+	envp_arr = NULL;
+	envp_arr_size = ft_lst_size6((*exec_struct)->envp_struct);
+	envp_arr = ft_calloc(envp_arr_size + 1, sizeof(char *));
+	if (!envp_arr)
+		error_allocation_exec_struct_and_exit(exec_struct);
+	tmp = (*exec_struct)->envp_struct;
+	i = 0;
+	while (tmp)
+	{
+		envp_arr[i] = ft_strjoin(tmp->name, "=");
+		envp_arr[i] = ft_strjoin_freed(envp_arr[i], tmp->value);
+		tmp = tmp->next;
+		i++;
+	}
+	return (envp_arr);
+}
 
 static int	search_last_input(t_exec_redirection *redirection, int fd_in)
 {

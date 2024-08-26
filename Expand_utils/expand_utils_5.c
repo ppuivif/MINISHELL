@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 16:13:01 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/26 17:46:03 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	expand_string_after_dollar1(char **str, t_command_line **command_line)
 			variable = expand_variables(&remaining_line, command_line);
 		else
 			remaining_line += len;
-
 		add_to_definitive_content(&result, variable, command_line, NULL);
 	}
 	*str = free_and_null (*str);

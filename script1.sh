@@ -356,89 +356,89 @@ case $choice in
         ;;
 esac
 
-run_test 1 "< infile.txt cat | cat > outfile.txt" 1 0
-run_test 2 "<infile.txt cat | cat > outfile.txt" 1 0
-run_test 3 "< infile.txt cat| cat > outfile.txt" 1 0
-run_test 4 "< infile.txt cat |cat > outfile.txt" 1 0
-run_test 5 "< infile.txt cat | cat >outfile.txt" 1 0
-run_test 6 "<infile.txt cat|cat >outfile.txt" 1 0
-run_test 7 "<	infile.txt cat | cat > outfile.txt" 1 0
-run_test 8 "<		infile.txt cat | cat > outfile.txt" 1 0
-run_test 9 "< infile.txt cat	| cat > outfile.txt" 1 0
-run_test 10 "< infile.txt cat		| cat > outfile.txt" 1 0
-run_test 11 "< infile.txt cat |	cat > outfile.txt" 1 0
-run_test 12 "< infile.txt cat |		cat > outfile.txt" 1 0
-run_test 13 "< infile.txt cat |	cat > outfile.txt" 1 0
-run_test 14 "< infile.txt cat |		cat > outfile.txt" 1 0
-run_test 15 "< infile.txt cat | cat	> outfile.txt" 1 0
-run_test 16 "< infile.txt cat | cat		> outfile.txt" 1 0
-run_test 17 "< infile.txt cat | cat >	outfile.txt" 1 0
-run_test 18 "< infile.txt cat | cat >		outfile.txt" 1 0
-run_test 19 "< infile.txt cat | cat > outfile.txt	" 1 0
-run_test 20 "< infile.txt cat | cat > outfile.txt		" 1 0
+run_test 1 "< infile1.txt cat | cat > outfile1.txt" 1 0
+run_test 2 "<infile1.txt cat | cat > outfile1.txt" 1 0
+run_test 3 "< infile1.txt cat| cat > outfile1.txt" 1 0
+run_test 4 "< infile1.txt cat |cat > outfile1.txt" 1 0
+run_test 5 "< infile1.txt cat | cat >outfile1.txt" 1 0
+run_test 6 "<infile1.txt cat|cat >outfile1.txt" 1 0
+run_test 7 "<	infile1.txt cat | cat > outfile1.txt" 1 0
+run_test 8 "<		infile1.txt cat | cat > outfile1.txt" 1 0
+run_test 9 "< infile1.txt cat	| cat > outfile1.txt" 1 0
+run_test 10 "< infile1.txt cat		| cat > outfile1.txt" 1 0
+run_test 11 "< infile1.txt cat |	cat > outfile1.txt" 1 0
+run_test 12 "< infile1.txt cat |		cat > outfile1.txt" 1 0
+run_test 13 "< infile1.txt cat |	cat > outfile1.txt" 1 0
+run_test 14 "< infile1.txt cat |		cat > outfile1.txt" 1 0
+run_test 15 "< infile1.txt cat | cat	> outfile1.txt" 1 0
+run_test 16 "< infile1.txt cat | cat		> outfile1.txt" 1 0
+run_test 17 "< infile1.txt cat | cat >	outfile1.txt" 1 0
+run_test 18 "< infile1.txt cat | cat >		outfile1.txt" 1 0
+run_test 19 "< infile1.txt cat | cat > outfile1.txt	" 1 0
+run_test 20 "< infile1.txt cat | cat > outfile1.txt		" 1 0
 
-run_test 21 "<< infile.txt cat | cat > outfile.txt" 21 0
-run_test 22 "<<infile.txt cat | cat > outfile.txt" 21 0
-run_test 23 "<< infile.txt cat| cat > outfile.txt" 21 0
-run_test 24 "<< infile.txt cat |cat > outfile.txt" 21 0
-run_test 25 "<< infile.txt cat | cat> outfile.txt" 21 0
-run_test 26 "<< infile.txt cat | cat >outfile.txt" 21 0
-run_test 27 "<<infile.txt cat|cat >outfile.txt" 21 0
-run_test 28 "<< infile.txt cat | cat > outfile.txt" 21 0
-run_test 29 "<<	infile.txt cat | cat > outfile.txt" 21 0
-run_test 30 "<<		infile.txt cat | cat > outfile.txt" 21 0
-run_test 31 "<< infile.txt cat	| cat > outfile.txt" 21 0
-run_test 32 "<< infile.txt cat		| cat > outfile.txt" 21 0
-run_test 33 "<< infile.txt cat |	cat > outfile.txt" 21 0
-run_test 34 "<< infile.txt cat |		cat > outfile.txt" 21 0
-run_test 35 "<< infile.txt cat | cat	> outfile.txt" 21 0
-run_test 36 "<< infile.txt cat | cat		> outfile.txt" 21 0
-run_test 37 "<< infile.txt cat | cat >	outfile.txt" 21 0
-run_test 38 "<< infile.txt cat | cat >		outfile.txt" 21 0
-run_test 39 "<< infile.txt cat | cat > outfile.txt	" 21 0
-run_test 40 "<< infile.txt cat | cat > outfile.txt		" 21 0
+run_test 21 "<< infile1.txt cat | cat > outfile1.txt" 21 0
+run_test 22 "<<infile1.txt cat | cat > outfile1.txt" 21 0
+run_test 23 "<< infile1.txt cat| cat > outfile1.txt" 21 0
+run_test 24 "<< infile1.txt cat |cat > outfile1.txt" 21 0
+run_test 25 "<< infile1.txt cat | cat> outfile1.txt" 21 0
+run_test 26 "<< infile1.txt cat | cat >outfile1.txt" 21 0
+run_test 27 "<<infile1.txt cat|cat >outfile1.txt" 21 0
+run_test 28 "<< infile1.txt cat | cat > outfile1.txt" 21 0
+run_test 29 "<<	infile1.txt cat | cat > outfile1.txt" 21 0
+run_test 30 "<<		infile1.txt cat | cat > outfile1.txt" 21 0
+run_test 31 "<< infile1.txt cat	| cat > outfile1.txt" 21 0
+run_test 32 "<< infile1.txt cat		| cat > outfile1.txt" 21 0
+run_test 33 "<< infile1.txt cat |	cat > outfile1.txt" 21 0
+run_test 34 "<< infile1.txt cat |		cat > outfile1.txt" 21 0
+run_test 35 "<< infile1.txt cat | cat	> outfile1.txt" 21 0
+run_test 36 "<< infile1.txt cat | cat		> outfile1.txt" 21 0
+run_test 37 "<< infile1.txt cat | cat >	outfile1.txt" 21 0
+run_test 38 "<< infile1.txt cat | cat >		outfile1.txt" 21 0
+run_test 39 "<< infile1.txt cat | cat > outfile1.txt	" 21 0
+run_test 40 "<< infile1.txt cat | cat > outfile1.txt		" 21 0
 
-run_test 41 "< infile.txt cat | cat >> outfile.txt" 41 0
-run_test 42 "<infile.txt cat | cat >> outfile.txt" 41 0
-run_test 43 "< infile.txt cat| cat >> outfile.txt" 41 0
-run_test 44 "< infile.txt cat |cat >> outfile.txt" 41 0
-run_test 45 "< infile.txt cat | cat>> outfile.txt" 41 0
-run_test 46 "< infile.txt cat | cat >>outfile.txt" 41 0
-run_test 47 "<infile.txt cat|cat >>outfile.txt" 41 0
-run_test 48 "< infile.txt cat | cat >> outfile.txt" 41 0
-run_test 49 "<	infile.txt cat | cat >> outfile.txt" 41 0
-run_test 50 "<		infile.txt cat | cat >> outfile.txt" 41 0
-run_test 51 "< infile.txt cat	| cat >> outfile.txt" 41 0
-run_test 52 "< infile.txt cat		| cat >> outfile.txt" 41 0
-run_test 53 "< infile.txt cat |	cat >> outfile.txt" 41 0
-run_test 54 "< infile.txt cat |		cat >> outfile.txt" 41 0
-run_test 55 "< infile.txt cat | cat	>> outfile.txt" 41 0
-run_test 56 "< infile.txt cat | cat		>> outfile.txt" 41 0
-run_test 57 "< infile.txt cat | cat >>	outfile.txt" 41 0
-run_test 58 "< infile.txt cat | cat >>		outfile.txt" 41 0
-run_test 59 "< infile.txt cat | cat >> outfile.txt	" 41 0
-run_test 60 "< infile.txt cat | cat >> outfile.txt		" 41 0
+run_test 41 "< infile1.txt cat | cat >> outfile1.txt" 41 0
+run_test 42 "<infile1.txt cat | cat >> outfile1.txt" 41 0
+run_test 43 "< infile1.txt cat| cat >> outfile1.txt" 41 0
+run_test 44 "< infile1.txt cat |cat >> outfile1.txt" 41 0
+run_test 45 "< infile1.txt cat | cat>> outfile1.txt" 41 0
+run_test 46 "< infile1.txt cat | cat >>outfile1.txt" 41 0
+run_test 47 "<infile1.txt cat|cat >>outfile1.txt" 41 0
+run_test 48 "< infile1.txt cat | cat >> outfile1.txt" 41 0
+run_test 49 "<	infile1.txt cat | cat >> outfile1.txt" 41 0
+run_test 50 "<		infile1.txt cat | cat >> outfile1.txt" 41 0
+run_test 51 "< infile1.txt cat	| cat >> outfile1.txt" 41 0
+run_test 52 "< infile1.txt cat		| cat >> outfile1.txt" 41 0
+run_test 53 "< infile1.txt cat |	cat >> outfile1.txt" 41 0
+run_test 54 "< infile1.txt cat |		cat >> outfile1.txt" 41 0
+run_test 55 "< infile1.txt cat | cat	>> outfile1.txt" 41 0
+run_test 56 "< infile1.txt cat | cat		>> outfile1.txt" 41 0
+run_test 57 "< infile1.txt cat | cat >>	outfile1.txt" 41 0
+run_test 58 "< infile1.txt cat | cat >>		outfile1.txt" 41 0
+run_test 59 "< infile1.txt cat | cat >> outfile1.txt	" 41 0
+run_test 60 "< infile1.txt cat | cat >> outfile1.txt		" 41 0
 
-run_test 61 "<< infile.txt cat | cat >> outfile.txt" 61 0
-run_test 62 "<<infile.txt cat | cat >> outfile.txt" 61 0
-run_test 63 "<< infile.txt cat| cat >> outfile.txt" 61 0
-run_test 64 "<< infile.txt cat |cat >> outfile.txt" 61 0
-run_test 65 "<< infile.txt cat | cat>> outfile.txt" 61 0
-run_test 66 "<< infile.txt cat | cat >>outfile.txt" 61 0
-run_test 67 "<<infile.txt cat|cat >>outfile.txt" 61 0
-run_test 68 "<< infile.txt cat | cat >> outfile.txt" 61 0
-run_test 69 "<<	infile.txt cat | cat >> outfile.txt" 61 0
-run_test 70 "<<		infile.txt cat | cat >> outfile.txt" 61 0
-run_test 71 "<< infile.txt cat	| cat >> outfile.txt" 61 0
-run_test 72 "<< infile.txt cat		| cat >> outfile.txt" 61 0
-run_test 73 "<< infile.txt cat |	cat >> outfile.txt" 61 0
-run_test 74 "<< infile.txt cat |		cat >> outfile.txt" 61 0
-run_test 75 "<< infile.txt cat | cat	>> outfile.txt" 61 0
-run_test 76 "<< infile.txt cat | cat		>> outfile.txt" 61 0
-run_test 77 "<< infile.txt cat | cat >>	outfile.txt" 61 0
-run_test 78 "<< infile.txt cat | cat >>		outfile.txt" 61 0
-run_test 79 "<< infile.txt cat | cat >> outfile.txt	" 61 0
-run_test 80 "<< infile.txt cat | cat >> outfile.txt		" 61 0
+run_test 61 "<< infile1.txt cat | cat >> outfile1.txt" 61 0
+run_test 62 "<<infile1.txt cat | cat >> outfile1.txt" 61 0
+run_test 63 "<< infile1.txt cat| cat >> outfile1.txt" 61 0
+run_test 64 "<< infile1.txt cat |cat >> outfile1.txt" 61 0
+run_test 65 "<< infile1.txt cat | cat>> outfile1.txt" 61 0
+run_test 66 "<< infile1.txt cat | cat >>outfile1.txt" 61 0
+run_test 67 "<<infile1.txt cat|cat >>outfile1.txt" 61 0
+run_test 68 "<< infile1.txt cat | cat >> outfile1.txt" 61 0
+run_test 69 "<<	infile1.txt cat | cat >> outfile1.txt" 61 0
+run_test 70 "<<		infile1.txt cat | cat >> outfile1.txt" 61 0
+run_test 71 "<< infile1.txt cat	| cat >> outfile1.txt" 61 0
+run_test 72 "<< infile1.txt cat		| cat >> outfile1.txt" 61 0
+run_test 73 "<< infile1.txt cat |	cat >> outfile1.txt" 61 0
+run_test 74 "<< infile1.txt cat |		cat >> outfile1.txt" 61 0
+run_test 75 "<< infile1.txt cat | cat	>> outfile1.txt" 61 0
+run_test 76 "<< infile1.txt cat | cat		>> outfile1.txt" 61 0
+run_test 77 "<< infile1.txt cat | cat >>	outfile1.txt" 61 0
+run_test 78 "<< infile1.txt cat | cat >>		outfile1.txt" 61 0
+run_test 79 "<< infile1.txt cat | cat >> outfile1.txt	" 61 0
+run_test 80 "<< infile1.txt cat | cat >> outfile1.txt		" 61 0
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 1 to 80\n"
@@ -446,25 +446,25 @@ else
 	echo -e "end of test serie from 1 to 80"
 fi
 
-run_test 81 "< infile.txt < infile.txt" 81 0
-run_test 82 "<infile.txt < infile.txt" 81 0
-run_test 83 "< infile.txt <infile.txt" 81 0
-run_test 84 "<infile.txt <infile.txt" 81 0
-run_test 85 "<infile.txt<infile.txt" 81 0
-run_test 86 "<infile.txt<infile.txt" 81 0
-run_test 87 " <	infile.txt < infile.txt" 81 0
-run_test 88 " < infile.txt	< infile.txt" 81 0
-run_test 89 " < infile.txt <	infile.txt" 81 0
-run_test 90 " < infile.txt < infile.txt	" 81 0
-run_test 91 "< infile.txt < infile.txt < infile.txt" 91 0
-run_test 92 "<infile.txt < infile.txt < infile.txt" 91 0
-run_test 93 "< infile.txt <infile.txt < infile.txt" 91 0
-run_test 94 "< infile.txt < infile.txt <infile.txt" 91 0
-run_test 95 "< infile.txt < infile.txt < infile.txt" 91 0
-run_test 96 "<infile.txt <infile.txt < infile.txt" 91 0
-run_test 97 "<infile.txt <infile.txt <infile.txt" 91 0
-run_test 98 "<infile.txt<infile.txt <infile.txt" 91 0
-run_test 99 "<infile.txt<infile.txt<infile.txt" 91 0
+run_test 81 "< infile1.txt < infile2.txt" 81 0
+run_test 82 "<infile1.txt < infile2.txt" 81 0
+run_test 83 "< infile1.txt <infile2.txt" 81 0
+run_test 84 "<infile1.txt <infile2.txt" 81 0
+run_test 85 "<infile1.txt<infile2.txt" 81 0
+run_test 86 "<infile1.txt<infile2.txt" 81 0
+run_test 87 " <	infile1.txt < infile2.txt" 81 0
+run_test 88 " < infile1.txt	< infile2.txt" 81 0
+run_test 89 " < infile1.txt <	infile2.txt" 81 0
+run_test 90 " < infile1.txt < infile2.txt	" 81 0
+run_test 91 "< infile1.txt < infile2.txt < infile3.txt" 91 0
+run_test 92 "<infile1.txt < infile2.txt < infile3.txt" 91 0
+run_test 93 "< infile1.txt <infile2.txt < infile3.txt" 91 0
+run_test 94 "< infile1.txt < infile2.txt <infile3.txt" 91 0
+run_test 95 "< infile1.txt < infile2.txt < infile3.txt" 91 0
+run_test 96 "<infile1.txt <infile2.txt < infile3.txt" 91 0
+run_test 97 "<infile1.txt <infile2.txt <infile3.txt" 91 0
+run_test 98 "<infile1.txt<infile2.txt <infile3.txt" 91 0
+run_test 99 "<infile1.txt<infile2.txt<infile3.txt" 91 0
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 81 to 99\n"
@@ -472,25 +472,25 @@ else
 	echo -e "end of test serie from 81 to 99"
 fi
 
-run_test 100 "> outfile.txt > outfile.txt" 100 0
-run_test 101 ">outfile.txt > outfile.txt" 100 0
-run_test 102 "> outfile.txt >outfile.txt" 100 0
-run_test 103 ">outfile.txt >outfile.txt" 100 0
-run_test 104 ">outfile.txt>outfile.txt" 100 0
-run_test 105 ">outfile.txt>outfile.txt" 100 0
-run_test 106 " >	outfile.txt > outfile.txt" 100 0
-run_test 107 " > outfile.txt	> outfile.txt" 100 0
-run_test 108 " > outfile.txt >	outfile.txt" 100 0
-run_test 109 " > outfile.txt > outfile.txt	" 100 0
-run_test 110 "> outfile.txt > outfile.txt > outfile.txt" 110 0
-run_test 111 ">outfile.txt > outfile.txt > outfile.txt" 110 0
-run_test 112 "> outfile.txt >outfile.txt > outfile.txt" 110 0
-run_test 113 "> outfile.txt > outfile.txt >outfile.txt" 110 0
-run_test 114 "> outfile.txt > outfile.txt > outfile.txt" 110 0
-run_test 115 ">outfile.txt >outfile.txt > outfile.txt" 110 0
-run_test 116 ">outfile.txt >outfile.txt >outfile.txt" 110 0
-run_test 117 ">outfile.txt>outfile.txt >outfile.txt" 110 0
-run_test 118 ">outfile.txt>outfile.txt>outfile.txt" 110 0
+run_test 100 "> outfile1.txt > outfile2.txt" 100 0
+run_test 101 ">outfile1.txt > outfile2.txt" 100 0
+run_test 102 "> outfile1.txt >outfile2.txt" 100 0
+run_test 103 ">outfile1.txt >outfile2.txt" 100 0
+run_test 104 ">outfile1.txt>outfile2.txt" 100 0
+run_test 105 ">outfile1.txt>outfile2.txt" 100 0
+run_test 106 " >	outfile1.txt > outfile2.txt" 100 0
+run_test 107 " > outfile1.txt	> outfile2.txt" 100 0
+run_test 108 " > outfile1.txt >	outfile2.txt" 100 0
+run_test 109 " > outfile1.txt > outfile2.txt	" 100 0
+run_test 110 "> outfile1.txt > outfile2.txt > outfile3.txt" 110 0
+run_test 111 ">outfile1.txt > outfile2.txt > outfile3.txt" 110 0
+run_test 112 "> outfile1.txt >outfile2.txt > outfile3.txt" 110 0
+run_test 113 "> outfile1.txt > outfile2.txt >outfile3.txt" 110 0
+run_test 114 "> outfile1.txt > outfile2.txt > outfile3.txt" 110 0
+run_test 115 ">outfile1.txt >outfile2.txt > outfile3.txt" 110 0
+run_test 116 ">outfile1.txt >outfile2.txt >outfile3.txt" 110 0
+run_test 117 ">outfile1.txt>outfile2.txt >outfile3.txt" 110 0
+run_test 118 ">outfile1.txt>outfile2.txt>outfile3.txt" 110 0
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 100 to 118\n"
@@ -498,25 +498,25 @@ else
 	echo -e "end of test serie from 100 to 118"
 fi
 
-run_test 120 "<< infile.txt << infile.txt" 120 0
-run_test 121 "<<infile.txt << infile.txt" 120 0
-run_test 122 "<< infile.txt <<infile.txt" 120 0
-run_test 123 "<<infile.txt <<infile.txt" 120 0
-run_test 124 "<<infile.txt<<infile.txt" 120 0
-run_test 125 "<<infile.txt<<infile.txt" 120 0
-run_test 126 " <<	infile.txt << infile.txt" 120 0
-run_test 127 " << infile.txt	<< infile.txt" 120 0
-run_test 128 " << infile.txt <<	infile.txt" 120 0
-run_test 129 " << infile.txt << infile.txt	" 120 0
-run_test 130 "<< infile.txt << infile.txt << infile.txt" 130 0
-run_test 131 "<<infile.txt << infile.txt << infile.txt" 130 0
-run_test 132 "<< infile.txt <<infile.txt << infile.txt" 130 0
-run_test 133 "<< infile.txt << infile.txt <<infile.txt" 130 0
-run_test 134 "<< infile.txt << infile.txt << infile.txt" 130 0
-run_test 135 "<<infile.txt <<infile.txt << infile.txt" 130 0
-run_test 136 "<<infile.txt <<infile.txt <<infile.txt" 130 0
-run_test 137 "<<infile.txt<<infile.txt <<infile.txt" 130 0
-run_test 138 "<<infile.txt<<infile.txt<<infile.txt" 130 0
+run_test 120 "<< limiter1.txt << limiter2.txt" 120 0
+run_test 121 "<<limiter1.txt << limiter2.txt" 120 0
+run_test 122 "<< limiter1.txt <<limiter2.txt" 120 0
+run_test 123 "<<limiter1.txt <<limiter2.txt" 120 0
+run_test 124 "<<limiter1.txt<<limiter2.txt" 120 0
+run_test 125 "<<limiter1.txt<<limiter2.txt" 120 0
+run_test 126 " <<	limiter1.txt << limiter2.txt" 120 0
+run_test 127 " << limiter1.txt	<< limiter2.txt" 120 0
+run_test 128 " << limiter1.txt <<	limiter2.txt" 120 0
+run_test 129 " << limiter1.txt << limiter2.txt	" 120 0
+run_test 130 "<< limiter1.txt << limiter2.txt << limiter3.txt" 130 0
+run_test 131 "<<limiter1.txt << limiter2.txt << limiter3.txt" 130 0
+run_test 132 "<< limiter1.txt <<limiter2.txt << limiter3.txt" 130 0
+run_test 133 "<< limiter1.txt << limiter2.txt <<limiter3.txt" 130 0
+run_test 134 "<< limiter1.txt << limiter2.txt << limiter3.txt" 130 0
+run_test 135 "<<limiter1.txt <<limiter2.txt << limiter3.txt" 130 0
+run_test 136 "<<limiter1.txt <<limiter2.txt <<limiter3.txt" 130 0
+run_test 137 "<<limiter1.txt<<limiter2.txt <<limiter3.txt" 130 0
+run_test 138 "<<limiter1.txt<<limiter2.txt<<limiter3.txt" 130 0
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 120 to 138\n"
@@ -524,25 +524,25 @@ else
 	echo -e "end of test serie from 120 to 138"
 fi
 
-run_test 140 ">> outfile.txt >> outfile.txt" 140 0
-run_test 141 ">>outfile.txt >> outfile.txt" 140 0
-run_test 142 ">> outfile.txt >>outfile.txt" 140 0
-run_test 143 ">>outfile.txt >>outfile.txt" 140 0
-run_test 144 ">>outfile.txt>>outfile.txt" 140 0
-run_test 145 ">>outfile.txt>>outfile.txt" 140 0
-run_test 146 " >>	outfile.txt >> outfile.txt" 140 0
-run_test 147 " >> outfile.txt	>> outfile.txt" 140 0
-run_test 148 " >> outfile.txt >>	outfile.txt" 140 0
-run_test 149 " >> outfile.txt >> outfile.txt	" 140 0
-run_test 150 ">> outfile.txt >> outfile.txt >> outfile.txt" 150 0
-run_test 151 ">>outfile.txt >> outfile.txt >> outfile.txt" 150 0
-run_test 152 ">> outfile.txt >>outfile.txt >> outfile.txt" 150 0
-run_test 153 ">> outfile.txt >> outfile.txt >>outfile.txt" 150 0
-run_test 154 ">> outfile.txt >> outfile.txt >> outfile.txt" 150 0
-run_test 155 ">>outfile.txt >>outfile.txt >> outfile.txt" 150 0
-run_test 156 ">>outfile.txt >>outfile.txt >>outfile.txt" 150 0
-run_test 157 ">>outfile.txt>>outfile.txt >>outfile.txt" 150 0
-run_test 158 ">>outfile.txt>>outfile.txt>>outfile.txt" 150 0
+run_test 140 ">> outfile1.txt >> outfile2.txt" 140 0
+run_test 141 ">>outfile1.txt >> outfile2.txt" 140 0
+run_test 142 ">> outfile1.txt >>outfile2.txt" 140 0
+run_test 143 ">>outfile1.txt >>outfile2.txt" 140 0
+run_test 144 ">>outfile1.txt>>outfile2.txt" 140 0
+run_test 145 ">>outfile1.txt>>outfile2.txt" 140 0
+run_test 146 " >>	outfile1.txt >> outfile2.txt" 140 0
+run_test 147 " >> outfile.txt	>> outfile2.txt" 140 0
+run_test 148 " >> outfile1.txt >>	outfile2.txt" 140 0
+run_test 149 " >> outfile1.txt >> outfile2.txt	" 140 0
+run_test 150 ">> outfile1.txt >> outfile2.txt >> outfile3.txt" 150 0
+run_test 151 ">>outfile1.txt >> outfile2.txt >> outfile3.txt" 150 0
+run_test 152 ">> outfile1.txt >>outfile2.txt >> outfile3.txt" 150 0
+run_test 153 ">> outfile1.txt >> outfile2.txt >>outfile3.txt" 150 0
+run_test 154 ">> outfile1.txt >> outfile2.txt >> outfile3.txt" 150 0
+run_test 155 ">>outfile1.txt >>outfile2.txt >> outfile3.txt" 150 0
+run_test 156 ">>outfile1.txt >>outfile2.txt >>outfile3.txt" 150 0
+run_test 157 ">>outfile1.txt>>outfile2.txt >>outfile3.txt" 150 0
+run_test 158 ">>outfile1.txt>>outfile2.txt>>outfile3.txt" 150 0
 if [ "$display" == "all" ]
 then
 	echo -e "end of test serie from 140 to 158\n"
