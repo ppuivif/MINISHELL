@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/26 17:44:47 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/27 09:21:56 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,16 @@ t_command_line **command_line)
 	int		i;
 	char	*tmp;
 	char	*result;
-	int		len;
 
 	i = 0;
 	tmp = NULL;
 	result = NULL;
-	len = 0;
 	while (*str && str[0][i])
 	{
 		if (str[0][i] == '$')
 		{
-			len = get_len_and_extract_after_first_dollar(&str[0][i], &tmp, \
+			i += get_len_and_extract_after_first_dollar(&str[0][i], &tmp, \
 			command_line);
-			i += len;
 			expand_string_after_dollar1(&tmp, command_line);
 		}
 		else
