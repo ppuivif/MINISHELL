@@ -1803,6 +1803,8 @@ run_test "simple" 2331 ".././.." 2331 126 ".././..: Is a directory"
 run_test "simple" 2332 "/./../../../../../.." 2332 126 "/./../../../../../..: Is a directory"
 run_test "simple" 2333 "././../../../../../.." 2333 126 "././../../../../../..: Is a directory"
 
+run_test "simple" 2340 "." 2340 2 ".: filename argument required"
+run_test "simple" 2345 ".." 2345 127 "..: command not found"
 
 
 
@@ -2457,6 +2459,10 @@ chmod 644 temp/outfile_without_permission
 delete_file temp/outfile_without_permission
 chmod 644 temp/infile_without_permission
 delete_file temp/infile_without_permission
+
+#unset PATH
+#run_test "simple" 8000 "echo \$PATH" 8000 0
+#run_test "simple" 8001 "ls" 8001 127 "ls: No such file or directory"
 
 
 # -g for greater than and -ge for greater than or equal to

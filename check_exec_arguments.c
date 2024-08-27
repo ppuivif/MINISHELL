@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:35 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/26 17:40:23 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/27 11:34:26 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ t_exec_struct **exec_struct)
 	char		**cmd_arr;
 
 	cmd_arr = (*exec_substring)->cmd_arr;
+
 	if (check_dir_and_file_permission(cmd_arr, exec_substring, \
 	exec_struct) == 0)
 		return ;

@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/26 17:43:59 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/27 12:08:43 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@ t_exec_struct **exec_struct)
 	(*exec_struct)->command_line->current_exit_code = 126;
 }
 
-static void	is_a_non_reachable_file( \
+static void	is_a_file_without_rights( \
 t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
 	ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-	ft_putstr_fd(": Permission denied\n", 2);
+	ft_putstr_fd(": Permission denied1\n", 2);
 	(*exec_substring)->exec_arguments->is_argument_valid = false;
 	(*exec_struct)->command_line->current_exit_code = 126;
 }
@@ -43,7 +43,7 @@ static void	is_a_non_reachable_directory_or_path( \
 t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
 	ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-	ft_putstr_fd(": Permission denied\n", 2);
+	ft_putstr_fd(": Permission denied2\n", 2);
 	(*exec_substring)->exec_arguments->is_argument_valid = false;
 	(*exec_struct)->command_line->current_exit_code = 126;
 }
@@ -51,17 +51,17 @@ t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 int	check_dir_and_file_permission(char **cmd_arr, \
 t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
-	struct stat	st;
+	struct stat	buffer;
 
 	if (strcspn(cmd_arr[0], "/") < ft_strlen(cmd_arr[0]) && \
-	stat(cmd_arr[0], &st) != -1)
+	stat(cmd_arr[0], &buffer) == 0)
 	{
-		if (S_ISDIR(st.st_mode))
+		if (S_ISDIR(buffer.st_mode))
 			is_a_reachable_directory(exec_substring, exec_struct);
-		else if (S_ISREG(st.st_mode))
+		else if (S_ISREG(buffer.st_mode))
 		{
-			if (!(st.st_mode & S_IXUSR))
-				is_a_non_reachable_file(exec_substring, \
+			if (!(buffer.st_mode & S_IXUSR))
+				is_a_file_without_rights(exec_substring, \
 				exec_struct);
 			else
 				is_a_reachable_file_with_complete_path(exec_substring, \
