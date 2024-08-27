@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/26 17:46:03 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/27 09:51:44 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,32 +38,38 @@ void	expand_string_after_dollar1(char **str, t_command_line **command_line)
 		error_allocation_command_line_and_exit(command_line);
 }
 
+static void	expand_string_beginning_space(t_expanded_argument **exp_arguments, \
+char **definitive_content, t_command_line **command_line, char **tmp)
+{
+	bool	last_arg_with_wspaces;
+
+	last_arg_with_wspaces = true;
+	if (*definitive_content)
+		add_exp_arguments(exp_arguments, definitive_content, \
+		command_line);
+	while (*tmp && tmp[0][0] && last_arg_with_wspaces == true)
+	{
+		cut_variable_on_whitespaces(exp_arguments, tmp, \
+		&last_arg_with_wspaces, command_line);
+	}
+}
+
 void	expand_string_after_dollar2(char *str, \
 t_expanded_argument **exp_arguments, char **definitive_content, \
 t_command_line **command_line)
 {
 	char	*variable;
 	char	*extracted_argument;
-	bool	last_arg_with_wspaces;
 	char	*tmp;
 
 	extracted_argument = NULL;
-	last_arg_with_wspaces = true;
 	variable = expand_variables(&str, command_line);
 	tmp = variable;
 	while (tmp && tmp[0])
 	{
 		if (ft_isspace(tmp[0]) == true)
-		{
-			if (*definitive_content)
-				add_exp_arguments(exp_arguments, definitive_content, \
-				command_line);
-			while (tmp && tmp[0] && last_arg_with_wspaces == true)
-			{
-				cut_variable_on_whitespaces(exp_arguments, &tmp, \
-				&last_arg_with_wspaces, command_line);
-			}
-		}
+			expand_string_beginning_space(exp_arguments, definitive_content, \
+			command_line, &tmp);
 		else
 		{
 			extract_argument_until_next_whitespace_or_dollar(&tmp, \

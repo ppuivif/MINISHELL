@@ -260,7 +260,15 @@ then
 #	./minishell 100
 	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
 	exit_code_minishell=$?
-#	echo "exit_code_minishell"temp/.txt"
+#	echo "exit_code_minishell"
+#	echo "$exit_code_minishell"
+	cat "temp/outfile1.txt" >"temp/$test_index-minishell_outfile1.txt"
+	cat "temp/outfile2.txt" >"temp/$test_index-minishell_outfile2.txt"
+	delete_file "temp/tmp_to_read_command.txt"
+	exec 100>&-
+
+	echo "$full_command" >"temp/tmp_to_execute_valgrind.txt"
+	echo "exit" >>"temp/tmp_to_execute_valgrind.txt"
 
 
 	if [ "$run_valgrind" == "yes" ]
@@ -447,7 +455,7 @@ echo "To execute specific tests on execution choice 5"
 read -p "Enter your choice : " choice
 echo ""
 
-# Handle the user's choicetemp/
+# Handle the user's choice
 case $choice in
     1)
         choice_one
@@ -2459,8 +2467,8 @@ else
 	echo -e "${GREEN}no error detected${NC}"
 fi
 
-delete "\$OUTFILE"
-delete "\"\$OUTFILE\""
+delete_file "\$OUTFILE"
+delete_file "\"\$OUTFILE\""
 
 #delete_files
 
