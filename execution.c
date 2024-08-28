@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/26 17:08:14 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/28 18:34:59 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ void	execution(t_exec_struct **exec_struct)
 		if (pid_1 == 0)
 		{
 			exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct, \
-			pid_arr, fd, i);
+			pid_arr, fd);
 		}
 	/*	if (cursor == ft_lst_last7((*exec_struct)->exec_substrings))
 		{
@@ -287,7 +287,7 @@ void	execution(t_exec_struct **exec_struct)
 }*/
 
 //void	exec_child(t_exec_substring *substrings, int fd_in, int fd_out, char **envp, t_exec_struct **exec_struct)
-void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd, int i)
+void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd)
 {
 	int		exit_code;
 	char	*path_with_cmd;
@@ -300,44 +300,20 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 		exit_code = (*exec_struct)->command_line->current_exit_code;
 	if (fd_in == -1 || fd_out == -1)
 		exit_code = 1;
-//	(void)fd;
-	(void)i;
-/*	if (fd_in > 0 && is_input_empty(fd_in) == true)
-	{
-		fd_in = open("empty_file.txt", O_WRONLY | O_TRUNC | O_CREAT, 0644);
-		printf("%d\n", fd_in);
-	}*/
-	/*printf("status fd[0] in child%d value : %d - open : %s\n", i, fd[0], is_fd_open(fd[0]) ? "true" : "false");	
-	printf("status fd[1] in child%d value : %d - open : %s\n", i, fd[1], is_fd_open(fd[1]) ? "true" : "false");
-	printf("status fd_in in child%d value : %d - open : %s\n", i, fd_in, is_fd_open(fd_in) ? "true" : "false");
-	printf("status fd_out in child%d value : %d - open : %s\n\n", i, fd_out, is_fd_open(fd_out) ? "true" : "false");*/
 	if (fd_in > 2)
 	{
 		dup2(fd_in, STDIN_FILENO);
-//		printf("status fd_in in child%d after dup value : %d - open : %s\n", i, fd_in, is_fd_open(fd_in) ? "true" : "false");
 		close_fd(fd_in);
 	}
 	if (fd_out > 2)
 	{
 		dup2(fd_out, STDOUT_FILENO);
-//		printf("status fd_out in child%d after dup value : %d - open : %s\n\n", i, fd_out, is_fd_open(fd_out) ? "true" : "false");
 		close_fd(fd_out);
 	}
-//	if (fd[0] != 0 && fd[1] != 1)
-//	{
 	close_fd(fd[0]);
 	close_fd(fd[1]);
-//	}
-/*	printf("status fd[0] in child%d value : %d - open : %s\n", i, fd[0], is_fd_open(fd[0]) ? "true" : "false");	
-	printf("status fd[1] in child%d value : %d - open : %s\n", i, fd[1], is_fd_open(fd[1]) ? "true" : "false");
-	printf("status fd_in in child%d value : %d - open : %s\n", i, fd_in, is_fd_open(fd_in) ? "true" : "false");
-	printf("status fd_out in child%d value : %d - open : %s\n\n", i, fd_out, is_fd_open(fd_out) ? "true" : "false");*/
 	free(pid_arr);
-	//free_envp_struct(&(*exec_struct)->envp_struct); //! J'ai commenté ca
-	//free_all_command_line(&(*exec_struct)->command_line);//! J'ai commenté ca
-	//free_all_exec_struct(exec_struct);//! J'ai commenté ca
 	rl_clear_history();
-//	printf("fd_out: %d\n", fd_out);
 	if (substring->exec_arguments && fd_out > 0)
 	{
 		if (substring->exec_arguments->is_builtin)
@@ -348,25 +324,12 @@ void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_
 	free_envp_struct(&(*exec_struct)->envp_struct);//! J'ai mis ca
 	free_all_command_line(&(*exec_struct)->command_line);//! J'ai mis ca
 	free_all_exec_struct(exec_struct);//! J'ai mis ca
-//	printf("path_with_cmd : %s\n", path_with_cmd);
-//	printf("cmd_arr[0] : %s\n", cmd_arr[0]);
-//	printf("exit_code : %d\n", exit_code);
 	if (path_with_cmd && cmd_arr && cmd_arr[0] && exit_code == 0)
 	{
-//		execve(path_with_cmd, cmd_arr, envp_arr);
-//		if (execve(path_with_cmd, cmd_arr, envp_arr) == -1)
-//		printf("%s\n", cmd_arr[0]);
-//		printf("here\n");
 		execve(path_with_cmd, cmd_arr, envp_arr);
 		perror("error\nexecve of a cmd failed");//to verify
 			//exit_code = -1 ?
 	}
-//	printf("exit_code : %d\n", exit_code);
-//	free(pid_arr);
-//	free_envp_struct(&(*exec_struct)->envp_struct);
-//	free_all_command_line(&(*exec_struct)->command_line);
-//	free_all_exec_struct(exec_struct);
-//	rl_clear_history();
 	free(path_with_cmd);
 	free_arr(cmd_arr);
 	free_arr(envp_arr);
