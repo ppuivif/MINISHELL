@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/28 18:38:59 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/28 18:45:50 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,20 +50,15 @@ static int	search_last_input(t_exec_redirection *redirection, int fd_in)
 		}
 		if (cursor->fd_input > 2)
 			fd_in = cursor->fd_input;
-//		if (cursor->next)
-//			close_fd(cursor->fd_input);
 		cursor = cursor->next;
 	}
 	return (fd_in);
 }
 
-static int	search_last_output(t_exec_redirection *redirection)
-// recevoir en parametre fd_out par defaut a 1, idem search_last_input
+static int	search_last_output(t_exec_redirection *redirection, int fd_out)
 {
-	int					fd_out;
 	t_exec_redirection	*cursor;
 
-	fd_out = 1;
 	cursor = redirection;
 	while (cursor)
 	{
@@ -74,8 +69,6 @@ static int	search_last_output(t_exec_redirection *redirection)
 		}
 		if (cursor->fd_output > 2)
 			fd_out = cursor->fd_output;
-//		if (cursor->next)
-//			close_fd(cursor->fd_output);
 		cursor = cursor->next;
 	}
 	return (fd_out);
@@ -145,7 +138,7 @@ void	execution(t_exec_struct **exec_struct)
 	{
 		fd_out = STDOUT_FILENO;//builtins don't use fd_in : to verify 
 		if (cursor->exec_redirections)
-			fd_out = search_last_output(cursor->exec_redirections);
+			fd_out = search_last_output(cursor->exec_redirections, fd_out);
 		if ((*exec_struct)->exec_substrings->exec_arguments-> \
 		is_builtin == 2 && substrings_nmemb == 1)
 		{
@@ -162,7 +155,7 @@ void	execution(t_exec_struct **exec_struct)
 		if (cursor->exec_redirections)
 		{
 			fd_in = search_last_input(cursor->exec_redirections, fd_in);
-			fd_out = search_last_output(cursor->exec_redirections);
+			fd_out = search_last_output(cursor->exec_redirections, fd_out);
 		}
 		if (cursor != ft_lst_last7((*exec_struct)->exec_substrings))
 		{
