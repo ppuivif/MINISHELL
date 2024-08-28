@@ -31,9 +31,9 @@ function create_files_and_set_permissions() {
     	chmod 644 "temp/tmp_to_execute_valgrind.txt"
 		exec 101< "temp/tmp_to_execute_valgrind.txt"
 	fi
-	echo -e "ceci est\nun test1\nlimiter1" > temp/infile1.txt
-	echo -e "ceci est\nun test2\nlimiter2" > temp/infile2.txt
-	echo -e "ceci est\nun test3\nlimiter3" > temp/infile3.txt
+	echo -e "ceci est\nun test1\n" > temp/infile1.txt
+	echo -e "ceci est\nun test2\n" > temp/infile2.txt
+	echo -e "ceci est\nun test3\n" > temp/infile3.txt
 	echo > temp/outfile1.txt
 	chmod 644 temp/outfile1.txt
 	echo > temp/outfile2.txt
@@ -212,6 +212,9 @@ execute_test() {
     exit_code_expected=$5
  	substring=$6
  	invalid_test=$7
+ 	limiter1=$8
+ 	limiter2=$9
+ 	limiter3=${10}
 	test="test$test_index\t$command\t"
     message=$test
     
@@ -219,26 +222,46 @@ execute_test() {
 
 	heredoc1_content="line1
 line2
-limiter1"
+"$limiter1""
 
 	heredoc2_content="line1
 line2
-limiter1
+"$limiter1"
 line3
 line4
-limiter2"
+"$limiter2""
 
 	heredoc3_content="line1
 line2
-limiter1
+"$limiter1"
 line3
 line4
-limiter2
+"$limiter2"
 line5
 line6
-limiter3"
+"$limiter3""
 
-	if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ]
+# if more lines with heredoc4 dont forget to modify tail on line 406
+
+	heredoc4_content="line1
+"$TEST1"
+"$limiter1""
+
+: << BLOCK_COMMENT
+
+"$TEST1""$TEST2"
+"$TEST1"" ""$TEST2"
+"$TEST1""$TEST2""$TEST3"
+"$TEST1"" ""$TEST2"" ""$TEST3"
+"$TEST4"
+"$TEST5"
+"$TEST1""$TEST4"
+"$TEST1"" ""$TEST4"
+"$limiter1""
+
+BLOCK_COMMENT
+
+	if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ] && [ "$test_type" != "heredoc_with_expand" ]
 	then
 		full_command="$command" 
 	elif [ "$test_type" == "oneheredoc" ]
@@ -253,14 +276,13 @@ ${heredoc2_content}"
 	then
 		full_command="${command}
 ${heredoc3_content}"
+	elif [ "$test_type" == "heredoc_with_expand" ]
+	then
+		full_command="${command}
+${heredoc4_content}"
 	fi
 
-
 	echo "$full_command" >"temp/tmp_to_read_command.txt"
-
-
-#if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ]
-#then
 
 	eval "$full_command" 1>"temp/$test_index-bash_stdout.txt" 2>"temp/$test_index-bash_stderr.txt"
 	exit_code_bash=$?
@@ -274,7 +296,7 @@ ${heredoc3_content}"
 
 
 	echo "$command" >"temp/tmp_to_read_command.txt"
-	if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ]
+	if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ] && [ "$test_type" != "heredoc_with_expand" ]
 	then
 		./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
 	elif [ "$test_type" == "oneheredoc" ];
@@ -286,6 +308,9 @@ ${heredoc3_content}"
 	elif [ "$test_type" == "threeheredoc" ];
 	then
 		echo "$heredoc3_content" | ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+	elif [ "$test_type" == "heredoc_with_expand" ];
+	then
+		echo "$heredoc4_content" | ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
 
 
 
@@ -309,14 +334,6 @@ BLOCK_COMMENT
 
 	fi
 
-
-
-
-#    << 'limiter1'
-#	echo -e "first_line\n"
-#limiter1
-#	fi
-
 	exit_code_minishell=$?
 #	echo "exit_code_minishell"
 #	echo "$exit_code_minishell"
@@ -331,12 +348,31 @@ BLOCK_COMMENT
 
 	if [ "$run_valgrind" == "yes" ]
 	then
-#	 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --trace-children=yes --error-exitcode=1 ./minishell 101
- 		valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
-#		beware : if minishell exit_code is 10, script will consider it as a valgrind_error	
-		exit_code_valgrind=$?
-#		echo "exit_code_valgrind"
-#		echo "$exit_code_valgrind"
+		if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ] && [ "$test_type" != "heredoc_with_expand" ]
+		then
+#		 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --trace-children=yes --error-exitcode=1 ./minishell 101
+ 			valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+#			beware : if minishell exit_code is 10, script will consider it as a valgrind_error	
+			exit_code_valgrind=$?
+#			echo "exit_code_valgrind"
+#			echo "$exit_code_valgrind"
+		elif [ "$test_type" == "oneheredoc" ];
+		then
+ 			echo "$heredoc1_content" | valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+			exit_code_valgrind=$?
+		elif [ "$test_type" == "twoheredoc" ];
+		then
+ 			echo "$heredoc2_content" | valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+			exit_code_valgrind=$?
+		elif [ "$test_type" == "threeheredoc" ];
+		then
+ 			echo "$heredoc3_content" | valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+			exit_code_valgrind=$?
+		elif [ "$test_type" == "heredoc_with_expand" ];
+		then
+ 			echo "$heredoc4_content" | valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+			exit_code_valgrind=$?
+		fi
 	else
 		exit_code_valgrind=0
 	fi
@@ -347,7 +383,7 @@ BLOCK_COMMENT
 	diff_outfile2=$(diff "temp/$test_index-minishell_outfile2.txt" "temp/$test_index-bash_outfile2.txt" > /dev/null)
 	diff_exit_outfile2=$?
 	
-	if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ]
+	if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ] && [ "$test_type" != "heredoc_with_expand" ]
 	then
 		diff_stdout=$(diff "temp/$test_index-minishell_stdout.txt" "temp/$test_index-bash_stdout.txt" > /dev/null)
 		diff_exit_stdout=$?
@@ -359,15 +395,15 @@ BLOCK_COMMENT
 		diff_exit_stdout=$?
 	elif [ "$test_type" == "twoheredoc" ];
 	then
-#		<(sed '3d' filename) is use to skip only the third line
-#		<(tail -n +4 filename) is use to skip the first, the two and third line
 		diff_stdout=$(diff <(tail -n +7 "temp/$test_index-minishell_stdout.txt") "temp/$test_index-bash_stdout.txt" > /dev/null)
 		diff_exit_stdout=$?
 	elif [ "$test_type" == "threeheredoc" ];
 	then
-#		<(sed '3d' filename) is use to skip only the third line
-#		<(tail -n +4 filename) is use to skip the first, the two and third line
 		diff_stdout=$(diff <(tail -n +10 "temp/$test_index-minishell_stdout.txt") "temp/$test_index-bash_stdout.txt" > /dev/null)
+		diff_exit_stdout=$?
+	elif [ "$test_type" == "heredoc_with_expand" ];
+	then
+		diff_stdout=$(diff <(tail -n +4 "temp/$test_index-minishell_stdout.txt") "temp/$test_index-bash_stdout.txt" > /dev/null)
 		diff_exit_stdout=$?
 	fi
 
@@ -658,13 +694,13 @@ run_test "simple" 19 "< temp/infile1.txt cat | cat > temp/outfile1.txt	" 1 0
 run_test "simple" 20 "< temp/infile1.txt cat | cat > temp/outfile1.txt		" 1 0
 
 
-run_test "oneheredoc" 21 "<< limiter1 cat | cat > temp/outfile1.txt" 21 0
-run_test "oneheredoc" 22 "<<limiter1 cat | cat > temp/outfile1.txt" 21 0
-run_test "oneheredoc" 36 "<< limiter1 cat | cat		> temp/outfile1.txt" 21 0
-run_test "oneheredoc" 37 "<< limiter1 cat | cat >	temp/outfile1.txt" 21 0
-run_test "oneheredoc" 38 "<< limiter1 cat | cat >		temp/outfile1.txt" 21 0
-run_test "oneheredoc" 39 "<< limiter1 cat | cat > temp/outfile1.txt	" 21 0
-run_test "oneheredoc" 40 "<< limiter1 cat | cat > temp/outfile1.txt		" 21 0
+run_test "oneheredoc" 21 "<< limiter1 cat | cat > temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 22 "<<limiter1 cat | cat > temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 36 "<< limiter1 cat | cat		> temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 37 "<< limiter1 cat | cat >	temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 38 "<< limiter1 cat | cat >		temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 39 "<< limiter1 cat | cat > temp/outfile1.txt	" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 40 "<< limiter1 cat | cat > temp/outfile1.txt		" 21 0 "" "" "limiter1"
 
 run_test "simple" 41 "< temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
 run_test "simple" 42 "<temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
@@ -700,26 +736,26 @@ fi
 #: <<BLOCK_COMMENT
 
 
-run_test "oneheredoc" 61 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 62 "<<limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 63 "<< limiter1 cat| cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 64 "<< limiter1 cat |cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 65 "<< limiter1 cat | cat>> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 66 "<< limiter1 cat | cat >>temp/outfile1.txt" 61 0
-run_test "oneheredoc" 67 "<<limiter1 cat|cat >>temp/outfile1.txt" 61 0
-run_test "oneheredoc" 68 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 69 "<<	limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 70 "<<		limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 71 "<< limiter1 cat	| cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 72 "<< limiter1 cat		| cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 73 "<< limiter1 cat |	cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 74 "<< limiter1 cat |		cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 75 "<< limiter1 cat | cat	>> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 76 "<< limiter1 cat | cat		>> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 77 "<< limiter1 cat | cat >>	temp/outfile1.txt" 61 0
-run_test "oneheredoc" 78 "<< limiter1 cat | cat >>		temp/outfile1.txt" 61 0
-run_test "oneheredoc" 79 "<< limiter1 cat | cat >> temp/outfile1.txt	" 61 0
-run_test "oneheredoc" 80 "<< limiter1 cat | cat >> temp/outfile1.txt		" 61 0
+run_test "oneheredoc" 61 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 62 "<<limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 63 "<< limiter1 cat| cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 64 "<< limiter1 cat |cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 65 "<< limiter1 cat | cat>> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 66 "<< limiter1 cat | cat >>temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 67 "<<limiter1 cat|cat >>temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 68 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 69 "<<	limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 70 "<<		limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 71 "<< limiter1 cat	| cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 72 "<< limiter1 cat		| cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 73 "<< limiter1 cat |	cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 74 "<< limiter1 cat |		cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 75 "<< limiter1 cat | cat	>> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 76 "<< limiter1 cat | cat		>> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 77 "<< limiter1 cat | cat >>	temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 78 "<< limiter1 cat | cat >>		temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 79 "<< limiter1 cat | cat >> temp/outfile1.txt	" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 80 "<< limiter1 cat | cat >> temp/outfile1.txt		" 61 0 "" "" "limiter1"
 
 if (( "$start_index" >= 61  && "$start_index" <= 80 && "$end_index" >= 61 && "$end_index" <= 80 ))
 then
@@ -795,25 +831,25 @@ then
 fi
 
 
-run_test "twoheredoc" 120 "<< limiter1 << limiter2 cat" 120 0
-run_test "twoheredoc" 121 "<<limiter1 << limiter2" 120 0
-run_test "twoheredoc" 122 "<< limiter1 <<limiter2" 120 0
-run_test "twoheredoc" 123 "<<limiter1 <<limiter2" 120 0
-run_test "twoheredoc" 124 "<<limiter1<<limiter2" 120 0
-run_test "twoheredoc" 125 "<<limiter1<<limiter2" 120 0
-run_test "twoheredoc" 126 " <<	limiter1 << limiter2" 120 0
-run_test "twoheredoc" 127 " << limiter1	<< limiter2" 120 0
-run_test "twoheredoc" 128 " << limiter1 <<	limiter2" 120 0
-run_test "twoheredoc" 129 " << limiter1 << limiter2	" 120 0
-run_test "threeheredoc" 130 "<< limiter1 << limiter2 << limiter3" 130 0
-run_test "threeheredoc" 131 "<<limiter1 << limiter2 << limiter3" 130 0
-run_test "threeheredoc" 132 "<< limiter1 <<limiter2 << limiter3" 130 0
-run_test "threeheredoc" 133 "<< limiter1 << limiter2 <<limiter3" 130 0
-run_test "threeheredoc" 134 "<< limiter1 << limiter2 << limiter3" 130 0
-run_test "threeheredoc" 135 "<<limiter1 <<limiter2 << limiter3" 130 0
-run_test "threeheredoc" 136 "<<limiter1 <<limiter2 <<limiter3" 130 0
-run_test "threeheredoc" 137 "<<limiter1<<limiter2 <<limiter3" 130 0
-run_test "threeheredoc" 138 "<<limiter1<<limiter2<<limiter3" 130 0
+run_test "twoheredoc" 120 "<< limiter1 << limiter2 cat" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 121 "<<limiter1 << limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 122 "<< limiter1 <<limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 123 "<<limiter1 <<limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 124 "<<limiter1<<limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 125 "<<limiter1<<limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 126 " <<	limiter1 << limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 127 " << limiter1	<< limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 128 " << limiter1 <<	limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 129 " << limiter1 << limiter2	" 120 0 "" "" "limiter1" "limiter2"
+run_test "threeheredoc" 130 "<< limiter1 << limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 131 "<<limiter1 << limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 132 "<< limiter1 <<limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 133 "<< limiter1 << limiter2 <<limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 134 "<< limiter1 << limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 135 "<<limiter1 <<limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 136 "<<limiter1 <<limiter2 <<limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 137 "<<limiter1<<limiter2 <<limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 138 "<<limiter1<<limiter2<<limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
 
 if (( "$start_index" >= 120 && "$start_index" <= 138 && "$end_index" >= 120 && "$end_index" <= 138 ))
 then
@@ -868,14 +904,14 @@ run_test "simple" 168 "> '\"temp/outfile1.txt\"'" 168 1 "\"temp/outfile1.txt\": 
 run_test "simple" 169 "> \"'temp/outfile1.txt'\"" 169 1 "'temp/outfile1.txt': No such file or directory"
 run_test "simple" 170 "> '\"'temp/outfile1.txt'\"'" 170 1 "\"temp/outfile1.txt\": No such file or directory"
 run_test "simple" 171 "> \"'\"temp/outfile1.txt\"'\"" 171 1 "'temp/outfile1.txt': No such file or directory"
-run_test "oneheredoc" 172 "<< 'limiter1'" 172 0
-run_test "oneheredoc" 173 "<< \"limiter1\"" 173 0
-run_test "oneheredoc" 174 "<< '\"limiter1\"'" 174 0
-run_test "oneheredoc" 175 "<< \"'limiter1'\"" 175 0
-run_test "oneheredoc" 176 "<< '\"'limiter1'\"'" 176 0
-run_test "oneheredoc" 177 "<< \"'\"limiter1\"'\"" 177 0
-run_test "oneheredoc" 178 "<< '<limiter1'" 178 0
-run_test "oneheredoc" 179 "<< \"<limiter1\"" 179 0
+run_test "oneheredoc" 172 "<< 'limiter1'" 172 0 "" "" "limiter1"
+run_test "oneheredoc" 173 "<< \"limiter1\"" 173 0 "" "" "limiter1"
+run_test "oneheredoc" 174 "<< '\"limiter1\"'" 174 0 "" "" "\"limiter1\""
+run_test "oneheredoc" 175 "<< \"'limiter1'\"" 175 0 "" "" "'limiter1'"
+run_test "oneheredoc" 176 "<< '\"'limiter1'\"'" 176 0 "" "" "\"limiter1\""
+run_test "oneheredoc" 177 "<< \"'\"limiter1\"'\"" 177 0 "" "" "'limiter1'"
+run_test "oneheredoc" 178 "<< '<limiter1'" 178 0 "" "" "<limiter1"
+run_test "oneheredoc" 179 "<< \"<limiter1\"" 179 0 "" "" "<limiter1"
 
 run_test "simple" 190 ">> 'temp/outfile1.txt'" 190 0
 run_test "simple" 191 ">> \"temp/outfile1.txt\"" 191 0
@@ -896,7 +932,7 @@ fi
 
 
 run_test "simple" 200 "\"< temp/infile1.txt\"" 200 127 "< temp/infile1.txt: No such file or directory"
-run_test "oneheredoc" 210 "\"<< limiter1\"" 210 127 "<< temp/infile1.txt: No such file or directory"
+run_test "simple" 210 "\"<< limiter1\"" 210 127 "<< limiter1: command not found"
 run_test "simple" 220 "\"> temp/outfile1.txt\"" 220 127 "> temp/outfile1.txt: No such file or directory"
 run_test "simple" 230 "\">> temp/outfile1.txt\"" 230 127 ">> temp/outfile1.txt: No such file or directory"
 
@@ -1531,8 +1567,13 @@ unset OUTFILE
 #: <<BLOCK_COMMENT
 
 export LIMITER="limiter1"
+export TEST1="salut"
+export TEST2="les"
+export TEST3="amis"
+export TEST4="     salut     les     amis     "
+export TEST5="     salut     les     amis"
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1770 && "$start_index" <= 1810 && "$end_index" >= 1770 && "$end_index" <= 1810 ))
 then
 	if [ "$display" == "all" ]
 	then
@@ -1542,49 +1583,37 @@ then
 	fi
 fi
 
-run_test "oneheredoc" 1780 "<< \$LIMITER" 1780 0
-run_test "oneheredoc" 1781 "<< \$DO_NOT_EXIST" 1781 0
-run_test "oneheredoc" 1782 "<< '\$LIMITER'" 1782 0
-run_test "oneheredoc" 1783 "<< \"\$LIMITER\"" 1782 0
-run_test "oneheredoc" 1784 "<< '\"\$LIMITER\"'" 1784 0
-run_test "oneheredoc" 1785 "<< \"'\"\$LIMITER\"'\"" 1785 0
-run_test "oneheredoc" 1786 "<< \"\$LIMITER \$LIMITER\"" 1786 0
-run_test "oneheredoc" 1787 "<< \" \$LIMITER\"" 1787 0
-run_test "oneheredoc" 1788 "<< \"  \$LIMITER\"" 1788 0
-run_test "oneheredoc" 1789 "<< \"\$LIMITER \"" 1789 0
-run_test "oneheredoc" 1790 "<< \"\$LIMITER  \"" 1790 0
-run_test "oneheredoc" 1791 "<< \" \$LIMITER \"" 1791 0
-run_test "oneheredoc" 1792 "<< \"  \$LIMITER  \"" 1792 0
-run_test "oneheredoc" 1793 "<< \"	\$LIMITER\"" 1793 0
-run_test "oneheredoc" 1794 "<< \"\$LIMITER	\"" 1794 0
-run_test "oneheredoc" 1795 "<< \"		\$LIMITER\"" 1795 0
-run_test "oneheredoc" 1796 "<< \"\$LIMITER		\"" 1796 0
-run_test "oneheredoc" 1797 "<< \"	\$LIMITER	\"" 1797 0
-run_test "oneheredoc" 1798 "<< \"		\$LIMITER		\"" 1798 0
-run_test "oneheredoc" 1799 "<< \"LIMITER \$LIMITER\"" 1799 0
+run_test "oneheredoc" 1770 "<< \$LIMITER" 1770 0 "" "" "\$LIMITER"
+run_test "oneheredoc" 1771 "<< \$DO_NOT_EXIST" 1771 0 "" "" "\$DO_NOT_EXIST"
+run_test "oneheredoc" 1772 "<< '\$LIMITER'" 1772 0 "" "" "\$LIMITER"
+run_test "oneheredoc" 1773 "<< \"\$LIMITER\"" 1772 0 "" "" "\$LIMITER"
+run_test "oneheredoc" 1774 "<< '\"\$LIMITER\"'" 1774 0 "" "" "\"\$LIMITER\""
+run_test "oneheredoc" 1775 "<< \"'\"\$LIMITER\"'\"" 1775 0 "" "" "'\$LIMITER'"
+run_test "oneheredoc" 1776 "<< \"\$LIMITER \$LIMITER\"" 1776 0 "" "" "\$LIMITER \$LIMITER"
+run_test "oneheredoc" 1777 "<< \" \$LIMITER\"" 1777 0 "" "" " \$LIMITER"
+run_test "oneheredoc" 1778 "<< \"  \$LIMITER\"" 1778 0 "" "" "  \$LIMITER"
+run_test "oneheredoc" 1779 "<< \"\$LIMITER \"" 1779 0 "" "" "\$LIMITER "
+run_test "oneheredoc" 1780 "<< \"\$LIMITER  \"" 1780 0 "" "" "\$LIMITER  "
+run_test "oneheredoc" 1781 "<< \" \$LIMITER \"" 1781 0 "" "" " \$LIMITER "
+run_test "oneheredoc" 1782 "<< \"  \$LIMITER  \"" 1782 0 "" "" "  \$LIMITER  "
+run_test "oneheredoc" 1783 "<< \"	\$LIMITER\"" 1783 0 "" "" "	\$LIMITER"
+run_test "oneheredoc" 1784 "<< \"\$LIMITER	\"" 1784 0 "" "" "\$LIMITER	"
+run_test "oneheredoc" 1785 "<< \"		\$LIMITER\"" 1785 0 "" "" "		\$LIMITER"
+run_test "oneheredoc" 1786 "<< \"\$LIMITER		\"" 1786 0 "" "" "\$LIMITER		"
+run_test "oneheredoc" 1787 "<< \"	\$LIMITER	\"" 1787 0 "" "" "	\$LIMITER	"
+run_test "oneheredoc" 1788 "<< \"		\$LIMITER		\"" 1788 0 "" "" "		\$LIMITER		"
+run_test "oneheredoc" 1789 "<< \"LIMITER \$LIMITER\"" 1789 0 "" "" "LIMITER \$LIMITER"
+
+run_test "heredoc_with_expand" 1790 "<< limiter1 cat" 1790 0 "" "" "limiter1"
+
 
 unset LIMITER
+unset TEST1
+unset TEST2
+unset TEST3
+unset TEST4
+unset TEST5
 
-: <<BLOCK_COMMENT
-
-tester contenu du heredoc avec :
-
-TEST1="salut"
-TEST2="les"
-TEST3="amis"
-TEST4="     salut     les     amis     "
-\$TEST1
-\$TEST1 \$TEST2rm "\$OUTFILE"
-
-\$TEST1\$TEST2
-\$TEST1 \$TEST2 \$TEST3
-\$TEST1\$TEST2\$TEST3
-\$TEST4
-\$TEST1 \$TEST4
-\$TEST1\$TEST4
-
-
-BLOCK_COMMENT
 
 export OUTFILE="temp/outfile1.txt"
 

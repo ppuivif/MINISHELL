@@ -5,6 +5,10 @@ Fichier expand_utils_14.c
 la fonction check_path_in_envp est appelée par la fonction check_command_with_options.
 	- elle fait appel à la fonction search_path qui crée un tableau de char * contenant
 	tous les chemin du PATH de l'environnement.
+	- si search_path ne trouve pas de variable PATH dans l'environnement, la fonction
+	search_path retourne NULL,
+	- si search_path trouve une variable PATH dans l'environnement, la fonction
+	search_path retourne NULL,
 	
 
 -----------------------------------------------------------------------------------------------
