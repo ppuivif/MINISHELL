@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/26 17:45:14 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/28 15:18:05 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ t_exec_redirection **exec_redirection)
 	(*exec_redirection)->fd_input = open(exp_redirection->content, O_RDONLY);
 	if ((*exec_redirection)->fd_input == -1)
 	{
-		if (access(exp_redirection->content, F_OK) == -1) //voir plutot stat
+		if (access(exp_redirection->content, F_OK) == -1)
 			perror(exp_redirection->content);
 		else
 			perror(exp_redirection->content);

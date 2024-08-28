@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/26 17:56:52 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/28 15:01:39 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,9 +292,23 @@ int				check_dir_and_file_permission(char **cmd_arr, \
 
 void			check_path_in_envp(t_exec_substring **exec_substring, \
 				t_exec_struct **exec_struct);
-//char			**search_path(t_envp_struct *envp_struct);
 /*int			check_path_cmd_validity(char **path, \
 				t_exec_substring **exec_substring);*/
+
+/*
+* expand_utils_15.c
+*/
+
+void			check_when_no_path(t_exec_substring **exec_substring, \
+				t_exec_struct **exec_struct, char **path_envp);
+
+/*
+* expand_utils_16.c
+*/
+
+void			check_when_path_exists(t_exec_substring **exec_substring, \
+				t_exec_struct **exec_struct, char **path_envp);
+
 
 /*
 * free_command_line_1.c
