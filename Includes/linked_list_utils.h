@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/23 14:41:07 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/29 08:52:36 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,9 @@ typedef struct s_exec_substring
 	t_exec_argument			*exec_arguments;
 	char					**cmd_arr;
 	char					*path_with_cmd;
+	int						fd_in;
+	int						fd_out;
+	int						fd[2];
 	struct s_exec_substring	*next;
 }	t_exec_substring;
 
