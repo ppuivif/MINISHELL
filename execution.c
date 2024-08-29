@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/29 20:04:43 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/29 20:50:38 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,9 +123,24 @@ static int	*build_pid_arr(int *pid_arr, int i)
 	return (new_pid_arr);
 }
 
+void	data_transfer_to_next_cursor(t_exec_substring **exec_substring)
+{
+	if ((*exec_substring)->next)
+	{
+		(*exec_substring)->next->fd_in = (*exec_substring)->fd_in;
+		(*exec_substring)->next->fd_out = STDOUT_FILENO;
+		(*exec_substring)->next->fd[0] = (*exec_substring)->fd[0];
+		(*exec_substring)->next->fd[1] = (*exec_substring)->fd[1];
+	}
+	else
+	{
+		close_fd((*exec_substring)->fd[0]);
+		close_fd((*exec_substring)->fd[1]);
+	}
+}
 
-int	fork_create(t_exec_struct **exec_struct, t_exec_substring *exec_substring, \
-int *pid_arr)
+int	fork_create(t_exec_struct **exec_struct, \
+t_exec_substring *exec_substring, int *pid_arr)
 {
 	pid_t	pid_1;
 	char **envp_arr;
@@ -138,13 +153,32 @@ int *pid_arr)
 		perror("error\ncreate fork failed");
 		error_fork_creation_and_exit(exec_struct);
 	}
-//	*pid_arr[i] = pid_1;
 	if (pid_1 == 0)
 		exec_child(exec_substring, envp_arr, exec_struct);
 	free_arr(envp_arr);
 	return (pid_1);
 }
 
+void	pipe_create(t_exec_struct **exec_struct, \
+t_exec_substring **exec_substring, int *pid_arr)
+{
+	if (pipe((*exec_substring)->fd) == -1)
+	{
+		free(pid_arr);
+		perror("error\ncreate pipe failed");
+		error_pipe_creation_and_exit(exec_struct);
+	}
+	if ((*exec_substring)->fd_out == STDOUT_FILENO) //no out redirection
+		(*exec_substring)->fd_out = (*exec_substring)->fd[1];
+}
+
+void	search_ioput(t_exec_substring **exec_substring)
+{
+	(*exec_substring)->fd_in = search_last_input( \
+	(*exec_substring)->exec_redirections, (*exec_substring)->fd_in);
+	(*exec_substring)->fd_out = search_last_output( \
+	(*exec_substring)->exec_redirections, (*exec_substring)->fd_out);
+}
 
 
 void substrings_execution(t_exec_struct **exec_struct)
@@ -153,59 +187,30 @@ void substrings_execution(t_exec_struct **exec_struct)
 	int		*pid_arr;
 	t_exec_substring	*cursor;
 
-	int					fd_out;
-	int					fd_in;
-	int					fd[2];
-	
 	i = 0;
 	pid_arr = NULL;
 	cursor = (*exec_struct)->exec_substrings;
-
-	fd_in = STDIN_FILENO;
-	fd[0] = STDIN_FILENO;
-	fd[1] = STDOUT_FILENO;
-
 	while (cursor)
 	{
 		pid_arr = build_pid_arr(pid_arr, i);
-		fd_out = STDOUT_FILENO;
 		if (cursor->exec_redirections)
-		{
-			fd_in = search_last_input(cursor->exec_redirections, fd_in);
-			fd_out = search_last_output(cursor->exec_redirections, fd_out);
-		}
+			search_last_ioput(&cursor);
 		if (cursor != ft_lst_last7((*exec_struct)->exec_substrings))
-		{
-			if (pipe(fd) == -1)
-			{
-				free(pid_arr);
-				perror("error\ncreate pipe failed");
-				error_pipe_creation_and_exit(exec_struct);
-			}
-			if (fd_out == STDOUT_FILENO) //no out redirection
-				fd_out = fd[1];
-		}
-		cursor->fd_in = fd_in;
-		cursor->fd_out = fd_out;
-		cursor->fd[0] = fd[0];
-		cursor->fd[1] = fd[1];
-		cursor->fd[1] = fd[1];
+			pipe_create(exec_struct, &cursor, pid_arr);
 		pid_arr[i] = fork_create(exec_struct, cursor, pid_arr);
-
-		close_fd(fd_in);
-		close_fd(fd_out);
+		close_fd(cursor->fd_in);
+		close_fd(cursor->fd_out);
 		if (cursor != ft_lst_last7((*exec_struct)->exec_substrings))
 		{
-			close_fd(fd[1]);
-			fd_in = fd[0];
+			close_fd(cursor->fd[1]);
+			cursor->fd_in = cursor->fd[0];
 		}
+		data_transfer_to_next_cursor(&cursor);
 		cursor = cursor->next;
 		i++;
 	}
 	(*exec_struct)->command_line->current_exit_code = \
 	get_exit_code_last_process(pid_arr, i - 1);
-	close_fd(fd[0]);
-	close_fd(fd[1]);
 }
 
 void	execution(t_exec_struct **exec_struct)
