@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/28 18:45:50 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/29 08:53:37 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,18 +74,6 @@ static int	search_last_output(t_exec_redirection *redirection, int fd_out)
 	return (fd_out);
 }
 
-void	print_int_arr(int *arr, int size)// to delete
-{
-	int	i;
-
-	i = 0;
-	while (i <= size)
-	{
-		printf("arr %d : %d\n", i, arr[i]);
-		i++;
-	}
-}
-
 static int	*build_pid_arr(int *pid_arr, int i)
 {
 	int	*new_pid_arr;
@@ -111,62 +99,49 @@ static int	*build_pid_arr(int *pid_arr, int i)
 	return (new_pid_arr);
 }
 
-void	execution(t_exec_struct **exec_struct)
-{
-	t_exec_substring	*cursor;
-	int					i;
-	int					fd[2];
-	pid_t				pid_1;
-	int					fd_in;
-	int					fd_out;
-	int					substrings_nmemb;
-	char				**envp_arr;
-	int					status;
-	int					*pid_arr;
-	int					pid_last_process;
 
-	cursor = (*exec_struct)->exec_substrings;
-	substrings_nmemb = (int)ft_lst_size7(cursor);
+void substrings_execution(t_exec_struct **exec_struct)
+{
+	int		i;
+	int		*pid_arr;
+	char	**envp_arr;
+	int		status;
+	int		pid_last_process;
+	pid_t	pid_1;
+	t_exec_substring	*cursor;
+	int					*fd_out;
+	int					*fd_in;
+	int					*fd[2];
+
 	i = 0;
-	status = 0;
-	fd_in = STDIN_FILENO;
 	pid_arr = NULL;
+	status = 0;
 	pid_last_process = 0;
-	fd[0] = 0;
-	fd[1] = 1;
-	if ((*exec_struct)->exec_substrings->exec_arguments)
-	{
-		fd_out = STDOUT_FILENO;//builtins don't use fd_in : to verify 
-		if (cursor->exec_redirections)
-			fd_out = search_last_output(cursor->exec_redirections, fd_out);
-		if ((*exec_struct)->exec_substrings->exec_arguments-> \
-		is_builtin == 2 && substrings_nmemb == 1)
-		{
-			if (fd_out > 0)
-				exec_builtin(*exec_struct, \
-				(*exec_struct)->exec_substrings, NULL);
-			return ;
-		}
-	}
-	while (i < substrings_nmemb)
+	cursor = (*exec_struct)->exec_substrings;
+	fd_out = &cursor->fd_out;
+	fd_in = &cursor->fd_in;
+	fd[0] = &cursor->fd[0];
+	fd[1] = &cursor->fd[1];
+
+	while (i < (int)ft_lst_size7((*exec_struct)->exec_substrings))
 	{
 		pid_arr = build_pid_arr(pid_arr, i);
-		fd_out = STDOUT_FILENO;
+		*fd_out = STDOUT_FILENO;
 		if (cursor->exec_redirections)
 		{
-			fd_in = search_last_input(cursor->exec_redirections, fd_in);
-			fd_out = search_last_output(cursor->exec_redirections, fd_out);
+			*fd_in = search_last_input(cursor->exec_redirections, *fd_in);
+			*fd_out = search_last_output(cursor->exec_redirections, *fd_out);
 		}
 		if (cursor != ft_lst_last7((*exec_struct)->exec_substrings))
 		{
-			if (pipe(fd) == -1)
+			if (pipe(*fd) == -1)
 			{
 				free(pid_arr);
 				perror("error\ncreate pipe failed");
 				error_pipe_creation_and_exit(exec_struct);
 			}
-			if (fd_out == STDOUT_FILENO) //no out redirection
-				fd_out = fd[1];
+			if (*fd_out == STDOUT_FILENO) //no out redirection
+				*fd_out = fd[0][1];
 		}
 		envp_arr = build_envp_arr(exec_struct);
 		pid_1 = fork();
@@ -180,15 +155,15 @@ void	execution(t_exec_struct **exec_struct)
 		pid_last_process = pid_1;
 		if (pid_1 == 0)
 		{
-			exec_child(cursor, fd_in, fd_out, envp_arr, exec_struct, \
-			pid_arr, fd);
+			exec_child(cursor, *fd_in, *fd_out, envp_arr, exec_struct, \
+			pid_arr, *fd);
 		}
-		close_fd(fd_in);
-		close_fd(fd_out);
+		close_fd(*fd_in);
+		close_fd(*fd_out);
 		if (cursor != ft_lst_last7((*exec_struct)->exec_substrings))
 		{
-			close_fd(fd[1]);
-			fd_in = fd[0];
+			close_fd(*fd[1]);
+			*fd_in = *fd[0];
 		}
 		free_arr(envp_arr);
 		cursor = cursor->next;
@@ -204,9 +179,32 @@ void	execution(t_exec_struct **exec_struct)
 			continue;
 		i--;
 	}
-	close_fd(fd[0]);
-	close_fd(fd[1]);
+	close_fd(*fd[0]);
+	close_fd(*fd[1]);
 	free(pid_arr);
+}
+
+void	execution(t_exec_struct **exec_struct)
+{
+	int					*fd_out;
+	t_exec_substring	*cursor;
+
+	cursor = (*exec_struct)->exec_substrings;
+	fd_out = &cursor->fd_out;
+	if (cursor->exec_arguments)
+	{
+		if (cursor->exec_redirections)
+			*fd_out = search_last_output(cursor->exec_redirections, \
+			*fd_out);
+		if (cursor->exec_arguments->is_builtin == 2 && \
+		ft_lst_size7(cursor) == 1)
+		{
+			if (*fd_out > 0)
+				exec_builtin(*exec_struct, cursor, NULL);
+			return ;
+		}
+	}
+	substrings_execution(exec_struct);
 }
 
 
