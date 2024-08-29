@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/28 18:35:29 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/29 18:29:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -359,7 +359,10 @@ void			check_exec_arguments(t_exec_substring **exec_substring, \
 
 char			**build_envp_arr(t_exec_struct **exec_struct);
 void			execution(t_exec_struct **exec_struct);
-void			exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd);
+//void			exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd);
+
+void			exec_child(t_exec_substring *substring, char **envp_arr, \
+ 				t_exec_struct **exec_struct);
 
 /*
 * error_handling.c

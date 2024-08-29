@@ -6,11 +6,35 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/29 08:53:37 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/29 18:36:12 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+static int	get_exit_code_last_process(int *pid_arr, int i)
+{
+	int		pid_last_process;
+	int		status;
+	int		exit_code_last_process;
+
+	pid_last_process = pid_arr[i];
+	status = 0;
+	exit_code_last_process = 0;
+
+	while (waitpid(pid_last_process, &status, 0) != -1)
+		continue ;
+	exit_code_last_process = WEXITSTATUS(status);
+	i--;
+	while (i >= 0)
+	{
+		while (waitpid(pid_arr[i], NULL, 0) != -1)
+			continue;
+		i--;
+	}
+	free(pid_arr);
+	return (exit_code_last_process);
+}
 
 char	**build_envp_arr(t_exec_struct **exec_struct)
 {
@@ -105,43 +129,39 @@ void substrings_execution(t_exec_struct **exec_struct)
 	int		i;
 	int		*pid_arr;
 	char	**envp_arr;
-	int		status;
-	int		pid_last_process;
 	pid_t	pid_1;
 	t_exec_substring	*cursor;
-	int					*fd_out;
-	int					*fd_in;
-	int					*fd[2];
-
+	int					fd_out;
+	int					fd_in;
+	int					fd[2];
+	
 	i = 0;
 	pid_arr = NULL;
-	status = 0;
-	pid_last_process = 0;
 	cursor = (*exec_struct)->exec_substrings;
-	fd_out = &cursor->fd_out;
-	fd_in = &cursor->fd_in;
-	fd[0] = &cursor->fd[0];
-	fd[1] = &cursor->fd[1];
+	fd_in = STDIN_FILENO;
+	fd[0] = STDIN_FILENO;
+	fd[1] = STDOUT_FILENO;
 
-	while (i < (int)ft_lst_size7((*exec_struct)->exec_substrings))
+//	while (i < (int)ft_lst_size7((*exec_struct)->exec_substrings))
+	while (cursor)
 	{
 		pid_arr = build_pid_arr(pid_arr, i);
-		*fd_out = STDOUT_FILENO;
+		fd_out = STDOUT_FILENO;
 		if (cursor->exec_redirections)
 		{
-			*fd_in = search_last_input(cursor->exec_redirections, *fd_in);
-			*fd_out = search_last_output(cursor->exec_redirections, *fd_out);
+			fd_in = search_last_input(cursor->exec_redirections, fd_in);
+			fd_out = search_last_output(cursor->exec_redirections, fd_out);
 		}
 		if (cursor != ft_lst_last7((*exec_struct)->exec_substrings))
 		{
-			if (pipe(*fd) == -1)
+			if (pipe(fd) == -1)
 			{
 				free(pid_arr);
 				perror("error\ncreate pipe failed");
 				error_pipe_creation_and_exit(exec_struct);
 			}
-			if (*fd_out == STDOUT_FILENO) //no out redirection
-				*fd_out = fd[0][1];
+			if (fd_out == STDOUT_FILENO) //no out redirection
+				fd_out = fd[1];
 		}
 		envp_arr = build_envp_arr(exec_struct);
 		pid_1 = fork();
@@ -152,36 +172,38 @@ void substrings_execution(t_exec_struct **exec_struct)
 			error_fork_creation_and_exit(exec_struct);
 		}
 		pid_arr[i] = pid_1;
-		pid_last_process = pid_1;
 		if (pid_1 == 0)
 		{
-			exec_child(cursor, *fd_in, *fd_out, envp_arr, exec_struct, \
-			pid_arr, *fd);
+/*			printf("*fd_in : %d\n", fd_in);
+			printf("fd_in : %d\n", cursor->fd_in);
+			printf("*fd_out : %d\n", *fd_out);
+			printf("fd_out : %d\n", cursor->fd_out);*/
+
+			cursor->fd_in = fd_in;
+			cursor->fd_out = fd_out;
+			cursor->fd[0] = fd[0];
+			cursor->fd[1] = fd[1];
+			cursor->fd[1] = fd[1];
+/*			exec_child(cursor, cursor->fd_in, cursor->fd_out, envp_arr, exec_struct, \
+			pid_arr, cursor->fd);*/
+			exec_child(cursor, envp_arr, exec_struct);
+			
 		}
-		close_fd(*fd_in);
-		close_fd(*fd_out);
+		close_fd(fd_in);
+		close_fd(fd_out);
 		if (cursor != ft_lst_last7((*exec_struct)->exec_substrings))
 		{
-			close_fd(*fd[1]);
-			*fd_in = *fd[0];
+			close_fd(fd[1]);
+			fd_in = fd[0];
 		}
 		free_arr(envp_arr);
 		cursor = cursor->next;
 		i++;
 	}
-	while (waitpid(pid_last_process, &status, 0) != -1)
-		continue ;
-	(*exec_struct)->command_line->current_exit_code = WEXITSTATUS(status);
-	i-=2;
-	while (i >= 0)
-	{
-		while (waitpid(pid_arr[i], NULL, 0) != -1)
-			continue;
-		i--;
-	}
-	close_fd(*fd[0]);
-	close_fd(*fd[1]);
-	free(pid_arr);
+	(*exec_struct)->command_line->current_exit_code = \
+	get_exit_code_last_process(pid_arr, i - 1);
+	close_fd(fd[0]);
+	close_fd(fd[1]);
 }
 
 void	execution(t_exec_struct **exec_struct)
@@ -194,9 +216,8 @@ void	execution(t_exec_struct **exec_struct)
 	if (cursor->exec_arguments)
 	{
 		if (cursor->exec_redirections)
-			*fd_out = search_last_output(cursor->exec_redirections, \
-			*fd_out);
-		if (cursor->exec_arguments->is_builtin == 2 && \
+			*fd_out = search_last_output(cursor->exec_redirections, *fd_out);
+		if (cursor->exec_arguments->is_builtin == IOPUT_NOT_ACCEPTED && \
 		ft_lst_size7(cursor) == 1)
 		{
 			if (*fd_out > 0)
@@ -207,41 +228,109 @@ void	execution(t_exec_struct **exec_struct)
 	substrings_execution(exec_struct);
 }
 
+// void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd)
+// {
+// 	int		exit_code;
+// 	char	*path_with_cmd;
+// 	char	**cmd_arr;
 
-void	exec_child(t_exec_substring *substring, int fd_in, int fd_out, char **envp_arr, t_exec_struct **exec_struct, int *pid_arr, int *fd)
+// 	exit_code = 0;
+// 	path_with_cmd = ft_strdup(substring->path_with_cmd);//malloc a proteger
+// 	cmd_arr = arr_copy(substring->cmd_arr);
+// 	if (substring->exec_arguments && substring->exec_arguments->is_argument_valid == false)
+// 		exit_code = (*exec_struct)->command_line->current_exit_code;
+// 	if (fd_in == -1 || fd_out == -1)
+// 		exit_code = 1;
+// 	if (fd_in > 2)
+// 	{
+// 		dup2(fd_in, STDIN_FILENO);
+// 		close_fd(fd_in);
+// 	}
+// 	if (fd_out > 2)
+// 	{
+// 		dup2(fd_out, STDOUT_FILENO);
+// 		close_fd(fd_out);
+// 	}
+// 	close_fd(fd[0]);
+// 	close_fd(fd[1]);
+// 	free(pid_arr);
+// 	rl_clear_history();
+// 	if (substring->exec_arguments && fd_out > 0)
+// 	{
+// 		if (substring->exec_arguments->is_builtin)
+// 		{
+// 			exec_builtin(*exec_struct, substring, envp_arr); //! J'ai mis ca
+// 		}
+// 	}
+// 	free_envp_struct(&(*exec_struct)->envp_struct);//! J'ai mis ca
+// 	free_all_command_line(&(*exec_struct)->command_line);//! J'ai mis ca
+// 	free_all_exec_struct(exec_struct);//! J'ai mis ca
+// 	if (path_with_cmd && cmd_arr && cmd_arr[0] && exit_code == 0)
+// 	{
+// 		execve(path_with_cmd, cmd_arr, envp_arr);
+// 		perror("error\nexecve of a cmd failed");//to verify
+// 			//exit_code = -1 ?
+// 	}
+// 	free(path_with_cmd);
+// 	free_arr(cmd_arr);
+// 	free_arr(envp_arr);
+// 	exit(exit_code);
+// }
+
+void	exec_child(t_exec_substring *substring, char **envp_arr, \
+t_exec_struct **exec_struct)
 {
 	int		exit_code;
-	char	*path_with_cmd;
 	char	**cmd_arr;
-
+	char	*path_with_cmd;
+	
 	exit_code = 0;
-	path_with_cmd = ft_strdup(substring->path_with_cmd);//malloc a proteger
-	cmd_arr = arr_copy(substring->cmd_arr);
+	cmd_arr = NULL;
+	path_with_cmd = NULL;
+
+	
 	if (substring->exec_arguments && substring->exec_arguments->is_argument_valid == false)
 		exit_code = (*exec_struct)->command_line->current_exit_code;
-	if (fd_in == -1 || fd_out == -1)
+	if (substring->fd_in == -1 || substring->fd_out == -1)
 		exit_code = 1;
-	if (fd_in > 2)
+	if (substring->fd_in > 2)
 	{
-		dup2(fd_in, STDIN_FILENO);
-		close_fd(fd_in);
+		dup2(substring->fd_in, STDIN_FILENO);
+		close_fd(substring->fd_in);
 	}
-	if (fd_out > 2)
+	if (substring->fd_out > 2)
 	{
-		dup2(fd_out, STDOUT_FILENO);
-		close_fd(fd_out);
+		dup2(substring->fd_out, STDOUT_FILENO);
+		close_fd(substring->fd_out);
 	}
-	close_fd(fd[0]);
-	close_fd(fd[1]);
-	free(pid_arr);
+	close_fd(substring->fd[0]);
+	close_fd(substring->fd[1]);
 	rl_clear_history();
-	if (substring->exec_arguments && fd_out > 0)
+	if (substring->exec_arguments && substring->fd_out > 0)
 	{
 		if (substring->exec_arguments->is_builtin)
-		{
 			exec_builtin(*exec_struct, substring, envp_arr); //! J'ai mis ca
+	}
+
+
+	cmd_arr = arr_copy(substring->cmd_arr);
+	if (!cmd_arr)
+	{
+		free_arr(envp_arr);
+		error_allocation_exec_struct_and_exit(exec_struct);
+	}
+
+	if (substring->path_with_cmd)
+	{
+		path_with_cmd = ft_strdup(substring->path_with_cmd);
+		if (!path_with_cmd)
+		{
+			free_arr(cmd_arr);
+			free_arr(envp_arr);
+			error_allocation_exec_struct_and_exit(exec_struct);
 		}
 	}
+
 	free_envp_struct(&(*exec_struct)->envp_struct);//! J'ai mis ca
 	free_all_command_line(&(*exec_struct)->command_line);//! J'ai mis ca
 	free_all_exec_struct(exec_struct);//! J'ai mis ca
