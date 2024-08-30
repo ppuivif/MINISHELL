@@ -16,7 +16,8 @@ SRCS = minishell.c \
 		check_exec_redirections.c\
 		check_exec_arguments.c\
 		error_handling.c\
-		execution.c\
+		execution_parent.c\
+		execution_child.c\
 		free_command_line_1.c\
 		free_command_line_2.c\
 		free_exec_struct.c\

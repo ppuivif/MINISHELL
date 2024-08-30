@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execution.c                                        :+:      :+:    :+:   */
+/*   execution_parent.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/29 21:55:36 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/30 09:10:02 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ static int	*build_pid_arr(int *pid_arr, int i)
 	return (new_pid_arr);
 }
 
-void	fd_handle(t_exec_substring **exec_substring)
+void	fd_handle_in_parent(t_exec_substring **exec_substring)
 {
 	close_fd((*exec_substring)->fd_in);
 	close_fd((*exec_substring)->fd_out);
@@ -199,7 +199,7 @@ void substrings_execution(t_exec_struct **exec_struct)
 		if (cursor != ft_lst_last7((*exec_struct)->exec_substrings))
 			pipe_create(exec_struct, &cursor, pid_arr);
 		pid_arr[i] = fork_create(exec_struct, cursor, pid_arr);
-		fd_handle(&cursor);
+		fd_handle_in_parent(&cursor);
 		cursor = cursor->next;
 		i++;
 	}
@@ -227,73 +227,4 @@ void	execution(t_exec_struct **exec_struct)
 		}
 	}
 	substrings_execution(exec_struct);
-}
-
-void	exec_child(t_exec_substring *substring, char **envp_arr, \
-t_exec_struct **exec_struct)
-{
-	int		exit_code;
-	char	**cmd_arr;
-	char	*path_with_cmd;
-	
-	exit_code = 0;
-	cmd_arr = NULL;
-	path_with_cmd = NULL;
-
-	
-	if (substring->exec_arguments && substring->exec_arguments->is_argument_valid == false)
-		exit_code = (*exec_struct)->command_line->current_exit_code;
-	if (substring->fd_in == -1 || substring->fd_out == -1)
-		exit_code = 1;
-	if (substring->fd_in > 2)
-	{
-		dup2(substring->fd_in, STDIN_FILENO);
-		close_fd(substring->fd_in);
-	}
-	if (substring->fd_out > 2)
-	{
-		dup2(substring->fd_out, STDOUT_FILENO);
-		close_fd(substring->fd_out);
-	}
-	close_fd(substring->fd[0]);
-	close_fd(substring->fd[1]);
-	rl_clear_history();
-	if (substring->exec_arguments && substring->fd_out > 0)
-	{
-		if (substring->exec_arguments->is_builtin)
-			exec_builtin(*exec_struct, substring, envp_arr); //! J'ai mis ca
-	}
-
-
-	cmd_arr = arr_copy(substring->cmd_arr);
-	if (!cmd_arr)
-	{
-		free_arr(envp_arr);
-		error_allocation_exec_struct_and_exit(exec_struct);
-	}
-
-	if (substring->path_with_cmd)
-	{
-		path_with_cmd = ft_strdup(substring->path_with_cmd);
-		if (!path_with_cmd)
-		{
-			free_arr(cmd_arr);
-			free_arr(envp_arr);
-			error_allocation_exec_struct_and_exit(exec_struct);
-		}
-	}
-
-	free_envp_struct(&(*exec_struct)->envp_struct);//! J'ai mis ca
-	free_all_command_line(&(*exec_struct)->command_line);//! J'ai mis ca
-	free_all_exec_struct(exec_struct);//! J'ai mis ca
-	if (path_with_cmd && cmd_arr && cmd_arr[0] && exit_code == 0)
-	{
-		execve(path_with_cmd, cmd_arr, envp_arr);
-		perror("error\nexecve of a cmd failed");//to verify
-			//exit_code = -1 ?
-	}
-	free(path_with_cmd);
-	free_arr(cmd_arr);
-	free_arr(envp_arr);
-	exit(exit_code);
 }
