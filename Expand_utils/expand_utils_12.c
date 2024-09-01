@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_12.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/01 14:48:55 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:13:23 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,13 @@ char *filename, int fd, t_command_line **command_line)
 			return (1);
 		}
 		line = readline("heredoc : ");
-		if (!line || ft_strcmp(line, exp_redirection->content) == 0)
+		if (!line)
+		{
+			ft_putstr_fd("warning: here-document at line \
+delimited by end-of-file\n", 2);
+			break ;
+		}
+		if (ft_strcmp(line, exp_redirection->content) == 0)
 			break ;
 		if (line[0])
 			add_history(line);
