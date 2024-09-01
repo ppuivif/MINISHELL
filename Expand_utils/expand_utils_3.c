@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/28 15:52:22 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/30 14:45:05 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ static int	expand_variables_when_dollar_first(char \
 				error_allocation_command_line_and_exit(command_line);
 		}
 		else
-			len_to_cut = simple_expand_variables_when_dollar_first( \
-			remaining_line, result, command_line);
+			len_to_cut = simple_expand_variables_when_dollar_first \
+			(remaining_line, result, command_line);
 	}
 	else
 		*result = ft_strdup("$");

@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/27 12:08:43 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/31 15:29:06 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void	is_a_file_without_rights( \
 t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
 	ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-	ft_putstr_fd(": Permission denied1\n", 2);
+	ft_putstr_fd(": Permission denied\n", 2);
 	(*exec_substring)->exec_arguments->is_argument_valid = false;
 	(*exec_struct)->command_line->current_exit_code = 126;
 }
@@ -43,7 +43,7 @@ static void	is_a_non_reachable_directory_or_path( \
 t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
 	ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-	ft_putstr_fd(": Permission denied2\n", 2);
+	ft_putstr_fd(": Permission denied\n", 2);
 	(*exec_substring)->exec_arguments->is_argument_valid = false;
 	(*exec_struct)->command_line->current_exit_code = 126;
 }

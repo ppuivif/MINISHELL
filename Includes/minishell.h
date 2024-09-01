@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/29 19:16:32 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/01 14:48:03 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,9 +274,9 @@ int				check_outfile(t_expanded_redirection *exp_redirection, \
 				t_exec_redirection **exec_redirection);
 int				check_infile(t_expanded_redirection *exp_redirection, \
 				t_exec_redirection **exec_redirection);
-int				check_heredoc(t_expanded_redirection *exp_redirection, \
-				t_exec_redirection **exec_redirection, \
-				t_command_line **command_line);
+int				check_heredoc(t_exec_struct **exec_struct, \
+				t_expanded_redirection *exp_redirection, \
+				t_exec_redirection **exec_redirection);
 
 /*
 * expand_utils_13.c
@@ -309,7 +309,6 @@ void			check_when_no_path(t_exec_substring **exec_substring, \
 void			check_when_path_exists(t_exec_substring **exec_substring, \
 				t_exec_struct **exec_struct, char **path_envp);
 
-
 /*
 * free_command_line_1.c
 */
@@ -340,7 +339,8 @@ void			build_exec_struct(t_exec_struct **exec_struct);
 
 int				open_and_check_file(t_expanded_redirection *exp_redirections, \
 				t_exec_redirection **exec_redirection, \
-				t_exec_substring **exec_substring, t_exec_struct *exec_struct);
+				t_exec_substring **exec_substring, \
+				t_exec_struct **exec_struct);
 
 /*
 * check_exec_arguments.c
@@ -354,13 +354,33 @@ void			check_exec_arguments(t_exec_substring **exec_substring, \
 				t_exec_struct **exec_struct);
 
 /*
-* execution.c
+* execution_parent.c
+*/
+
+void			execution(t_exec_struct **exec_struct);
+
+/*
+* execution_child.c
+*/
+
+void			exec_child(t_exec_substring *substring, char **envp_arr, \
+				t_exec_struct **exec_struct);
+
+/*
+* exec_utils_1.c
+*/
+
+void			substrings_execution(t_exec_struct **exec_struct);
+
+/*
+* exec_utils_2.c
 */
 
 char			**build_envp_arr(t_exec_struct **exec_struct);
-void			execution(t_exec_struct **exec_struct);
-void			exec_child(t_exec_substring *substring, char **envp_arr, \
- 				t_exec_struct **exec_struct);
+int				search_last_output(t_exec_redirection *redirection, int fd_out);
+int				search_last_input(t_exec_redirection *redirection, int fd_in);
+void			fd_handle_in_parent(t_exec_substring **exec_substring);
+int				get_exit_code_last_process(int *pid_arr, int i);
 
 /*
 * error_handling.c

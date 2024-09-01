@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/29 18:06:39 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/31 15:45:01 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,8 @@ static void	free_exec_substring_struct(t_exec_substring **exec_substrings)
 		((*exec_substrings)->cmd_arr);
 		(*exec_substrings)->path_with_cmd = free_and_null \
 		((*exec_substrings)->path_with_cmd);
-		free((*exec_substrings)->pid_arr);
+		((*exec_substrings)->pid_arr) = free_and_null \
+			((*exec_substrings)->pid_arr);
 		free((*exec_substrings));
 		*exec_substrings = tmp;
 	}

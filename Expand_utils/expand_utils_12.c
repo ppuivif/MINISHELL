@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/28 15:18:05 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/01 14:48:55 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,22 +63,21 @@ t_exec_redirection **exec_redirection)
 }
 
 static int	read_and_expand_heredoc(t_expanded_redirection *exp_redirection, \
-char **filename, int fd, t_command_line **command_line)
+char *filename, int fd, t_command_line **command_line)
 {
 	char	*line;
 
 	line = NULL;
 	while (1)
 	{
-		line = readline("heredoc : ");
 		signals(1);
 		if (g_sign)
 		{
-//			printf("voici le sign : %d\n", g_sign);//to delete
-			unlink(*filename); // Optionally delete the temporary file
-			*filename = free_and_null(*filename);
+			unlink(filename); // Optionally delete the temporary file
+			filename = free_and_null(filename);
 			return (1);
 		}
+		line = readline("heredoc : ");
 		if (!line || ft_strcmp(line, exp_redirection->content) == 0)
 			break ;
 		if (line[0])
@@ -93,8 +92,9 @@ char **filename, int fd, t_command_line **command_line)
 	return (0);
 }
 
-int	check_heredoc(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection, t_command_line **command_line)
+int	check_heredoc(t_exec_struct **exec_struct, \
+t_expanded_redirection *exp_redirection, \
+t_exec_redirection **exec_redirection)
 {
 	int		fd;
 	char	*filename;
@@ -105,8 +105,12 @@ t_exec_redirection **exec_redirection, t_command_line **command_line)
 	index = free_and_null(index);
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
+	{
+		perror(filename);
 		return (1);
-	if (read_and_expand_heredoc(exp_redirection, &filename, fd, command_line))
+	}
+	if (read_and_expand_heredoc(exp_redirection, filename, fd, \
+	&(*exec_struct)->command_line))
 	{
 		close(fd);
 		return (1);

@@ -2565,6 +2565,9 @@ run_test "simple" 7313 "< temp/infile_without_permission > temp/outfile1.txt cat
 run_test "simple" 7314 "> temp/outfile1.txt < temp/infile_without_permission cat -e" 7314 1 "temp/infile_without_permission: Permission denied"
 run_test "simple" 7315 "< temp/infile_without_permission > temp/outfile1.txt invalid_command" 7315 1 "temp/infile_without_permission: Permission denied"
 run_test "simple" 7316 "invalid_command < temp/infile_without_permission > temp/outfile1.txt" 7316 1 "temp/infile_without_permission: Permission denied"
+run_test "simple" 7317 "Tests/executable_no_permission" 7317 126 "Tests/executable_no_permission: Permission denied"
+run_test "simple" 7318 "Tests/file_whith_segfault" 7318 139 "segmentation fault  ./file_with_segfault"
+
 
 chmod 644 temp/outfile_without_permission
 delete_file temp/outfile_without_permission

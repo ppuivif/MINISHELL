@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/30 09:48:23 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/30 14:50:11 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,11 @@ static int	exit_code_and_fd_handle_in_child(t_exec_substring **substring, \
 t_exec_struct **exec_struct)
 {
 	int	exit_code;
-	
+
 	exit_code = 0;
-	if ((*substring)->exec_arguments && (*substring)->exec_arguments->is_argument_valid == false)
-		exit_code = (*exec_struct)->command_line->current_exit_code;		
+	if ((*substring)->exec_arguments && \
+	(*substring)->exec_arguments->is_argument_valid == false)
+		exit_code = (*exec_struct)->command_line->current_exit_code;
 	if ((*substring)->fd_in == -1 || (*substring)->fd_out == -1)
 		exit_code = 1;
 	if ((*substring)->fd_in > 2)
@@ -63,7 +64,7 @@ t_exec_struct **exec_struct, char **cmd_arr, char **envp_arr)
 	return (path_with_cmd);
 }
 
-static char **copy_cmd_arr(t_exec_substring *substring, \
+static char	**copy_cmd_arr(t_exec_substring *substring, \
 t_exec_struct **exec_struct, char **envp_arr)
 {
 	char	**cmd_arr;
@@ -81,14 +82,13 @@ t_exec_struct **exec_struct, char **envp_arr)
 	return (cmd_arr);
 }
 
-
 void	exec_child(t_exec_substring *substring, char **envp_arr, \
 t_exec_struct **exec_struct)
 {
 	int		exit_code;
 	char	**cmd_arr;
 	char	*path_with_cmd;
-	
+
 	cmd_arr = NULL;
 	path_with_cmd = NULL;
 	exit_code = exit_code_and_fd_handle_in_child(&substring, exec_struct);
@@ -102,8 +102,8 @@ t_exec_struct **exec_struct)
 	if (path_with_cmd && cmd_arr && cmd_arr[0] && exit_code == 0)
 	{
 		execve(path_with_cmd, cmd_arr, envp_arr);
-		perror("error\nexecve of a cmd failed");//to verify
-			//exit_code = -1 ?
+		exit_code = 1;
+		ft_putstr_fd("Execve failed\n", 2);
 	}
 	free(path_with_cmd);
 	free_arr(cmd_arr);
