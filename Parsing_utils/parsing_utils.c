@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:37 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 16:44:58 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 14:31:34 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ unsigned int	count_angled_bracket(char *str)
 
 static int	count_len_to_next_quote(char **remaining_line, char quote_type)
 {
-	int len_to_next_quote;
-	
+	int	len_to_next_quote;
+
 	len_to_next_quote = 1;
 	while (*remaining_line[0] && *remaining_line[0] != quote_type)
 	{

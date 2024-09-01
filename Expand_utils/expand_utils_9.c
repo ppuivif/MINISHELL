@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 11:02:55 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 14:37:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,47 +72,5 @@ char **extracted_line, t_command_line **command_line)
 	len = get_len_and_extract_after_first_dollar(&str[0], extracted_line, \
 	command_line);
 	expand_string_after_dollar1(extracted_line, command_line);
-	return (len);
-}
-
-int	simple_expand_content_of_arguments(char *str, \
-t_expanded_argument **exp_arguments, char **definitive_content, \
-t_command_line **command_line)
-{
-	int		len;
-	char	*extracted_line;
-//	char    *tmp;
-//	tmp = NULL;
-	extracted_line = NULL;
-	len = handle_special_characters_after_dollar(str, &extracted_line, \
-	command_line, false);
-	if (len == -1)
-		return (len);
-	else if (len == 0)
-	{
-		len = get_len_and_extract_after_first_dollar(&str[0], &extracted_line, \
-		command_line);
-		expand_string_after_dollar2(extracted_line, exp_arguments, \
-		definitive_content, command_line);
-		extracted_line = free_and_null(extracted_line);
-	}
-	else if (len > 0)
-	{
-		if (*definitive_content)
-		{
-			*definitive_content = ft_strjoin_freed \
-			(*definitive_content, extracted_line);
-			extracted_line = free_and_null(extracted_line);
-		}
-		else
-			*definitive_content = ft_strdup_freed(extracted_line);
-		return (len);
-/*		tmp = ft_strdup_freed(extracted_line);
-		extracted_line = NULL;
-		if (*definitive_content)
-			free(*definitive_content);
-		*definitive_content = tmp;
-		return (len);*/
-	}
 	return (len);
 }

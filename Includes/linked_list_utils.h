@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list_utils.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/21 17:14:07 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/08/29 18:01:02 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,15 @@ typedef enum t_redirection_type
 	REDIRECTION_AMBIGUOUS = 5,
 }	t_redirection;
 
+typedef enum t_builtin_type
+{
+	ISNOT_BUILTIN = 0,
+	IOPUT_ACCEPTED = 1,
+	IOPUT_NOT_ACCEPTED = 2,
+}	t_builtin;
+
 typedef struct s_expanded_argument
 {
-	bool						alloc_succeed;//to delete
 	char						*content;
 	struct s_expanded_argument	*next;
 }	t_expanded_argument;
@@ -101,7 +107,7 @@ typedef struct s_exec_argument
 {
 	char					*argument;
 	bool					is_argument_valid;
-	int						is_builtin;
+	t_builtin				is_builtin;
 	struct s_exec_argument	*next;
 }	t_exec_argument;
 
@@ -113,6 +119,10 @@ typedef struct s_exec_substring
 	t_exec_argument			*exec_arguments;
 	char					**cmd_arr;
 	char					*path_with_cmd;
+	int						*pid_arr;
+	int						fd_in;
+	int						fd_out;
+	int						fd[2];
 	struct s_exec_substring	*next;
 }	t_exec_substring;
 

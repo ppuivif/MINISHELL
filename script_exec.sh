@@ -178,6 +178,7 @@ execute_parsing_test() {
 		flag=$((flag + 1))
 	else
 		status5="OK"
+		echo "$heredoc1_content" | ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
 		error_detail5=""
 		status_message="${GREEN} OK${NC}"
     fi
@@ -211,42 +212,78 @@ execute_test() {
     exit_code_expected=$5
  	substring=$6
  	invalid_test=$7
+ 	limiter1=$8
+ 	limiter2=$9
+ 	limiter3=${10}
 	test="test$test_index\t$command\t"
     message=$test
     
 	create_files_and_set_permissions $test_index "execution"
 
-#: << BLOCK_COMMENT
-
-	if [ "$test_type" == "oneheredoc" ]
-	then
 	heredoc1_content="line1
-line2"
+line2
+"$limiter1""
 
-	full_command="${command}
-${heredoc1_content}
-limiter1"
-	else
+	heredoc2_content="line1
+line2
+"$limiter1"
+line3
+line4
+"$limiter2""
+
+	heredoc3_content="line1
+line2
+"$limiter1"
+line3
+line4
+"$limiter2"
+line5
+line6
+"$limiter3""
+
+# if more lines with heredoc4 dont forget to modify tail on line 406
+
+	heredoc4_content="line1
+"$TEST1"
+"$limiter1""
+
+: << BLOCK_COMMENT
+
+"$TEST1""$TEST2"
+"$TEST1"" ""$TEST2"
+"$TEST1""$TEST2""$TEST3"
+"$TEST1"" ""$TEST2"" ""$TEST3"
+"$TEST4"
+"$TEST5"
+"$TEST1""$TEST4"
+"$TEST1"" ""$TEST4"
+"$limiter1""
+
+BLOCK_COMMENT
+
+	if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ] && [ "$test_type" != "heredoc_with_expand" ]
+	then
 		full_command="$command" 
+	elif [ "$test_type" == "oneheredoc" ]
+	then
+		full_command="${command}
+${heredoc1_content}"
+	elif [ "$test_type" == "twoheredoc" ]
+	then
+		full_command="${command}
+${heredoc2_content}"
+	elif [ "$test_type" == "threeheredoc" ]
+	then
+		full_command="${command}
+${heredoc3_content}"
+	elif [ "$test_type" == "heredoc_with_expand" ]
+	then
+		full_command="${command}
+${heredoc4_content}"
 	fi
 
-	limiter="limiter"
-
-	heredoc_input=$(cat << 'EOF'
-echo -e "first_line\n"
-EOF
-)
-
-
 	echo "$full_command" >"temp/tmp_to_read_command.txt"
-#	echo "$heredoc_input" >"temp/tmp_to_read_command.txt"
-#	cat "temp/tmp_to_read_command.txt"
 
-
-if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ]
-then
-
-#	eval "$full_command"
 	eval "$full_command" 1>"temp/$test_index-bash_stdout.txt" 2>"temp/$test_index-bash_stderr.txt"
 	exit_code_bash=$?
 #	echo "exit_code_bash"
@@ -255,10 +292,48 @@ then
 	cat "temp/outfile2.txt" >"temp/$test_index-bash_outfile2.txt"
 	
 	echo > temp/outfile1.txt
-	echo > temp/outfile2.txt	
-    
-#	./minishell 100
-	./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+	echo > temp/outfile2.txt
+
+
+	echo "$command" >"temp/tmp_to_read_command.txt"
+	if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ] && [ "$test_type" != "heredoc_with_expand" ]
+	then
+		./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+	elif [ "$test_type" == "oneheredoc" ];
+	then
+		echo "$heredoc1_content" | ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+	elif [ "$test_type" == "twoheredoc" ];
+	then
+		echo "$heredoc2_content" | ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+	elif [ "$test_type" == "threeheredoc" ];
+	then
+		echo "$heredoc3_content" | ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+	elif [ "$test_type" == "heredoc_with_expand" ];
+	then
+		echo "$heredoc4_content" | ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+
+
+
+: << BLOCK_COMMENT
+		echo -e "line1\nline2\nlimiter1\nerror\n" | ./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt"
+BLOCK_COMMENT
+
+: << BLOCK_COMMENT
+		./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt" <<< "line1
+	line2
+	limiter1"
+BLOCK_COMMENT
+
+: << BLOCK_COMMENT
+		./minishell 100 1>"temp/$test_index-minishell_stdout.txt" 2>"temp/$test_index-minishell_stderr.txt" << EOF
+	line1
+	line2
+	limiter1
+EOF
+BLOCK_COMMENT
+
+	fi
+
 	exit_code_minishell=$?
 #	echo "exit_code_minishell"
 #	echo "$exit_code_minishell"
@@ -273,12 +348,31 @@ then
 
 	if [ "$run_valgrind" == "yes" ]
 	then
-#	 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --trace-children=yes --error-exitcode=1 ./minishell 101
- 		valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
-#		beware : if minishell exit_code is 10, script will consider it as a valgrind_error	
-		exit_code_valgrind=$?
-#		echo "exit_code_valgrind"
-#		echo "$exit_code_valgrind"
+		if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ] && [ "$test_type" != "heredoc_with_expand" ]
+		then
+#		 	valgrind --suppressions=readline.supp --leak-check=full --track-fds=yes --trace-children=yes --error-exitcode=1 ./minishell 101
+ 			valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+#			beware : if minishell exit_code is 10, script will consider it as a valgrind_error	
+			exit_code_valgrind=$?
+#			echo "exit_code_valgrind"
+#			echo "$exit_code_valgrind"
+		elif [ "$test_type" == "oneheredoc" ];
+		then
+ 			echo "$heredoc1_content" | valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+			exit_code_valgrind=$?
+		elif [ "$test_type" == "twoheredoc" ];
+		then
+ 			echo "$heredoc2_content" | valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+			exit_code_valgrind=$?
+		elif [ "$test_type" == "threeheredoc" ];
+		then
+ 			echo "$heredoc3_content" | valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+			exit_code_valgrind=$?
+		elif [ "$test_type" == "heredoc_with_expand" ];
+		then
+ 			echo "$heredoc4_content" | valgrind --suppressions=readline.supp --leak-check=full --trace-children=yes --error-exitcode=10 ./minishell 101 1>/dev/null 2>&1
+			exit_code_valgrind=$?
+		fi
 	else
 		exit_code_valgrind=0
 	fi
@@ -288,8 +382,31 @@ then
 	diff_exit_outfile1=$?
 	diff_outfile2=$(diff "temp/$test_index-minishell_outfile2.txt" "temp/$test_index-bash_outfile2.txt" > /dev/null)
 	diff_exit_outfile2=$?
-	diff_stdout=$(diff "temp/$test_index-minishell_stdout.txt" "temp/$test_index-bash_stdout.txt" > /dev/null)
-	diff_exit_stdout=$?
+	
+	if [ "$test_type" != "oneheredoc" ] && [ "$test_type" != "twoheredoc" ] && [ "$test_type" != "threeheredoc" ] && [ "$test_type" != "heredoc_with_expand" ]
+	then
+		diff_stdout=$(diff "temp/$test_index-minishell_stdout.txt" "temp/$test_index-bash_stdout.txt" > /dev/null)
+		diff_exit_stdout=$?
+	elif [ "$test_type" == "oneheredoc" ];
+	then
+#		<(sed '3d' filename) is use to skip only the third line
+#		<(tail -n +4 filename) is use to skip the first, the two and third line
+		diff_stdout=$(diff <(tail -n +4 "temp/$test_index-minishell_stdout.txt") "temp/$test_index-bash_stdout.txt" > /dev/null)
+		diff_exit_stdout=$?
+	elif [ "$test_type" == "twoheredoc" ];
+	then
+		diff_stdout=$(diff <(tail -n +7 "temp/$test_index-minishell_stdout.txt") "temp/$test_index-bash_stdout.txt" > /dev/null)
+		diff_exit_stdout=$?
+	elif [ "$test_type" == "threeheredoc" ];
+	then
+		diff_stdout=$(diff <(tail -n +10 "temp/$test_index-minishell_stdout.txt") "temp/$test_index-bash_stdout.txt" > /dev/null)
+		diff_exit_stdout=$?
+	elif [ "$test_type" == "heredoc_with_expand" ];
+	then
+		diff_stdout=$(diff <(tail -n +4 "temp/$test_index-minishell_stdout.txt") "temp/$test_index-bash_stdout.txt" > /dev/null)
+		diff_exit_stdout=$?
+	fi
+
 	
 	empty_substring=""
 	if [ "$substring" = "$empty_substring" ] && [ ! -s "temp/$test_index-minishell_stderr.txt" ]
@@ -404,7 +521,7 @@ then
 	substring=""
 	delete_file "temp/tmp_to_execute_valgrind.txt"
 	exec 101>&-
-fi
+#fi
 	delete_infiles
 	delete_outfiles
 }
@@ -577,13 +694,13 @@ run_test "simple" 19 "< temp/infile1.txt cat | cat > temp/outfile1.txt	" 1 0
 run_test "simple" 20 "< temp/infile1.txt cat | cat > temp/outfile1.txt		" 1 0
 
 
-run_test "oneheredoc" 21 "<< limiter1 cat | cat > temp/outfile1.txt" 21 0
-run_test "oneheredoc" 22 "<<limiter1 cat | cat > temp/outfile1.txt" 21 0
-run_test "oneheredoc" 36 "<< limiter1 cat | cat		> temp/outfile1.txt" 21 0
-run_test "oneheredoc" 37 "<< limiter1 cat | cat >	temp/outfile1.txt" 21 0
-run_test "oneheredoc" 38 "<< limiter1 cat | cat >		temp/outfile1.txt" 21 0
-run_test "oneheredoc" 39 "<< limiter1 cat | cat > temp/outfile1.txt	" 21 0
-run_test "oneheredoc" 40 "<< limiter1 cat | cat > temp/outfile1.txt		" 21 0
+run_test "oneheredoc" 21 "<< limiter1 cat | cat > temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 22 "<<limiter1 cat | cat > temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 36 "<< limiter1 cat | cat		> temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 37 "<< limiter1 cat | cat >	temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 38 "<< limiter1 cat | cat >		temp/outfile1.txt" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 39 "<< limiter1 cat | cat > temp/outfile1.txt	" 21 0 "" "" "limiter1"
+run_test "oneheredoc" 40 "<< limiter1 cat | cat > temp/outfile1.txt		" 21 0 "" "" "limiter1"
 
 run_test "simple" 41 "< temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
 run_test "simple" 42 "<temp/infile1.txt cat | cat >> temp/outfile1.txt" 41 0
@@ -619,28 +736,28 @@ fi
 #: <<BLOCK_COMMENT
 
 
-run_test "oneheredoc" 61 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 62 "<<limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 63 "<< limiter1 cat| cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 64 "<< limiter1 cat |cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 65 "<< limiter1 cat | cat>> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 66 "<< limiter1 cat | cat >>temp/outfile1.txt" 61 0
-run_test "oneheredoc" 67 "<<limiter1 cat|cat >>temp/outfile1.txt" 61 0
-run_test "oneheredoc" 68 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 69 "<<	limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 70 "<<		limiter1 cat | cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 71 "<< limiter1 cat	| cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 72 "<< limiter1 cat		| cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 73 "<< limiter1 cat |	cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 74 "<< limiter1 cat |		cat >> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 75 "<< limiter1 cat | cat	>> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 76 "<< limiter1 cat | cat		>> temp/outfile1.txt" 61 0
-run_test "oneheredoc" 77 "<< limiter1 cat | cat >>	temp/outfile1.txt" 61 0
-run_test "oneheredoc" 78 "<< limiter1 cat | cat >>		temp/outfile1.txt" 61 0
-run_test "oneheredoc" 79 "<< limiter1 cat | cat >> temp/outfile1.txt	" 61 0
-run_test "oneheredoc" 80 "<< limiter1 cat | cat >> temp/outfile1.txt		" 61 0
+run_test "oneheredoc" 61 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 62 "<<limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 63 "<< limiter1 cat| cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 64 "<< limiter1 cat |cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 65 "<< limiter1 cat | cat>> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 66 "<< limiter1 cat | cat >>temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 67 "<<limiter1 cat|cat >>temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 68 "<< limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 69 "<<	limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 70 "<<		limiter1 cat | cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 71 "<< limiter1 cat	| cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 72 "<< limiter1 cat		| cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 73 "<< limiter1 cat |	cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 74 "<< limiter1 cat |		cat >> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 75 "<< limiter1 cat | cat	>> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 76 "<< limiter1 cat | cat		>> temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 77 "<< limiter1 cat | cat >>	temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 78 "<< limiter1 cat | cat >>		temp/outfile1.txt" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 79 "<< limiter1 cat | cat >> temp/outfile1.txt	" 61 0 "" "" "limiter1"
+run_test "oneheredoc" 80 "<< limiter1 cat | cat >> temp/outfile1.txt		" 61 0 "" "" "limiter1"
 
-if (( "$start_index" >= 61 ))
+if (( "$start_index" >= 61  && "$start_index" <= 80 && "$end_index" >= 61 && "$end_index" <= 80 ))
 then
 	if [ "$display" == "all" ]
 	then
@@ -714,25 +831,25 @@ then
 fi
 
 
-run_test "twoheredoc" 120 "<< limiter1 << limiter2" 120 0
-run_test "twoheredoc" 121 "<<limiter1 << limiter2" 120 0
-run_test "twoheredoc" 122 "<< limiter1 <<limiter2" 120 0
-run_test "twoheredoc" 123 "<<limiter1 <<limiter2" 120 0
-run_test "twoheredoc" 124 "<<limiter1<<limiter2" 120 0
-run_test "twoheredoc" 125 "<<limiter1<<limiter2" 120 0
-run_test "twoheredoc" 126 " <<	limiter1 << limiter2" 120 0
-run_test "twoheredoc" 127 " << limiter1	<< limiter2" 120 0
-run_test "twoheredoc" 128 " << limiter1 <<	limiter2" 120 0
-run_test "twoheredoc" 129 " << limiter1 << limiter2	" 120 0
-run_test "threeheredoc" 130 "<< limiter1 << limiter2 << limiter3" 130 0
-run_test "threeheredoc" 131 "<<limiter1 << limiter2 << limiter3" 130 0
-run_test "threeheredoc" 132 "<< limiter1 <<limiter2 << limiter3" 130 0
-run_test "threeheredoc" 133 "<< limiter1 << limiter2 <<limiter3" 130 0
-run_test "threeheredoc" 134 "<< limiter1 << limiter2 << limiter3" 130 0
-run_test "threeheredoc" 135 "<<limiter1 <<limiter2 << limiter3" 130 0
-run_test "threeheredoc" 136 "<<limiter1 <<limiter2 <<limiter3" 130 0
-run_test "threeheredoc" 137 "<<limiter1<<limiter2 <<limiter3" 130 0
-run_test "threeheredoc" 138 "<<limiter1<<limiter2<<limiter3" 130 0
+run_test "twoheredoc" 120 "<< limiter1 << limiter2 cat" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 121 "<<limiter1 << limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 122 "<< limiter1 <<limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 123 "<<limiter1 <<limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 124 "<<limiter1<<limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 125 "<<limiter1<<limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 126 " <<	limiter1 << limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 127 " << limiter1	<< limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 128 " << limiter1 <<	limiter2" 120 0 "" "" "limiter1" "limiter2"
+run_test "twoheredoc" 129 " << limiter1 << limiter2	" 120 0 "" "" "limiter1" "limiter2"
+run_test "threeheredoc" 130 "<< limiter1 << limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 131 "<<limiter1 << limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 132 "<< limiter1 <<limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 133 "<< limiter1 << limiter2 <<limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 134 "<< limiter1 << limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 135 "<<limiter1 <<limiter2 << limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 136 "<<limiter1 <<limiter2 <<limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 137 "<<limiter1<<limiter2 <<limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
+run_test "threeheredoc" 138 "<<limiter1<<limiter2<<limiter3" 130 0 "" "" "limiter1" "limiter2" "limiter3"
 
 if (( "$start_index" >= 120 && "$start_index" <= 138 && "$end_index" >= 120 && "$end_index" <= 138 ))
 then
@@ -787,14 +904,14 @@ run_test "simple" 168 "> '\"temp/outfile1.txt\"'" 168 1 "\"temp/outfile1.txt\": 
 run_test "simple" 169 "> \"'temp/outfile1.txt'\"" 169 1 "'temp/outfile1.txt': No such file or directory"
 run_test "simple" 170 "> '\"'temp/outfile1.txt'\"'" 170 1 "\"temp/outfile1.txt\": No such file or directory"
 run_test "simple" 171 "> \"'\"temp/outfile1.txt\"'\"" 171 1 "'temp/outfile1.txt': No such file or directory"
-run_test "oneheredoc" 172 "<< 'limiter'" 172 0
-run_test "oneheredoc" 173 "<< \"limiter\"" 173 0
-run_test "oneheredoc" 174 "<< '\"limiter\"'" 174 0
-run_test "oneheredoc" 175 "<< \"'limiter'\"" 175 0
-run_test "oneheredoc" 176 "<< '\"'limiter'\"'" 176 0
-run_test "oneheredoc" 177 "<< \"'\"limiter\"'\"" 177 0
-run_test "oneheredoc" 178 "<< '<limiter'" 178 0
-run_test "oneheredoc" 179 "<< \"<limiter\"" 179 0
+run_test "oneheredoc" 172 "<< 'limiter1'" 172 0 "" "" "limiter1"
+run_test "oneheredoc" 173 "<< \"limiter1\"" 173 0 "" "" "limiter1"
+run_test "oneheredoc" 174 "<< '\"limiter1\"'" 174 0 "" "" "\"limiter1\""
+run_test "oneheredoc" 175 "<< \"'limiter1'\"" 175 0 "" "" "'limiter1'"
+run_test "oneheredoc" 176 "<< '\"'limiter1'\"'" 176 0 "" "" "\"limiter1\""
+run_test "oneheredoc" 177 "<< \"'\"limiter1\"'\"" 177 0 "" "" "'limiter1'"
+run_test "oneheredoc" 178 "<< '<limiter1'" 178 0 "" "" "<limiter1"
+run_test "oneheredoc" 179 "<< \"<limiter1\"" 179 0 "" "" "<limiter1"
 
 run_test "simple" 190 ">> 'temp/outfile1.txt'" 190 0
 run_test "simple" 191 ">> \"temp/outfile1.txt\"" 191 0
@@ -815,7 +932,7 @@ fi
 
 
 run_test "simple" 200 "\"< temp/infile1.txt\"" 200 127 "< temp/infile1.txt: No such file or directory"
-run_test "oneheredoc" 210 "\"<< limiter\"" 210 127 "<< temp/infile1.txt: No such file or directory"
+run_test "simple" 210 "\"<< limiter1\"" 210 127 "<< limiter1: command not found"
 run_test "simple" 220 "\"> temp/outfile1.txt\"" 220 127 "> temp/outfile1.txt: No such file or directory"
 run_test "simple" 230 "\">> temp/outfile1.txt\"" 230 127 ">> temp/outfile1.txt: No such file or directory"
 
@@ -1325,9 +1442,6 @@ then
 	fi
 fi
 
-
-
-
 export TEST1="test1"
 export TEST2="test2"
 export TEST3="salut     les     amis"
@@ -1384,7 +1498,7 @@ fi
 
 export INFILE="temp/infile1.txt"
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1700 && "$start_index" <= 1719 && "$end_index" >= 1700 && "$end_index" <= 1719 ))
 then
 	if [ "$display" == "all" ]
 	then
@@ -1418,7 +1532,7 @@ unset INFILE
 
 export OUTFILE="temp/outfile1.txt"
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1700 && "$start_index" <= 1759 && "$end_index" >= 1700 && "$end_index" <= 1759 ))
 then
 	if [ "$display" == "all" ]
 	then
@@ -1450,63 +1564,60 @@ run_test "simple" 1758 "> \"		\$OUTFILE		\"" 1758 0
 run_test "simple" 1759 "> \"OUTFILE \$OUTFILE\"" 1759 0
 unset OUTFILE
 
-: <<BLOCK_COMMENT
+#: <<BLOCK_COMMENT
 
-export LIMITER="limiter"
+export LIMITER="limiter1"
+export TEST1="salut"
+export TEST2="les"
+export TEST3="amis"
+export TEST4="     salut     les     amis     "
+export TEST5="     salut     les     amis"
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1770 && "$start_index" <= 1810 && "$end_index" >= 1770 && "$end_index" <= 1810 ))
 then
 	if [ "$display" == "all" ]
 	then
 		echo ""
-		echo "\$LIMITER = \"limiter\""
+		echo "\$LIMITER = \"limiter1\""
 		echo ""
 	fi
 fi
 
-run_test "heredoc" 1780 "<< \$LIMITER" 1780 0
-run_test "heredoc" 1781 "<< \$DO_NOT_EXIST" 1781 0
-run_test "heredoc" 1782 "<< '\$LIMITER'" 1782 0
-run_test "heredoc" 1783 "<< \"\$LIMITER\"" 1782 0
-run_test "heredoc" 1784 "<< '\"\$LIMITER\"'" 1784 0
-run_test "heredoc" 1785 "<< \"'\"\$LIMITER\"'\"" 1785 0
-run_test "heredoc" 1786 "<< \"\$LIMITER \$LIMITER\"" 1786 0
-run_test "heredoc" 1787 "<< \" \$LIMITER\"" 1787 0
-run_test "heredoc" 1788 "<< \"  \$LIMITER\"" 1788 0
-run_test "heredoc" 1789 "<< \"\$LIMITER \"" 1789 0
-run_test "heredoc" 1790 "<< \"\$LIMITER  \"" 1790 0
-run_test "heredoc" 1791 "<< \" \$LIMITER \"" 1791 0
-run_test "heredoc" 1792 "<< \"  \$LIMITER  \"" 1792 0
-run_test "heredoc" 1793 "<< \"	\$LIMITER\"" 1793 0
-run_test "heredoc" 1794 "<< \"\$LIMITER	\"" 1794 0
-run_test "heredoc" 1795 "<< \"		\$LIMITER\"" 1795 0
-run_test "heredoc" 1796 "<< \"\$LIMITER		\"" 1796 0
-run_test "heredoc" 1797 "<< \"	\$LIMITER	\"" 1797 0
-run_test "heredoc" 1798 "<< \"		\$LIMITER		\"" 1798 0
-run_test "heredoc" 1799 "<< \"LIMITER \$LIMITER\"" 1799 0
+run_test "oneheredoc" 1770 "<< \$LIMITER" 1770 0 "" "" "\$LIMITER"
+run_test "oneheredoc" 1771 "<< \$DO_NOT_EXIST" 1771 0 "" "" "\$DO_NOT_EXIST"
+run_test "oneheredoc" 1772 "<< '\$LIMITER'" 1772 0 "" "" "\$LIMITER"
+run_test "oneheredoc" 1773 "<< \"\$LIMITER\"" 1772 0 "" "" "\$LIMITER"
+run_test "oneheredoc" 1774 "<< '\"\$LIMITER\"'" 1774 0 "" "" "\"\$LIMITER\""
+run_test "oneheredoc" 1775 "<< \"'\"\$LIMITER\"'\"" 1775 0 "" "" "'\$LIMITER'"
+run_test "oneheredoc" 1776 "<< \"\$LIMITER \$LIMITER\"" 1776 0 "" "" "\$LIMITER \$LIMITER"
+run_test "oneheredoc" 1777 "<< \" \$LIMITER\"" 1777 0 "" "" " \$LIMITER"
+run_test "oneheredoc" 1778 "<< \"  \$LIMITER\"" 1778 0 "" "" "  \$LIMITER"
+run_test "oneheredoc" 1779 "<< \"\$LIMITER \"" 1779 0 "" "" "\$LIMITER "
+run_test "oneheredoc" 1780 "<< \"\$LIMITER  \"" 1780 0 "" "" "\$LIMITER  "
+run_test "oneheredoc" 1781 "<< \" \$LIMITER \"" 1781 0 "" "" " \$LIMITER "
+run_test "oneheredoc" 1782 "<< \"  \$LIMITER  \"" 1782 0 "" "" "  \$LIMITER  "
+run_test "oneheredoc" 1783 "<< \"	\$LIMITER\"" 1783 0 "" "" "	\$LIMITER"
+run_test "oneheredoc" 1784 "<< \"\$LIMITER	\"" 1784 0 "" "" "\$LIMITER	"
+run_test "oneheredoc" 1785 "<< \"		\$LIMITER\"" 1785 0 "" "" "		\$LIMITER"
+run_test "oneheredoc" 1786 "<< \"\$LIMITER		\"" 1786 0 "" "" "\$LIMITER		"
+run_test "oneheredoc" 1787 "<< \"	\$LIMITER	\"" 1787 0 "" "" "	\$LIMITER	"
+run_test "oneheredoc" 1788 "<< \"		\$LIMITER		\"" 1788 0 "" "" "		\$LIMITER		"
+run_test "oneheredoc" 1789 "<< \"LIMITER \$LIMITER\"" 1789 0 "" "" "LIMITER \$LIMITER"
 
-tester contenu du heredoc avec :
+run_test "heredoc_with_expand" 1790 "<< limiter1 cat" 1790 0 "" "" "limiter1"
 
-TEST1="salut"
-TEST2="les"
-TEST3="amis"
-TEST4="     salut     les     amis     "
-\$TEST1
-\$TEST1 \$TEST2
-\$TEST1\$TEST2
-\$TEST1 \$TEST2 \$TEST3
-\$TEST1\$TEST2\$TEST3
-\$TEST4
-\$TEST1 \$TEST4
-\$TEST1\$TEST4
 
 unset LIMITER
+unset TEST1
+unset TEST2
+unset TEST3
+unset TEST4
+unset TEST5
 
-BLOCK_COMMENT
 
 export OUTFILE="temp/outfile1.txt"
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1820 && "$start_index" <= 1838 && "$end_index" >= 1820 && "$end_index" <= 1838 ))
 then
 	if [ "$display" == "all" ]
 	then
@@ -1537,15 +1648,88 @@ run_test "simple" 1837 ">> \"	\$OUTFILE	\"" 1837 0
 run_test "simple" 1838 ">> \"		\$OUTFILE		\"" 1838 0
 unset OUTFILE
 
-if (( "$start_index" >= 1700 && "$start_index" <= 1900 && "$end_index" >= 1700 && "$end_index" <= 1900 ))
+if (( "$start_index" >= 1700 && "$start_index" <= 1850 && "$end_index" >= 1700 && "$end_index" <= 1850 ))
 then
 	if [ "$display" == "all" ]
 	then
-		echo -e "end of test serie from 1700 to 1900\n"
+		echo -e "end of test serie from 1700 to 1850\n"
 	else
-		echo -e "end of test serie from 1700 to 1900"
+		echo -e "end of test serie from 1700 to 1850"
 	fi
 fi
+
+export TEST1
+export TEST2=
+export TEST3=""
+export TEST4=" "
+export TEST5="	"
+
+if (( "$start_index" >= 1900 && "$start_index" <= 1950 && "$end_index" >= 1900 && "$end_index" <= 1950 ))
+then
+	if [ "$display" == "all" ]
+	then
+		echo ""
+		echo "\$TEST1"
+		echo "\$TEST2 ="
+		echo "\$TEST3 = \"\""
+		echo "\$TEST4 = \" \""
+		echo "\$TEST5 = \"	\""
+		echo ""
+	fi
+fi
+
+run_test "simple" 1900 "< \$TEST1 cat" 1900 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1901 "< \$TEST1 ls" 1901 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1902 "< \$TEST1 cat | cat" 1902 0 "\$TEST1: ambiguous redirect"
+run_test "simple" 1903 "< \$TEST1 cat | ls" 1903 0 "\$TEST1: ambiguous redirect"
+run_test "simple" 1904 "< \$TEST1 < temp/infile1.txt cat" 1904 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1905 "< temp/infile1.txt < \$TEST1 cat" 1905 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1906 "< \$TEST1 < do_not_exist cat" 1906 1 "\$TEST1: ambiguous redirect"
+run_test "simple" 1907 "< do_not_exist < \$TEST1 cat" 1907 1 "do_not_exist: No such file or directory"
+
+run_test "simple" 1910 "< \$TEST2 cat" 1910 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1911 "< \$TEST2 ls" 1911 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1912 "< \$TEST2 cat | cat" 1912 0 "\$TEST2: ambiguous redirect"
+run_test "simple" 1913 "< \$TEST2 cat | ls" 1913 0 "\$TEST2: ambiguous redirect"
+run_test "simple" 1914 "< \$TEST2 < temp/infile1.txt cat" 1914 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1915 "< temp/infile1.txt < \$TEST2 cat" 1915 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1916 "< \$TEST2 < do_not_exist cat" 1916 1 "\$TEST2: ambiguous redirect"
+run_test "simple" 1917 "< do_not_exist < \$TEST2 cat" 1917 1 "do_not_exist: No such file or directory"
+
+run_test "simple" 1920 "< \$TEST3 cat" 1920 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1921 "< \$TEST3 ls" 1921 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1922 "< \$TEST3 cat | cat" 1922 0 "\$TEST3: ambiguous redirect"
+run_test "simple" 1923 "< \$TEST3 cat | ls" 1923 0 "\$TEST3: ambiguous redirect"
+run_test "simple" 1924 "< \$TEST3 < temp/infile1.txt cat" 1924 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1925 "< temp/infile1.txt < \$TEST3 cat" 1925 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1926 "< \$TEST3 < do_not_exist cat" 1926 1 "\$TEST3: ambiguous redirect"
+run_test "simple" 1927 "< do_not_exist < \$TEST3 cat" 1927 1 "do_not_exist: No such file or directory"
+
+run_test "simple" 1930 "< \$TEST4 cat" 1930 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1931 "< \$TEST4 ls" 1931 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1932 "< \$TEST4 cat | cat" 1932 0 "\$TEST4: ambiguous redirect"
+run_test "simple" 1933 "< \$TEST4 cat | ls" 1933 0 "\$TEST4: ambiguous redirect"
+run_test "simple" 1934 "< \$TEST4 < temp/infile1.txt cat" 1934 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1935 "< temp/infile1.txt < \$TEST4 cat" 1935 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1936 "< \$TEST4 < do_not_exist cat" 1936 1 "\$TEST4: ambiguous redirect"
+run_test "simple" 1937 "< do_not_exist < \$TEST4 cat" 1937 1 "do_not_exist: No such file or directory"
+
+run_test "simple" 1940 "< \$TEST5 cat" 1940 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1941 "< \$TEST5 ls" 1941 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1942 "< \$TEST5 cat | cat" 1942 0 "\$TEST5: ambiguous redirect"
+run_test "simple" 1943 "< \$TEST5 cat | ls" 1943 0 "\$TEST5: ambiguous redirect"
+run_test "simple" 1944 "< \$TEST5 < temp/infile1.txt cat" 1944 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1945 "< temp/infile1.txt < \$TEST5 cat" 1945 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1946 "< \$TEST5 < do_not_exist cat" 1946 1 "\$TEST5: ambiguous redirect"
+run_test "simple" 1947 "< do_not_exist < \$TEST5 cat" 1947 1 "do_not_exist: No such file or directory"
+
+unset TEST1
+unset TEST2
+unset TEST3
+unset TEST4
+unset TEST5
+
+
 
 run_test "simple" 2000 "<" 2000 2 "syntax error"
 run_test "simple" 2001 "< <" 2001 2 "syntax error"
@@ -1730,52 +1914,54 @@ run_test "simple" 2331 ".././.." 2331 126 ".././..: Is a directory"
 run_test "simple" 2332 "/./../../../../../.." 2332 126 "/./../../../../../..: Is a directory"
 run_test "simple" 2333 "././../../../../../.." 2333 126 "././../../../../../..: Is a directory"
 
+run_test "simple" 2340 "." 2340 2 ".: filename argument required"
+run_test "simple" 2345 ".." 2345 127 "..: command not found"
 
 
 
-run_test "simple" 3000 "<<< infile.txt" 3000 2 "syntax error" "invalid test because bash has a special behaviour"
-run_test "simple" 3001 "<<<< infile.txt" 3001 2 "syntax error"
-run_test "simple" 3002 "<<<<< infile.txt" 3002 2 "syntax error"
-run_test "simple" 3003 "<<> infile.txt" 3003 2 "syntax error"
-run_test "simple" 3004 "<<>> infile.txt" 3004 2 "syntax error"
-run_test "simple" 3005 "<<>>> infile.txt" 3005 2 "syntax error"
-run_test "simple" 3006 "<<>>>> infile.txt" 3006 2 "syntax error"
-run_test "simple" 3007 "<<>< infile.txt" 3007 2 "syntax error"
-run_test "simple" 3008 "<<><< infile.txt" 3008 2 "syntax error"
-run_test "simple" 3009 "<<><<< infile.txt" 3009 2 "syntax error"
-run_test "simple" 3010 "<<><<<< infile.txt" 3010 2 "syntax error"
-run_test "simple" 3011 "<<><> infile.txt" 3011 2 "syntax error"
-run_test "simple" 3012 "<<><>> infile.txt" 3012 2 "syntax error"
-run_test "simple" 3013 "<<><>>> infile.txt" 3013 2 "syntax error"
-run_test "simple" 3014 "<<><>>>> infile.txt" 3014 2 "syntax error"
-run_test "simple" 3015 "<> infile.txt" 3015 2 "syntax error" "invalid test because bash has a special behaviour"
-run_test "simple" 3016 "<>> infile.txt" 3016 2 "syntax error"
-run_test "simple" 3017 "<>>> infile.txt" 3017 2 "syntax error"
-run_test "simple" 3018 "<>>>> infile.txt" 3018 2 "syntax error"
-run_test "simple" 3019 "<>>>>> infile.txt" 3019 2 "syntax error"
-run_test "simple" 3020 "<>< infile.txt" 3020 2 "syntax error"
-run_test "simple" 3021 "<><< infile.txt" 3021 2 "syntax error"
-run_test "simple" 3022 "<><<< infile.txt" 3022 2 "syntax error"
-run_test "simple" 3023 "<><<<< infile.txt" 3023 2 "syntax error"
-run_test "simple" 3024 "<><> infile.txt" 3024 2 "syntax error"
-run_test "simple" 3025 "<><>> infile.txt" 3025 2 "syntax error"
-run_test "simple" 3026 "<><>>> infile.txt" 3026 2 "syntax error"
-run_test "simple" 3027 "<><>>>> infile.txt" 3027 2 "syntax error"
-run_test "simple" 3028 "<><>>>>> infile.txt" 3028 2 "syntax error"
-run_test "simple" 3029 ">>> outfile.txt" 3029 2 "syntax error"
-run_test "simple" 3030 ">>>> outfile.txt" 3030 2 "syntax error"
-run_test "simple" 3031 ">>>>> outfile.txt" 3031 2 "syntax error"
-run_test "simple" 3032 ">>>>>> outfile.txt" 3032 2 "syntax error"
-run_test "simple" 3033 ">>< outfile.txt" 3033 2 "syntax error"
-run_test "simple" 3034 ">><< outfile.txt" 3034 2 "syntax error"
-run_test "simple" 3035 ">><<< outfile.txt" 3035 2 "syntax error"
-run_test "simple" 3036 ">><<<< outfile.txt" 3036 2 "syntax error"
-run_test "simple" 3037 ">><<<<< outfile.txt" 3037 2 "syntax error"
-run_test "simple" 3038 ">><> outfile.txt" 3038 2 "syntax error"
-run_test "simple" 3039 ">><>> outfile.txt" 3039 2 "syntax error"
-run_test "simple" 3040 ">><>>> outfile.txt" 3040 2 "syntax error"
-run_test "simple" 3041 ">><>>>> outfile.txt" 3041 2 "syntax error"
-run_test "simple" 3042 ">><>>>>> outfile.txt" 3042 2 "syntax error"
+run_test "simple" 3000 "<<< infile1.txt" 3000 2 "syntax error" "invalid test because bash has a special behaviour"
+run_test "simple" 3001 "<<<< infile1.txt" 3001 2 "syntax error"
+run_test "simple" 3002 "<<<<< infile1.txt" 3002 2 "syntax error"
+run_test "simple" 3003 "<<> infile1.txt" 3003 2 "syntax error"
+run_test "simple" 3004 "<<>> infile1.txt" 3004 2 "syntax error"
+run_test "simple" 3005 "<<>>> infile1.txt" 3005 2 "syntax error"
+run_test "simple" 3006 "<<>>>> infile1.txt" 3006 2 "syntax error"
+run_test "simple" 3007 "<<>< infile1.txt" 3007 2 "syntax error"
+run_test "simple" 3008 "<<><< infile1.txt" 3008 2 "syntax error"
+run_test "simple" 3009 "<<><<< infile1.txt" 3009 2 "syntax error"
+run_test "simple" 3010 "<<><<<< infile1.txt" 3010 2 "syntax error"
+run_test "simple" 3011 "<<><> infile1.txt" 3011 2 "syntax error"
+run_test "simple" 3012 "<<><>> infile1.txt" 3012 2 "syntax error"
+run_test "simple" 3013 "<<><>>> infile1.txt" 3013 2 "syntax error"
+run_test "simple" 3014 "<<><>>>> infile1.txt" 3014 2 "syntax error"
+run_test "simple" 3015 "<> infile1.txt" 3015 2 "syntax error" "invalid test because bash has a special behaviour"
+run_test "simple" 3016 "<>> infile1.txt" 3016 2 "syntax error"
+run_test "simple" 3017 "<>>> infile1.txt" 3017 2 "syntax error"
+run_test "simple" 3018 "<>>>> infile1.txt" 3018 2 "syntax error"
+run_test "simple" 3019 "<>>>>> infile1.txt" 3019 2 "syntax error"
+run_test "simple" 3020 "<>< infile1.txt" 3020 2 "syntax error"
+run_test "simple" 3021 "<><< infile1.txt" 3021 2 "syntax error"
+run_test "simple" 3022 "<><<< infile1.txt" 3022 2 "syntax error"
+run_test "simple" 3023 "<><<<< infile1.txt" 3023 2 "syntax error"
+run_test "simple" 3024 "<><> infile1.txt" 3024 2 "syntax error"
+run_test "simple" 3025 "<><>> infile1.txt" 3025 2 "syntax error"
+run_test "simple" 3026 "<><>>> infile1.txt" 3026 2 "syntax error"
+run_test "simple" 3027 "<><>>>> infile1.txt" 3027 2 "syntax error"
+run_test "simple" 3028 "<><>>>>> infile1.txt" 3028 2 "syntax error"
+run_test "simple" 3029 ">>> outfile1.txt" 3029 2 "syntax error"
+run_test "simple" 3030 ">>>> outfile1.txt" 3030 2 "syntax error"
+run_test "simple" 3031 ">>>>> outfile1.txt" 3031 2 "syntax error"
+run_test "simple" 3032 ">>>>>> outfile1.txt" 3032 2 "syntax error"
+run_test "simple" 3033 ">>< outfile1.txt" 3033 2 "syntax error"
+run_test "simple" 3034 ">><< outfile1.txt" 3034 2 "syntax error"
+run_test "simple" 3035 ">><<< outfile1.txt" 3035 2 "syntax error"
+run_test "simple" 3036 ">><<<< outfile1.txt" 3036 2 "syntax error"
+run_test "simple" 3037 ">><<<<< outfile1.txt" 3037 2 "syntax error"
+run_test "simple" 3038 ">><> outfile1.txt" 3038 2 "syntax error"
+run_test "simple" 3039 ">><>> outfile1.txt" 3039 2 "syntax error"
+run_test "simple" 3040 ">><>>> outfile1.txt" 3040 2 "syntax error"
+run_test "simple" 3041 ">><>>>> outfile1.txt" 3041 2 "syntax error"
+run_test "simple" 3042 ">><>>>>> outfile1.txt" 3042 2 "syntax error"
 
 if (( "$start_index" >= 3000 && "$start_index" <= 3050 && "$end_index" >= 3000 && "$end_index" <= 3050 ))
 then
@@ -1787,39 +1973,39 @@ then
 	fi
 fi
 
-run_test "simple" 3300 "< 'infile.txt" 3300 2  "syntax error"
-run_test "simple" 3301 "< infile.txt'" 3301 2 "syntax error"
-run_test "simple" 3302 "< \"infile.txt" 3302 2 "syntax error"
-run_test "simple" 3303 "< infile.txt\"" 3303 2 "syntax error"
-run_test "simple" 3304 "< 'infile.txt\"" 3304 2 "syntax error"
-run_test "simple" 3305 "< 'infile.txt'\"" 3305 2 "syntax error"
-#run_test "simple" 3306 "< \"infile.txt'\"" 3306 2 "syntax error"
-run_test "simple" 3307 "< \"infile.txt\"'" 3307 2 "syntax error"
-run_test "simple" 3308 "<< 'infile.txt" 3308 2 "syntax error"
-run_test "simple" 3309 "<< infile.txt'" 3309 2 "syntax error"
-run_test "simple" 3310 "<< \"infile.txt" 3310 2 "syntax error"
-run_test "simple" 3311 "<< infile.txt\"" 3311 2 "syntax error"
-run_test "simple" 3312 "<< 'infile.txt\"" 3312 2 "syntax error"
-run_test "simple" 3313 "<< 'infile.txt'\"" 3313 2 "syntax error"
-#run_test "simple" 3314 "<< \"infile.txt'\"" 3314 2 "syntax error"
-run_test "simple" 3315 "<< \"infile.txt\"'" 3315 2 "syntax error"
+run_test "simple" 3300 "< 'infile1.txt" 3300 2  "syntax error"
+run_test "simple" 3301 "< infile1.txt'" 3301 2 "syntax error"
+run_test "simple" 3302 "< \"infile1.txt" 3302 2 "syntax error"
+run_test "simple" 3303 "< infile1.txt\"" 3303 2 "syntax error"
+run_test "simple" 3304 "< 'infile1.txt\"" 3304 2 "syntax error"
+run_test "simple" 3305 "< 'infile1.txt'\"" 3305 2 "syntax error"
+#run_test "simple" 3306 "< \"infile1.txt'\"" 3306 2 "syntax error"
+run_test "simple" 3307 "< \"infile1.txt\"'" 3307 2 "syntax error"
+run_test "simple" 3308 "<< 'infile1.txt" 3308 2 "syntax error"
+run_test "simple" 3309 "<< infile1.txt'" 3309 2 "syntax error"
+run_test "simple" 3310 "<< \"infile1.txt" 3310 2 "syntax error"
+run_test "simple" 3311 "<< infile1.txt\"" 3311 2 "syntax error"
+run_test "simple" 3312 "<< 'infile1.txt\"" 3312 2 "syntax error"
+run_test "simple" 3313 "<< 'infile1.txt'\"" 3313 2 "syntax error"
+#run_test "simple" 3314 "<< \"infile1.txt'\"" 3314 2 "syntax error"
+run_test "simple" 3315 "<< \"infile1.txt\"'" 3315 2 "syntax error"
 
-run_test "simple" 3400 "> 'outfile.txt" 3400 2 "syntax error"
-run_test "simple" 3401 "> outfile.txt'" 3401 2 "syntax error"
-run_test "simple" 3402 "> \"outfile.txt" 3402 2 "syntax error"
-run_test "simple" 3403 "> outfile.txt\"" 3403 2 "syntax error"
-run_test "simple" 3404 "> 'outfile.txt\"" 3404 2 "syntax error"
-run_test "simple" 3405 "> 'outfile.txt'\"" 3405 2 "syntax error"
-#run_test "simple" 3406 "> \"outfile.txt'\"" 3406 2 "syntax error"
-run_test "simple" 3407 "> \"outfile.txt\"'" 3407 2 "syntax error"
-run_test "simple" 3408 ">> 'outfile.txt" 3408 2 "syntax error"
-run_test "simple" 3409 ">> outfile.txt'" 3409 2 "syntax error"
-run_test "simple" 3410 ">> \"outfile.txt" 3410 2 "syntax error"
-run_test "simple" 3411 ">> outfile.txt\"" 3411 2 "syntax error"
-run_test "simple" 3412 ">> 'outfile.txt\"" 3412 2 "syntax error"
-run_test "simple" 3413 ">> 'outfile.txt'\"" 3413 2 "syntax error"
-#run_test "simple" 3414 ">> \"outfile.txt'\"" 3414 2 "syntax error"
-run_test "simple" 3415 ">> \"outfile.txt\"'" 3415 2 "syntax error"
+run_test "simple" 3400 "> 'outfile1.txt" 3400 2 "syntax error"
+run_test "simple" 3401 "> outfile1.txt'" 3401 2 "syntax error"
+run_test "simple" 3402 "> \"outfile1.txt" 3402 2 "syntax error"
+run_test "simple" 3403 "> outfile1.txt\"" 3403 2 "syntax error"
+run_test "simple" 3404 "> 'outfile1.txt\"" 3404 2 "syntax error"
+run_test "simple" 3405 "> 'outfile1.txt'\"" 3405 2 "syntax error"
+#run_test "simple" 3406 "> \"outfile1.txt'\"" 3406 2 "syntax error"
+run_test "simple" 3407 "> \"outfile1.txt\"'" 3407 2 "syntax error"
+run_test "simple" 3408 ">> 'outfile1.txt" 3408 2 "syntax error"
+run_test "simple" 3409 ">> outfile1.txt'" 3409 2 "syntax error"
+run_test "simple" 3410 ">> \"outfile1.txt" 3410 2 "syntax error"
+run_test "simple" 3411 ">> outfile1.txt\"" 3411 2 "syntax error"
+run_test "simple" 3412 ">> 'outfile1.txt\"" 3412 2 "syntax error"
+run_test "simple" 3413 ">> 'outfile1.txt'\"" 3413 2 "syntax error"
+#run_test "simple" 3414 ">> \"outfile1.txt'\"" 3414 2 "syntax error"
+run_test "simple" 3415 ">> \"outfile1.txt\"'" 3415 2 "syntax error"
 
 if (( "$start_index" >= 3300 && "$start_index" <= 3415 && "$end_index" >= 3300 && "$end_index" <= 3415 ))
 then
@@ -2139,7 +2325,7 @@ run_test "simple" 4874 "cat <\"./test_files/infile1\" | grep hello\" | echo hi" 
 run_test "simple" 4875 "cat <\"./temp/infile_big.txt\" | echo hi" 4875 0
 
 
-
+#366
 run_test "simple" 4933 "\$PWD" 4933 126 ": Is a directory"
 
 mkdir ./temp/no_permission_dir
@@ -2174,6 +2360,8 @@ run_test "simple" 4962 "/nix" 4962 126 "/nix: Is a directory"
 
 run_test "simple" 4970 "temp" 4970 127 "temp: command not found"
 
+#444
+run_test "simple" 4980 "echo \$\"42\$'HOME'" 4980 0
 
 
 if (( "$start_index" >= 4800 && "$start_index" <= 4999 && "$end_index" >= 4800 && "$end_index" <= 4999 ))
@@ -2377,11 +2565,18 @@ run_test "simple" 7313 "< temp/infile_without_permission > temp/outfile1.txt cat
 run_test "simple" 7314 "> temp/outfile1.txt < temp/infile_without_permission cat -e" 7314 1 "temp/infile_without_permission: Permission denied"
 run_test "simple" 7315 "< temp/infile_without_permission > temp/outfile1.txt invalid_command" 7315 1 "temp/infile_without_permission: Permission denied"
 run_test "simple" 7316 "invalid_command < temp/infile_without_permission > temp/outfile1.txt" 7316 1 "temp/infile_without_permission: Permission denied"
+run_test "simple" 7317 "Tests/executable_no_permission" 7317 126 "Tests/executable_no_permission: Permission denied"
+run_test "simple" 7318 "Tests/file_whith_segfault" 7318 139 "segmentation fault  ./file_with_segfault"
+
 
 chmod 644 temp/outfile_without_permission
 delete_file temp/outfile_without_permission
 chmod 644 temp/infile_without_permission
 delete_file temp/infile_without_permission
+
+#unset PATH
+#run_test "simple" 8000 "echo \$PATH" 8000 0
+#run_test "simple" 8001 "ls" 8001 127 "ls: No such file or directory"
 
 
 # -g for greater than and -ge for greater than or equal to
@@ -2391,6 +2586,10 @@ then
 else
 	echo -e "${GREEN}no error detected${NC}"
 fi
+
+delete_file "\$OUTFILE"
+delete_file "\"\$OUTFILE\""
+
 #delete_files
 
 exit

@@ -6,64 +6,50 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 14:39:39 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/08/23 14:38:53 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	expand_content_heredoc_when_dollar_first(char *str, \
-char **tmp, t_command_line **command_line)
+void	add_to_definitive_content(char **definitive_content, \
+char *extracted_line, t_command_line **command_line, char *str)
 {
-	int	len;
-
-	len = 0;
-	if (str[1] != '\"' && str[1] != '\'' && (str[1]) != 0)
-	{
-		len += get_len_and_extract_after_first_dollar(str, tmp, command_line);
-		expand_string_after_dollar1(tmp, command_line);
-	}
+	if (!*definitive_content)
+		*definitive_content = ft_strdup(extracted_line);
 	else
-		len += get_len_and_extract_until_next_separator_dollar_excluded \
-		(str, tmp);
-	return (len);
+		*definitive_content = \
+		ft_strjoin_freed(*definitive_content, extracted_line);
+	extracted_line = free_and_null(extracted_line);
+	if (!*definitive_content)
+	{
+		free(str);
+		error_allocation_command_line_and_exit(command_line);
+	}
 }
 
-void	expand_content_when_heredoc(char **str, t_command_line **command_line, \
-bool flag_for_expand)
+void	check_ambiguous_redirection(char **extracted_line, \
+t_native_redirection **n_redirection)
 {
-	int		i;
-	char	*tmp;
-	char	*result;
+	size_t	len;
+	size_t	len_to_separator;
 
-	i = 0;
-	result = NULL;
-	while (str[0][i])
-	{
-		if (str[0][i] == '$')
-		{
-			if (flag_for_expand == true)
-				i += expand_content_heredoc_when_dollar_first \
-				(&str[0][i], &tmp, command_line);
-			else
-			{
-				i += get_len_and_extract_until_next_dollar_first_dollar_excluded(&str[0][i], &tmp);
-			}
-		}
-		else
-			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp, \
-			command_line);
-		if (!result)
-		{
-			result = ft_strdup_freed(tmp);
-			tmp = NULL;
-		}
-		else
-		{
-			result = ft_strjoin_freed(result, tmp);
-			tmp = free_and_null(tmp);
-		}
-	}
-	free(*str);
-	*str = ft_strdup_freed(result);
+	len = ft_strlen(*extracted_line);
+	len_to_separator = ft_strcspn(*extracted_line, " \t\n\v\f\r\0");
+	if (len == 0 || len_to_separator < len)
+		(*n_redirection)->t_redirection = REDIRECTION_AMBIGUOUS;
+}
+
+void	add_exp_arguments(t_expanded_argument **exp_arguments, \
+char **definitive_content, t_command_line **command_line)
+{
+	t_expanded_argument	*exp_argument;
+
+	exp_argument = NULL;
+	init_expanded_argument_struct(&exp_argument, command_line);
+	exp_argument->content = ft_strdup_freed(*definitive_content);
+	*definitive_content = NULL;
+	if (!exp_argument->content)
+		error_allocation_command_line_and_exit(command_line);
+	ft_lst_add_back5(exp_arguments, exp_argument);
 }

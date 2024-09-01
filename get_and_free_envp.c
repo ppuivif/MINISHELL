@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_and_free_envp.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:41 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/19 14:39:20 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/01 19:03:00 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,10 @@ static void	add_line(char *envp, t_envp_struct **envp_struct)
 		exit(EXIT_FAILURE);
 	}
 	new_element->name = ft_substr(envp, 0, ft_strcspn(envp, "="));
-	new_element->equal = 1;
+	if (ft_strcspn(envp, "=") < (int)ft_strlen(envp))
+		new_element->equal = 1;
+	else
+		new_element->equal = 0;
 	new_element->value = ft_substr(envp, ft_strcspn(envp, "=") + 1, \
 		ft_strlen(envp));
 	ft_lst_add_back6(envp_struct, new_element);
