@@ -6,15 +6,14 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/02 11:05:09 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 17:48:57 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
 int	open_and_check_file(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection, t_exec_substring **exec_substring, \
-t_exec_struct **exec_struct)
+t_exec_redirection **exec_redirection, t_exec_substring **exec_substring)
 {
 	int	status_code;
 
@@ -26,9 +25,6 @@ t_exec_struct **exec_struct)
 	else if (exp_redirection->t_redirection == REDIRECTION_INFILE && \
 	(*exec_substring)->is_previous_file_opened == true)
 		status_code = check_infile(exp_redirection, exec_redirection);
-	else if (exp_redirection->t_redirection == REDIRECTION_HEREDOC)
-		status_code = check_heredoc(exec_struct, exp_redirection, \
-		exec_redirection);
 	else if (exp_redirection->t_redirection == REDIRECTION_AMBIGUOUS && \
 	(*exec_substring)->is_previous_file_opened == true)
 		status_code = assignment_ambiguous_redirection(exp_redirection, \

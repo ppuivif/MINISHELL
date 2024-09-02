@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/02 11:21:08 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 16:27:38 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,13 @@ int	main(int argc, char **argv, char **envp)
 			command_line->current_exit_code == 0)
 			{
 				build_exec_struct(&exec_struct);
-				signals(2);
-//				ft_execution_lst_print(exec_struct, 1);
-				execution(&exec_struct);
-				envp_struct = exec_struct->envp_struct;
+				if (command_line->current_exit_code == 0)
+				{
+					signals(2);
+//					ft_execution_lst_print(exec_struct, 1);
+					execution(&exec_struct);
+					envp_struct = exec_struct->envp_struct;
+				}
 			}
 			//printf("%d\n", exit_code);
 			if (command_line)

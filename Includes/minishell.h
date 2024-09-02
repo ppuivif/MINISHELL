@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/01 20:13:29 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/02 17:49:12 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -274,9 +274,9 @@ int				check_outfile(t_expanded_redirection *exp_redirection, \
 				t_exec_redirection **exec_redirection);
 int				check_infile(t_expanded_redirection *exp_redirection, \
 				t_exec_redirection **exec_redirection);
-int				check_heredoc(t_exec_struct **exec_struct, \
-				t_expanded_redirection *exp_redirection, \
-				t_exec_redirection **exec_redirection);
+int				open_and_check_heredoc(t_substring *substring, \
+				t_expanded_redirection **exp_redirection, \
+				t_command_line **command_line);
 
 /*
 * expand_utils_13.c
@@ -339,8 +339,7 @@ void			build_exec_struct(t_exec_struct **exec_struct);
 
 int				open_and_check_file(t_expanded_redirection *exp_redirections, \
 				t_exec_redirection **exec_redirection, \
-				t_exec_substring **exec_substring, \
-				t_exec_struct **exec_struct);
+				t_exec_substring **exec_substring);
 
 /*
 * check_exec_arguments.c

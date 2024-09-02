@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 14:27:12 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 17:25:41 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char **remaining_line, t_command_line **command_line)
 }
 
 static int	parse_substrings(char **remaining_line, \
-t_command_line **command_line)
+t_command_line **command_line, int susbtring_index)
 {
 	t_substring	*substring;
 	int			status_code;	
@@ -63,6 +63,7 @@ t_command_line **command_line)
 		free_substring(&substring);
 		return (2);//syntax_error 
 	}
+	substring->substring_index = susbtring_index;
 	ft_lst_add_back1(&(*command_line)->substrings, substring);
 	return (0);
 }
@@ -70,12 +71,15 @@ t_command_line **command_line)
 static int	cut_remaining_line_on_pipes(t_command_line **command_line, \
 char *remaining_line)
 {
+	int	index;
 	int	status_code;
+	
 
 	status_code = 0;
+	index = 0;
 	while (remaining_line[0])
 	{
-		status_code = parse_substrings(&remaining_line, command_line);
+		status_code = parse_substrings(&remaining_line, command_line, index);
 		if (status_code == 2)
 		{
 			(*command_line)->current_exit_code = 2;
@@ -89,6 +93,7 @@ char *remaining_line)
 			ft_putstr_fd("syntax error\n", 2);
 			return (2);
 		}
+		index++;
 	}
 	return (0);
 }
