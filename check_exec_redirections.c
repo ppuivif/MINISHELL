@@ -6,18 +6,11 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/30 18:22:32 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 11:05:09 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*void	sigint_handler(int sig)
-{
-	(void)sig;
-	g_sign = 1;
-	ioctl(STDIN_FILENO, TIOCSTI, "\n");
-}*/
 
 int	open_and_check_file(t_expanded_redirection *exp_redirection, \
 t_exec_redirection **exec_redirection, t_exec_substring **exec_substring, \

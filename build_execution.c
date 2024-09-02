@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/30 18:23:18 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 11:29:18 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,9 @@ t_exec_struct **exec_struct)
 	exec_redirection->substring_index = (*exec_substring)->index;
 	status_code = open_and_check_file(exp_redirection, &exec_redirection, \
 	exec_substring, exec_struct);
+	(*exec_struct)->command_line->current_exit_code = status_code;
 	if (status_code != 0)
-	{
 		(*exec_substring)->is_previous_file_opened = false;
-		(*exec_struct)->command_line->current_exit_code = 1;
-	}
-	else
-		(*exec_struct)->command_line->current_exit_code = 0;
 	ft_lst_add_back8(&(*exec_substring)->exec_redirections, exec_redirection);
 }
 
