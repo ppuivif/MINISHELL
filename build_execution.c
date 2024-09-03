@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 06:15:22 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 09:39:32 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,28 +65,6 @@ t_exec_struct **exec_struct)
 	ft_lst_add_back7(&(*exec_struct)->exec_substrings, exec_substring);
 }
 
-
-
-
-
-void	search_heredoc_and_modify_exp_redirec(t_substring *substring, \
-t_command_line **command_line)
-{
-	t_expanded_redirection	*tmp;
-	
-	tmp = substring->exp_redirections;
-	while (tmp)
-	{
-		if (tmp->t_redirection == REDIRECTION_HEREDOC)
-			(*command_line)->current_exit_code = \
-			open_heredoc_and_modify_exp_redirec(substring, &tmp, command_line);
-		tmp = tmp->next;
-	}
-}
-
-
-
-
 void	build_exec_struct(t_exec_struct **exec_struct)
 {
 	t_substring	*tmp;
@@ -95,7 +73,7 @@ void	build_exec_struct(t_exec_struct **exec_struct)
 	while (tmp)
 	{
 		search_heredoc_and_modify_exp_redirec(tmp, \
-		&(*exec_struct)->command_line);
+		exec_struct);
 		tmp = tmp->next;
 	}
 	if ((*exec_struct)->command_line->current_exit_code)

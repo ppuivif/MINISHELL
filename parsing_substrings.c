@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/02 17:25:41 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 18:41:15 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ char *remaining_line)
 {
 	int	index;
 	int	status_code;
-	
 
 	status_code = 0;
 	index = 0;

@@ -73,6 +73,7 @@ SRCS += Expand_utils/expand_utils_1.c\
 
 SRCS += Exec_utils/exec_utils_1.c\
 		Exec_utils/exec_utils_2.c\
+		Exec_utils/exec_utils_3.c\
 
 
 SRCS +=	Free_utils/free_command_line_1.c\
