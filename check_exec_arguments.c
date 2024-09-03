@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:35 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/28 10:57:59 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 06:24:05 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,16 @@ t_exec_struct **exec_struct)
 void	check_exec_arguments(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
-	if ((*exec_substring)->exec_arguments->argument)
+	if ((*exec_substring)->exec_arguments->argument && \
+	(*exec_struct)->command_line->current_exit_code == 0)
 	{
 		if (check_is_builtin((*exec_substring)->exec_arguments))
+		{
+			(*exec_struct)->command_line->current_exit_code = 0;
 			return ;
+		}
+		build_cmd_arr(exec_substring, exec_struct);
+		if ((*exec_substring)->cmd_arr && (*exec_substring)->cmd_arr[0])
+			check_command_with_options(exec_substring, exec_struct);
 	}
-	build_cmd_arr(exec_substring, exec_struct);
-	if ((*exec_substring)->cmd_arr && (*exec_substring)->cmd_arr[0])
-		check_command_with_options(exec_substring, exec_struct);
 }

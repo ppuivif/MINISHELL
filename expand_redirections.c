@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/02 17:31:36 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 04:24:28 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,17 +109,16 @@ t_native_redirection *n_redirection, char *definitive_content, int index)
 }
 
 void	expand_redirections(t_substring *substring, \
-t_native_redirection *n_redirection, t_command_line **command_line)
+t_native_redirection *n_redirection, t_command_line **command_line, \
+int exp_redirection_index)
 {
 	int						i;
 	int						len;
-	int						index;
 	t_expanded_redirection	*exp_redirection;
 	char					*definitive_content;
 
 	i = 0;
 	len = 0;
-	index = 0;
 	exp_redirection = NULL;
 	definitive_content = NULL;
 	while (n_redirection && n_redirection->content[i])
@@ -128,10 +127,9 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 		(&n_redirection->content[i], &definitive_content, &n_redirection, \
 		command_line);
 		i += len;
-		index++;
 	}
 	init_expanded_redirection_struct(&exp_redirection, command_line);
 	expanded_redirection_struct_assignment (&exp_redirection, n_redirection, \
-	definitive_content, index);
+	definitive_content, exp_redirection_index);
 	ft_lst_add_back4(&substring->exp_redirections, exp_redirection);
 }

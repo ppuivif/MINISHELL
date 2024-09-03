@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/02 18:00:24 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 07:01:09 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ int fd, t_command_line **command_line)
 		if (!line)
 		{
 			ft_putstr_fd("warning: here-document at line \
-delimited by end-of-file\n", 2);
+delimited by end-of-file (wanted limiter)\n", 2);
 			break ;
 		}
 		if (ft_strcmp(line, exp_redirection->content) == 0)
@@ -80,11 +80,13 @@ t_expanded_redirection **exp_redirection, t_command_line **command_line)
 //	malloc protection
 	filename = ft_strjoin_freed(filename, exp_redirection_index);
 //	malloc protection
+	substring_index = free_and_null(substring_index);
+	exp_redirection_index = free_and_null(exp_redirection_index);
 	return (filename);
 }
 
 
-int	open_and_check_heredoc(t_substring *substring, \
+int	open_heredoc_and_modify_exp_redirec(t_substring *substring, \
 t_expanded_redirection **exp_redirection, t_command_line **command_line)
 {
 	int		fd;

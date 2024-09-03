@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/02 17:49:12 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 04:25:21 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,8 @@ void			expand_contents(t_command_line **command_line);
 
 void			expand_redirections(t_substring *substring, \
 				t_native_redirection *n_redirection, \
-				t_command_line **command_line);
+				t_command_line **command_line, \
+				int exp_redirection_index);
 
 /*
 * expand_arguments.c
@@ -274,7 +275,7 @@ int				check_outfile(t_expanded_redirection *exp_redirection, \
 				t_exec_redirection **exec_redirection);
 int				check_infile(t_expanded_redirection *exp_redirection, \
 				t_exec_redirection **exec_redirection);
-int				open_and_check_heredoc(t_substring *substring, \
+int				open_heredoc_and_modify_exp_redirec(t_substring *substring, \
 				t_expanded_redirection **exp_redirection, \
 				t_command_line **command_line);
 

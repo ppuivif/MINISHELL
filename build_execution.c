@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/02 17:49:31 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 06:15:22 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ t_exec_struct **exec_struct)
 	init_exec_substring_struct(&exec_substring, exec_struct);
 	tmp1 = substring->exp_redirections;
 	tmp2 = substring->exp_arguments;
+	(*exec_struct)->command_line->current_exit_code = 0;
 	while (tmp1)
 	{
 		build_exec_redirection_struct(tmp1, &exec_substring, exec_struct);
@@ -61,7 +62,6 @@ t_exec_struct **exec_struct)
 	}
 	if (exec_substring->exec_arguments)
 		check_exec_arguments(&exec_substring, exec_struct);
-//	printf("status_code : %d\n", (*exec_struct)->command_line->current_exit_code);
 	ft_lst_add_back7(&(*exec_struct)->exec_substrings, exec_substring);
 }
 
@@ -79,7 +79,7 @@ t_command_line **command_line)
 	{
 		if (tmp->t_redirection == REDIRECTION_HEREDOC)
 			(*command_line)->current_exit_code = \
-			open_and_check_heredoc(substring, &tmp, command_line);
+			open_heredoc_and_modify_exp_redirec(substring, &tmp, command_line);
 		tmp = tmp->next;
 	}
 }
