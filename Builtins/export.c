@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 17:13:23 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 19:29:05 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,34 @@ static int	is_alpha(char *argument)
 	return (0);
 }
 
+static int	error_export(t_exec_struct *exec_struct, \
+t_exec_argument *exec_arguments)
+{
+	if (!exec_arguments->next || \
+	!ft_strcmp(exec_arguments->next->argument, "--"))
+	{
+		print_export(exec_struct->envp_struct);
+		return (1);
+	}
+	if (!ft_strcmp(exec_arguments->next->argument, "-"))
+		return (1);
+	if (error_option(exec_struct, exec_arguments, "export"))
+		return (1);
+	return (0);
+}
+
 void	export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
 	t_exec_argument	*arguments;
 
 	arguments = exec_arguments->next;
-	if (!arguments)
-		return (print_export(exec_struct->envp_struct));
+	if (error_export(exec_struct, exec_arguments))
+		return ;
 	while (arguments)
 	{
-		if (!strcmp(arguments->argument, "_") \
-		|| !strncmp(arguments->argument, "_=", 2) \
-		|| !strncmp(arguments->argument, "_+=", 3))
+		if (!ft_strcmp(arguments->argument, "_") \
+		|| !ft_strncmp(arguments->argument, "_=", 2) \
+		|| !ft_strncmp(arguments->argument, "_+=", 3))
 			return ;
 		if (is_alpha(arguments->argument) == 1)
 		{

@@ -6,73 +6,58 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/31 15:29:06 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 11:58:39 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	is_a_reachable_directory(t_exec_substring **exec_substring, \
-t_exec_struct **exec_struct)
+int	assignment_ambiguous_redirection( \
+t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection)
 {
-	ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-	ft_putstr_fd(": Is a directory\n", 2);
-	(*exec_substring)->exec_arguments->is_argument_valid = false;
-	(*exec_struct)->command_line->current_exit_code = 126;
-}
-
-static void	is_a_file_without_rights( \
-t_exec_substring **exec_substring, t_exec_struct **exec_struct)
-{
-	ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-	ft_putstr_fd(": Permission denied\n", 2);
-	(*exec_substring)->exec_arguments->is_argument_valid = false;
-	(*exec_struct)->command_line->current_exit_code = 126;
-}
-
-static void	is_a_reachable_file_with_complete_path( \
-t_exec_substring **exec_substring, t_exec_struct **exec_struct)
-{
-	(*exec_substring)->path_with_cmd = \
-	ft_strdup((*exec_substring)->cmd_arr[0]);
-	if (!(*exec_substring)->path_with_cmd)
-		error_allocation_exec_struct_and_exit(exec_struct);
-}
-
-static void	is_a_non_reachable_directory_or_path( \
-t_exec_substring **exec_substring, t_exec_struct **exec_struct)
-{
-	ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-	ft_putstr_fd(": Permission denied\n", 2);
-	(*exec_substring)->exec_arguments->is_argument_valid = false;
-	(*exec_struct)->command_line->current_exit_code = 126;
-}
-
-int	check_dir_and_file_permission(char **cmd_arr, \
-t_exec_substring **exec_substring, t_exec_struct **exec_struct)
-{
-	struct stat	buffer;
-
-	if (strcspn(cmd_arr[0], "/") < ft_strlen(cmd_arr[0]) && \
-	stat(cmd_arr[0], &buffer) == 0)
-	{
-		if (S_ISDIR(buffer.st_mode))
-			is_a_reachable_directory(exec_substring, exec_struct);
-		else if (S_ISREG(buffer.st_mode))
-		{
-			if (!(buffer.st_mode & S_IXUSR))
-				is_a_file_without_rights(exec_substring, \
-				exec_struct);
-			else
-				is_a_reachable_file_with_complete_path(exec_substring, \
-				exec_struct);
-		}
-		return (0);
-	}
-	else if (errno == EACCES)
-	{
-		is_a_non_reachable_directory_or_path(exec_substring, exec_struct);
-		return (0);
-	}
+	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
+	(*exec_redirection)->fd_output = -1;
+	(*exec_redirection)->fd_input = -1;
+	ft_putstr_fd(exp_redirection->content, 2);
+	ft_putstr_fd(": ambiguous redirect\n", 2);
 	return (1);
+}
+
+int	check_outfile(t_expanded_redirection *exp_redirection, \
+t_exec_redirection **exec_redirection)
+{
+	if (exp_redirection->t_redirection == REDIRECTION_OUTFILE)
+		(*exec_redirection)->fd_output = \
+		open(exp_redirection->content, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	else if (exp_redirection->t_redirection == REDIRECTION_APPEND)
+		(*exec_redirection)->fd_output = \
+		open(exp_redirection->content, O_WRONLY | O_APPEND | O_CREAT, 0644);
+	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
+	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
+	if ((*exec_redirection)->fd_output == -1)
+	{
+		perror(exp_redirection->content);
+		return (1);
+	}
+	return (0);
+}
+
+int	check_infile(t_expanded_redirection *exp_redirection, \
+t_exec_redirection **exec_redirection)
+{
+	int	return_value;
+
+	return_value = 0;
+	(*exec_redirection)->fd_input = open(exp_redirection->content, O_RDONLY);
+	if ((*exec_redirection)->fd_input == -1)
+	{
+		if (access(exp_redirection->content, F_OK) == -1)
+			perror(exp_redirection->content);
+		else
+			perror(exp_redirection->content);
+		return_value = 1;
+	}
+	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
+	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
+	return (return_value);
 }

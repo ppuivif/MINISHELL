@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_and_free_envp.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:41 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/01 19:03:00 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 06:54:38 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,16 @@ static void	add_line(char *envp, t_envp_struct **envp_struct)
 void	get_envp(char **envp, t_envp_struct **envp_struct, char *line)
 {
 	int	i;
+	(void)line;
 
 	i = 0;
-	if (!envp_struct || !envp[0])
+/*	if (!envp_struct || !envp[0])
 	{
 		ft_putstr_fd("error\nenvp doesn't exists or is empty\n", 2);
 		line = free_and_null(line);
 		exit(EXIT_FAILURE);
-	}
-	while (envp[i])
+	}*/
+	while (envp_struct && envp[i])
 	{
 		add_line(envp[i], envp_struct);
 		i++;

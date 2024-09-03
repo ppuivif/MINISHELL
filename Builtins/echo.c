@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 13:29:44 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/10 18:51:32 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 19:17:30 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,22 +38,22 @@ void	echo(t_exec_argument *exec_arguments)
 	t_exec_argument	*arguments;
 	int				n;
 
-	arguments = exec_arguments;
+	arguments = exec_arguments->next;
 	n = 1;
-	if (!arguments->next)
+	if (!arguments)
 	{
 		ft_putstr_fd("\n", 1);
 		return ;
 	}
-	while (arguments && check_argument(arguments->next))
+	while (arguments && check_argument(arguments))
 	{
 		arguments = arguments->next;
 		n = 0;
 	}
-	while (arguments->next)
+	while (arguments)
 	{
-		ft_putstr_fd(arguments->next->argument, 1);
-		if (arguments->next->next)
+		ft_putstr_fd(arguments->argument, 1);
+		if (arguments->next)
 			ft_putstr_fd(" ", 1);
 		arguments = arguments->next;
 	}

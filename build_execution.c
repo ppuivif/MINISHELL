@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/30 18:23:18 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 06:15:22 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,11 @@ t_exec_struct **exec_struct)
 
 	status_code = 0;
 	init_exec_redirection_struct(&exec_redirection, exec_struct);
-	exec_redirection->substring_index = (*exec_substring)->index;
 	status_code = open_and_check_file(exp_redirection, &exec_redirection, \
-	exec_substring, exec_struct);
-	if (status_code != 0)
-	{
+	exec_substring);
+	(*exec_struct)->command_line->current_exit_code = status_code;
+	if (status_code)
 		(*exec_substring)->is_previous_file_opened = false;
-		(*exec_struct)->command_line->current_exit_code = 1;
-	}
-	else
-		(*exec_struct)->command_line->current_exit_code = 0;
 	ft_lst_add_back8(&(*exec_substring)->exec_redirections, exec_redirection);
 }
 
@@ -45,16 +40,16 @@ t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 }
 
 static void	build_exec_substring_struct(t_substring *substring, \
-t_exec_struct **exec_struct, int index)
+t_exec_struct **exec_struct)
 {
 	t_exec_substring		*exec_substring;
 	t_expanded_redirection	*tmp1;
 	t_expanded_argument		*tmp2;
 
 	init_exec_substring_struct(&exec_substring, exec_struct);
-	exec_substring->index = index;
 	tmp1 = substring->exp_redirections;
 	tmp2 = substring->exp_arguments;
+	(*exec_struct)->command_line->current_exit_code = 0;
 	while (tmp1)
 	{
 		build_exec_redirection_struct(tmp1, &exec_substring, exec_struct);
@@ -70,17 +65,45 @@ t_exec_struct **exec_struct, int index)
 	ft_lst_add_back7(&(*exec_struct)->exec_substrings, exec_substring);
 }
 
+
+
+
+
+void	search_heredoc_and_modify_exp_redirec(t_substring *substring, \
+t_command_line **command_line)
+{
+	t_expanded_redirection	*tmp;
+	
+	tmp = substring->exp_redirections;
+	while (tmp)
+	{
+		if (tmp->t_redirection == REDIRECTION_HEREDOC)
+			(*command_line)->current_exit_code = \
+			open_heredoc_and_modify_exp_redirec(substring, &tmp, command_line);
+		tmp = tmp->next;
+	}
+}
+
+
+
+
 void	build_exec_struct(t_exec_struct **exec_struct)
 {
-	int			index;
 	t_substring	*tmp;
 
-	index = 0;
 	tmp = (*exec_struct)->command_line->substrings;
 	while (tmp)
 	{
-		build_exec_substring_struct(tmp, exec_struct, index);
+		search_heredoc_and_modify_exp_redirec(tmp, \
+		&(*exec_struct)->command_line);
 		tmp = tmp->next;
-		index++;
+	}
+	if ((*exec_struct)->command_line->current_exit_code)
+		return ;
+	tmp = (*exec_struct)->command_line->substrings;
+	while (tmp)
+	{
+		build_exec_substring_struct(tmp, exec_struct);
+		tmp = tmp->next;
 	}
 }

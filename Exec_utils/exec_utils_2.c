@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/31 12:38:52 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 04:49:42 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,26 +94,34 @@ void	fd_handle_in_parent(t_exec_substring **exec_substring)
 
 int	get_exit_code_last_process(int *pid_arr, int i)
 {
-	int		pid_last_process;
 	int		status;
 	int		exit_code_last_process;
+	int		index_last_process;
 
-	pid_last_process = pid_arr[i];
 	status = 0;
 	exit_code_last_process = 0;
-	while (waitpid(pid_last_process, &status, 0) != -1)
-		continue ;
-//	if (WIFEXITED(status))
-		exit_code_last_process = WEXITSTATUS(status);
-//	if (WIFSIGNALED(status))
-//		exit_code_last_process = WTERMSIG(status);
-	i--;
+	index_last_process = i;
 	while (i >= 0)
 	{
-		while (waitpid(pid_arr[i], NULL, 0) != -1)
+		while (waitpid(pid_arr[i], &status, 0) != -1)
 			continue ;
+		if (i == index_last_process)
+			exit_code_last_process = WEXITSTATUS(status);
+			
+/*		{
+			if (WIFEXITED(status))
+			{
+				exit_code_last_process = WEXITSTATUS(status);
+//				printf("exit_code_last_process ifexited %d\n", exit_code_last_process);
+			}
+			if (WIFSIGNALED(status))
+			{
+				exit_code_last_process = WTERMSIG(status);
+//				printf("exit_code_last_process ifsignaled %d\n", exit_code_last_process);
+			}
+		}*/
 		i--;
 	}
-	//free(pid_arr);
 	return (exit_code_last_process);
 }
+

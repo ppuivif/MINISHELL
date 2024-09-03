@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:50:21 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/01 17:51:55 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 16:19:57 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static int	search_var(t_exec_struct *exec_struct, char *str)
 	env = exec_struct->envp_struct;
 	while (env)
 	{
-		if (!strcmp(env->name, str))
+		if (!ft_strcmp(env->name, str))
 			return (1);
 		env = env->next;
 	}

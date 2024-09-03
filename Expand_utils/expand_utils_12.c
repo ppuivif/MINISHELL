@@ -3,67 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_12.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/01 20:13:23 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 07:01:09 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	assignment_ambiguous_redirection( \
-t_expanded_redirection *exp_redirection, t_exec_redirection **exec_redirection)
+static void	fill_file_in_heredoc(t_expanded_redirection *exp_redirection, \
+t_command_line **command_line, char **line, int fd)
 {
-	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
-	(*exec_redirection)->fd_output = -1;
-	(*exec_redirection)->fd_input = -1;
-	ft_putstr_fd(exp_redirection->content, 2);
-	ft_putstr_fd(": ambiguous redirect\n", 2);
-	return (1);
+		if (line[0])
+			add_history(*line);
+		expand_content_when_heredoc(line, command_line, \
+		exp_redirection->flag_for_expand);
+		ft_putstr_fd(*line, fd);
+		ft_putstr_fd("\n", fd);
 }
 
-int	check_outfile(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection)
+static int	exp_redirec_modif(t_expanded_redirection **exp_redirection, \
+char *filename, int status_code)
 {
-	if (exp_redirection->t_redirection == REDIRECTION_OUTFILE)
-		(*exec_redirection)->fd_output = \
-		open(exp_redirection->content, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	else if (exp_redirection->t_redirection == REDIRECTION_APPEND)
-		(*exec_redirection)->fd_output = \
-		open(exp_redirection->content, O_WRONLY | O_APPEND | O_CREAT, 0644);
-	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
-	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
-	if ((*exec_redirection)->fd_output == -1)
-	{
-		perror(exp_redirection->content);
-		return (1);
-	}
+	(*exp_redirection)->content = free_and_null((*exp_redirection)->content);
+	(*exp_redirection)->content = filename;
+	(*exp_redirection)->t_redirection = REDIRECTION_INFILE;
+	if (status_code == 130 || status_code == 131)
+		return (status_code);
 	return (0);
 }
 
-int	check_infile(t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection)
-{
-	int	return_value;
-
-	return_value = 0;
-	(*exec_redirection)->fd_input = open(exp_redirection->content, O_RDONLY);
-	if ((*exec_redirection)->fd_input == -1)
-	{
-		if (access(exp_redirection->content, F_OK) == -1)
-			perror(exp_redirection->content);
-		else
-			perror(exp_redirection->content);
-		return_value = 1;
-	}
-	(*exec_redirection)->file = ft_strdup(exp_redirection->content);
-	(*exec_redirection)->t_redirection = exp_redirection->t_redirection;
-	return (return_value);
-}
-
 static int	read_and_expand_heredoc(t_expanded_redirection *exp_redirection, \
-char *filename, int fd, t_command_line **command_line)
+int fd, t_command_line **command_line)
 {
 	char	*line;
 
@@ -72,63 +44,70 @@ char *filename, int fd, t_command_line **command_line)
 	{
 		signals(1);
 		if (g_sign)
-		{
-			unlink(filename); // Optionally delete the temporary file
-			filename = free_and_null(filename);
-			return (1);
-		}
+			return (128 + g_sign);
 		line = readline("heredoc : ");
 		if (!line)
 		{
 			ft_putstr_fd("warning: here-document at line \
-delimited by end-of-file\n", 2);
+delimited by end-of-file (wanted limiter)\n", 2);
 			break ;
 		}
 		if (ft_strcmp(line, exp_redirection->content) == 0)
 			break ;
-		if (line[0])
-			add_history(line);
-		expand_content_when_heredoc(&line, command_line, \
-		exp_redirection->flag_for_expand);
-		ft_putstr_fd(line, fd);
-		ft_putstr_fd("\n", fd);
+		fill_file_in_heredoc(exp_redirection, command_line, &line, fd);
 		line = free_and_null(line);
 	}
 	line = free_and_null(line);
 	return (0);
 }
 
-int	check_heredoc(t_exec_struct **exec_struct, \
-t_expanded_redirection *exp_redirection, \
-t_exec_redirection **exec_redirection)
+
+static char	*create_heredoc_file_name(t_substring *substring, \
+t_expanded_redirection **exp_redirection, t_command_line **command_line)
+{
+	char	*filename;
+	char	*substring_index;
+	char	*exp_redirection_index;
+	(void)command_line;
+
+	substring_index = ft_itoa(substring->substring_index);
+//	malloc protection
+	exp_redirection_index = ft_itoa((*exp_redirection)->exp_redirection_index);
+//	malloc protection
+	filename = ft_strjoin("heredoc_tmp_", substring_index);
+//	malloc protection
+	filename = ft_strjoin_freed(filename, "_");
+//	malloc protection
+	filename = ft_strjoin_freed(filename, exp_redirection_index);
+//	malloc protection
+	substring_index = free_and_null(substring_index);
+	exp_redirection_index = free_and_null(exp_redirection_index);
+	return (filename);
+}
+
+
+int	open_heredoc_and_modify_exp_redirec(t_substring *substring, \
+t_expanded_redirection **exp_redirection, t_command_line **command_line)
 {
 	int		fd;
 	char	*filename;
-	char	*index;
+	int		status_code;
 
-	index = ft_itoa((*exec_redirection)->substring_index);
-	filename = ft_strjoin("heredoc_tmp_", index);
-	index = free_and_null(index);
+	filename = create_heredoc_file_name(substring, \
+	exp_redirection, command_line);
+	status_code = 0;
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
 	{
 		perror(filename);
 		return (1);
 	}
-	if (read_and_expand_heredoc(exp_redirection, filename, fd, \
-	&(*exec_struct)->command_line))
-	{
-		close(fd);
-		return (1);
-	}
+	status_code = read_and_expand_heredoc(*exp_redirection, fd, \
+	command_line);
 	close(fd);
-	(*exec_redirection)->file = filename;
-	(*exec_redirection)->t_redirection = REDIRECTION_INFILE;
-	(*exec_redirection)->fd_input = open((*exec_redirection)->file, O_RDONLY);
-	if ((*exec_redirection)->fd_input == -1)
-	{
-		perror((*exec_redirection)->file);
+	if (status_code == 1)
 		return (1);
-	}
-	return (0);
+	status_code = exp_redirec_modif(exp_redirection, filename, \
+	status_code);
+	return (status_code);
 }

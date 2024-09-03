@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 14:25:10 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 04:24:28 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,8 +94,9 @@ t_command_line **command_line)
 
 static void	expanded_redirection_struct_assignment( \
 t_expanded_redirection **exp_redirection, \
-t_native_redirection *n_redirection, char *definitive_content)
+t_native_redirection *n_redirection, char *definitive_content, int index)
 {
+	(*exp_redirection)->exp_redirection_index = index;
 	(*exp_redirection)->flag_for_expand = n_redirection->flag_for_expand;
 	(*exp_redirection)->t_redirection = n_redirection->t_redirection;
 	if ((*exp_redirection)->t_redirection == REDIRECTION_AMBIGUOUS)
@@ -108,7 +109,8 @@ t_native_redirection *n_redirection, char *definitive_content)
 }
 
 void	expand_redirections(t_substring *substring, \
-t_native_redirection *n_redirection, t_command_line **command_line)
+t_native_redirection *n_redirection, t_command_line **command_line, \
+int exp_redirection_index)
 {
 	int						i;
 	int						len;
@@ -128,6 +130,6 @@ t_native_redirection *n_redirection, t_command_line **command_line)
 	}
 	init_expanded_redirection_struct(&exp_redirection, command_line);
 	expanded_redirection_struct_assignment (&exp_redirection, n_redirection, \
-	definitive_content);
+	definitive_content, exp_redirection_index);
 	ft_lst_add_back4(&substring->exp_redirections, exp_redirection);
 }

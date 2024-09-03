@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/01 20:11:16 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 14:53:33 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,13 @@ int	main(int argc, char **argv, char **envp)
 			command_line->current_exit_code == 0)
 			{
 				build_exec_struct(&exec_struct);
-				signals(2);
-//				ft_execution_lst_print(exec_struct, 1);
-				execution(&exec_struct);
-				envp_struct = exec_struct->envp_struct;
+				if (command_line->current_exit_code == 0)
+				{
+					signals(2);
+//					ft_execution_lst_print(exec_struct, 1);
+					execution(&exec_struct);
+					envp_struct = exec_struct->envp_struct;
+				}
 			}
 			//printf("%d\n", exit_code);
 			if (command_line)
@@ -94,6 +97,7 @@ int	main(int argc, char **argv, char **envp)
 			line = free_and_null(line);
 			free_all_command_line(&command_line);
 			free_all_exec_struct(&exec_struct);
+			g_sign = 0;
 		}
 	}
 	free_envp_struct(&envp_struct);

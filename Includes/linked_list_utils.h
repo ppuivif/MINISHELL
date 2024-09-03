@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/29 18:01:02 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 17:12:24 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_expanded_argument
 
 typedef struct s_expanded_redirection
 {
+	int								exp_redirection_index;
 	char							*content;
 	t_redirection					t_redirection;
 	bool							flag_for_expand;
@@ -76,6 +77,7 @@ typedef struct s_native_redirection
 
 typedef struct s_substring
 {
+	int						substring_index;
 	char					*remaining_line;
 	t_native_argument		*n_arguments;
 	t_native_redirection	*n_redirections;
@@ -95,7 +97,6 @@ typedef struct s_command_line
 
 typedef struct s_exec_redirection
 {
-	int							substring_index;
 	char						*file;
 	t_redirection				t_redirection;
 	int							fd_input;
@@ -113,7 +114,6 @@ typedef struct s_exec_argument
 
 typedef struct s_exec_substring
 {
-	int						index;
 	t_exec_redirection		*exec_redirections;
 	bool					is_previous_file_opened;
 	t_exec_argument			*exec_arguments;

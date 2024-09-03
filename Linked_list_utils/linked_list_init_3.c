@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/29 18:01:26 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 17:13:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,6 @@ t_exec_struct **exec_struct)
 	*exec_redirection = ft_calloc(1, sizeof(t_exec_redirection));
 	if (!*exec_redirection)
 		error_allocation_exec_struct_and_exit(exec_struct);
-	(*exec_redirection)->substring_index = 0;
 	(*exec_redirection)->file = NULL;
 	(*exec_redirection)->t_redirection = 2;
 	(*exec_redirection)->fd_input = -2;
@@ -58,7 +57,6 @@ t_exec_struct **exec_struct)
 	*exec_substring = ft_calloc(1, sizeof(t_exec_substring));
 	if (!*exec_substring)
 		error_allocation_exec_struct_and_exit(exec_struct);
-	(*exec_substring)->index = 0;
 	(*exec_substring)->exec_redirections = NULL;
 	(*exec_substring)->is_previous_file_opened = true;
 	(*exec_substring)->exec_arguments = NULL;

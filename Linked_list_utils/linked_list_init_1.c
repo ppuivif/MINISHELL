@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/19 16:03:38 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 17:11:08 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ int	init_substring_struct(t_substring **substring)
 	*substring = ft_calloc(1, sizeof(t_substring));
 	if (!*substring)
 		return (-1);
+	(*substring)->substring_index = 0;
 	(*substring)->remaining_line = NULL;
 	(*substring)->n_redirections = NULL;
 	(*substring)->n_arguments = NULL;

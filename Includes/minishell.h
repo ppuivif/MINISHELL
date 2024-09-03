@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/01 20:13:29 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:25:27 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,8 @@ void			expand_contents(t_command_line **command_line);
 
 void			expand_redirections(t_substring *substring, \
 				t_native_redirection *n_redirection, \
-				t_command_line **command_line);
+				t_command_line **command_line, \
+				int exp_redirection_index);
 
 /*
 * expand_arguments.c
@@ -274,9 +275,9 @@ int				check_outfile(t_expanded_redirection *exp_redirection, \
 				t_exec_redirection **exec_redirection);
 int				check_infile(t_expanded_redirection *exp_redirection, \
 				t_exec_redirection **exec_redirection);
-int				check_heredoc(t_exec_struct **exec_struct, \
-				t_expanded_redirection *exp_redirection, \
-				t_exec_redirection **exec_redirection);
+int				open_heredoc_and_modify_exp_redirec(t_substring *substring, \
+				t_expanded_redirection **exp_redirection, \
+				t_command_line **command_line);
 
 /*
 * expand_utils_13.c
@@ -339,8 +340,7 @@ void			build_exec_struct(t_exec_struct **exec_struct);
 
 int				open_and_check_file(t_expanded_redirection *exp_redirections, \
 				t_exec_redirection **exec_redirection, \
-				t_exec_substring **exec_substring, \
-				t_exec_struct **exec_struct);
+				t_exec_substring **exec_substring);
 
 /*
 * check_exec_arguments.c
@@ -401,13 +401,13 @@ void			error_fork_creation_and_exit(t_exec_struct **exec_struct);
 void			exec_builtin(t_exec_struct *exec_struct, \
 				t_exec_substring *substring, char **envp_arr);
 void			echo(t_exec_argument *exec_arguments);
-void			pwd(void);
+void			pwd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			exit_builting(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments, char **envp_arr);
 int				check_is_builtin(t_exec_argument *exec_arguments);
 void			cd(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments);
-void			env(t_exec_struct *exec_struct);
+void			env(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			unset(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments);
 void			export(t_exec_struct *exec_struct, \
@@ -420,6 +420,8 @@ int				ft_aatoi(char *nptr, t_exec_struct *exec_struct, \
 				char **envp_arr);
 void			message_error(char *str, t_exec_struct *exec_struct, \
 				char **envp_arr);
+int				error_option(t_exec_struct *exec_struct, \
+t_exec_argument *exec_arguments, char *str);
 
 /*
 * signals
