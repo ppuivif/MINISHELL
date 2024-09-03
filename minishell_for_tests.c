@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   minishell_for_tests.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 19:37:46 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:08:58 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ int *previous_exit_code, int *exit_code)
 	g_sign = 0;
 }
 
-static void	init_and_execute(t_exec_struct **exec_struct, \
-t_command_line *command_line, t_envp_struct **envp_struct)
+static void	init_and_execute(t_exec_struct **exec_struct, t_command_line *command_line, \
+t_envp_struct **envp_struct)
 {
 	if (init_exec_struct(exec_struct) == -1)
 		error_allocation_exec_struct_and_exit(exec_struct);
@@ -42,6 +42,7 @@ t_command_line *command_line, t_envp_struct **envp_struct)
 		if (command_line->current_exit_code == 0)
 		{
 			signals(2);
+//			ft_execution_lst_print(exec_struct, 1);
 			execution(exec_struct);
 			*envp_struct = (*exec_struct)->envp_struct;
 		}
@@ -52,7 +53,6 @@ static void	readline_and_get_signals(t_envp_struct **envp_struct, char **line, \
 int *exit_code)
 {
 	signals(0);
-	*line = readline("minishell : ");
 	if (!(*line))
 	{
 		free_envp_struct(envp_struct);
@@ -79,7 +79,7 @@ int *exit_code, char **argv)
 	{
 		readline_and_get_signals(envp_struct, line, exit_code);
 		if (!*line)
-			break ;
+			break;
 		if (*exit_code)
 			previous_exit_code = *exit_code;
 		if (*line[0])
@@ -95,17 +95,22 @@ int *exit_code, char **argv)
 	}
 }
 
-int	main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)//for tests
 {
+	int				fd;
 	char			*line;
 	t_envp_struct	*envp_struct;
 	int				exit_code;
 
-	(void)argc;
 	line = NULL;
 	envp_struct = NULL;
 	exit_code = 0;
 	get_envp(envp, &envp_struct, line);
+	if (argc == 2)
+	{
+		fd = ft_atoi(argv[1]);
+		line = get_next_line(fd);
+	}
 	get_command_line(&envp_struct, &line, &exit_code, argv);
 	free_envp_struct(&envp_struct);
 	return (exit_code);
