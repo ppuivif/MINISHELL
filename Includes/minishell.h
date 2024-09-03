@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/03 17:25:27 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 20:10:44 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -277,7 +277,7 @@ int				check_infile(t_expanded_redirection *exp_redirection, \
 				t_exec_redirection **exec_redirection);
 int				open_heredoc_and_modify_exp_redirec(t_substring *substring, \
 				t_expanded_redirection **exp_redirection, \
-				t_command_line **command_line);
+				t_exec_struct **exec_struct);
 
 /*
 * expand_utils_13.c
@@ -370,10 +370,17 @@ void			exec_child(t_exec_substring *substring, char **envp_arr, \
 * exec_utils_1.c
 */
 
-void			substrings_execution(t_exec_struct **exec_struct);
+void			search_heredoc_and_modify_exp_redirec(t_substring *substring, \
+				t_exec_struct **exec_struct);
 
 /*
 * exec_utils_2.c
+*/
+
+void			substrings_execution(t_exec_struct **exec_struct);
+
+/*
+* exec_utils_3.c
 */
 
 char			**build_envp_arr(t_exec_struct **exec_struct);

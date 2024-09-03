@@ -1,7 +1,9 @@
 tester Stéphane :
-tests 61 et 87
+tests 61, 73 et 87
 
 -----------------------------------------------------------------------------------------------
+
+env -i ./minishell
 
 //echo "$USER'"
 //exit dans un pipe n'affiche pas exit (pas forcement tres important)
