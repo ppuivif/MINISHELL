@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   build_execution.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 19:37:26 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 06:15:22 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ void	build_exec_struct(t_exec_struct **exec_struct)
 	while (tmp)
 	{
 		search_heredoc_and_modify_exp_redirec(tmp, \
-		exec_struct);
+		&(*exec_struct)->command_line);
 		tmp = tmp->next;
 	}
 	if ((*exec_struct)->command_line->current_exit_code)

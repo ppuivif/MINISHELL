@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 16:38:04 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 17:38:43 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/01 20:13:07 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,11 @@ static void	ctrl_c(int sign)
 
 static void	ctrl_c1(int sign)
 {
-	g_sign = sign;
-	rl_on_new_line();
-	rl_replace_line("", 0);
-	ioctl(0, TIOCSTI, "\n");
-	(void)sign;
+    g_sign = sign;
+    rl_on_new_line();
+    rl_replace_line("", 0);
+    ioctl(0, TIOCSTI, "\n");
+    (void)sign;
 }
 
 static void	ctrl_c2(int sign)
@@ -54,7 +54,7 @@ void	signals(int sign)
 	}
 	if (sign == 1)
 	{
-//		signal(SIGQUIT, ctrl_backslash);
+		signal(SIGQUIT, ctrl_backslash);
 		signal(SIGINT, ctrl_c1);//CTRL C dans heredoc
 	}
 	if (sign == 2)

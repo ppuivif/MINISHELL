@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_12.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 19:38:36 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 07:01:09 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,12 @@
 static void	fill_file_in_heredoc(t_expanded_redirection *exp_redirection, \
 t_command_line **command_line, char **line, int fd)
 {
-	if (line[0])
-		add_history(*line);
-	expand_content_when_heredoc(line, command_line, \
-	exp_redirection->flag_for_expand);
-	ft_putstr_fd(*line, fd);
-	ft_putstr_fd("\n", fd);
+		if (line[0])
+			add_history(*line);
+		expand_content_when_heredoc(line, command_line, \
+		exp_redirection->flag_for_expand);
+		ft_putstr_fd(*line, fd);
+		ft_putstr_fd("\n", fd);
 }
 
 static int	exp_redirec_modif(t_expanded_redirection **exp_redirection, \
@@ -61,45 +61,40 @@ delimited by end-of-file (wanted limiter)\n", 2);
 	return (0);
 }
 
+
 static char	*create_heredoc_file_name(t_substring *substring, \
-t_expanded_redirection **exp_redirection, t_exec_struct **exec_struct)
+t_expanded_redirection **exp_redirection, t_command_line **command_line)
 {
 	char	*filename;
 	char	*substring_index;
 	char	*exp_redirection_index;
+	(void)command_line;
 
 	substring_index = ft_itoa(substring->substring_index);
-	if (!substring_index)
-		error_allocation_exec_struct_and_exit(exec_struct);
+//	malloc protection
 	exp_redirection_index = ft_itoa((*exp_redirection)->exp_redirection_index);
-	if (!exp_redirection_index)
-		error_allocation_exec_struct_and_exit(exec_struct);
+//	malloc protection
 	filename = ft_strjoin("heredoc_tmp_", substring_index);
-	substring_index = free_and_null(substring_index);
-	if (!filename)
-		error_allocation_exec_struct_and_exit(exec_struct);
+//	malloc protection
 	filename = ft_strjoin_freed(filename, "_");
-	if (!filename)
-		error_allocation_exec_struct_and_exit(exec_struct);
+//	malloc protection
 	filename = ft_strjoin_freed(filename, exp_redirection_index);
-	if (exp_redirection_index && !filename)
-	{
-		exp_redirection_index = free_and_null(exp_redirection_index);
-		error_allocation_exec_struct_and_exit(exec_struct);
-	}
+//	malloc protection
+	substring_index = free_and_null(substring_index);
 	exp_redirection_index = free_and_null(exp_redirection_index);
 	return (filename);
 }
 
+
 int	open_heredoc_and_modify_exp_redirec(t_substring *substring, \
-t_expanded_redirection **exp_redirection, t_exec_struct **exec_struct)
+t_expanded_redirection **exp_redirection, t_command_line **command_line)
 {
 	int		fd;
 	char	*filename;
 	int		status_code;
 
 	filename = create_heredoc_file_name(substring, \
-	exp_redirection, exec_struct);
+	exp_redirection, command_line);
 	status_code = 0;
 	fd = open(filename, O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	if (fd == -1)
@@ -108,7 +103,7 @@ t_expanded_redirection **exp_redirection, t_exec_struct **exec_struct)
 		return (1);
 	}
 	status_code = read_and_expand_heredoc(*exp_redirection, fd, \
-	&(*exec_struct)->command_line);
+	command_line);
 	close(fd);
 	if (status_code == 1)
 		return (1);
