@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execution_child.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 05:32:27 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/03 20:09:24 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ t_exec_struct **exec_struct)
 		exec_builtin(*exec_struct, substring, envp_arr);
 	cmd_arr = copy_cmd_arr(substring, exec_struct, envp_arr);
 	path_with_cmd = copy_path(substring, exec_struct, cmd_arr, envp_arr);
+	exit_code = (*exec_struct)->command_line->current_exit_code;
 	free_before_execve(exec_struct);
 	if (path_with_cmd && cmd_arr && cmd_arr[0] && exit_code == 0)
 	{

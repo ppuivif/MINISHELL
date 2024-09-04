@@ -1,0 +1,36 @@
+minishell : export a
+minishell : echo $a
+error : an allocation failed
+==601262== 
+==601262== FILE DESCRIPTORS: 3 open (3 std) at exit.
+==601262== 
+==601262== HEAP SUMMARY:
+==601262==     in use at exit: 223,313 bytes in 228 blocks
+==601262==   total heap usage: 4,353 allocs, 4,125 frees, 449,178 bytes allocated
+==601262== 
+==601262== 2 bytes in 1 blocks are still reachable in loss record 1 of 69
+==601262==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==601262==    by 0x10DB28: ft_substr (libft_utils_2.c:96)
+==601262==    by 0x10FF0B: simple_expand_variables_when_dollar_first (expand_utils_3.c:44)
+==601262==    by 0x11003E: expand_variables_when_dollar_first (expand_utils_3.c:71)
+==601262==    by 0x1100D2: expand_variables (expand_utils_3.c:90)
+==601262==    by 0x1106BB: expand_string_after_dollar2 (expand_utils_5.c:66)
+==601262==    by 0x10A858: expand_content_beginning_dollar (expand_arguments.c:58)
+==601262==    by 0x10A9D6: expand_arguments (expand_arguments.c:99)
+==601262==    by 0x10A21D: expand_contents (expand_contents.c:37)
+==601262==    by 0x109D8D: parse_command_line (parsing_substrings.c:124)
+==601262==    by 0x109748: get_and_execute_command_line (minishell_for_execution.c:84)
+==601262==    by 0x109812: main (minishell_for_execution.c:105)
+==601262== 
+==601262== 3 bytes in 1 blocks are still reachable in loss record 2 of 69
+==601262==    at 0x4848899: malloc (in /usr/libexec/valgrind/vgpreload_memcheck-amd64-linux.so)
+==601262==    by 0x10DB28: ft_substr (libft_utils_2.c:96)
+==601262==    by 0x10FDFF: get_len_and_extract_after_first_dollar (expand_utils_2.c:78)
+==601262==    by 0x10A83D: expand_content_beginning_dollar (expand_arguments.c:56)
+==601262==    by 0x10A9D6: expand_arguments (expand_arguments.c:99)
+==601262==    by 0x10A21D: expand_contents (expand_contents.c:37)
+==601262==    by 0x109D8D: parse_command_line (parsing_substrings.c:124)
+==601262==    by 0x109748: get_and_execute_command_line (minishell_for_execution.c:84)
+==601262==    by 0x109812: main (minishell_for_execution.c:105)
+
+cd cree pas pwd et oldpwd

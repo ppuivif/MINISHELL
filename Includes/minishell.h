@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/03 18:12:50 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 16:16:00 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,17 +39,10 @@ extern int	g_sign;
 # endif
 
 /*
-* to delete
+* get_envp.c
 */
 
-void			print_arr(char **arr);
-
-/*
-* get_and_free_envp.c
-*/
-
-void			get_envp(char **envp, t_envp_struct **envp_struct, char *line);
-void			free_envp_struct(t_envp_struct **envp_struct);
+void			get_envp(char **envp, t_envp_struct **envp_struct);
 
 /*
 * parsing_substrings.c
@@ -323,7 +316,14 @@ void			free_all_command_line(t_command_line **command_line);
 void			free_substring(t_substring **substrings);
 
 /*
-* free_command_line_1.c
+* free_envp_struct.c
+*/
+
+void			free_envp_struct(t_envp_struct **envp_struct);
+
+
+/*
+* free_exec_struct.c
 */
 
 void			free_all_exec_struct(t_exec_struct **exec_struct);
@@ -393,6 +393,8 @@ int				get_exit_code_last_process(int *pid_arr, int i);
 * error_handling.c
 */
 
+void			error_allocation_envp_struct_and_exit( \
+				t_envp_struct **envp_struct);
 void			error_allocation_exec_struct_and_exit( \
 				t_exec_struct **exec_struct);
 void			error_allocation_command_line_and_exit( \
@@ -408,17 +410,18 @@ void			error_fork_creation_and_exit(t_exec_struct **exec_struct);
 void			exec_builtin(t_exec_struct *exec_struct, \
 				t_exec_substring *substring, char **envp_arr);
 void			echo(t_exec_argument *exec_arguments);
-void			pwd(void);
+void			pwd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			exit_builting(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments, char **envp_arr);
 int				check_is_builtin(t_exec_argument *exec_arguments);
 void			cd(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments);
-void			env(t_exec_struct *exec_struct);
+void			env(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
 void			unset(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments);
 void			export(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments);
+int				search_var(t_envp_struct *envp_struct, char *str);
 void			print_export(t_envp_struct *envp_struct);
 void			add_export(t_exec_struct *exec_struct, char *argument);
 void			add2_export(t_exec_struct *exec_struct, char *argument);
@@ -427,6 +430,8 @@ int				ft_aatoi(char *nptr, t_exec_struct *exec_struct, \
 				char **envp_arr);
 void			message_error(char *str, t_exec_struct *exec_struct, \
 				char **envp_arr);
+int				error_option(t_exec_struct *exec_struct, \
+t_exec_argument *exec_arguments, char *str);
 
 /*
 * signals

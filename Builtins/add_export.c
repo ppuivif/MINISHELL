@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   add_export.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/21 16:50:21 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/01 17:51:55 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/04 16:15:48 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	search_var(t_exec_struct *exec_struct, char *str)
+int	search_var(t_envp_struct *envp_struct, char *str)
 {
 	t_envp_struct	*env;
 
-	env = exec_struct->envp_struct;
+	env = envp_struct;
 	while (env)
 	{
-		if (!strcmp(env->name, str))
+		if (!ft_strcmp(env->name, str))
 			return (1);
 		env = env->next;
 	}
@@ -47,7 +47,7 @@ static void	new_name_export(t_exec_struct *exec_struct, \
 {
 	char	*tmp1;
 
-	if (search_var(exec_struct, argument))
+	if (search_var(exec_struct->envp_struct, argument))
 		return ;
 	tmp1 = ft_substr(argument, 0, ft_strlen(argument));
 	ft_lst_add_back6(&exec_struct->envp_struct, ft_lstnew \

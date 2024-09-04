@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 11:30:07 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 06:23:21 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:14:01 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@
 #include <errno.h>
 #include "minishell.h"
 
-void	pwd(void)
+void	pwd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
 	char	str[PATH_MAX];
 
+	if (error_option(exec_struct, exec_arguments, "pwd"))
+		return ;
 	if (getcwd(str, PATH_MAX))
 	{
 		ft_putstr_fd(str, 1);

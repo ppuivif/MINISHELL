@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:11 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 17:11:12 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:13:43 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,15 @@ void	unset(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 	t_envp_struct	*previous;
 
 	arguments = exec_arguments->next;
-	if (arguments && arguments->argument[0] == '-')
-		exec_struct->command_line->current_exit_code = 2;
+	if (error_option(exec_struct, exec_arguments, "unset"))
+		return ;
 	while (arguments)
 	{
 		current = exec_struct->envp_struct;
 		previous = exec_struct->envp_struct;
 		while (current)
 		{
-			if (!strcmp(arguments->argument, current->name))
+			if (!ft_strcmp(arguments->argument, current->name))
 			{
 				unset_remove(exec_struct, current, previous);
 				break ;

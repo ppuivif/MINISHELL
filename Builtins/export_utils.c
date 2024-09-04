@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:33:32 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/01 17:56:08 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/04 17:05:33 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ static void	ft_lst_print(t_envp_struct *envp_struct, int fd)
 		{
 			ft_putstr_fd("declare -x ", fd);
 			ft_putstr_fd(tmp->name, fd);
-			if (tmp->value)
+			if (tmp->value && tmp->equal)
 			{
 				ft_putstr_fd("=\"", fd);
 				ft_putstr_fd(tmp->value, fd);
