@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/20 09:37:41 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/02 17:12:24 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,16 +39,22 @@ typedef enum t_redirection_type
 	REDIRECTION_AMBIGUOUS = 5,
 }	t_redirection;
 
+typedef enum t_builtin_type
+{
+	ISNOT_BUILTIN = 0,
+	IOPUT_ACCEPTED = 1,
+	IOPUT_NOT_ACCEPTED = 2,
+}	t_builtin;
+
 typedef struct s_expanded_argument
 {
-	bool						alloc_succeed;
 	char						*content;
 	struct s_expanded_argument	*next;
 }	t_expanded_argument;
 
 typedef struct s_expanded_redirection
 {
-	bool							alloc_succeed;
+	int								exp_redirection_index;
 	char							*content;
 	t_redirection					t_redirection;
 	bool							flag_for_expand;
@@ -61,15 +67,17 @@ typedef struct s_native_argument
 	struct s_native_argument	*next;
 }	t_native_argument;
 
-typedef struct s_nativt_redirection
+typedef struct s_native_redirection
 {
 	char						*content;
 	t_redirection				t_redirection;
-	struct s_nativt_redirection	*next;
+	bool						flag_for_expand;
+	struct s_native_redirection	*next;
 }	t_native_redirection;
 
 typedef struct s_substring
 {
+	int						substring_index;
 	char					*remaining_line;
 	t_native_argument		*n_arguments;
 	t_native_redirection	*n_redirections;
@@ -89,7 +97,6 @@ typedef struct s_command_line
 
 typedef struct s_exec_redirection
 {
-	int							substring_index;
 	char						*file;
 	t_redirection				t_redirection;
 	int							fd_input;
@@ -101,18 +108,21 @@ typedef struct s_exec_argument
 {
 	char					*argument;
 	bool					is_argument_valid;
-	int						is_builtin;
+	t_builtin				is_builtin;
 	struct s_exec_argument	*next;
 }	t_exec_argument;
 
 typedef struct s_exec_substring
 {
-	int						index;
 	t_exec_redirection		*exec_redirections;
 	bool					is_previous_file_opened;
 	t_exec_argument			*exec_arguments;
 	char					**cmd_arr;
 	char					*path_with_cmd;
+	int						*pid_arr;
+	int						fd_in;
+	int						fd_out;
+	int						fd[2];
 	struct s_exec_substring	*next;
 }	t_exec_substring;
 

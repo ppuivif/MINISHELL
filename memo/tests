@@ -1,0 +1,10 @@
+CTRL C à l'invite -> nouvelle invite -> echo $? = 130
+CTRL D à l'invite -> quitte -> echo $? = 131
+CTRL \ -> aucune action
+
+
+<< limiter cat
+CTRL C -> nouvelle invite -> echo $? = 130
+
+<< limiter cat
+CTRL D -> message d'erreur (... wanted limiter)+ nouvelle invite -> echo $? = 0

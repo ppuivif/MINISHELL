@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:57:29 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/26 08:02:36 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/01 15:14:52 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ t_exec_argument *exec_arguments, char **envp_arr)
 	size_t	len;
 
 	len = ft_lst_size9(exec_arguments);
-	if (len == 1)
+	if (len == 1 && ft_lst_size7(exec_struct->exec_substrings) == 1)
 	{
 		ft_putstr_fd("exit\n", 2);
 		message_exit(exec_struct, envp_arr);

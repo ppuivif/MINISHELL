@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:16 by drabarza          #+#    #+#             */
-/*   Updated: 2024/07/11 09:01:35 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/03 17:14:22 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ static char	*search_home(t_exec_struct *exec_struct)
 	env = exec_struct->envp_struct;
 	while (env)
 	{
-		if (!strncmp(env->name, "HOME", 4))
+		if (!ft_strncmp(env->name, "HOME", 4))
 		{
 			return (env->value);
 		}
@@ -35,7 +35,7 @@ static char	*search_or_replace_oldpwd(t_exec_struct *exec_struct, char *str)
 	env = exec_struct->envp_struct;
 	while (env)
 	{
-		if (!strncmp(env->name, "OLDPWD", 6))
+		if (!ft_strncmp(env->name, "OLDPWD", 6))
 		{
 			if (!str)
 				return (env->value);
@@ -44,6 +44,11 @@ static char	*search_or_replace_oldpwd(t_exec_struct *exec_struct, char *str)
 			return (NULL);
 		}
 		env = env->next;
+	}
+	if (!str)
+	{
+		exec_struct->command_line->current_exit_code = 1;
+		return ("bash: cd: OLDPWD not set");
 	}
 	return (NULL);
 }
@@ -79,20 +84,18 @@ t_exec_argument *exec_arguments, size_t size)
 	if (size == 1 || !ft_strcmp(exec_arguments->next->argument, "--")
 		|| !ft_strcmp(exec_arguments->next->argument, "~"))
 	{
-		home = strdup(search_home(exec_struct));
+		home = ft_strdup(search_home(exec_struct));
 		if (!home)
 		{
 			ft_putstr_fd("bash: cd: HOME not set\n", 2);
 			exec_struct->command_line->current_exit_code = 1;
 		}
 		else if (chdir(home) == -1)
-		{
 			check_error(exec_struct, home);
-		}
 		free(home);
 		return (1);
 	}
-	if (exec_arguments->next->argument[0] == '-')
+	if (!ft_strcmp(exec_arguments->next->argument, "-"))
 	{
 		ft_putstr_fd(search_or_replace_oldpwd(exec_struct, NULL), 2);
 		ft_putstr_fd("\n", 2);
@@ -113,6 +116,8 @@ void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 		exec_struct->command_line->current_exit_code = 1;
 		return ;
 	}
+	if (error_option(exec_struct, exec_arguments, "cd"))
+		return ;
 	if (cd_option(exec_struct, exec_arguments, size))
 		return ;
 	old = getcwd(NULL, 0);
