@@ -1,7 +1,27 @@
 
+Le parsing s'exécute sur le char *command_line.
 
+La première étape est le parsing sur les pipes.
+La fonction parse_command_line crée et retourne une variable command_line.
+Cette variable est un élément de structure de type t_command_line qui contient :
+	- un int pour l'exit_code,
+	- un pointeur de structure de type t_substring.
 
+-----------------------------------------------------------------------------------------------
 
+La fonction parse_command_line() (fichier parsing_substrings) :
+	-reçoit le char *line en argument,
+	- vérifie après avoir skip les spaces sur line que la longueur de la string obtenue
+	(remaining_line) est différente de 0, sinon retourne la variable command_line
+	(préalabalement initialisée à NULL),
+	- si la string remaining_line contient encore des caractères, la fonction
+	cut_remaing_line_on_pipes() est appelée.
+	- cette fonction renvoie un status_code,
+	- si ce status_code est différent de 0 (2 pour erreur de syntaxe), l'expand des variables
+	n'est pas exécuté et command_line est retourné.
+	- si le status_code est égal à 0, la fonction expand_contents est appelée.
+	
+-----------------------------------------------------------------------------------------------
 
 La fonction cut_remaining_line_on_pipes permet de lire la totalité de remaining_line envoyé
 par la fonction parse_command_line.
@@ -43,7 +63,7 @@ Elle est appelée par la fonction cut_remaining_line_on_pipes (fichier parsing_s
 
 La fonction get_arguments_and_redirections permet de découper les substring en redirections et
 arguments.
-Elle modifie remaining_line et chaque maillon substring qui lui sont envoyés.
+Elle modifie remaining_line et chaque maillon substring qui lui est envoyé.
 Elle lit remaining_line dans une boucle jusqu'au pipe.
 Elle retourne un status_code permettant de gérer l'exit_code.
 Elle est appelée par la fonction parse_substrings (fichier parsing_substrings.c).
@@ -51,8 +71,9 @@ Elle est appelée par la fonction parse_substrings (fichier parsing_substrings.c
 	 fonction get_redirections,
 	 - sinon elle appelle la fonction get_arguments.
 	 - elle lit le retour des fonctions (status_code). Si le status_code est différent de 0,
-	 la lecture s'arrête et la fonction get_arguments_and_redirections retourne le status_code
-	 de l'une ou l'autre des 2 fonctions,
+	 (2 pour erreur de syntaxe) la lecture s'arrête et la fonction
+	 get_arguments_and_redirections retourne le status_code de l'une ou l'autre des
+	 2 fonctions,
 	 - si les status_code sont égaux à 0, la fonction continue la lecture jusqu'au pipe.
 
 -----------------------------------------------------------------------------------------------

@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/30 12:41:21 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 21:28:30 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	execution(t_exec_struct **exec_struct)
 
 	cursor = (*exec_struct)->exec_substrings;
 	fd_out = &cursor->fd_out;
-	if (cursor->exec_arguments)
+	if (cursor && cursor->exec_arguments)
 	{
 		if (cursor->exec_redirections)
 			*fd_out = search_last_output(cursor->exec_redirections, *fd_out);

@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 22:53:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 22:36:21 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,9 @@ t_command_line **command_line, int susbtring_index)
 	status_code = 0;
 	*remaining_line = skip_first_whitespaces(*remaining_line);
 	if (ft_strlen(*remaining_line) == 0)
-		return (0);
+		return (0);//nothing else to read
 	if (is_pipe_first_character(*remaining_line) == true)
-		return (2);
+		return (2);//syntax_error
 	if (init_substring_struct(&substring) == -1)
 		error_allocation_command_line_and_exit(command_line);
 	status_code = get_arguments_and_redirections(&substring, remaining_line, \
@@ -61,7 +61,7 @@ t_command_line **command_line, int susbtring_index)
 	if (status_code == 2)
 	{
 		free_substring(&substring);
-		return (2);
+		return (2);//syntax_error 
 	}
 	substring->substring_index = susbtring_index;
 	ft_lst_add_back1(&(*command_line)->substrings, substring);
@@ -120,6 +120,8 @@ t_envp_struct **envp_struct, int previous_exit_code)
 	status_code = cut_remaining_line_on_pipes(&command_line, remaining_line);
 	if (status_code != 0)
 		return (command_line);
+//	ft_native_lst_print(command_line, 1);//for parsing_tests
 	expand_contents(&command_line);
+//	ft_expanded_lst_print(command_line, 1);//for parsing_tests
 	return (command_line);
 }

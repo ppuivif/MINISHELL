@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:41 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 17:21:31 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 21:57:50 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,14 @@ static void	add_line(char *envp, t_envp_struct **envp_struct)
 static void	search_variables(t_envp_struct **envp_struct)
 {
 	char	str[PATH_MAX];
-	char	*PWD;
-	
-	PWD = NULL;
+	char	*pwd;
+
+	pwd = NULL;
 	getcwd(str, PATH_MAX);
 	if (search_var(*envp_struct, "PWD") == 0)
 	{
-		PWD = ft_strjoin("PWD=", str);
-		add_line(PWD, envp_struct);
+		pwd = ft_strjoin("PWD=", str);
+		add_line(pwd, envp_struct);
 	}
 	if (search_var(*envp_struct, "SHLVL") == 0)
 		add_line("SHLVL=1", envp_struct);
@@ -63,4 +63,3 @@ void	get_envp(char **envp, t_envp_struct **envp_struct)
 	}
 	search_variables(envp_struct);
 }
-

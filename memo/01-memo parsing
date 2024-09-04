@@ -1,51 +1,14 @@
 
------------------------------------------------------------------------------------------------
-
-La commande readline permet de lire sur l'entrée standard et renvoie un char* (command_line)
-qui contient la lecture.
-Cette fonction est à inclure dans une boucle qui s'exécutera jusqu'à ce qu'elle retourne un
-NULL. Ce retour est obtenu par CTRL D (EOF).
-
-La fonction readline leak.
-
-Le contenu du fichier readline.supp permet de ne pas faire apparaître les leaks en rajouttant
-le flag (valgrind --suppressions=chemin/vers/votre_fichier.supp)
-
-La fonction add_history stocke dans un fichier les commandes passées dans le terminal.
-Cette fonction doit être free par la fonction clear_history(). 
-
-Si la ligne de commande prend la valeur exit, les free (et close), le clear_history sont
-effectués, un EXIT_SUCCESS est réalisé.
-
-La structure command_line prend le retour de la fonction parse_command_line.
-
-Si la valeur exit_code est différente de 0, la fonction error_handling est appelée. Les free
-(et close) sont effectués et un message d'erreur est affiché.
-
-Si la valeur exit_code est égale à 0, les free (et close) sont effectués.
-
------------------------------------------------------------------------------------------------
-
-Le parsing s'exécute sur le char *command_line.
-
-La première étape est le parsing sur les pipes.
-La fonction parse_command_line crée et retourne une variable command_line.
-Cette variable est un élément de structure de type t_command_line qui contient :
-	- un int pour l'exit_code,
-	- un pointeur de structure de type t_substring.
-
-La fonction parse_command_line :
-	-reçoit le char *line en argument,
-	- vérifie après avoir skip les spaces sur line que la longueur de la string obtenue
-	(remaining_line) est différente de 0, sinon retourne la variable command_line
-	(préalabalement initialisée à NULL),
-	- si la string remaining_line contient encore des caractères, la fonction
-	cut_remaing_line_on_pipes est appelée.
-	Dans la fonction cut_remaining_line, une boucle s'exécute tant que la string remaining_line
-	contient des caractères :
+-----------------------------------------------------------------------------------------------	
+	
+Dans la fonction cut_remaining_line, une boucle s'exécute tant que la string remaining_line
+contient des caractères :
 		- dans cette boucle, la variable command_line est modifiée,
 		
 		
+
+
+
 		
 		
 		

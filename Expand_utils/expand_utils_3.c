@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/30 14:45:05 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 18:42:25 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,15 @@ t_command_line **command_line)
 	{
 		if (ft_strcmp(variable, cursor->name) == 0)
 		{
-			result = ft_strdup(cursor->value);
-			if (!result)
-				error_allocation_command_line_and_exit(command_line);
+			if (cursor->value)
+			{
+				result = ft_strdup(cursor->value);
+				if (!result)
+				{
+					printf("here\n");
+					error_allocation_command_line_and_exit(command_line);
+				}
+			}
 			return (result);
 		}
 		cursor = cursor->next;

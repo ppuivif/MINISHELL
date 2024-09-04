@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 12:19:03 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 22:27:42 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ t_command_line *command_line, t_envp_struct **envp_struct)
 	command_line->current_exit_code == 0)
 	{
 		build_exec_struct(exec_struct);
-		if (command_line->current_exit_code == 0)
+		if (command_line->current_exit_code != 130)
 		{
 			signals(2);
 //			ft_execution_lst_print(exec_struct, 1);

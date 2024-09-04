@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 09:49:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 20:18:24 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ t_exec_substring *exec_substring, int *pid_arr)
 	pid_1 = fork();
 	if (pid_1 == -1)
 	{
+		free_arr(envp_arr);
 		free(pid_arr);
 		perror("error\ncreate fork failed");
 		error_fork_creation_and_exit(exec_struct);

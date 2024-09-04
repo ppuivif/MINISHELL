@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/04 16:16:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 21:50:54 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -321,7 +321,6 @@ void			free_substring(t_substring **substrings);
 
 void			free_envp_struct(t_envp_struct **envp_struct);
 
-
 /*
 * free_exec_struct.c
 */
@@ -410,13 +409,15 @@ void			error_fork_creation_and_exit(t_exec_struct **exec_struct);
 void			exec_builtin(t_exec_struct *exec_struct, \
 				t_exec_substring *substring, char **envp_arr);
 void			echo(t_exec_argument *exec_arguments);
-void			pwd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
+void			pwd(t_exec_struct *exec_struct, \
+				t_exec_argument *exec_arguments);
 void			exit_builting(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments, char **envp_arr);
 int				check_is_builtin(t_exec_argument *exec_arguments);
 void			cd(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments);
-void			env(t_exec_struct *exec_struct, t_exec_argument *exec_arguments);
+void			env(t_exec_struct *exec_struct, \
+				t_exec_argument *exec_arguments);
 void			unset(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments);
 void			export(t_exec_struct *exec_struct, \

@@ -90,13 +90,15 @@ La fonction readline_and_get_signals() (fichier minishell.c) :
 -----------------------------------------------------------------------------------------------		
 
 La fonction init_and_execute() (fichier minishell.c):
-		- initialise la structure exec_struct,
-		- assigne les pointeurs contenus dans la structure exec_struct,
-		- si le parsing et l'expand se sont correctement exécutés, la fonction
-		build_exec_struct() ext appelée. Cette fonction traite les heredoc, vérifie les
-		redirections et les arguments. 
+	- initialise la structure exec_struct,
+	- assigne les pointeurs contenus dans la structure exec_struct,
+	- si le parsing et l'expand se sont correctement exécutés, la fonction
+	build_exec_struct() ext appelée. Cette fonction traite les heredoc, vérifie les
+	redirections et les arguments.
+	- si l'exit_code est différent de 130 (cas d'un CTRL C dans des heredocs), la fonction
+	signals() (avec un argument à 2 pour l'exécution) est appelée, puis la fonction
+	execution(), et l'envp_struct est mis à jour pour le prochain appel de la fonction.
 
-
-
+-----------------------------------------------------------------------------------------------		
 
 
