@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 09:49:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 12:51:35 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ t_exec_substring **exec_substring, int *pid_arr)
 		perror("error\ncreate pipe failed");
 		error_pipe_creation_and_exit(exec_struct);
 	}
-	if ((*exec_substring)->fd_out == STDOUT_FILENO)// no out redirection
+	if ((*exec_substring)->fd_out == STDOUT_FILENO) // no out redirection
 		(*exec_substring)->fd_out = (*exec_substring)->fd[1];
 }
 

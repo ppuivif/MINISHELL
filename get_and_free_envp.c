@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_and_free_envp.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:41 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 06:54:38 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 12:48:20 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ static void	add_line(char *envp, t_envp_struct **envp_struct)
 void	get_envp(char **envp, t_envp_struct **envp_struct, char *line)
 {
 	int	i;
-	(void)line;
 
+	(void)line;
 	i = 0;
 /*	if (!envp_struct || !envp[0])
 	{
