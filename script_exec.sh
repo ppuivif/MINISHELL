@@ -1480,7 +1480,8 @@ run_test "simple" 1613 "echo '\$TEST3''text'" 1613 0
 run_test "simple" 1614 "echo \"\$TEST3\"" 1614 0
 run_test "simple" 1615 "echo \"\$TEST3\"'text'" 1615 0
 run_test "simple" 1616 "\$TEST4" 1616 0
-#run_test "simple" 1617 "\$TEST4" 1617 0
+
+run_test "simple" 1620 "\$TEST1=\$TEST1" 1620 0
 
 unset TEST1
 unset TEST2
@@ -2539,6 +2540,7 @@ run_test "simple" 7020 "< temp/infile1.txt cat wc" 7020 1 "cat: wc: No such file
 
 run_test "simple" 7100 "< missing_file cat -e" 7100 1 "missing_file: No such file or directory"
 run_test "simple" 7101 "< missing_file invalid_command" 7101 1 "missing_file: No such file or directory"
+run_test "simple" 7102 "invalid_command < missing_file" 7102 1 "missing_file: No such file or directory"
 
 run_test "simple" 7200 "< missing_file cat > outfile1.txt" 7200 1 "missing_file: No such file or directory"
 run_test "simple" 7201 "> temp/outfile1.txt < missing_file cat" 7201 1 "missing_file: No such file or directory"
@@ -2565,8 +2567,9 @@ run_test "simple" 7313 "< temp/infile_without_permission > temp/outfile1.txt cat
 run_test "simple" 7314 "> temp/outfile1.txt < temp/infile_without_permission cat -e" 7314 1 "temp/infile_without_permission: Permission denied"
 run_test "simple" 7315 "< temp/infile_without_permission > temp/outfile1.txt invalid_command" 7315 1 "temp/infile_without_permission: Permission denied"
 run_test "simple" 7316 "invalid_command < temp/infile_without_permission > temp/outfile1.txt" 7316 1 "temp/infile_without_permission: Permission denied"
-run_test "simple" 7317 "Tests/executable_no_permission" 7317 126 "Tests/executable_no_permission: Permission denied"
-run_test "simple" 7318 "Tests/file_whith_segfault" 7318 139 "segmentation fault  ./file_with_segfault"
+
+run_test "simple" 7318 "Tests/executable_no_permission" 7318 126 "Tests/executable_no_permission: Permission denied"
+run_test "simple" 7319 "Tests/file_whith_segfault" 7319 139 "segmentation fault  ./file_with_segfault"
 
 
 chmod 644 temp/outfile_without_permission
@@ -2577,6 +2580,10 @@ delete_file temp/infile_without_permission
 #unset PATH
 #run_test "simple" 8000 "echo \$PATH" 8000 0
 #run_test "simple" 8001 "ls" 8001 127 "ls: No such file or directory"
+
+run_test "simple" 9000 "sleep 100 & pid=$! && kill -SIGINT $pid" 9000 130
+run_test "simple" 9001 "sleep 100 & pid=$! && kill -SIGQUIT $pid" 9001 131
+
 
 
 # -g for greater than and -ge for greater than or equal to

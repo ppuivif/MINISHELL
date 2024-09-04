@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:20:53 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 19:15:46 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/04 17:00:41 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	env(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 		return ;
 	while (env)
 	{
-		if (env->name || env->equal == 1)
+		if (env->name && env->equal == 1)
 		{
 			ft_putstr_fd(env->name, 1);
 			ft_putstr_fd("=", 1);

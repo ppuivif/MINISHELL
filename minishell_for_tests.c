@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 17:08:58 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 12:19:03 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,19 @@
 
 int	g_sign = 0;
 
-static void	reinit_and_free_lists(t_exec_struct **exec_struct, char *line, \
-int *previous_exit_code, int *exit_code)
+static void save_exit_code_and_free_lists(t_exec_struct **exec_struct, \
+char *line, int *exit_code)
 {
 	if ((*exec_struct)->command_line)
-	{
-		*previous_exit_code = (*exec_struct)->command_line->current_exit_code;
 		*exit_code = (*exec_struct)->command_line->current_exit_code;
-	}
 	free(line);
 	free_all_command_line(&(*exec_struct)->command_line);
 	free_all_exec_struct(exec_struct);
 	g_sign = 0;
 }
 
-static void	init_and_execute(t_exec_struct **exec_struct, t_command_line *command_line, \
-t_envp_struct **envp_struct)
+static void	init_and_execute(t_exec_struct **exec_struct, \
+t_command_line *command_line, t_envp_struct **envp_struct)
 {
 	if (init_exec_struct(exec_struct) == -1)
 		error_allocation_exec_struct_and_exit(exec_struct);
@@ -80,19 +77,18 @@ int *exit_code, char **argv)
 		readline_and_get_signals(envp_struct, line, exit_code);
 		if (!*line)
 			break;
-		if (*exit_code)
-			previous_exit_code = *exit_code;
+		previous_exit_code = *exit_code;
 		if (*line[0])
 		{
 			add_history(*line);
 			command_line = parse_command_line(argv, *line, \
 			envp_struct, previous_exit_code);
 			init_and_execute(&exec_struct, command_line, envp_struct);
-			reinit_and_free_lists(&exec_struct, *line, \
-			&previous_exit_code, exit_code);
+			save_exit_code_and_free_lists(&exec_struct, *line, exit_code);
 			*line = NULL;
 		}
 	}
+	rl_clear_history();
 }
 
 int	main(int argc, char **argv, char **envp)//for tests
@@ -105,7 +101,7 @@ int	main(int argc, char **argv, char **envp)//for tests
 	line = NULL;
 	envp_struct = NULL;
 	exit_code = 0;
-	get_envp(envp, &envp_struct, line);
+	get_envp(envp, &envp_struct);
 	if (argc == 2)
 	{
 		fd = ft_atoi(argv[1]);

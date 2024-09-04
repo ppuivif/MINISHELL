@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:46 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 15:06:17 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 08:54:10 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ t_command_line **command_line)
 	int	len;
 	int	len_to_next_separator;
 
-	len_to_next_separator = ft_strcspn(&str[1], "$\"\' \t\n\v\f\r\0");
+	len_to_next_separator = ft_strcspn(&str[1], "$=\"\' \t\n\v\f\r\0");
 	*extracted_line = ft_substr(str, 0, len_to_next_separator + 1);
 	if (!(*extracted_line))
 		error_allocation_command_line_and_exit(command_line);

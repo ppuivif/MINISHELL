@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   minishell.c                                        :+:      :+:    :+:   */
+/*   minishell_for_execution.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 18:43:23 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 15:25:10 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,11 @@
 
 int	g_sign = 0;
 
-static void	reinit_and_free_lists(t_exec_struct **exec_struct, char *line, \
-int *previous_exit_code, int *exit_code)
+static void	save_exit_code_and_free_lists(t_exec_struct **exec_struct, \
+char *line, int *exit_code)
 {
 	if ((*exec_struct)->command_line)
-	{
-		*previous_exit_code = (*exec_struct)->command_line->current_exit_code;
 		*exit_code = (*exec_struct)->command_line->current_exit_code;
-	}
 	free(line);
 	free_all_command_line(&(*exec_struct)->command_line);
 	free_all_exec_struct(exec_struct);
@@ -65,8 +62,8 @@ int *exit_code)
 	g_sign = 0;
 }
 
-static void	get_command_line(t_envp_struct **envp_struct, char **line, \
-int *exit_code, char **argv)
+static void	get_and_execute_command_line(t_envp_struct **envp_struct, \
+char **line, int *exit_code, char **argv)
 {
 	t_command_line	*command_line;
 	t_exec_struct	*exec_struct;
@@ -80,19 +77,18 @@ int *exit_code, char **argv)
 		readline_and_get_signals(envp_struct, line, exit_code);
 		if (!*line)
 			break ;
-		if (*exit_code)
-			previous_exit_code = *exit_code;
+		previous_exit_code = *exit_code;
 		if (*line[0])
 		{
 			add_history(*line);
 			command_line = parse_command_line(argv, *line, \
 			envp_struct, previous_exit_code);
 			init_and_execute(&exec_struct, command_line, envp_struct);
-			reinit_and_free_lists(&exec_struct, *line, \
-			&previous_exit_code, exit_code);
+			save_exit_code_and_free_lists(&exec_struct, *line, exit_code);
 			*line = NULL;
 		}
 	}
+	rl_clear_history();
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -105,8 +101,8 @@ int	main(int argc, char **argv, char **envp)
 	line = NULL;
 	envp_struct = NULL;
 	exit_code = 0;
-	get_envp(envp, &envp_struct, line);
-	get_command_line(&envp_struct, &line, &exit_code, argv);
+	get_envp(envp, &envp_struct);
+	get_and_execute_command_line(&envp_struct, &line, &exit_code, argv);
 	free_envp_struct(&envp_struct);
 	return (exit_code);
 }
