@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 15:25:10 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 08:38:02 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,14 @@ char *line, int *exit_code)
 static void	init_and_execute(t_exec_struct **exec_struct, \
 t_command_line *command_line, t_envp_struct **envp_struct)
 {
-	if (init_exec_struct(exec_struct) == -1)
-		error_allocation_exec_struct_and_exit(exec_struct);
+	init_exec_struct(exec_struct);
 	(*exec_struct)->envp_struct = *envp_struct;
 	(*exec_struct)->command_line = command_line;
 	if (command_line->substrings && \
 	command_line->current_exit_code == 0)
 	{
 		build_exec_struct(exec_struct);
-		if (command_line->current_exit_code == 0)
+		if (command_line->current_exit_code != 130)
 		{
 			signals(2);
 			execution(exec_struct);

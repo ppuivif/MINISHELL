@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/02 17:12:24 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:13:12 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 # include <stdbool.h>
 
 # include "libft_utils.h"
-
-# include <stdio.h>//to delete
 
 typedef struct s_envp_struct	t_envp_struct;
 typedef struct s_envp_struct
@@ -135,17 +133,6 @@ typedef struct s_exec_struct
 }	t_exec_struct;
 
 /*
-* linked_list_utils_for_print to delete
-*/
-
-void				ft_envp_struct_lst_print(t_envp_struct *envp_struct, \
-					int fd);
-void				ft_native_lst_print(t_command_line *command_line, int fd);
-void				ft_expanded_lst_print(t_command_line *command_line, int fd);
-void				ft_execution_lst_print(t_exec_struct *exec_struct, int fd);
-void				print_t_redirection(int t_redirection, int fd);
-
-/*
 * linked_list_utils1.c for substring
 */
 
@@ -217,5 +204,46 @@ void				ft_lst_add_back8(t_exec_redirection **head, \
 size_t				ft_lst_size9(t_exec_argument *head);
 void				ft_lst_add_back9(t_exec_argument **head, \
 					t_exec_argument *new_element);
+
+/*
+* linked_list_init_1.c
+*/
+
+int					init_envp_struct(t_envp_struct **envp_struct);
+int					init_command_line_struct(t_command_line **command_line);
+int					init_substring_struct(t_substring **substring, \
+					t_command_line **command_line);
+
+/*
+* linked_list_init_2.c
+*/
+
+int					init_native_argument_struct( \
+					t_native_argument **n_argument, \
+					t_command_line **command_line);
+int					init_native_redirection_struct( \
+					t_native_redirection **n_redirection, \
+					t_command_line **command_line);
+int					init_expanded_argument_struct( \
+					t_expanded_argument **exp_argument, \
+					t_command_line **command_line);
+int					init_expanded_redirection_struct( \
+					t_expanded_redirection **exp_redirection, \
+					t_command_line **command_line);
+
+/*
+* linked_list_init_3.c
+*/
+
+int					init_exec_struct(t_exec_struct **exec_struct);
+int					init_exec_substring_struct( \
+					t_exec_substring **exec_substring, \
+					t_exec_struct **exec_struct);
+int					init_exec_redirection_struct( \
+					t_exec_redirection **exec_redirection, \
+					t_exec_struct **exec_struct);
+int					init_exec_argument_struct( \
+					t_exec_argument **exec_argument, \
+					t_exec_struct **exec_struct);
 
 #endif

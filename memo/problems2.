@@ -1,5 +1,0 @@
-echo "'$?'"
-your output -> ''
-expected output -> '0' -> 0 is the current exit code
-
-ctrl-C in heredoc should Quit the heredoc.

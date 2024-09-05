@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_utils_16.c                                  :+:      :+:    :+:   */
+/*   expand_utils_17.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/28 15:16:15 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:20:17 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ static void	no_valid_argument(t_exec_substring **exec_substring, \
 t_exec_struct **exec_struct)
 {
 	ft_putstr_fd((*exec_substring)->cmd_arr[0], 2);
-	if (strcspn((*exec_substring)->cmd_arr[0], "/") < \
-	ft_strlen((*exec_substring)->cmd_arr[0]))
+	if (ft_strcspn((*exec_substring)->cmd_arr[0], "/") < \
+	(int)ft_strlen((*exec_substring)->cmd_arr[0]))
 		ft_putstr_fd(": No such file or directory\n", 2);
 	else
 		ft_putstr_fd(": command not found\n", 2);

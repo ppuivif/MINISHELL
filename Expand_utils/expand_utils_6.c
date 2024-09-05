@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/27 09:34:38 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:19:30 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ char **tmp, t_command_line **command_line)
 	else if (str[0] == '\'')
 	{
 		len += get_len_and_extract_with_single_quotes(str, tmp, command_line);
-		if (strcspn(*tmp, "$") < ft_strlen(*tmp))
+		if (ft_strcspn(*tmp, "$") < (int)ft_strlen(*tmp))
 			expand_string_between_single_quotes(tmp, command_line);
 	}
 	else if (ft_isspace(str[0]) == true)
@@ -86,7 +86,7 @@ char **tmp, t_command_line **command_line)
 	return (len);
 }
 
-static int	expand_content_when_dollar_first(char *str, \
+static int	expand_redirec_content_when_dollar_first(char *str, \
 char **tmp, t_command_line **command_line)
 {
 	int	i;	
@@ -116,7 +116,7 @@ t_command_line **command_line)
 	while (str[0][i])
 	{
 		if (str[0][i] == '$')
-			i += expand_content_when_dollar_first \
+			i += expand_redirec_content_when_dollar_first \
 			(&str[0][i], &tmp, command_line);
 		else
 			i += expand_content_when_dollar_not_first \

@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:34 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 04:24:28 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:16:43 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@ t_command_line **command_line)
 		quote_type = content[0];
 		len = get_len_and_extract_between_quotes (&content[1], \
 		extracted_line, command_line, quote_type);
-		if (content[0] == '\"' && (strcspn(*extracted_line, "$") \
-		< ft_strlen(*extracted_line)))
+		if (content[0] == '\"' && \
+		(ft_strcspn(*extracted_line, "$") < (int)ft_strlen(*extracted_line)))
 			complete_expand_content_of_redirections(extracted_line, \
 			command_line);
 	}
@@ -92,7 +92,7 @@ t_command_line **command_line)
 	return (len);
 }
 
-static void	expanded_redirection_struct_assignment( \
+static int	expanded_redirection_struct_assignment( \
 t_expanded_redirection **exp_redirection, \
 t_native_redirection *n_redirection, char *definitive_content, int index)
 {
@@ -102,10 +102,13 @@ t_native_redirection *n_redirection, char *definitive_content, int index)
 	if ((*exp_redirection)->t_redirection == REDIRECTION_AMBIGUOUS)
 	{
 		(*exp_redirection)->content = ft_strdup(n_redirection->content);
+		if (!(*exp_redirection)->content)
+			return (-1);
 		free (definitive_content);
 	}
 	else
 		(*exp_redirection)->content = definitive_content;
+	return (0);
 }
 
 void	expand_redirections(t_substring *substring, \
@@ -129,7 +132,9 @@ int exp_redirection_index)
 		i += len;
 	}
 	init_expanded_redirection_struct(&exp_redirection, command_line);
-	expanded_redirection_struct_assignment (&exp_redirection, n_redirection, \
-	definitive_content, exp_redirection_index);
+	if (expanded_redirection_struct_assignment \
+	(&exp_redirection, n_redirection, \
+	definitive_content, exp_redirection_index) == -1)
+		error_allocation_command_line_and_exit(command_line);
 	ft_lst_add_back4(&substring->exp_redirections, exp_redirection);
 }

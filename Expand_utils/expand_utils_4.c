@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 14:35:17 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:19:08 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ char **extracted_argument, t_command_line **command_line)
 	if (**str == '$')
 		len_to_next_separator = 1;
 	else
-		len_to_next_separator = strcspn(*str, "$ \t\n\v\f\r\0");
+		len_to_next_separator = ft_strcspn(*str, "$ \t\n\v\f\r\0");
 	*extracted_argument = ft_substr(*str, 0, \
 	len_to_next_separator);
 	if (!(*extracted_argument))
@@ -65,8 +65,8 @@ static bool	is_last_argument_followed_by_whitespaces(char *str)
 	size_t	len_to_end;
 
 	len_to_end = ft_strlen(str);
-	if (is_last_argument(str) == true && strcspn(str, " \t\n\v\f\r") \
-	< len_to_end)
+	if (is_last_argument(str) == true && ft_strcspn(str, " \t\n\v\f\r") \
+	< (int)len_to_end)
 		return (true);
 	return (false);
 }

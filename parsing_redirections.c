@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_redirections.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:23 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/21 17:10:56 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/05 08:58:55 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,8 @@ t_command_line **command_line)
 	len = 0;
 	n_redirection = NULL;
 	init_native_redirection_struct(&n_redirection, command_line);
-	if (get_redirection_type(remaining_line, n_redirection) == 2)
+	if (get_redirection_type(remaining_line, n_redirection) == \
+	REDIRECTION_INDEFINED)
 	{
 		n_redirection = free_and_null(n_redirection);
 		return (2);

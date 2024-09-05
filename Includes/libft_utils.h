@@ -6,16 +6,16 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 14:31:54 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/08/19 16:02:33 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:00:50 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_UTILS_H
 # define LIBFT_UTILS_H
 # include <stdlib.h>
+# include <stddef.h>
 # include <unistd.h>
-# include <stdio.h>//to delete
-# include <stdbool.h>//to verify if permitted ?
+# include <stdbool.h>
 
 /*
 * libft_utils_1.c
@@ -57,7 +57,7 @@ char			**ft_split(char const *s, char c);
 */
 
 char			*ft_itoa(int n);
-int				ft_atoi(const char *nptr);//to delete
+int				ft_atoi(const char *nptr);
 
 /*
 * libft_utils_6.c
