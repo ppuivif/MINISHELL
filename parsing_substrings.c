@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:36:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 22:53:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:07:50 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ t_command_line **command_line, int susbtring_index)
 		return (0);
 	if (is_pipe_first_character(*remaining_line) == true)
 		return (2);
-	if (init_substring_struct(&substring) == -1)
-		error_allocation_command_line_and_exit(command_line);
+	init_substring_struct(&substring, command_line);
 	status_code = get_arguments_and_redirections(&substring, remaining_line, \
 	command_line);
 	if (status_code == 2)

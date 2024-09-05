@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:51 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 18:42:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 09:30:47 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,7 @@ t_command_line **command_line)
 			{
 				result = ft_strdup(cursor->value);
 				if (!result)
-				{
-					printf("here\n");
 					error_allocation_command_line_and_exit(command_line);
-				}
 			}
 			return (result);
 		}
@@ -46,7 +43,7 @@ static int	simple_expand_variables_when_dollar_first(char \
 	int		len_to_cut;
 	char	*tmp;
 
-	len_to_cut = strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
+	len_to_cut = ft_strcspn(&remaining_line[1], "$ \t\n\v\f\r\0");
 	tmp = ft_substr(&remaining_line[1], 0, len_to_cut);
 	if (!tmp)
 		error_allocation_command_line_and_exit(command_line);

@@ -1,8 +1,6 @@
 CC = gcc
 FLAGS = -Wall -Werror -Wextra -g -IIncludes -ILinked_list_utils -ILibft_utils -IParsing_utils -IExpand_utils -IExec_utils
 NAME  = minishell
-#SRCDIR = src
-#OBJDIR = obj
 
 #SRCS = minishell_for_tests.c \
 #SRCS = minishell_for_execution.c \
@@ -86,8 +84,7 @@ SRCS +=	Free_utils/free_command_line_1.c\
 		Free_utils/free_exec_struct.c\
 
 
-SRCS += linked_list_utils_for_print.c\
-		GNL/get_next_line_utils.c\
+SRCS += GNL/get_next_line_utils.c\
 		GNL/get_next_line.c\
 #GNL to delete
 
@@ -98,9 +95,6 @@ all : $(NAME)
 $(NAME) : $(OBJECTS)
 		$(CC) $(FLAGS) $(OBJECTS) -o $@ -lreadline
 		@clear
-
-#$(OBJDIR):
-#	mkdir -p $(OBJDIR)
 
 %.o : %.c
 		$(CC) $(FLAGS) -c $< -o $@

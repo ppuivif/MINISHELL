@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 20:18:24 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:13:52 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ t_exec_substring **exec_substring, int *pid_arr)
 		perror("error\ncreate pipe failed");
 		error_pipe_creation_and_exit(exec_struct);
 	}
-	if ((*exec_substring)->fd_out == STDOUT_FILENO)// no out redirection
+	if ((*exec_substring)->fd_out == STDOUT_FILENO)
 		(*exec_substring)->fd_out = (*exec_substring)->fd[1];
 }
 
