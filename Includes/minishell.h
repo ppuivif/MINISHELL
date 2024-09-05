@@ -6,29 +6,26 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/05 10:09:20 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 11:11:51 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-# include <stdlib.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 
 # include "libft_utils.h"
 # include "linked_list_utils.h"
-# include "../GNL/get_next_line.h"//to delete
 
-# include <stdio.h>//to delete
 # include <fcntl.h>
 # include <sys/wait.h>
-# include <dirent.h>//for opendir in check_exec_arguments.c
-# include <sys/stat.h>//for stat
+# include <dirent.h>
+# include <sys/stat.h>
 # include <sys/ioctl.h>
 
-# include <errno.h>//to delete
+# include <errno.h>
 # include <signal.h>
 # include <limits.h>
 
@@ -109,7 +106,8 @@ int				get_len_and_extract_until_next_quote(char *str, \
 int				get_len_and_extract_until_next_dollar(char *str, \
 				char **extracted_line, t_command_line **command_line);
 int				get_len_and_extract_until_next_dollar_first_excluded( \
-				char *str, char **extracted_line);
+				char *str, char **extracted_line, \
+				t_command_line **command_line);
 /*
 * expand_utils_2.c
 */
@@ -265,30 +263,6 @@ void			check_when_no_path(t_exec_substring **exec_substring, \
 
 void			check_when_path_exists(t_exec_substring **exec_substring, \
 				t_exec_struct **exec_struct, char **path_envp);
-
-/*
-* free_command_line_1.c
-*/
-
-void			free_all_command_line(t_command_line **command_line);
-
-/*
-* free_command_line_2.c
-*/
-
-void			free_substring(t_substring **substrings);
-
-/*
-* free_envp_struct.c
-*/
-
-void			free_envp_struct(t_envp_struct **envp_struct);
-
-/*
-* free_exec_struct.c
-*/
-
-void			free_all_exec_struct(t_exec_struct **exec_struct);
 
 /*
 * build_execution.c

@@ -6,15 +6,12 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/05 10:13:12 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 11:22:01 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LINKED_LIST_UTILS_H
 # define LINKED_LIST_UTILS_H
-
-# include <stdlib.h>
-# include <stdbool.h>
 
 # include "libft_utils.h"
 
@@ -245,5 +242,29 @@ int					init_exec_redirection_struct( \
 int					init_exec_argument_struct( \
 					t_exec_argument **exec_argument, \
 					t_exec_struct **exec_struct);
+
+/*
+* free_command_line_1.c
+*/
+
+void				free_all_command_line(t_command_line **command_line);
+
+/*
+* free_command_line_2.c
+*/
+
+void				free_substring(t_substring **substrings);
+
+/*
+* free_envp_struct.c
+*/
+
+void				free_envp_struct(t_envp_struct **envp_struct);
+
+/*
+* free_exec_struct.c
+*/
+
+void				free_all_exec_struct(t_exec_struct **exec_struct);
 
 #endif

@@ -6,11 +6,10 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/05 09:37:56 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 11:16:13 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linked_list_utils.h"
 #include "minishell.h"
 
 int	init_exec_struct(t_exec_struct **exec_struct)

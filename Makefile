@@ -1,11 +1,8 @@
-CC = gcc
+CC = cc
 FLAGS = -Wall -Werror -Wextra -g -IIncludes -ILinked_list_utils -ILibft_utils -IParsing_utils -IExpand_utils -IExec_utils
 NAME  = minishell
 
-#SRCS = minishell_for_tests.c \
-#SRCS = minishell_for_execution.c \
-
-SRCS = minishell_for_execution.c \
+SRCS = minishell.c \
 		get_envp.c\
 		parsing_substrings.c\
 		parsing_redirections.c\
@@ -77,16 +74,10 @@ SRCS += Exec_utils/exec_utils_1.c\
 		Exec_utils/exec_utils_2.c\
 		Exec_utils/exec_utils_3.c\
 
-
 SRCS +=	Free_utils/free_command_line_1.c\
 		Free_utils/free_command_line_2.c\
 		Free_utils/free_envp_struct.c \
 		Free_utils/free_exec_struct.c\
-
-
-SRCS += GNL/get_next_line_utils.c\
-		GNL/get_next_line.c\
-#GNL to delete
 
 OBJECTS = $(SRCS:.c=.o)
 

@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/26 14:22:54 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 11:04:47 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ bool flag_for_expand)
 				(&str[0][i], &tmp, command_line);
 			else
 				i += get_len_and_extract_until_next_dollar_first_excluded(\
-				&str[0][i], &tmp);
+				&str[0][i], &tmp, command_line);
 		}
 		else
 			i += get_len_and_extract_until_next_dollar(&str[0][i], &tmp, \

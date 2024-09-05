@@ -6,11 +6,10 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/05 10:18:09 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 11:15:44 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linked_list_utils.h"
 #include "minishell.h"
 
 int	init_envp_struct(t_envp_struct **envp_struct)

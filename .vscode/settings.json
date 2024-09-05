@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "stdio.h": "c",
-        "linked_list_utils.h": "c",
-        "minishell.h": "c"
-    }
-}
