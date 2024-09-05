@@ -6,11 +6,11 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:27 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/31 15:45:01 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 11:16:03 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linked_list_utils.h"
+#include "minishell.h"
 
 static void	free_exec_argument_struct(t_exec_argument **exec_arguments)
 {

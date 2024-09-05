@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   expand_utils_13.c                                  :+:      :+:    :+:   */
+/*   expand_utils_14.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/31 15:29:06 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:19:54 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ t_exec_substring **exec_substring, t_exec_struct **exec_struct)
 {
 	struct stat	buffer;
 
-	if (strcspn(cmd_arr[0], "/") < ft_strlen(cmd_arr[0]) && \
+	if (ft_strcspn(cmd_arr[0], "/") < (int)ft_strlen(cmd_arr[0]) && \
 	stat(cmd_arr[0], &buffer) == 0)
 	{
 		if (S_ISDIR(buffer.st_mode))

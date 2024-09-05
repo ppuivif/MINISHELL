@@ -1,35 +1,0 @@
-Script started on 2024-09-04 08:58:30+02:00 [TERM="xterm-256color" TTY="/dev/pts/0" COLUMNS="131" LINES="39"]
-[1m[7m%[27m[1m[0m                                                                                                                                   ]2;ppuivif@1G7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL0]1;..08-MINISHELL0]7;file://1G7.42angouleme.fr/nfs/homes/ppuivif/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL0\[0m[27m[24m[J[01;32m➜  [36m08-MINISHELL0[00m [K[?1h=[?2004h[0m[27m[24m[J[01;32m➜  [36m08-MINISHELL0[00m [01;34mgit:([31mDriss[34m) [33m✗[00m [Kbash  b  ../sc vr  cript_exec_ .sh[1m [0m[0m [?1l>[?2004l
-]2;./script_exec.sh]1;./script_exec.shmkdir: cannot create directory ‘temp’: File exists
-[H[2J[3JTo execute all tests choice 1
-To execute only parsing tests choice 2
-To execute only expansion tests choice 3
-To execute only execution tests choice 4
-To execute specific tests on execution choice 5
-Enter your choice : 5
-
-Enter the start of the range: 1620
-Enter the end of the range: 1620
-
-To run valgrind_test choice 1
-Not to run valgrind_test choice 2
-Warning : running tests with valgrind will execute the script slower
-Enter your choice (1 or 2): 1
-
-To display all tests choice 1
-To display only wrong tests choice 2
-Enter your choice (1 or 2): 1
-
-
-$TEST1 = "test1"
-$TEST2 = "test2"
-$TEST3 = 'salut     les     amis'
-$TEST4 = 'echo    "     salut'
-$TEST5 = 'echo    "     salut     les     amis'\n
-test1620	$TEST1=$TEST1	                              1620[0;31m KO : [0m[0;31mstd_output [0m[0;31mexit_code [0m
-end of test serie from 1600 to 1699
-
-[0;31m2 errors were detected[0m
-[1m[7m%[27m[1m[0m                                                                                                                                   ]2;ppuivif@1G7:~/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL0]1;..08-MINISHELL0]7;file://1G7.42angouleme.fr/nfs/homes/ppuivif/Documents/ECOLE_42/42_COMMON_CORE/08-MINISHELL0\[0m[27m[24m[J[01;32m➜  [36m08-MINISHELL0[00m [01;34mgit:([31mDriss[34m) [33m✗[00m [K[?1h=[?2004h[?2004l
-
-Script done on 2024-09-04 08:59:10+02:00 [COMMAND_EXIT_CODE="0"]

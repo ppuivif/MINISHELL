@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:12 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/26 10:34:24 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 10:17:09 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ char **extracted_line, char **definitive_content, t_command_line **command_line)
 	len = get_len_and_extract_between_quotes \
 	(&n_argument_content[0][1], extracted_line, command_line, '\"');
 	*n_argument_content += len;
-	if (strcspn(*extracted_line, "$") < ft_strlen(*extracted_line))
+	if (ft_strcspn(*extracted_line, "$") < (int)ft_strlen(*extracted_line))
 		complete_expand_content_of_arguments(extracted_line, \
 		command_line, flag_keep_dollar);
 	add_to_definitive_content(definitive_content, \

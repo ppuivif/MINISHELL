@@ -6,14 +6,14 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 14:19:55 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 09:44:31 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	expand_content_when_dollar_first(char *extracted_line, char **tmp, \
-t_command_line **command_line, bool flag_keep_dollar)
+static int	expand_arg_content_when_dollar_first(char *extracted_line, \
+char **tmp, t_command_line **command_line, bool flag_keep_dollar)
 {
 	int	len;
 
@@ -41,7 +41,7 @@ t_command_line **command_line, bool flag_keep_dollar)
 	while (extracted_line[0][i])
 	{
 		if (extracted_line[0][i] == '$')
-			i += expand_content_when_dollar_first(&extracted_line[0][i], \
+			i += expand_arg_content_when_dollar_first(&extracted_line[0][i], \
 			&tmp, command_line, flag_keep_dollar);
 		else
 			i += expand_content_when_dollar_not_first(&extracted_line[0][i], \

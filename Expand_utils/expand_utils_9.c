@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/23 14:37:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 09:24:44 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ t_command_line **command_line)
 	argv_index = ft_substr(str, 1, 1);
 	if (!argv_index)
 		error_allocation_command_line_and_exit(command_line);
-	else if (str[1] == '0' && (*command_line)->argv[atoi(argv_index)])
+	else if (str[1] == '0' && (*command_line)->argv[ft_atoi(argv_index)])
 		*extracted_line = \
-		ft_strdup((*command_line)->argv[atoi(argv_index)]);
+		ft_strdup((*command_line)->argv[ft_atoi(argv_index)]);
 	else
 		*extracted_line = ft_strdup("");
 	argv_index = free_and_null(argv_index);

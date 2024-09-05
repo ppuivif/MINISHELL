@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:33:41 by drabarza          #+#    #+#             */
-/*   Updated: 2024/08/31 16:37:17 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 11:05:14 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ t_command_line **command_line)
 }
 
 int	get_len_and_extract_until_next_dollar_first_excluded(char *str, \
-char **extracted_line)
+char **extracted_line, t_command_line **command_line)
 {
 	int	len;
 	int	len_to_next_dollar;
@@ -84,7 +84,7 @@ char **extracted_line)
 	len_to_next_dollar = ft_strcspn(&str[1], "$");
 	*extracted_line = ft_substr(str, 0, len_to_next_dollar + 1);
 	if (!(*extracted_line))
-		return (-1);
+		error_allocation_command_line_and_exit(command_line);
 	len = len_to_next_dollar + 1;
 	return (len);
 }

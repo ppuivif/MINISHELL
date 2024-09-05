@@ -6,7 +6,7 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 17:38:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/04 20:07:03 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,10 @@ char	**build_envp_arr(t_exec_struct **exec_struct)
 	while (tmp)
 	{
 		envp_arr[i] = ft_strjoin(tmp->name, "=");
-		envp_arr[i] = ft_strjoin_freed(envp_arr[i], tmp->value);
+		if (tmp->value)
+			envp_arr[i] = ft_strjoin_freed(envp_arr[i], tmp->value);
+		else
+			envp_arr[i] = ft_strjoin_freed(envp_arr[i], "");
 		tmp = tmp->next;
 		i++;
 	}

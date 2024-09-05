@@ -1,3 +1,0 @@
-substring 0 : 
-	-argument 0 : 	test_minishelltest_minishell	
-

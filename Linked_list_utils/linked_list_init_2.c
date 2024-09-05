@@ -6,11 +6,10 @@
 /*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/02 17:13:31 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 11:15:51 by ppuivif          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "linked_list_utils.h"
 #include "minishell.h"
 
 int	init_native_argument_struct(t_native_argument **n_argument, \
