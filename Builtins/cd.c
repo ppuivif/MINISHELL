@@ -77,10 +77,8 @@ static void	check_error(t_exec_struct *exec_struct, char *argument)
 }
 
 static int	cd_option(t_exec_struct *exec_struct, \
-t_exec_argument *exec_arguments, size_t size)
+t_exec_argument *exec_arguments, size_t size, char *home)
 {
-	char	*home;
-
 	if (size == 1 || !ft_strcmp(exec_arguments->next->argument, "--")
 		|| !ft_strcmp(exec_arguments->next->argument, "~"))
 	{
@@ -100,7 +98,8 @@ t_exec_argument *exec_arguments, size_t size)
 		ft_putstr_fd(search_or_replace_oldpwd(exec_struct, NULL), 2);
 		ft_putstr_fd("\n", 2);
 		if (chdir(search_or_replace_oldpwd(exec_struct, NULL)) == -1)
-			check_error(exec_struct, search_or_replace_oldpwd(exec_struct, NULL));
+			check_error(exec_struct, search_or_replace_oldpwd \
+				(exec_struct, NULL));
 		return (1);
 	}
 	return (0);
@@ -109,8 +108,10 @@ t_exec_argument *exec_arguments, size_t size)
 void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
 	char	*old;
+	char	*home;
 	size_t	size;
 
+	home = NULL;
 	size = ft_lst_size9(exec_arguments);
 	if (size > 2)
 	{
@@ -120,7 +121,7 @@ void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 	}
 	if (error_option(exec_struct, exec_arguments, "cd"))
 		return ;
-	if (cd_option(exec_struct, exec_arguments, size))
+	if (cd_option(exec_struct, exec_arguments, size, home))
 		return ;
 	old = getcwd(NULL, 0);
 	if (chdir(exec_arguments->next->argument) == -1)
