@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/09 15:45:49 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:15:52 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	execution(t_exec_struct **exec_struct)
 		ft_lst_size7(cursor) == 1)
 		{
 			if (*fd_out > 0)
-				exec_builtin(*exec_struct, cursor, NULL, *fd_out);
+				exec_builtin(*exec_struct, cursor, NULL);
 			return ;
 		}
 	}

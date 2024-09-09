@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:16 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/09 16:27:47 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/05 17:18:58 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,10 @@ static void	check_error(t_exec_struct *exec_struct, char *argument)
 }
 
 static int	cd_option(t_exec_struct *exec_struct, \
-t_exec_substring *exec_substring, size_t size, char *home)
+t_exec_argument *exec_arguments, size_t size, char *home)
 {
-	if (size == 1 || !ft_strcmp(exec_substring->exec_arguments->next->argument, \
-	"--") || !ft_strcmp(exec_substring->exec_arguments->next->argument, "~"))
+	if (size == 1 || !ft_strcmp(exec_arguments->next->argument, "--")
+		|| !ft_strcmp(exec_arguments->next->argument, "~"))
 	{
 		home = ft_strdup(search_home(exec_struct));
 		if (!home)
@@ -93,11 +93,10 @@ t_exec_substring *exec_substring, size_t size, char *home)
 		free(home);
 		return (1);
 	}
-	if (!ft_strcmp(exec_substring->exec_arguments->next->argument, "-"))
+	if (!ft_strcmp(exec_arguments->next->argument, "-"))
 	{
-		ft_putstr_fd(search_or_replace_oldpwd(exec_struct, NULL), \
-			exec_substring->fd_out);
-		ft_putstr_fd("\n", exec_substring->fd_out);
+		ft_putstr_fd(search_or_replace_oldpwd(exec_struct, NULL), 2);
+		ft_putstr_fd("\n", 2);
 		if (chdir(search_or_replace_oldpwd(exec_struct, NULL)) == -1)
 			check_error(exec_struct, search_or_replace_oldpwd \
 				(exec_struct, NULL));
@@ -106,28 +105,28 @@ t_exec_substring *exec_substring, size_t size, char *home)
 	return (0);
 }
 
-void	cd(t_exec_struct *exec_struct, t_exec_substring *exec_substr)
+void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 {
 	char	*old;
 	char	*home;
 	size_t	size;
 
 	home = NULL;
-	size = ft_lst_size9(exec_substr->exec_arguments);
+	size = ft_lst_size9(exec_arguments);
 	if (size > 2)
 	{
 		ft_putstr_fd("cd: too many arguments\n", 2);
 		exec_struct->command_line->current_exit_code = 1;
 		return ;
 	}
-	if (error_option(exec_struct, exec_substr->exec_arguments, "cd"))
+	if (error_option(exec_struct, exec_arguments, "cd"))
 		return ;
-	if (cd_option(exec_struct, exec_substr, size, home))
+	if (cd_option(exec_struct, exec_arguments, size, home))
 		return ;
 	old = getcwd(NULL, 0);
-	if (chdir(exec_substr->exec_arguments->next->argument) == -1)
+	if (chdir(exec_arguments->next->argument) == -1)
 	{
-		check_error(exec_struct, exec_substr->exec_arguments->next->argument);
+		check_error(exec_struct, exec_arguments->next->argument);
 		free(old);
 		return ;
 	}

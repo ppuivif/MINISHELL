@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/09 16:28:16 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/09 19:16:54 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,7 +349,7 @@ void			add2_export(t_exec_struct *exec_struct, char *argument);
 int				error_option(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments, char *str);
 void			exec_builtin(t_exec_struct *exec_struct, \
-				t_exec_substring *substring, char **envp_arr, int fd);
+				t_exec_substring *substring, char **envp_arr);
 int				check_is_builtin(t_exec_argument *exec_arguments);
 
 /*
@@ -357,20 +357,20 @@ int				check_is_builtin(t_exec_argument *exec_arguments);
 */
 
 void			cd(t_exec_struct *exec_struct, \
-				t_exec_substring *exec_substr);
+				t_exec_argument *exec_arguments);
 
 /*
 * echo.c
 */
 
-void			echo(t_exec_argument *exec_arguments, int fd);
+void			echo(t_exec_argument *exec_arguments);
 
 /*
 * env.c
 */
 
 void			env(t_exec_struct *exec_struct, \
-				t_exec_argument *exec_arguments, int fd);
+				t_exec_argument *exec_arguments);
 
 /*
 * exit_utils.c
@@ -392,7 +392,7 @@ void			exit_builting(t_exec_struct *exec_struct, \
 * export_utils.c
 */
 
-void			print_export(t_envp_struct *envp_struct, int fd);
+void			print_export(t_envp_struct *envp_struct);
 
 /*
 * export.c
@@ -400,14 +400,14 @@ void			print_export(t_envp_struct *envp_struct, int fd);
 
 t_envp_struct	*ft_lstnew(char *name, char *value, bool equal);
 void			export(t_exec_struct *exec_struct, \
-				t_exec_argument *exec_arguments, int fd);
+				t_exec_argument *exec_arguments);
 
 /*
 * pwd.c
 */
 
 void			pwd(t_exec_struct *exec_struct, \
-				t_exec_argument *exec_arguments, int fd);
+				t_exec_argument *exec_arguments);
 
 /*
 * unset.c

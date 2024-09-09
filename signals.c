@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/10 16:38:04 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/05 09:54:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 19:15:19 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,4 +59,5 @@ void	signals(int sign)
 		signal(SIGQUIT, ctrl_backslash);
 		signal(SIGINT, ctrl_c2);
 	}
+	signal(SIGPIPE, SIG_IGN);
 }
