@@ -35,7 +35,7 @@ char *filename, int status_code)
 }
 
 static int	read_and_expand_heredoc(t_expanded_redirection *exp_redirection, \
-int fd, t_command_line **command_line)
+char *filename, int fd, t_command_line **command_line)
 {
 	char	*line;
 
@@ -44,7 +44,10 @@ int fd, t_command_line **command_line)
 	{
 		signals(1);
 		if (g_sign)
+		{
+			unlink(filename);
 			return (128 + g_sign);
+		}
 		line = readline("heredoc : ");
 		if (!line)
 		{
@@ -105,13 +108,17 @@ t_expanded_redirection **exp_redirection, t_exec_struct **exec_struct)
 	if (fd == -1)
 	{
 		perror(filename);
+		//free(filename);
 		return (1);
 	}
-	status_code = read_and_expand_heredoc(*exp_redirection, fd, \
+	status_code = read_and_expand_heredoc(*exp_redirection, filename, fd, \
 	&(*exec_struct)->command_line);
 	close(fd);
-	if (status_code == 1)
+	if (status_code)
+	{
+		//free(filename);
 		return (1);
+	}
 	status_code = exp_redirec_modif(exp_redirection, filename, \
 	status_code);
 	return (status_code);
