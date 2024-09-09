@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:13 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/05 10:57:39 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 16:28:43 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,12 +54,12 @@ static int	is_alpha(char *argument)
 }
 
 static int	error_export(t_exec_struct *exec_struct, \
-t_exec_argument *exec_arguments)
+t_exec_argument *exec_arguments, int fd)
 {
 	if (!exec_arguments->next || \
 	!ft_strcmp(exec_arguments->next->argument, "--"))
 	{
-		print_export(exec_struct->envp_struct);
+		print_export(exec_struct->envp_struct, fd);
 		return (1);
 	}
 	if (!ft_strcmp(exec_arguments->next->argument, "-"))
@@ -69,12 +69,13 @@ t_exec_argument *exec_arguments)
 	return (0);
 }
 
-void	export(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
+void	export(t_exec_struct *exec_struct, \
+	t_exec_argument *exec_arguments, int fd)
 {
 	t_exec_argument	*arguments;
 
 	arguments = exec_arguments->next;
-	if (error_export(exec_struct, exec_arguments))
+	if (error_export(exec_struct, exec_arguments, fd))
 		return ;
 	while (arguments)
 	{

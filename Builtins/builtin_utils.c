@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 14:54:36 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 17:53:57 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:42:23 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,20 @@ t_exec_argument *exec_arguments, char *str)
 }
 
 void	exec_builtin(t_exec_struct *exec_struct, \
-t_exec_substring *substring, char **envp_arr)
+t_exec_substring *substring, char **envp_arr, int fd)
 {
 	if (!ft_strcmp(substring->exec_arguments->argument, "echo"))
-		echo(substring->exec_arguments);
+		echo(substring->exec_arguments, fd);
 	if (!ft_strcmp(substring->exec_arguments->argument, "cd"))
-		cd(exec_struct, substring->exec_arguments);
+		cd(exec_struct, substring);
 	if (!ft_strcmp(substring->exec_arguments->argument, "pwd"))
-		pwd(exec_struct, substring->exec_arguments);
+		pwd(exec_struct, substring->exec_arguments, fd);
 	if (!ft_strcmp(substring->exec_arguments->argument, "export"))
-		export(exec_struct, substring->exec_arguments);
+		export(exec_struct, substring->exec_arguments, fd);
 	if (!ft_strcmp(substring->exec_arguments->argument, "unset"))
 		unset(exec_struct, substring->exec_arguments);
 	if (!ft_strcmp(substring->exec_arguments->argument, "env"))
-		env(exec_struct, substring->exec_arguments);
+		env(exec_struct, substring->exec_arguments, fd);
 	if (!ft_strcmp(substring->exec_arguments->argument, "exit"))
 		exit_builting(exec_struct, substring->exec_arguments, envp_arr);
 }

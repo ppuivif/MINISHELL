@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 17:11:42 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/05 11:11:51 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 16:28:16 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -349,7 +349,7 @@ void			add2_export(t_exec_struct *exec_struct, char *argument);
 int				error_option(t_exec_struct *exec_struct, \
 				t_exec_argument *exec_arguments, char *str);
 void			exec_builtin(t_exec_struct *exec_struct, \
-				t_exec_substring *substring, char **envp_arr);
+				t_exec_substring *substring, char **envp_arr, int fd);
 int				check_is_builtin(t_exec_argument *exec_arguments);
 
 /*
@@ -357,20 +357,20 @@ int				check_is_builtin(t_exec_argument *exec_arguments);
 */
 
 void			cd(t_exec_struct *exec_struct, \
-				t_exec_argument *exec_arguments);
+				t_exec_substring *exec_substr);
 
 /*
 * echo.c
 */
 
-void			echo(t_exec_argument *exec_arguments);
+void			echo(t_exec_argument *exec_arguments, int fd);
 
 /*
 * env.c
 */
 
 void			env(t_exec_struct *exec_struct, \
-				t_exec_argument *exec_arguments);
+				t_exec_argument *exec_arguments, int fd);
 
 /*
 * exit_utils.c
@@ -392,7 +392,7 @@ void			exit_builting(t_exec_struct *exec_struct, \
 * export_utils.c
 */
 
-void			print_export(t_envp_struct *envp_struct);
+void			print_export(t_envp_struct *envp_struct, int fd);
 
 /*
 * export.c
@@ -400,14 +400,14 @@ void			print_export(t_envp_struct *envp_struct);
 
 t_envp_struct	*ft_lstnew(char *name, char *value, bool equal);
 void			export(t_exec_struct *exec_struct, \
-				t_exec_argument *exec_arguments);
+				t_exec_argument *exec_arguments, int fd);
 
 /*
 * pwd.c
 */
 
 void			pwd(t_exec_struct *exec_struct, \
-				t_exec_argument *exec_arguments);
+				t_exec_argument *exec_arguments, int fd);
 
 /*
 * unset.c

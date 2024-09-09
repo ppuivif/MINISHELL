@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils_2.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/05 10:13:52 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 15:26:09 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,12 @@ t_exec_substring **exec_substring, int *pid_arr)
 
 static void	search_last_ioput(t_exec_substring **exec_substring)
 {
-	(*exec_substring)->fd_in = search_last_input \
-	((*exec_substring)->exec_redirections, (*exec_substring)->fd_in);
+	if ((*exec_substring)->exec_redirections)
+	{
+		(*exec_substring)->fd_in = search_last_input \
+		((*exec_substring)->exec_redirections, (*exec_substring)->fd_in);
+		close_fd((*exec_substring)->fd[0]);
+	}
 	(*exec_substring)->fd_out = search_last_output \
 	((*exec_substring)->exec_redirections, (*exec_substring)->fd_out);
 }

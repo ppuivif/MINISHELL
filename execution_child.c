@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:32:59 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 20:09:24 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:26:49 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ t_exec_struct **exec_struct)
 		dup2((*substring)->fd_in, STDIN_FILENO);
 		close_fd((*substring)->fd_in);
 	}
-	if ((*substring)->fd_out > 2)
+	if ((*substring)->fd_out > 2 && !(*substring)->exec_arguments->is_builtin)
 	{
 		dup2((*substring)->fd_out, STDOUT_FILENO);
 		close_fd((*substring)->fd_out);
@@ -95,7 +95,7 @@ t_exec_struct **exec_struct)
 	rl_clear_history();
 	if (substring->exec_arguments && substring->fd_out > 0 && \
 	substring->exec_arguments->is_builtin)
-		exec_builtin(*exec_struct, substring, envp_arr);
+		exec_builtin(*exec_struct, substring, envp_arr, substring->fd_out);
 	cmd_arr = copy_cmd_arr(substring, exec_struct, envp_arr);
 	path_with_cmd = copy_path(substring, exec_struct, cmd_arr, envp_arr);
 	exit_code = (*exec_struct)->command_line->current_exit_code;

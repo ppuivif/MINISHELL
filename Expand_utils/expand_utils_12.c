@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/05 18:19:42 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/09 15:14:37 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ char *filename, int status_code)
 	(*exp_redirection)->content = free_and_null((*exp_redirection)->content);
 	(*exp_redirection)->content = filename;
 	(*exp_redirection)->t_redirection = REDIRECTION_INFILE;
+	(*exp_redirection)->is_old_heredoc = true;
 	if (status_code == 130 || status_code == 131)
 		return (status_code);
 	return (0);
@@ -108,7 +109,7 @@ t_expanded_redirection **exp_redirection, t_exec_struct **exec_struct)
 	if (fd == -1)
 	{
 		perror(filename);
-		//free(filename);
+		free(filename);
 		return (1);
 	}
 	status_code = read_and_expand_heredoc(*exp_redirection, filename, fd, \
@@ -116,7 +117,7 @@ t_expanded_redirection **exp_redirection, t_exec_struct **exec_struct)
 	close(fd);
 	if (status_code)
 	{
-		//free(filename);
+		free(filename);
 		return (1);
 	}
 	status_code = exp_redirec_modif(exp_redirection, filename, \
