@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 11:30:07 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 21:47:07 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 15:36:33 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	pwd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
+void	pwd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, int fd)
 {
 	char	str[PATH_MAX];
 
@@ -20,8 +20,8 @@ void	pwd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 		return ;
 	if (getcwd(str, PATH_MAX))
 	{
-		ft_putstr_fd(str, 1);
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd(str, fd);
+		ft_putstr_fd("\n", fd);
 	}
 	else
 	{

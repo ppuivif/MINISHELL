@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list_utils.h                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/19 16:33:21 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/05 11:22:01 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 15:15:01 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,7 @@ typedef struct s_expanded_redirection
 {
 	int								exp_redirection_index;
 	char							*content;
+	bool							is_old_heredoc;
 	t_redirection					t_redirection;
 	bool							flag_for_expand;
 	struct s_expanded_redirection	*next;

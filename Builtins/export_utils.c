@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/20 12:33:32 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 17:05:33 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 15:37:49 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ static t_envp_struct	*copy_envp_struct(t_envp_struct *envp_struct)
 	return (copy);
 }
 
-void	print_export(t_envp_struct *envp_struct)
+void	print_export(t_envp_struct *envp_struct, int fd)
 {
 	t_envp_struct	*sorted_envp;
 	t_envp_struct	*tmp_envp;
@@ -114,6 +114,6 @@ void	print_export(t_envp_struct *envp_struct)
 			tmp_envp = tmp_envp->next;
 		}
 	}
-	ft_lst_print(sorted_envp, 1);
+	ft_lst_print(sorted_envp, fd);
 	free_envp_struct(&sorted_envp);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exit.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/27 12:57:29 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/05 10:03:00 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/05 16:53:00 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,16 @@ t_exec_argument *exec_arguments, char **envp_arr)
 		ft_putstr_fd("exit\n", 2);
 		message_exit(exec_struct, envp_arr);
 	}
-	exec_struct->command_line->previous_exit_code = \
-	ft_aatoi(exec_arguments->next->argument, exec_struct, envp_arr);
-	ft_putstr_fd("exit\n", 2);
+	if (exec_arguments->next)
+	{
+		exec_struct->command_line->previous_exit_code = \
+			ft_aatoi(exec_arguments->next->argument, exec_struct, envp_arr);
+		if (ft_lst_size7(exec_struct->exec_substrings) == 1)
+			ft_putstr_fd("exit\n", 2);
+	}
 	if (len > 2)
 	{
-		ft_putstr_fd("bash: exit: too many arguments\n", 2);
+		ft_putstr_fd("exit: too many arguments\n", 2);
 		exec_struct->command_line->current_exit_code = 1;
 		return ;
 	}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/23 13:29:44 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/05 10:00:15 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 15:28:20 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static int	check_argument(t_exec_argument *exec_arguments)
 	return (1);
 }
 
-void	echo(t_exec_argument *exec_arguments)
+void	echo(t_exec_argument *exec_arguments, int fd)
 {
 	t_exec_argument	*arguments;
 	int				n;
@@ -39,7 +39,7 @@ void	echo(t_exec_argument *exec_arguments)
 	n = 1;
 	if (!arguments)
 	{
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n", fd);
 		return ;
 	}
 	while (arguments && check_argument(arguments))
@@ -49,11 +49,11 @@ void	echo(t_exec_argument *exec_arguments)
 	}
 	while (arguments)
 	{
-		ft_putstr_fd(arguments->argument, 1);
+		ft_putstr_fd(arguments->argument, fd);
 		if (arguments->next)
-			ft_putstr_fd(" ", 1);
+			ft_putstr_fd(" ", fd);
 		arguments = arguments->next;
 	}
 	if (n == 1)
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd("\n", fd);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_command_line_2.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:20 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 18:35:24 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 15:16:58 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static void	free_exp_redirection(t_expanded_redirection **exp_redirections)
 	while (ft_lst_size4(*exp_redirections))
 	{
 		tmp = (*exp_redirections)->next;
+		if ((*exp_redirections)->is_old_heredoc == true)
+			unlink((*exp_redirections)->content);
 		(*exp_redirections)->content = \
 		free_and_null((*exp_redirections)->content);
 		free(*exp_redirections);

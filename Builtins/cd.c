@@ -6,7 +6,7 @@
 /*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:23:16 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 17:14:22 by drabarza         ###   ########.fr       */
+/*   Updated: 2024/09/09 16:27:47 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ static char	*search_or_replace_oldpwd(t_exec_struct *exec_struct, char *str)
 	if (!str)
 	{
 		exec_struct->command_line->current_exit_code = 1;
-		return ("bash: cd: OLDPWD not set");
+		return ("cd: OLDPWD not set");
 	}
 	return (NULL);
 }
@@ -77,17 +77,15 @@ static void	check_error(t_exec_struct *exec_struct, char *argument)
 }
 
 static int	cd_option(t_exec_struct *exec_struct, \
-t_exec_argument *exec_arguments, size_t size)
+t_exec_substring *exec_substring, size_t size, char *home)
 {
-	char	*home;
-
-	if (size == 1 || !ft_strcmp(exec_arguments->next->argument, "--")
-		|| !ft_strcmp(exec_arguments->next->argument, "~"))
+	if (size == 1 || !ft_strcmp(exec_substring->exec_arguments->next->argument, \
+	"--") || !ft_strcmp(exec_substring->exec_arguments->next->argument, "~"))
 	{
 		home = ft_strdup(search_home(exec_struct));
 		if (!home)
 		{
-			ft_putstr_fd("bash: cd: HOME not set\n", 2);
+			ft_putstr_fd("cd: HOME not set\n", 2);
 			exec_struct->command_line->current_exit_code = 1;
 		}
 		else if (chdir(home) == -1)
@@ -95,35 +93,41 @@ t_exec_argument *exec_arguments, size_t size)
 		free(home);
 		return (1);
 	}
-	if (!ft_strcmp(exec_arguments->next->argument, "-"))
+	if (!ft_strcmp(exec_substring->exec_arguments->next->argument, "-"))
 	{
-		ft_putstr_fd(search_or_replace_oldpwd(exec_struct, NULL), 2);
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd(search_or_replace_oldpwd(exec_struct, NULL), \
+			exec_substring->fd_out);
+		ft_putstr_fd("\n", exec_substring->fd_out);
+		if (chdir(search_or_replace_oldpwd(exec_struct, NULL)) == -1)
+			check_error(exec_struct, search_or_replace_oldpwd \
+				(exec_struct, NULL));
 		return (1);
 	}
 	return (0);
 }
 
-void	cd(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
+void	cd(t_exec_struct *exec_struct, t_exec_substring *exec_substr)
 {
 	char	*old;
+	char	*home;
 	size_t	size;
 
-	size = ft_lst_size9(exec_arguments);
+	home = NULL;
+	size = ft_lst_size9(exec_substr->exec_arguments);
 	if (size > 2)
 	{
-		ft_putstr_fd("bash: cd: too many arguments\n", 2);
+		ft_putstr_fd("cd: too many arguments\n", 2);
 		exec_struct->command_line->current_exit_code = 1;
 		return ;
 	}
-	if (error_option(exec_struct, exec_arguments, "cd"))
+	if (error_option(exec_struct, exec_substr->exec_arguments, "cd"))
 		return ;
-	if (cd_option(exec_struct, exec_arguments, size))
+	if (cd_option(exec_struct, exec_substr, size, home))
 		return ;
 	old = getcwd(NULL, 0);
-	if (chdir(exec_arguments->next->argument) == -1)
+	if (chdir(exec_substr->exec_arguments->next->argument) == -1)
 	{
-		check_error(exec_struct, exec_arguments->next->argument);
+		check_error(exec_struct, exec_substr->exec_arguments->next->argument);
 		free(old);
 		return ;
 	}

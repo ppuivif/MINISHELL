@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   expand_utils_12.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/11 06:34:06 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/03 14:30:25 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 15:14:37 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,14 @@ char *filename, int status_code)
 	(*exp_redirection)->content = free_and_null((*exp_redirection)->content);
 	(*exp_redirection)->content = filename;
 	(*exp_redirection)->t_redirection = REDIRECTION_INFILE;
+	(*exp_redirection)->is_old_heredoc = true;
 	if (status_code == 130 || status_code == 131)
 		return (status_code);
 	return (0);
 }
 
 static int	read_and_expand_heredoc(t_expanded_redirection *exp_redirection, \
-int fd, t_command_line **command_line)
+char *filename, int fd, t_command_line **command_line)
 {
 	char	*line;
 
@@ -44,7 +45,10 @@ int fd, t_command_line **command_line)
 	{
 		signals(1);
 		if (g_sign)
+		{
+			unlink(filename);
 			return (128 + g_sign);
+		}
 		line = readline("heredoc : ");
 		if (!line)
 		{
@@ -105,13 +109,17 @@ t_expanded_redirection **exp_redirection, t_exec_struct **exec_struct)
 	if (fd == -1)
 	{
 		perror(filename);
+		free(filename);
 		return (1);
 	}
-	status_code = read_and_expand_heredoc(*exp_redirection, fd, \
+	status_code = read_and_expand_heredoc(*exp_redirection, filename, fd, \
 	&(*exec_struct)->command_line);
 	close(fd);
-	if (status_code == 1)
+	if (status_code)
+	{
+		free(filename);
 		return (1);
+	}
 	status_code = exp_redirec_modif(exp_redirection, filename, \
 	status_code);
 	return (status_code);

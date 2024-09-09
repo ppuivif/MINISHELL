@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 09:20:53 by drabarza          #+#    #+#             */
-/*   Updated: 2024/09/04 20:19:03 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 15:41:42 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ t_exec_argument *exec_arguments)
 	return (0);
 }
 
-void	env(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
+void	env(t_exec_struct *exec_struct, t_exec_argument *exec_arguments, int fd)
 {
 	t_envp_struct	*env;
 
@@ -48,10 +48,10 @@ void	env(t_exec_struct *exec_struct, t_exec_argument *exec_arguments)
 	{
 		if (env->name && env->equal == 1)
 		{
-			ft_putstr_fd(env->name, 1);
-			ft_putstr_fd("=", 1);
-			ft_putstr_fd(env->value, 1);
-			ft_putstr_fd("\n", 1);
+			ft_putstr_fd(env->name, fd);
+			ft_putstr_fd("=", fd);
+			ft_putstr_fd(env->value, fd);
+			ft_putstr_fd("\n", fd);
 		}
 		env = env->next;
 	}

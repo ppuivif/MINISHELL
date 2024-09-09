@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   linked_list_init_2.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ppuivif <ppuivif@student.42.fr>            +#+  +:+       +#+        */
+/*   By: drabarza <drabarza@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/05 18:10:24 by ppuivif           #+#    #+#             */
-/*   Updated: 2024/09/05 11:15:51 by ppuivif          ###   ########.fr       */
+/*   Updated: 2024/09/09 15:15:45 by drabarza         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_command_line **command_line)
 		error_allocation_command_line_and_exit(command_line);
 	(*exp_redirection)->exp_redirection_index = 0;
 	(*exp_redirection)->content = NULL;
+	(*exp_redirection)->is_old_heredoc = false;
 	(*exp_redirection)->t_redirection = 4;
 	(*exp_redirection)->flag_for_expand = true;
 	(*exp_redirection)->next = NULL;
