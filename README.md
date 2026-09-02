@@ -8,7 +8,7 @@ sudo apt install libreadline-dev
 ```BASH
 make
 ```
-- Execute the program to obtain the prompt and test :
+- Execute the program to get the prompt and test :
 ```BASH
 ./minishell
 ```
